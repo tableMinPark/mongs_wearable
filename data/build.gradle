@@ -1,0 +1,44 @@
+plugins {
+    id 'org.jetbrains.kotlin.android'
+    id 'com.android.library'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-kapt'
+}
+
+android {
+    namespace 'com.paymong.wear.data'
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 30
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+}
+
+dependencies {
+    implementation project(path: ':domain')
+    // dagger & hilt
+    implementation "com.google.dagger:hilt-android:2.48.1"
+    kapt 'com.google.dagger:hilt-compiler:2.48.1'
+    // inject
+    implementation group: 'javax.inject', name: 'javax.inject', version: '1'
+    // retrofit2 & coroutines
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+    // livedata
+    implementation "androidx.activity:activity-compose:1.8.1"
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
+}
