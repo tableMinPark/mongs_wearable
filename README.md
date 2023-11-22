@@ -1,0 +1,1 @@
+# paymong_wearable
