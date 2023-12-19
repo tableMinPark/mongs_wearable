@@ -1,6 +1,6 @@
 package com.paymong.wear.data.module
 
-import com.paymong.wear.data.api.AuthApi
+import com.paymong.wear.data.api.retrofit.AuthApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
