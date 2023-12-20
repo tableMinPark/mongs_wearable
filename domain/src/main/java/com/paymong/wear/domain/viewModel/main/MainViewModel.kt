@@ -3,31 +3,40 @@ package com.paymong.wear.domain.viewModel.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import com.paymong.wear.domain.dto.DefaultCode
 import com.paymong.wear.domain.repository.AppInfoRepository
 import com.paymong.wear.domain.repository.MongRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val mongRepository: MongRepository,
-    private val appInfoRepository: AppInfoRepository
+    private val appInfoRepository: AppInfoRepository,
+    private val mongRepository: MongRepository
 ) : ViewModel() {
-    val isSlotEmpty: LiveData<Boolean> get() = _isSlotEmpty
-    private val _isSlotEmpty = MutableLiveData(true)
-    val mapCode: LiveData<String> get() = _mapCode
-    private val _mapCode = MutableLiveData(DefaultCode.mapCode)
-    val mongCode: LiveData<String> get() = _mongCode
-    private val _mongCode = MutableLiveData(DefaultCode.mongCode)
-    val stateCode: LiveData<String> get() = _stateCode
-    private val _stateCode = MutableLiveData(DefaultCode.stateCode)
+//    var mapCode: LiveData<String> get() = _mapCode
+//    private val _mapCode = MutableLiveData(DefaultCode.mapCode)
+//    val mongCode: LiveData<String> get() = _mongCode
+//    private val _mongCode = MutableLiveData(DefaultCode.mongCode)
+//    val stateCode: LiveData<String> get() = _stateCode
+//    private val _stateCode = MutableLiveData(DefaultCode.stateCode)
 
+    var mapCode: LiveData<String>
+    var mongCode: LiveData<String>
+    var stateCode: LiveData<String>
 
     init {
+        val appInfoModel = appInfoRepository.getAppInfo()
+        val mongModel = mongRepository.getMong()
+        mapCode = appInfoModel.map { it.mapCode }
+        mongCode = mongModel.map { it.mongCode }
+        stateCode = mongModel.map { it.stateCode }
+
+    }
+
+//    init {
 
 //        appInfoRepository.getMapCode().observeForever { mapCode -> this.mapCode = mapCode }
 //        mongRepository.getMongCode().observeForever { mongCode -> this.mongCode = mongCode }
@@ -65,5 +74,5 @@ class MainViewModel @Inject constructor(
 //                delay(6000)
 //            }
 //        }
-    }
+//    }
 }

@@ -1,10 +1,11 @@
-package com.paymong.wear.data.api.model.response
+package com.paymong.wear.domain.dto.model
 
 import java.time.LocalDateTime
 
-data class MongResModel(
-    val mongId: Long,
-    val born: LocalDateTime,
+data class MongModel(
+    var slotId: Long,
+    var mongId: Long,
+    var born: LocalDateTime,
     var weight: Int,
     var mongCode: String,
     var nextMongCode: String,

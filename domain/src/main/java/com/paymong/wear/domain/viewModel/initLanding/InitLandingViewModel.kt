@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.paymong.wear.domain.repository.AppInfoRepository
+import com.paymong.wear.domain.repository.MongRepository
 import com.paymong.wear.domain.viewModel.code.InitLandingCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -13,6 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class InitLandingViewModel @Inject constructor(
+    private val appInfoRepository: AppInfoRepository,
+    private val mongRepository: MongRepository
 ) : ViewModel() {
     val processCode: LiveData<InitLandingCode> get() = _processCode
     private val _processCode = MutableLiveData(InitLandingCode.STAND_BY)
@@ -29,10 +33,11 @@ class InitLandingViewModel @Inject constructor(
             }
             // Todo : 페이몽 로그인 로직
             Log.d("test", "paymongLogin >> userName : $userName, email : $email")
-            delay(1000)
 
             if (isSuccess) {
                 _processCode.postValue(InitLandingCode.SIGN_IN_SUCCESS)
+                appInfoRepository.initSetAppInfo()
+                mongRepository.initSetMong()
                 delay(1000)
                 _processCode.postValue(InitLandingCode.END)
             } else {

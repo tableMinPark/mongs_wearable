@@ -7,12 +7,9 @@ import java.time.LocalDateTime
 
 @Entity(tableName = "mong")
 data class Mong(
-    @PrimaryKey
-    var slotId: Int,
-    var isSlotEmpty: Boolean = true,
+    @PrimaryKey(autoGenerate = true)
+    var slotId: Long = -1L,
     var mongId: Long = -1L,
-
-    var mongName: String = "이름 없음",
     var born: LocalDateTime = LocalDateTime.now(),
     var weight: Int = 0,
     var mongCode: String = "CH444",
@@ -30,10 +27,7 @@ data class Mong(
     companion object {
         fun of(mongResModel: MongResModel): Mong {
             return Mong(
-                slotId = mongResModel.slotId,
-                isSlotEmpty = false,
                 mongId = mongResModel.mongId,
-                mongName = mongResModel.mongName,
                 born = mongResModel.born,
                 weight = mongResModel.weight,
                 mongCode = mongResModel.mongCode,

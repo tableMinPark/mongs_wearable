@@ -1,9 +1,9 @@
 package com.paymong.wear.domain.repository
 
 import androidx.lifecycle.LiveData
+import com.paymong.wear.domain.dto.model.AppInfoModel
 
 interface AppInfoRepository {
-    fun initAppInfo()
-    fun modifyMapCode(mapCode: String)
-    fun findMapCode(): LiveData<String>
+    fun initSetAppInfo()
+    fun getAppInfo() : LiveData<AppInfoModel>
 }

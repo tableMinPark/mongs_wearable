@@ -7,6 +7,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.wear.compose.material.Text
+import com.paymong.wear.ui.code.MongCode
+import com.paymong.wear.ui.view.common.character.Character
 
 @Composable
 fun SlotSelectView(
@@ -23,6 +25,7 @@ fun SlotSelectContent() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "슬롯 선택 페이지")
+        val mong = MongCode.CH000
+        Character(mong = mong)
     }
 }
