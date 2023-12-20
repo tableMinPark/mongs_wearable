@@ -70,6 +70,10 @@ class SlotViewModel @Inject constructor(
 ////        mongRepository.getMongCode().observeForever { mongCode -> this.mongCode = mongCode }
 //    }
 
+    fun generateMong() {
+        Log.d("SlotViewModel", "Call - generateMong()")
+    }
+
     fun evolutionStart() {
         Log.d("SlotViewModel", "Call - evolutionStart()")
         // 진화 중 상태로 변경

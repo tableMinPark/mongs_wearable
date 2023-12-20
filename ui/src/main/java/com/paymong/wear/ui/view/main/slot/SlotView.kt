@@ -33,6 +33,7 @@ fun SlotView(
         evolutionStart = slotViewModel::evolutionStart,
         evolutionEnd = slotViewModel::evolutionEnd,
         graduation = slotViewModel::graduation,
+        generateMong = slotViewModel::generateMong,
         showSlotActionView = showActionContent
     )
 }
@@ -45,6 +46,7 @@ fun SlotContent(
     evolutionStart: () -> Unit,
     evolutionEnd: () -> Unit,
     graduation: () -> Unit,
+    generateMong: () -> Unit,
     showSlotActionView: () -> Unit
 ) {
     val mong = MongCode.valueOf(mongCode.value)
@@ -68,7 +70,7 @@ fun SlotContent(
                 StateCode.CD005 -> Dead()
                 StateCode.CD007 -> EvolutionReady(evolutionStart = evolutionStart)
                 StateCode.CD010 -> Character(mong = mong)
-                StateCode.CD444 -> Empty(onClick = {})
+                StateCode.CD444 -> Empty(onClick = generateMong)
                 else -> Character(
                     state = state,
                     mong = mong,
