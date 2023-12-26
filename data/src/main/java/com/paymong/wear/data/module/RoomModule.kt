@@ -3,6 +3,7 @@ package com.paymong.wear.data.module
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.util.query
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.paymong.wear.data.room.AppDatabase
 import dagger.Module

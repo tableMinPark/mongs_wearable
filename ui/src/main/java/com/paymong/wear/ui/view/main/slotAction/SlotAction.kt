@@ -1,5 +1,6 @@
 package com.paymong.wear.ui.view.main.slotAction
 
+import android.widget.Toast
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -9,17 +10,21 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.paymong.wear.domain.viewModel.DefaultValue
 import com.paymong.wear.domain.viewModel.main.SlotActionViewModel
 import com.paymong.wear.ui.R
 import com.paymong.wear.ui.code.NavItem
+import com.paymong.wear.ui.code.StateCode
 import com.paymong.wear.ui.theme.PaymongBlue
 import com.paymong.wear.ui.theme.PaymongBrown
 import com.paymong.wear.ui.theme.PaymongPurple
@@ -33,6 +38,14 @@ fun SlotActionView(
     hideSlotActionView: () -> Unit,
     slotActionViewModel: SlotActionViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+
+    /** Observer **/
+    val stateCode = slotActionViewModel.stateCode.observeAsState(DefaultValue.stateCode)
+
+    /** Data **/
+    val state = StateCode.valueOf(stateCode.value)
+
     /** State **/
     val showSlotAction = remember { mutableStateOf(false) }
     if (animateSlotAction.value) {
@@ -61,20 +74,32 @@ fun SlotActionView(
                 navController.navigate(NavItem.SlotSelect.route)
             },
             navFeed = {
-                hideSlotActionView()
-                navController.navigate(NavItem.Feed.route)
+                if (state == StateCode.CD002) {
+                    Toast.makeText(context, "수면 상태 입니다!", Toast.LENGTH_SHORT).show()
+                } else {
+                    hideSlotActionView()
+                    navController.navigate(NavItem.Feed.route)
+                }
             },
             setStroke = {
-                hideSlotActionView()
-                slotActionViewModel.stroke()
+                if (state == StateCode.CD002) {
+                    Toast.makeText(context, "수면 상태 입니다!", Toast.LENGTH_SHORT).show()
+                } else {
+                    hideSlotActionView()
+                    slotActionViewModel.stroke()
+                }
             },
             setSleep = {
                 hideSlotActionView()
                 slotActionViewModel.sleep()
             },
             setPoop = {
-                hideSlotActionView()
-                slotActionViewModel.poop()
+                if (state == StateCode.CD002) {
+                    Toast.makeText(context, "수면 상태 입니다!", Toast.LENGTH_SHORT).show()
+                } else {
+                    hideSlotActionView()
+                    slotActionViewModel.poop()
+                }
             },
             hideSlotActionView = hideSlotActionView
         )

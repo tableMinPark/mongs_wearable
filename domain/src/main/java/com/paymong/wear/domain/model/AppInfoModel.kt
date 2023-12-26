@@ -1,4 +1,4 @@
-package com.paymong.wear.domain.dto.model
+package com.paymong.wear.domain.model
 
 data class AppInfoModel(
     var mapCode: String = "MP000"

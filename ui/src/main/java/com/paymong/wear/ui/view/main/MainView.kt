@@ -30,6 +30,7 @@ import androidx.navigation.NavController
 import androidx.wear.compose.material.HorizontalPageIndicator
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.PageIndicatorState
+import com.paymong.wear.domain.viewModel.DefaultValue
 import com.paymong.wear.domain.viewModel.main.MainViewModel
 import com.paymong.wear.ui.code.MapCode
 import com.paymong.wear.ui.code.MongCode
@@ -52,9 +53,9 @@ fun MainView(
     mainViewModel: MainViewModel = hiltViewModel()
 ) {
     /** Observer **/
-    val mapCode = mainViewModel.mapCode.observeAsState("")
-    val mongCode = mainViewModel.mongCode.observeAsState("")
-    val stateCode = mainViewModel.stateCode.observeAsState("")
+    val mapCode = mainViewModel.mapCode.observeAsState(DefaultValue.mapCode)
+    val mongCode = mainViewModel.mongCode.observeAsState(DefaultValue.mongCode)
+    val stateCode = mainViewModel.stateCode.observeAsState(DefaultValue.stateCode)
 
     /** LaunchedEffect **/
     LaunchedEffect(Unit) {}

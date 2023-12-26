@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.paymong.wear.domain.viewModel.DefaultValue
 import com.paymong.wear.domain.viewModel.main.InteractionViewModel
 import com.paymong.wear.ui.R
 import com.paymong.wear.ui.code.NavItem
@@ -26,7 +27,7 @@ fun InteractionView(
     val context = LocalContext.current
 
     /** Data **/
-    val stateCode = interactionViewModel.stateCode.observeAsState("")
+    val stateCode = interactionViewModel.stateCode.observeAsState(DefaultValue.stateCode)
 
     val state = StateCode.valueOf(stateCode.value)
 

@@ -1,52 +1,47 @@
 package com.paymong.wear.domain.viewModel.main
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.paymong.wear.domain.dto.DefaultCode
+import com.paymong.wear.domain.model.MongModel
 import com.paymong.wear.domain.repository.MongRepository
+import com.paymong.wear.domain.viewModel.DefaultValue
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class InteractionViewModel @Inject constructor(
     private val mongRepository: MongRepository
 ) : ViewModel() {
-    val stateCode: LiveData<String> get() = _stateCode
-    private val _stateCode = MutableLiveData(DefaultCode.stateCode)
+    var stateCode: LiveData<String> get() = _mongModel.map { it.stateCode }
 
-    init {
-//        mongRepository.getStateCode().observeForever { stateCode -> this.stateCode = stateCode }
+    private val _mongModel = MediatorLiveData<MongModel>()
+    private val liveDataObserver = Observer<LiveData<MongModel>> { innerLiveData ->
+        innerLiveData.observeForever { mongModel ->
+            Log.d("InteractionViewModel", mongModel.toString())
+            _mongModel.value = mongModel
+        }
     }
 
-//    fun sleep() {
-//        // 수면 불가능 상태
-//        if (stateCode in arrayOf("CD005", "CD006", "CD007", "CD008", "CD010", "CD444")) {
-//            this.processCode = InteractionCode.ERROR
-//        } else {
-//            if (stateCode == "CD002") {
-//                // 수면 종료
-//                // TODO : 캐릭터 상태 최신화 (API 호출 필요)
-////                mongStateSharedRepository.setStateCode("CD000")   // 최신화 된 상태 코드가 삽입
-//            } else {
-//                // 수면 돌입
-////                mongStateSharedRepository.setStateCode("CD002")
-//            }
-//            this.processCode = InteractionCode.SLEEP
-//        }
-//    }
+    init {
+        stateCode = MutableLiveData(DefaultValue.stateCode)
+        _mongModel.addSource(mongRepository.getMong(), liveDataObserver)
+    }
 
-//    fun poop() {
-//        // 배변 처리 활동 불가능 상태
-//        if (stateCode in arrayOf("CD005", "CD006", "CD008", "CD010", "CD444")) {
-//            this.processCode = InteractionCode.ERROR
-//        } else {
-//            // TODO : 배변 처리 활동 API 호출
-////            mongStateSharedRepository.setPoopCount(0)
-//            this.processCode = InteractionCode.POOP
-//        }
-//    }
+    override fun onCleared() {
+        super.onCleared()
+        mongRepository.getMong().removeObserver(liveDataObserver)
+        Log.d("InteractionViewModel", "removeObserver")
+    }
 }

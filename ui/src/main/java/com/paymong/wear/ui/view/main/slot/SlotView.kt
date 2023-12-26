@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.paymong.wear.domain.viewModel.DefaultValue
 import com.paymong.wear.domain.viewModel.main.SlotViewModel
 import com.paymong.wear.ui.code.MongCode
 import com.paymong.wear.ui.code.StateCode
@@ -21,9 +22,9 @@ fun SlotView(
     slotViewModel: SlotViewModel = hiltViewModel()
 ) {
     /** Data **/
-    val mongCode = slotViewModel.mongCode.observeAsState("")
-    val stateCode = slotViewModel.stateCode.observeAsState("")
-    val poopCount = slotViewModel.poopCount.observeAsState(0)
+    val mongCode = slotViewModel.mongCode.observeAsState(DefaultValue.mongCode)
+    val stateCode = slotViewModel.stateCode.observeAsState(DefaultValue.stateCode)
+    val poopCount = slotViewModel.poopCount.observeAsState(DefaultValue.poopCount)
 
     /** Content **/
     SlotContent(

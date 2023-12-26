@@ -2,12 +2,19 @@ package com.paymong.wear.domain.viewModel.main
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.paymong.wear.domain.dto.DefaultCode
+import com.paymong.wear.domain.model.MongModel
 import com.paymong.wear.domain.repository.MongRepository
+import com.paymong.wear.domain.viewModel.DefaultValue
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,62 +23,38 @@ import javax.inject.Inject
 class SlotViewModel @Inject constructor(
     private val mongRepository: MongRepository
 ) : ViewModel() {
-    val mongCode: LiveData<String> get() = _mongCode
-    private val _mongCode = MutableLiveData(DefaultCode.mongCode)
-    val stateCode: LiveData<String> get() = _stateCode
-    private val _stateCode = MutableLiveData(DefaultCode.stateCode)
-    val poopCount: LiveData<Int> get() = _poopCount
-    private val _poopCount = MutableLiveData(DefaultCode.poopCount)
+    var mongCode: LiveData<String> get() = _mongModel.map { it.mongCode }
+    var stateCode: LiveData<String> get() = _mongModel.map { it.stateCode }
+    var poopCount: LiveData<Int> get() = _mongModel.map { it.poopCount }
+    private var nextMongCode: LiveData<String> get() = _mongModel.map { it.nextMongCode }
+    private var nextStateCode: LiveData<String> get() = _mongModel.map { it.nextStateCode }
 
-    private val _nextMongCode = MutableLiveData(DefaultCode.nextMongCode)
-    private val _nextStateCode = MutableLiveData(DefaultCode.nextStateCode)
-
-    init {
-        viewModelScope.launch {
-//            _mongCode.postValue("CH100")
-//            _stateCode.postValue("CD000")
-//            _poopCount.postValue(4)
-//            _mongCode.postValue("CH000")
-//            _stateCode.postValue("CD000")
-//            _poopCount.postValue(4)
-//            delay(1000)
-//            _nextStateCode.postValue(_stateCode.value)
-//            _stateCode.postValue("CD007")
-//            _nextMongCode.postValue("CH100")
-//            delay(5000)
-//            _nextStateCode.postValue(_stateCode.value)
-//            _stateCode.postValue("CD007")
-//            _nextMongCode.postValue("CH200")
-//            delay(5000)
-//            _nextStateCode.postValue(_stateCode.value)
-//            _stateCode.postValue("CD007")
-//            _nextMongCode.postValue("CH300")
-//            delay(5000)
-//            _stateCode.postValue("CD006")
+    private val _mongModel = MediatorLiveData<MongModel>()
+    private val liveDataObserver = Observer<LiveData<MongModel>> { innerLiveData ->
+        innerLiveData.observeForever { mongModel ->
+            Log.d("SlotViewModel", mongModel.toString())
+            _mongModel.value = mongModel
         }
     }
-
-
-//    var stateCode by mutableStateOf("CD444")
-//    var poopCount by mutableStateOf(0)
-//    var mongCode by mutableStateOf("CH444")
-//
-//    private var nextMongCode by mutableStateOf("")
-//    private var nextStateCode by mutableStateOf("")
-//
-//    init {
-//        mongRepository.getMongCondition().observeForever { mongCondition ->
-//            Log.d("test", mongCondition.toString())
-//        }
-//
-//        mongRepository.setMongCondition(MongCondition(0.5f, 0.5f,0.5f,0.5f))
-////        mongRepository.getStateCode().observeForever { stateCode -> this.stateCode = stateCode }
-////        mongRepository.getPoopCount().observeForever { poopCount -> this.poopCount = poopCount }
-////        mongRepository.getMongCode().observeForever { mongCode -> this.mongCode = mongCode }
-//    }
+    init {
+        mongCode = MutableLiveData(DefaultValue.mongCode)
+        stateCode = MutableLiveData(DefaultValue.stateCode)
+        poopCount = MutableLiveData(DefaultValue.poopCount)
+        nextMongCode = MutableLiveData(DefaultValue.nextMongCode)
+        nextStateCode = MutableLiveData(DefaultValue.nextStateCode)
+        _mongModel.addSource(mongRepository.getMong(), liveDataObserver)
+    }
+    override fun onCleared() {
+        super.onCleared()
+        mongRepository.getMong().removeObserver(liveDataObserver)
+        Log.d("SlotViewModel", "removeObserver")
+    }
 
     fun generateMong() {
         Log.d("SlotViewModel", "Call - generateMong()")
+        viewModelScope.launch(Dispatchers.IO) {
+            mongRepository.generateMong()
+        }
     }
 
     fun evolutionStart() {
@@ -91,9 +74,9 @@ class SlotViewModel @Inject constructor(
 
     fun graduation() {
         Log.d("SlotViewModel", "Call - graduation()")
-        _mongCode.postValue("CH444")
-        _stateCode.postValue("CD444")
-        _poopCount.postValue(0)
+//        _mongCode.postValue("CH444")
+//        _stateCode.postValue("CD444")
+//        _poopCount.postValue(0)
     }
 
     // TODO : 카프카 클라이언트가 Repository의 값을 변경하면 옵저버가 감지하기 때문에 필요없음

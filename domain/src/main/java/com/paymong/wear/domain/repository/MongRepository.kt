@@ -1,13 +1,19 @@
 package com.paymong.wear.domain.repository
 
 import androidx.lifecycle.LiveData
-import com.paymong.wear.domain.dto.model.MongModel
+import com.paymong.wear.domain.model.MongModel
 
 interface MongRepository {
-    fun initSetMong()
-    fun generateMong()
-    fun setSlot(slotId: Long)
-    fun getMong(): LiveData<MongModel>
+    suspend fun initSetMong()
+    suspend fun generateMong()
+    suspend fun setSlot(slotId: Long)
+    fun getMong(): LiveData<LiveData<MongModel>>
+    suspend fun setMongState(stateCode: String)
+    suspend fun findMongState(): String
+    suspend fun setPoopCount(poopCount: Int)
+    suspend fun setMongSleep()
+    suspend fun setMongWakeUp()
+
 
 //    fun initMong(callback: () -> Unit)
 //    fun setNowMong(slotId: Int)

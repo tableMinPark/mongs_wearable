@@ -1,14 +1,21 @@
 package com.paymong.wear.domain.viewModel.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.map
-import androidx.lifecycle.switchMap
-import com.paymong.wear.domain.dto.DefaultCode
+import androidx.lifecycle.viewModelScope
+import com.paymong.wear.domain.model.MongModel
 import com.paymong.wear.domain.repository.AppInfoRepository
 import com.paymong.wear.domain.repository.MongRepository
+import com.paymong.wear.domain.viewModel.DefaultValue
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,63 +23,31 @@ class MainViewModel @Inject constructor(
     private val appInfoRepository: AppInfoRepository,
     private val mongRepository: MongRepository
 ) : ViewModel() {
-//    var mapCode: LiveData<String> get() = _mapCode
-//    private val _mapCode = MutableLiveData(DefaultCode.mapCode)
-//    val mongCode: LiveData<String> get() = _mongCode
-//    private val _mongCode = MutableLiveData(DefaultCode.mongCode)
-//    val stateCode: LiveData<String> get() = _stateCode
-//    private val _stateCode = MutableLiveData(DefaultCode.stateCode)
+    var mapCode: LiveData<String> = MutableLiveData(DefaultValue.mapCode)
+    var mongCode: LiveData<String> get() = _mongModel.map { it.mongCode }
+    var stateCode: LiveData<String> get() = _mongModel.map { it.stateCode }
 
-    var mapCode: LiveData<String>
-    var mongCode: LiveData<String>
-    var stateCode: LiveData<String>
-
-    init {
-        val appInfoModel = appInfoRepository.getAppInfo()
-        val mongModel = mongRepository.getMong()
-        mapCode = appInfoModel.map { it.mapCode }
-        mongCode = mongModel.map { it.mongCode }
-        stateCode = mongModel.map { it.stateCode }
-
+    private val _mongModel = MediatorLiveData<MongModel>()
+    private val liveDataObserver = Observer<LiveData<MongModel>> { innerLiveData ->
+        innerLiveData.observeForever { mongModel ->
+            Log.d("MainViewModel", mongModel.toString())
+            _mongModel.value = mongModel
+        }
     }
 
-//    init {
+    init {
+        mongCode = MutableLiveData(DefaultValue.mongCode)
+        stateCode = MutableLiveData(DefaultValue.stateCode)
+        _mongModel.addSource(mongRepository.getMong(), liveDataObserver)
 
-//        appInfoRepository.getMapCode().observeForever { mapCode -> this.mapCode = mapCode }
-//        mongRepository.getMongCode().observeForever { mongCode -> this.mongCode = mongCode }
-//        mongRepository.getStateCode().observeForever { stateCode -> this.stateCode = stateCode }
-
-
-//        sharedRepository.getMapCode().observeForever { mapCode -> this.mapCode = mapCode }
-//        mongInfoSharedRepository.getMongCode().observeForever { mongCode -> this.mongCode = mongCode }
-//        mongStateSharedRepository.getStateCode().observeForever { stateCode -> this.stateCode = stateCode }
-//
-//        // TODO : 단위 테스트 (몽 상태 변화에 따른 화면 전환)
-//        mongInfoSharedRepository.getNextMongCode().observeForever { nextMongCode -> this.nextMongCode = nextMongCode }
-//        mongStateSharedRepository.getNextStateCode().observeForever { nextStateCode -> this.nextStateCode = nextStateCode }
-//        viewModelScope.launch {
-//            // 먹는중 -> 행복 -> 진화 대기 -> 진화 중 -> 졸업 ->  죽음
-//            for (stateCode in arrayOf("CD008", "CD009", "CD007", "CD010", "CD006", "CD005")) {
-//                when(stateCode) {
-//                    "CD008" -> {}
-//                    "CD009" -> {}
-//                    "CD007" -> {
-//                        mongStateSharedRepository.setNextStateCode("CD009")
-//                        mongInfoSharedRepository.setNextMongCode("CH200")
-//                    }
-//                    "CD010" -> {}
-//                    "CD006" -> {}
-//                    "CD005" -> {
-//                        mongConditionSharedRepository.setHealth(0.0f, 1L)
-//                        mongConditionSharedRepository.setSatiety(0.0f, 1L)
-//                        mongConditionSharedRepository.setStrength(0.0f, 1L)
-//                        mongConditionSharedRepository.setSleep(0.0f, 1L)
-//                    }
-//                    else -> {}
-//                }
-//                mongStateSharedRepository.setStateCode(stateCode)
-//                delay(6000)
-//            }
-//        }
-//    }
+        viewModelScope.launch(Dispatchers.IO) {
+            val appInfoModel = appInfoRepository.getAppInfo()
+            mapCode = appInfoModel.map { it.mapCode }
+        }
+    }
+    override fun onCleared() {
+        super.onCleared()
+        mongRepository.getMong().removeObserver(liveDataObserver)
+        Log.d("MainViewModel", "removeObserver")
+    }
 }
