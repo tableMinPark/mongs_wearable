@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -70,13 +71,27 @@ fun SlotContent(
             when (state) {
                 StateCode.CD005 -> Dead()
                 StateCode.CD007 -> EvolutionReady(evolutionStart = evolutionStart)
-                StateCode.CD010 -> Character(mong = mong)
+                StateCode.CD010 -> {
+                    Box(
+                        contentAlignment = Alignment.BottomCenter,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Character(mong = mong)
+                    }
+                }
                 StateCode.CD444 -> Empty(onClick = generateMong)
-                else -> Character(
-                    state = state,
-                    mong = mong,
-                    showSlotActionView = showSlotActionView
-                )
+                else -> {
+                    Box(
+                        contentAlignment = Alignment.BottomCenter,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Character(
+                            state = state,
+                            mong = mong,
+                            showSlotActionView = showSlotActionView
+                        )
+                    }
+                }
             }
         }
 

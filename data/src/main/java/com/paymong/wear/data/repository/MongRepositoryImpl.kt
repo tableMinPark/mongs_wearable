@@ -8,7 +8,6 @@ import com.paymong.wear.data.room.AppDatabase
 import com.paymong.wear.data.entity.Mong
 import com.paymong.wear.domain.model.MongModel
 import com.paymong.wear.domain.repository.MongRepository
-import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -21,8 +20,8 @@ class MongRepositoryImpl @Inject constructor(
 
     override suspend fun initSetMong() {
         if (appDatabase.mongDao().countMong() > 0) {
-            slotId = appDatabase.mongDao().findFirstMongSlotId()
-            setMong(slotId)
+            val firstMongSlotId = appDatabase.mongDao().findFirstMongSlotId()
+            setSlot(slotId = firstMongSlotId)
         }
     }
     override suspend fun generateMong() {
@@ -57,13 +56,20 @@ class MongRepositoryImpl @Inject constructor(
         )
         val registerMongSlotId = appDatabase.mongDao().registerMong(newMong)
         Log.d("MongRepository", "Call - generateMong() : $registerMongSlotId")
-        setMong(registerMongSlotId)
+        setSlot(registerMongSlotId)
     }
     override suspend fun setSlot(slotId: Long) {
+        Log.d("MongRepository", "Call - setSlot() : $slotId")
+        this@MongRepositoryImpl.slotId = slotId
         setMong(slotId)
     }
+
     override fun getMong(): LiveData<LiveData<MongModel>> {
         return this@MongRepositoryImpl.mongModel
+    }
+
+    override fun getAllMong(): LiveData<List<MongModel>> {
+        return appDatabase.mongDao().findAllMong()
     }
 
     override suspend fun setMongState(stateCode: String) {
@@ -91,10 +97,8 @@ class MongRepositoryImpl @Inject constructor(
     }
 
     private fun setMong(slotId: Long) {
-        this@MongRepositoryImpl.slotId = slotId
-
-        val mong = appDatabase.mongDao().findBySlotId(slotId)
-        this@MongRepositoryImpl._mongModel.postValue(mong)
+        val mongModel = appDatabase.mongDao().findBySlotId(slotId)
+        this@MongRepositoryImpl._mongModel.postValue(mongModel)
         Log.d("MongRepository", "Call - setMong()")
     }
 }

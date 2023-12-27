@@ -34,10 +34,10 @@ class ConditionViewModel @Inject constructor(
 
     init {
         mongCode = MutableLiveData(DefaultValue.mongCode)
-        health = MutableLiveData(1.0f)
-        satiety = MutableLiveData(1.0f)
-        strength = MutableLiveData(1.0f)
-        sleep = MutableLiveData(1.0f)
+        health = MutableLiveData(DefaultValue.health)
+        satiety = MutableLiveData(DefaultValue.satiety)
+        strength = MutableLiveData(DefaultValue.strength)
+        sleep = MutableLiveData(DefaultValue.sleep)
         _mongModel.addSource(mongRepository.getMong(), liveDataObserver)
     }
     override fun onCleared() {

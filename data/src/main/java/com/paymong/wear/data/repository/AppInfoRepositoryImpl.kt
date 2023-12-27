@@ -19,7 +19,7 @@ class AppInfoRepositoryImpl @Inject constructor(
     override fun initSetAppInfo() {
         CoroutineScope(Dispatchers.IO).launch {
             // TODO : 앱 인포 (API)
-            val mapCode = "MP001"
+            val mapCode = "MP000"
 
             _appInfoModel.postValue(AppInfoModel(mapCode = mapCode))
             Log.d("AppInfoRepository", "Call - initSetAppInfo()")

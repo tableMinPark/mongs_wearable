@@ -44,6 +44,15 @@ fun Background(
 }
 
 @Composable
+fun SlotSelectBackground() {
+    Image(
+        painter = painterResource(MapCode.MP000.code),
+        contentDescription = null,
+        contentScale = ContentScale.Crop
+    )
+}
+
+@Composable
 fun BackgroundEffect() {
     val imageLoader = ImageLoader.Builder(LocalContext.current).components {add(ImageDecoderDecoder.Factory())}.build()
 

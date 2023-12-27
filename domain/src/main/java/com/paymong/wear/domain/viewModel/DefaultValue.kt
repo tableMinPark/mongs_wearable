@@ -7,4 +7,10 @@ object DefaultValue {
     const val poopCount = 0
     const val nextMongCode: String = "CH444"
     const val nextStateCode: String = "CD444"
+
+    const val health = 1.0f
+    const val satiety = 1.0f
+    const val strength = 1.0f
+    const val sleep = 1.0f
+
 }
