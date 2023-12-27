@@ -33,11 +33,8 @@ import androidx.wear.compose.material.PageIndicatorState
 import com.paymong.wear.domain.model.MongModel
 import com.paymong.wear.domain.viewModel.main.SlotSelectViewModel
 import com.paymong.wear.ui.R
-import com.paymong.wear.ui.code.MapCode
 import com.paymong.wear.ui.theme.PaymongNavy
-import com.paymong.wear.ui.view.common.background.Background
 import com.paymong.wear.ui.view.common.background.SlotSelectBackground
-import com.paymong.wear.ui.view.main.maxPage
 import kotlin.math.max
 import kotlin.math.min
 
@@ -54,6 +51,10 @@ fun SlotSelectView(
 
     /** Content **/
     SlotSelectContent(
+        setSlot = { slotId ->
+            slotSelectViewModel.setSlot(slotId)
+            navController.popBackStack()
+        },
         generateMong = {
             slotSelectViewModel.generateMong()
             navController.popBackStack()
@@ -64,6 +65,7 @@ fun SlotSelectView(
 
 @Composable
 fun SlotSelectContent(
+    setSlot: (Long) -> Unit,
     generateMong: () -> Unit,
     slotList: State<List<MongModel>>
 ) {
@@ -80,7 +82,7 @@ fun SlotSelectContent(
     }
 
     Box {
-        // 캐릭터
+        // 생성일, 캐릭터, 버튼
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -89,22 +91,14 @@ fun SlotSelectContent(
             if (slotList.value.size == nowIndex.intValue) {
                 SlotAdd(onClick = generateMong)
             } else {
-                SlotFigure(mong = slotList.value[nowIndex.intValue])
+                SlotFigure(onClick = setSlot ,mong = slotList.value[nowIndex.intValue])
             }
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .zIndex(1f),
-            contentAlignment = Alignment.Center
-        ) {
-
         }
         // 화살표
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .zIndex(2f),
+                .zIndex(1f),
             contentAlignment = Alignment.Center
         ) {
             Row(
@@ -139,7 +133,7 @@ fun SlotSelectContent(
             unselectedColor = Color.White,
             indicatorSize = 6.dp,
             modifier = Modifier
-                .zIndex(3f)
+                .zIndex(2f)
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 7.dp)
         )

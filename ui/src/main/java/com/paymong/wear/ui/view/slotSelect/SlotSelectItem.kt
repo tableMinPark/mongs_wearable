@@ -35,24 +35,28 @@ import com.paymong.wear.ui.view.common.character.Character
 
 @Composable
 fun SlotFigure(
+    onClick: (Long) -> Unit,
     mong: MongModel
 ) {
     Column (
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(top = 15.dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 15.dp, bottom = 10.dp)
         ) {
             Text(text = mong.born.toString())
         }
+
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(top = 15.dp, bottom = 5.dp)
         ) {
             Character(
                 mong = MongCode.valueOf(mong.mongCode),
@@ -67,7 +71,7 @@ fun SlotFigure(
         ) {
             Button(
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                onClick = { /*TODO*/ }
+                onClick = { onClick(mong.slotId) }
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.blue_bnt),
@@ -88,22 +92,33 @@ fun SlotFigure(
 fun SlotAdd(
     onClick: () -> Unit
 ) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+    Column (
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
     ) {
-        Text(text = "새로운 알 분양 받기")
-        Icon(
-            imageVector = Icons.Outlined.Add,
-            contentDescription = null,
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = "새로운 알 분양 받기")
+        }
+        Row(
+            horizontalArrangement = Arrangement.Center,
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(top = 20.dp)
-                .size(40.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = onClick
-                )
-        )
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Add,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = onClick
+                    )
+            )
+        }
     }
 }

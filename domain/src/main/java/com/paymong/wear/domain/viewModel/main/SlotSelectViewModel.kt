@@ -17,6 +17,12 @@ class SlotSelectViewModel @Inject constructor(
 ) : ViewModel() {
     val slotList: LiveData<List<MongModel>> = mongRepository.getAllMong()
 
+    fun setSlot(slotId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            mongRepository.setSlot(slotId)
+        }
+    }
+
     fun generateMong() {
         Log.d("SlotSelectViewModel", "Call - generateMong()")
         viewModelScope.launch(Dispatchers.IO) {
