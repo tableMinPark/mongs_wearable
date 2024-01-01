@@ -16,6 +16,7 @@ import com.paymong.wear.domain.viewModel.DefaultValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Objects
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,30 +25,17 @@ class MainViewModel @Inject constructor(
     private val mongRepository: MongRepository
 ) : ViewModel() {
     var mapCode: LiveData<String> = MutableLiveData(DefaultValue.mapCode)
-    var mongCode: LiveData<String> get() = _mongModel.map { it.mongCode }
-    var stateCode: LiveData<String> get() = _mongModel.map { it.stateCode }
-
-    private val _mongModel = MediatorLiveData<MongModel>()
-    private val liveDataObserver = Observer<LiveData<MongModel>> { innerLiveData ->
-        innerLiveData.observeForever { mongModel ->
-            Log.d("MainViewModel", mongModel.toString())
-            _mongModel.value = mongModel
-        }
-    }
-
+    var mongCode: LiveData<String> = MutableLiveData(DefaultValue.mongCode)
+    var stateCode: LiveData<String> = MutableLiveData(DefaultValue.stateCode)
     init {
-        mongCode = MutableLiveData(DefaultValue.mongCode)
-        stateCode = MutableLiveData(DefaultValue.stateCode)
-        _mongModel.addSource(mongRepository.getMong(), liveDataObserver)
-
         viewModelScope.launch(Dispatchers.IO) {
+            Log.d("MainViewModel", "MainViewModel - init!")
+            val mongModel = mongRepository.getMong()
+            mongCode = mongModel.map { it.mongCode }
+            stateCode = mongModel.map { it.stateCode }
+
             val appInfoModel = appInfoRepository.getAppInfo()
             mapCode = appInfoModel.map { it.mapCode }
         }
-    }
-    override fun onCleared() {
-        super.onCleared()
-        mongRepository.getMong().removeObserver(liveDataObserver)
-        Log.d("MainViewModel", "removeObserver")
     }
 }

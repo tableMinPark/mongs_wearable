@@ -18,30 +18,20 @@ import com.paymong.wear.domain.viewModel.DefaultValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Objects
 import javax.inject.Inject
 
 @HiltViewModel
 class InteractionViewModel @Inject constructor(
     private val mongRepository: MongRepository
 ) : ViewModel() {
-    var stateCode: LiveData<String> get() = _mongModel.map { it.stateCode }
-
-    private val _mongModel = MediatorLiveData<MongModel>()
-    private val liveDataObserver = Observer<LiveData<MongModel>> { innerLiveData ->
-        innerLiveData.observeForever { mongModel ->
-            Log.d("InteractionViewModel", mongModel.toString())
-            _mongModel.value = mongModel
-        }
-    }
+    var stateCode: LiveData<String> = MutableLiveData(DefaultValue.stateCode)
 
     init {
-        stateCode = MutableLiveData(DefaultValue.stateCode)
-        _mongModel.addSource(mongRepository.getMong(), liveDataObserver)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        mongRepository.getMong().removeObserver(liveDataObserver)
-        Log.d("InteractionViewModel", "removeObserver")
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.d("InteractionViewModel", "InteractionViewModel - init!")
+            val mongModel = mongRepository.getMong()
+            stateCode = mongModel.map { it.stateCode }
+        }
     }
 }

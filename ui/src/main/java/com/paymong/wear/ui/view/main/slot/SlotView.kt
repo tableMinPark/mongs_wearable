@@ -1,6 +1,7 @@
 package com.paymong.wear.ui.view.main.slot
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -11,33 +12,61 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.paymong.wear.domain.viewModel.DefaultValue
+import com.paymong.wear.domain.viewModel.code.SlotCode
+import com.paymong.wear.domain.viewModel.code.SlotSelectCode
 import com.paymong.wear.domain.viewModel.main.SlotViewModel
 import com.paymong.wear.ui.code.MongCode
+import com.paymong.wear.ui.code.NavItem
 import com.paymong.wear.ui.code.StateCode
+import com.paymong.wear.ui.view.common.background.Process
 import com.paymong.wear.ui.view.common.character.Character
 
 @Composable
 fun SlotView(
+    navController: NavController,
     showActionContent: () -> Unit,
     slotViewModel: SlotViewModel = hiltViewModel()
 ) {
     /** Data **/
+    val processCode = slotViewModel.processCode.observeAsState(SlotCode.STAND_BY)
+
+    /** Observer **/
     val mongCode = slotViewModel.mongCode.observeAsState(DefaultValue.mongCode)
     val stateCode = slotViewModel.stateCode.observeAsState(DefaultValue.stateCode)
     val poopCount = slotViewModel.poopCount.observeAsState(DefaultValue.poopCount)
 
-    /** Content **/
-    SlotContent(
-        mongCode = mongCode,
-        stateCode = stateCode,
-        poopCount = poopCount,
-        evolutionStart = slotViewModel::evolutionStart,
-        evolutionEnd = slotViewModel::evolutionEnd,
-        graduation = slotViewModel::graduation,
-        generateMong = slotViewModel::generateMong,
-        showSlotActionView = showActionContent
-    )
+
+    /** Logic by ProcessCode **/
+    when(processCode.value) {
+        SlotCode.LOAD_MONG -> {
+            SlotProcess()
+        }
+        SlotCode.GENERATE_MONG -> {
+            SlotProcess()
+        }
+        SlotCode.END -> {
+            navController.navigate(NavItem.MainNested.route) {
+                popUpTo(
+                    navController.graph.id
+                )
+            }
+        }
+        else -> {
+            /** Content **/
+            SlotContent(
+                mongCode = mongCode,
+                stateCode = stateCode,
+                poopCount = poopCount,
+                evolutionStart = slotViewModel::evolutionStart,
+                evolutionEnd = slotViewModel::evolutionEnd,
+                graduation = slotViewModel::graduation,
+                generateMong = slotViewModel::generateMong,
+                showSlotActionView = showActionContent
+            )
+        }
+    }
 }
 
 @Composable
@@ -56,7 +85,10 @@ fun SlotContent(
     val poop = poopCount.value
 
     Box(
-        modifier = Modifier.fillMaxSize().padding(bottom = 10.dp).zIndex(0f)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 10.dp)
+            .zIndex(0f)
     ) {
         val zIndex = if (state in arrayListOf(
                 StateCode.CD006,

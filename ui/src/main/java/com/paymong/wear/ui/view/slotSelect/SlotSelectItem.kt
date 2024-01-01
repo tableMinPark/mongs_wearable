@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +32,9 @@ import androidx.wear.compose.material.Text
 import com.paymong.wear.domain.model.MongModel
 import com.paymong.wear.ui.R
 import com.paymong.wear.ui.code.MongCode
+import com.paymong.wear.ui.view.common.background.Process
 import com.paymong.wear.ui.view.common.character.Character
+import kotlinx.coroutines.delay
 
 @Composable
 fun SlotFigure(
@@ -120,5 +123,15 @@ fun SlotAdd(
                     )
             )
         }
+    }
+}
+
+@Composable
+fun SlotSelectProcess() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Process(processSize = 30)
     }
 }

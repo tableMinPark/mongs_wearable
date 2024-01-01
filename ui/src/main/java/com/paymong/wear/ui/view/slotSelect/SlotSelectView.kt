@@ -3,11 +3,14 @@ package com.paymong.wear.ui.view.slotSelect
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,9 +34,13 @@ import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.HorizontalPageIndicator
 import androidx.wear.compose.material.PageIndicatorState
 import com.paymong.wear.domain.model.MongModel
+import com.paymong.wear.domain.viewModel.code.InitLandingCode
+import com.paymong.wear.domain.viewModel.code.SlotSelectCode
 import com.paymong.wear.domain.viewModel.main.SlotSelectViewModel
 import com.paymong.wear.ui.R
+import com.paymong.wear.ui.code.NavItem
 import com.paymong.wear.ui.theme.PaymongNavy
+import com.paymong.wear.ui.view.common.background.Process
 import com.paymong.wear.ui.view.common.background.SlotSelectBackground
 import kotlin.math.max
 import kotlin.math.min
@@ -43,24 +50,44 @@ fun SlotSelectView(
     navController: NavController,
     slotSelectViewModel: SlotSelectViewModel = hiltViewModel()
 ) {
+    /** Data **/
+    val processCode = slotSelectViewModel.processCode.observeAsState(SlotSelectCode.STAND_BY)
+
     /** Observer **/
     val slotList = slotSelectViewModel.slotList.observeAsState(ArrayList())
 
     /** Background **/
     SlotSelectBackground()
 
-    /** Content **/
-    SlotSelectContent(
-        setSlot = { slotId ->
-            slotSelectViewModel.setSlot(slotId)
-            navController.popBackStack()
-        },
-        generateMong = {
-            slotSelectViewModel.generateMong()
-            navController.popBackStack()
-        },
-        slotList = slotList
-    )
+    /** Logic by ProcessCode **/
+    when(processCode.value) {
+        SlotSelectCode.LOAD_MONG_LIST -> {
+            SlotSelectProcess()
+        }
+        SlotSelectCode.GENERATE_MONG -> {
+            SlotSelectProcess()
+        }
+        SlotSelectCode.SET_SLOT -> {
+            SlotSelectProcess()
+        }
+        SlotSelectCode.END -> {
+            navController.navigate(NavItem.MainNested.route) {
+                popUpTo(
+                    navController.graph.id
+                )
+            }
+        }
+        else -> {
+            /** Content **/
+            SlotSelectContent(
+                setSlot = { selectSlotId ->
+                    slotSelectViewModel.setSlot(slotId = selectSlotId)
+                },
+                generateMong = slotSelectViewModel::generateMong,
+                slotList = slotList
+            )
+        }
+    }
 }
 
 @Composable

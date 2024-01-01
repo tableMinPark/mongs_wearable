@@ -93,9 +93,7 @@ fun MainLandingView(
         InitLandingCode.SIGN_IN_PROCESS_GOOGLE -> {
             GoogleSignIn(initLandingViewModel::googleSignInSuccess, initLandingViewModel::googleSignInFail)
         }
-        InitLandingCode.SIGN_IN_PROCESS -> {
-
-        }
+        InitLandingCode.SIGN_IN_PROCESS -> {  }
         InitLandingCode.END -> {
             navController.navigate(NavItem.Main.route) {
                 popUpTo(

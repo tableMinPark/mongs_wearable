@@ -1,6 +1,7 @@
 package com.paymong.wear.domain.viewModel
 
 object DefaultValue {
+    const val slotId = -1L
     const val mapCode = "MP000"
     const val mongCode = "CH444"
     const val stateCode = "CD444"

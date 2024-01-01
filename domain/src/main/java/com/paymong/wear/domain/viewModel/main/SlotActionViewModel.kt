@@ -2,13 +2,10 @@ package com.paymong.wear.domain.viewModel.main
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.paymong.wear.domain.model.MongModel
 import com.paymong.wear.domain.repository.MongRepository
 import com.paymong.wear.domain.viewModel.DefaultValue
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,31 +18,21 @@ import javax.inject.Inject
 class SlotActionViewModel @Inject constructor(
     val mongRepository: MongRepository
 ) : ViewModel() {
-    var stateCode: LiveData<String> get() = _mongModel.map { it.stateCode }
-    var poopCount: LiveData<Int> get() = _mongModel.map { it.poopCount }
+    var stateCode: LiveData<String> = MutableLiveData(DefaultValue.stateCode)
+    var poopCount: LiveData<Int> = MutableLiveData(DefaultValue.poopCount)
 
-    private val _mongModel = MediatorLiveData<MongModel>()
-    private val liveDataObserver = Observer<LiveData<MongModel>> { innerLiveData ->
-        innerLiveData.observeForever { mongModel ->
-            _mongModel.value = mongModel
-        }
-    }
     init {
-        Log.d("SlotActionViewModel", "init")
-        stateCode = MutableLiveData(DefaultValue.stateCode)
-        poopCount = MutableLiveData(DefaultValue.poopCount)
-        _mongModel.addSource(mongRepository.getMong(), liveDataObserver)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        mongRepository.getMong().removeObserver(liveDataObserver)
-        Log.d("SlotActionViewModel", "removeObserver")
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.d("SlotActionViewModel", "SlotActionViewModel - init!")
+            val mongModel = mongRepository.getMong()
+            stateCode = mongModel.map { it.stateCode }
+            poopCount = mongModel.map { it.poopCount }
+        }
     }
 
     fun sleep() {
         viewModelScope.launch(Dispatchers.IO) {
-            val stateCode = mongRepository.findMongState()
+            val stateCode = mongRepository.getMongState()
             if (stateCode == "CD002") {
                 // TODO : wakeUp action (API)
                 Log.d("SlotActionViewModel", "Call - sleep() : wakeUp")
@@ -67,7 +54,7 @@ class SlotActionViewModel @Inject constructor(
     fun stroke() {
         viewModelScope.launch(Dispatchers.IO) {
             Log.d("SlotActionViewModel", "Call - stroke()")
-            val nextMongState = mongRepository.findMongState()
+            val nextMongState = mongRepository.getMongState()
             mongRepository.setMongState("CD009")
             delay(1000)
             mongRepository.setMongState(nextMongState)

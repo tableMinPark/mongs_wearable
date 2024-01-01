@@ -13,47 +13,46 @@ import com.paymong.wear.domain.dto.DefaultCode
 import com.paymong.wear.domain.model.MongModel
 import com.paymong.wear.domain.repository.MongRepository
 import com.paymong.wear.domain.viewModel.DefaultValue
+import com.paymong.wear.domain.viewModel.code.SlotCode
+import com.paymong.wear.domain.viewModel.code.SlotSelectCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Objects
 import javax.inject.Inject
 
 @HiltViewModel
 class SlotViewModel @Inject constructor(
     private val mongRepository: MongRepository
 ) : ViewModel() {
-    var mongCode: LiveData<String> get() = _mongModel.map { it.mongCode }
-    var stateCode: LiveData<String> get() = _mongModel.map { it.stateCode }
-    var poopCount: LiveData<Int> get() = _mongModel.map { it.poopCount }
-    private var nextMongCode: LiveData<String> get() = _mongModel.map { it.nextMongCode }
-    private var nextStateCode: LiveData<String> get() = _mongModel.map { it.nextStateCode }
+    val processCode: LiveData<SlotCode> get() = _processCode
+    private val _processCode = MutableLiveData(SlotCode.LOAD_MONG)
 
-    private val _mongModel = MediatorLiveData<MongModel>()
-    private val liveDataObserver = Observer<LiveData<MongModel>> { innerLiveData ->
-        innerLiveData.observeForever { mongModel ->
-            Log.d("SlotViewModel", mongModel.toString())
-            _mongModel.value = mongModel
-        }
-    }
+    var mongCode: LiveData<String> = MutableLiveData(DefaultValue.mongCode)
+    var stateCode: LiveData<String> = MutableLiveData(DefaultValue.stateCode)
+    var poopCount: LiveData<Int> = MutableLiveData(DefaultValue.poopCount)
+    private var nextMongCode: LiveData<String> = MutableLiveData(DefaultValue.nextMongCode)
+    private var nextStateCode: LiveData<String> = MutableLiveData(DefaultValue.nextStateCode)
+
     init {
-        mongCode = MutableLiveData(DefaultValue.mongCode)
-        stateCode = MutableLiveData(DefaultValue.stateCode)
-        poopCount = MutableLiveData(DefaultValue.poopCount)
-        nextMongCode = MutableLiveData(DefaultValue.nextMongCode)
-        nextStateCode = MutableLiveData(DefaultValue.nextStateCode)
-        _mongModel.addSource(mongRepository.getMong(), liveDataObserver)
-    }
-    override fun onCleared() {
-        super.onCleared()
-        mongRepository.getMong().removeObserver(liveDataObserver)
-        Log.d("SlotViewModel", "removeObserver")
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.d("SlotViewModel", "SlotViewModel - init!")
+            val mongModel = mongRepository.getMong()
+            mongCode = mongModel.map { it.mongCode }
+            stateCode = mongModel.map { it.stateCode }
+            poopCount = mongModel.map { it.poopCount }
+            nextMongCode = mongModel.map { it.nextMongCode }
+            nextStateCode = mongModel.map { it.nextStateCode }
+            _processCode.postValue(SlotCode.STAND_BY)
+        }
     }
 
     fun generateMong() {
         Log.d("SlotViewModel", "Call - generateMong()")
         viewModelScope.launch(Dispatchers.IO) {
-            mongRepository.generateMong()
+            _processCode.postValue(SlotCode.GENERATE_MONG)
+            mongRepository.generateMong(callback = { _processCode.postValue(SlotCode.END) })
         }
     }
 

@@ -17,6 +17,8 @@ interface MongDao {
     fun findFirstMongSlotId(): Long
     @Query("SELECT * FROM mong WHERE slotId = :slotId")
     fun findBySlotId(slotId: Long): LiveData<MongModel>
+    @Query("SELECT * FROM mong WHERE slotId = :slotId")
+    fun findMongBySlotId(slotId: Long): LiveData<MongModel>
     @Query("SELECT * FROM mong")
     fun findAllMong(): LiveData<List<MongModel>>
     @Query("UPDATE mong SET nextStateCode = :nextStateCode WHERE slotId = :slotId")

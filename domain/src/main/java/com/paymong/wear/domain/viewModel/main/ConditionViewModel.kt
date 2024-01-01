@@ -7,42 +7,35 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.paymong.wear.domain.dto.DefaultCode
 import com.paymong.wear.domain.model.MongModel
 import com.paymong.wear.domain.repository.MongRepository
 import com.paymong.wear.domain.viewModel.DefaultValue
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.Objects
 import javax.inject.Inject
 
 @HiltViewModel
 class ConditionViewModel @Inject constructor(
     private val mongRepository: MongRepository
 ) : ViewModel() {
-    var mongCode: LiveData<String> get() = _mongModel.map { it.mongCode }
-    var health: LiveData<Float> get() = _mongModel.map { it.health }
-    var satiety: LiveData<Float> get() = _mongModel.map { it.satiety }
-    var strength: LiveData<Float> get() = _mongModel.map { it.strength }
-    var sleep: LiveData<Float> get() = _mongModel.map { it.sleep }
-
-    private val _mongModel = MediatorLiveData<MongModel>()
-    private val liveDataObserver = Observer<LiveData<MongModel>> { innerLiveData ->
-        innerLiveData.observeForever { mongModel ->
-            Log.d("ConditionViewModel", mongModel.toString())
-            _mongModel.value = mongModel
-        }
-    }
+    var mongCode: LiveData<String> = MutableLiveData(DefaultValue.mongCode)
+    var health: LiveData<Float> = MutableLiveData(DefaultValue.health)
+    var satiety: LiveData<Float> = MutableLiveData(DefaultValue.satiety)
+    var strength: LiveData<Float> = MutableLiveData(DefaultValue.strength)
+    var sleep: LiveData<Float> = MutableLiveData(DefaultValue.sleep)
 
     init {
-        mongCode = MutableLiveData(DefaultValue.mongCode)
-        health = MutableLiveData(DefaultValue.health)
-        satiety = MutableLiveData(DefaultValue.satiety)
-        strength = MutableLiveData(DefaultValue.strength)
-        sleep = MutableLiveData(DefaultValue.sleep)
-        _mongModel.addSource(mongRepository.getMong(), liveDataObserver)
-    }
-    override fun onCleared() {
-        super.onCleared()
-        mongRepository.getMong().removeObserver(liveDataObserver)
-        Log.d("ConditionViewModel", "removeObserver")
+        viewModelScope.launch(Dispatchers.IO) {
+            val mongModel = mongRepository.getMong()
+            mongCode = mongModel.map { it.mongCode }
+            health = mongModel.map { it.health }
+            satiety = mongModel.map { it.satiety }
+            strength = mongModel.map { it.strength }
+            sleep = mongModel.map { it.sleep }
+        }
     }
 }

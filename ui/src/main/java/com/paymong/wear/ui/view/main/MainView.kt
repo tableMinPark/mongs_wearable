@@ -141,7 +141,7 @@ fun MainContent(
         ) { page: Int ->
             when (page) {
                 0 -> ConditionView()
-                1 -> SlotView(showActionContent = showSlotActionView)
+                1 -> SlotView(navController = navController, showActionContent = showSlotActionView)
                 2 -> InteractionView(navController = navController)
                 3 -> ConfigureView(navController = navController)
             }

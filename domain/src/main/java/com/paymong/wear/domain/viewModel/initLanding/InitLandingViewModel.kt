@@ -23,7 +23,7 @@ class InitLandingViewModel @Inject constructor(
     private val _processCode = MutableLiveData(InitLandingCode.STAND_BY)
 
     private fun paymongLogin(userName: String?, email: String?) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             var isSuccess = true
 
             // 계정 데이터 유효성 체크
@@ -37,19 +37,11 @@ class InitLandingViewModel @Inject constructor(
 
             if (isSuccess) {
                 _processCode.postValue(InitLandingCode.SIGN_IN_SUCCESS)
-                initSet()
-                delay(1000)
-                _processCode.postValue(InitLandingCode.END)
+                appInfoRepository.initSetAppInfo()
+                mongRepository.initSetMong(callback = { _processCode.postValue(InitLandingCode.END) })
             } else {
                 _processCode.postValue(InitLandingCode.SIGN_IN_INIT)
             }
-        }
-    }
-
-    private suspend fun initSet() {
-        viewModelScope.launch(Dispatchers.IO) {
-            appInfoRepository.initSetAppInfo()
-            mongRepository.initSetMong()
         }
     }
 
