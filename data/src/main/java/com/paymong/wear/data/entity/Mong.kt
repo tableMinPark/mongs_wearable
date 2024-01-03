@@ -22,23 +22,4 @@ data class Mong(
     var satiety: Float = 0f,
     var strength: Float = 0f,
     var sleep: Float = 0f,
-) {
-//    companion object {
-//        fun of(mongResModel: MongResModel): Mong {
-//            return Mong(
-//                mongId = mongResModel.mongId,
-//                born = mongResModel.born,
-//                weight = mongResModel.weight,
-//                mongCode = mongResModel.mongCode,
-//                nextMongCode = mongResModel.nextMongCode,
-//                stateCode = mongResModel.stateCode,
-//                nextStateCode = mongResModel.nextStateCode,
-//                poopCount = mongResModel.poopCount,
-//                health = mongResModel.health,
-//                satiety = mongResModel.satiety,
-//                strength = mongResModel.strength,
-//                sleep = mongResModel.sleep
-//            )
-//        }
-//    }
-}
+)

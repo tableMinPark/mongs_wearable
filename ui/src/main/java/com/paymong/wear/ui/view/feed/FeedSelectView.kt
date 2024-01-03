@@ -94,7 +94,7 @@ fun FeedSelectContent(
                 .fillMaxSize()
                 .zIndex(0f)
         ) {
-            FeedItem(onClick = feeding, feedCode = feedList.value[nowIndex.intValue].foodCode)
+            FeedItem(onClick = feeding, name = feedList.value[nowIndex.intValue].name, code = feedList.value[nowIndex.intValue].code)
         }
         // 화살표
         Box(
@@ -119,7 +119,7 @@ fun FeedSelectContent(
                 }
                 Button(
                     onClick = {
-                        nowIndex.intValue = min(feedList.value.size, nowIndex.intValue + 1)
+                        nowIndex.intValue = min(feedList.value.size - 1, nowIndex.intValue + 1)
                     },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
                 ) {

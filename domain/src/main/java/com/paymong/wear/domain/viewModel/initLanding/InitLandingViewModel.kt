@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paymong.wear.domain.repository.AppInfoRepository
+import com.paymong.wear.domain.repository.FeedInfoRepository
 import com.paymong.wear.domain.repository.MongRepository
 import com.paymong.wear.domain.viewModel.code.InitLandingCode
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class InitLandingViewModel @Inject constructor(
     private val appInfoRepository: AppInfoRepository,
-    private val mongRepository: MongRepository
+    private val mongRepository: MongRepository,
+    private val feedInfoRepository: FeedInfoRepository
 ) : ViewModel() {
     val processCode: LiveData<InitLandingCode> get() = _processCode
     private val _processCode = MutableLiveData(InitLandingCode.STAND_BY)
@@ -38,6 +40,7 @@ class InitLandingViewModel @Inject constructor(
                 _processCode.postValue(InitLandingCode.SIGN_IN_SUCCESS)
                 appInfoRepository.initSetAppInfo()
                 mongRepository.initSetMong(callback = { _processCode.postValue(InitLandingCode.NAVIGATE) })
+                feedInfoRepository.initSetFeedInfo()
             } else {
                 _processCode.postValue(InitLandingCode.SIGN_IN_INIT)
             }

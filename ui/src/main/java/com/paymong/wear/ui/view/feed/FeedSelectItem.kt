@@ -1,8 +1,6 @@
 package com.paymong.wear.ui.view.feed
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,10 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,14 +22,17 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.Text
 import com.paymong.wear.ui.R
-import com.paymong.wear.ui.code.MongCode
+import com.paymong.wear.ui.code.FeedCode
 import com.paymong.wear.ui.view.common.background.Process
-import com.paymong.wear.ui.view.common.character.Character
+
+const val feedNameFontSize = 16
+const val feedImageSize = 75
 
 @Composable
 fun FeedItem(
     onClick: (String) -> Unit,
-    feedCode: String
+    name: String,
+    code: String
 ) {
     Column (
         verticalArrangement = Arrangement.Center,
@@ -46,9 +44,21 @@ fun FeedItem(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 15.dp, bottom = 5.dp)
         ) {
-            Text(text = feedCode)
+            Text(text = name, fontSize = feedNameFontSize.sp)
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp, bottom = 5.dp)
+        ) {
+            Image(
+                painter = painterResource(FeedCode.valueOf(code).code),
+                contentDescription = null,
+                modifier = Modifier.size(feedImageSize.dp)
+            )
         }
 
         Row(
@@ -58,7 +68,7 @@ fun FeedItem(
         ) {
             Button(
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                onClick = { onClick(feedCode) }
+                onClick = { onClick(code) }
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.blue_bnt),
@@ -66,9 +76,9 @@ fun FeedItem(
                 )
                 Text(
                     text = "구매",
+                    fontSize = 10.sp,
                     textAlign = TextAlign.Center,
                     color = Color.DarkGray,
-                    fontSize = 10.sp
                 )
             }
         }
