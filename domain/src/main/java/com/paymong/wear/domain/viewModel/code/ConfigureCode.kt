@@ -8,5 +8,5 @@ enum class ConfigureCode(
     SIGN_OUT_PROCESS("로그아웃 시도..."),
     SIGN_OUT_SUCCESS("로그아웃 성공!"),
     SIGN_OUT_FAIL("로그아웃 실패!"),
-    SIGN_OUT_END("로그아웃 종료")
+    NAVIGATE("로그아웃 종료")
 }

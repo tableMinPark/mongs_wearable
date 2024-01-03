@@ -9,5 +9,5 @@ enum class InitLandingCode(
     SIGN_IN_PROCESS_GOOGLE("구글 로그인 시도 중"),
     SIGN_IN_PROCESS("페이몽 로그인 시도 중"),
     SIGN_IN_SUCCESS("로그인 성공"),
-    END("끝")
+    NAVIGATE("끝")
 }

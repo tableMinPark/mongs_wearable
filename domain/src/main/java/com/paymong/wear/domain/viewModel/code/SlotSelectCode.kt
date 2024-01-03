@@ -7,5 +7,5 @@ enum class SlotSelectCode(
     LOAD_MONG_LIST("몽 목록 로딩 중"),
     GENERATE_MONG("몽 생성 중"),
     SET_SLOT("슬롯 변경 중"),
-    END("끝")
+    NAVIGATE("끝")
 }

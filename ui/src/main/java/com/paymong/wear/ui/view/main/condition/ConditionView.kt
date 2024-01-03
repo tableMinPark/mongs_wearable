@@ -7,12 +7,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.paymong.wear.domain.viewModel.main.ConditionViewModel
 import com.paymong.wear.ui.R
 import com.paymong.wear.ui.theme.PaymongBlue
 import com.paymong.wear.ui.theme.PaymongGreen
@@ -25,14 +22,11 @@ const val strokeWidth = 4
 
 @Composable
 fun ConditionView(
-    conditionViewModel: ConditionViewModel = hiltViewModel()
+    health: State<Float>,
+    satiety: State<Float>,
+    strength: State<Float>,
+    sleep: State<Float>
 ) {
-    /** Data **/
-    val health = conditionViewModel.health.observeAsState(0.0f)
-    val satiety = conditionViewModel.satiety.observeAsState(0.0f)
-    val strength = conditionViewModel.strength.observeAsState(0.0f)
-    val sleep = conditionViewModel.sleep.observeAsState(0.0f)
-
     /** Content **/
     ConditionContent(
         health = health,

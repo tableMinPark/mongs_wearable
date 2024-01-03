@@ -21,14 +21,14 @@ class SlotActionViewModel @Inject constructor(
     var stateCode: LiveData<String> = MutableLiveData(DefaultValue.stateCode)
     var poopCount: LiveData<Int> = MutableLiveData(DefaultValue.poopCount)
 
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            Log.d("SlotActionViewModel", "SlotActionViewModel - init!")
-            val mongModel = mongRepository.getMong()
-            stateCode = mongModel.map { it.stateCode }
-            poopCount = mongModel.map { it.poopCount }
-        }
-    }
+//    init {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            Log.d("SlotActionViewModel", "SlotActionViewModel - init!")
+//            val mongModel = mongRepository.getMong()
+//            stateCode = mongModel.map { it.stateCode }
+//            poopCount = mongModel.map { it.poopCount }
+//        }
+//    }
 
     fun sleep() {
         viewModelScope.launch(Dispatchers.IO) {

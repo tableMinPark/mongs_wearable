@@ -44,6 +44,24 @@ fun Background(
 }
 
 @Composable
+fun FeedBackGround() {
+    Image(
+        painter = painterResource(MapCode.MP000.code),
+        contentDescription = null,
+        contentScale = ContentScale.Crop
+    )
+}
+
+@Composable
+fun FeedSelectBackGround() {
+    Image(
+        painter = painterResource(MapCode.MP000.code),
+        contentDescription = null,
+        contentScale = ContentScale.Crop
+    )
+}
+
+@Composable
 fun SlotSelectBackground() {
     Image(
         painter = painterResource(MapCode.MP000.code),

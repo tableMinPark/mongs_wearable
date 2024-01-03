@@ -1,6 +1,8 @@
 package com.paymong.wear.ui.view
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
@@ -60,8 +62,16 @@ fun NavGraph () {
             composable(route = NavItem.Feed.route) {
                 FeedView(navController)
             }
-            composable(route = NavItem.FeedSelect.route) {
-                FeedSelectView(navController)
+            composable(
+                route = "${NavItem.FeedSelect.route}/{code}",
+                arguments = listOf(
+                    navArgument("code") {
+                        type = NavType.StringType
+                    }
+                )
+            ) {
+                val code = it.arguments!!.getString("code")
+                FeedSelectView(navController, if(code.isNullOrEmpty()) "FD" else code )
             }
         }
         // 뱌툴

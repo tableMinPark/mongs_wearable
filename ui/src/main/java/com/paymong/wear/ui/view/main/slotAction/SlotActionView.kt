@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -20,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.paymong.wear.domain.viewModel.DefaultValue
 import com.paymong.wear.domain.viewModel.main.SlotActionViewModel
 import com.paymong.wear.ui.R
 import com.paymong.wear.ui.code.NavItem
@@ -36,12 +34,10 @@ fun SlotActionView(
     navController: NavController,
     animateSlotAction: State<Boolean>,
     hideSlotActionView: () -> Unit,
+    stateCode: State<String>,
     slotActionViewModel: SlotActionViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-
-    /** Observer **/
-    val stateCode = slotActionViewModel.stateCode.observeAsState(DefaultValue.stateCode)
 
     /** Data **/
     val state = StateCode.valueOf(stateCode.value)

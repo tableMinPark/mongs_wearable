@@ -32,12 +32,15 @@ import androidx.wear.compose.material.HorizontalPageIndicator
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.PageIndicatorState
 import com.paymong.wear.domain.viewModel.DefaultValue
+import com.paymong.wear.domain.viewModel.code.FeedSelectCode
+import com.paymong.wear.domain.viewModel.code.MainCode
 import com.paymong.wear.domain.viewModel.main.MainViewModel
 import com.paymong.wear.ui.code.MapCode
 import com.paymong.wear.ui.code.MongCode
 import com.paymong.wear.ui.code.StateCode
 import com.paymong.wear.ui.theme.PaymongNavy
 import com.paymong.wear.ui.view.common.background.Background
+import com.paymong.wear.ui.view.common.background.Process
 import com.paymong.wear.ui.view.main.condition.ConditionView
 import com.paymong.wear.ui.view.main.configure.ConfigureView
 import com.paymong.wear.ui.view.main.interaction.InteractionView
@@ -53,38 +56,64 @@ fun MainView(
     navController: NavController,
     mainViewModel: MainViewModel = hiltViewModel()
 ) {
+    /** Flag **/
+    val processCode = mainViewModel.processCode.observeAsState(MainCode.LOAD)
+
     /** Observer **/
     val mapCode = mainViewModel.mapCode.observeAsState(DefaultValue.mapCode)
     val mongCode = mainViewModel.mongCode.observeAsState(DefaultValue.mongCode)
     val stateCode = mainViewModel.stateCode.observeAsState(DefaultValue.stateCode)
+    val poopCount = mainViewModel.poopCount.observeAsState(DefaultValue.poopCount)
+
+    val health = mainViewModel.health.observeAsState(DefaultValue.health)
+    val satiety = mainViewModel.health.observeAsState(DefaultValue.satiety)
+    val strength = mainViewModel.health.observeAsState(DefaultValue.strength)
+    val sleep = mainViewModel.health.observeAsState(DefaultValue.sleep)
+
+    /** Data **/
+    val map = MapCode.valueOf(mapCode.value)
 
     /** LaunchedEffect **/
     LaunchedEffect(Unit) {}
 
     /** Background **/
-    Background(map = MapCode.valueOf(mapCode.value))
+    Background(map = map)
 
-    /** Content **/
-    MainContent(
-        mapCode = mapCode,
-        mongCode = mongCode,
-        stateCode = stateCode,
-        navController = navController
-    )
+    /** Logic by ProcessCode **/
+    when(processCode.value) {
+        MainCode.LOAD -> {
+            MainProcess()
+        }
+        else -> {
+            /** Content **/
+            MainContent(
+                mongCode = mongCode,
+                stateCode = stateCode,
+                poopCount = poopCount,
+                health = health,
+                satiety = satiety,
+                strength = strength,
+                sleep = sleep,
+                navController = navController
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainContent(
-    mapCode: State<String>,
     mongCode: State<String>,
     stateCode: State<String>,
+    poopCount: State<Int>,
+    health: State<Float>,
+    satiety: State<Float>,
+    strength: State<Float>,
+    sleep: State<Float>,
     navController: NavController
 ) {
     /** Data **/
-    val map = MapCode.valueOf(mapCode.value)
     val mong = MongCode.valueOf(mongCode.value)
-    val state = StateCode.valueOf(stateCode.value)
 
     /** State **/
     val pagerState = rememberPagerState(initialPage = 1) { maxPage }
@@ -123,7 +152,6 @@ fun MainContent(
         zIndex.floatValue = -1f
     }
 
-
     /** Fun **/
     val showSlotActionView = {
         animateSlotAction.value = true
@@ -134,21 +162,31 @@ fun MainContent(
 
     /** View Content **/
     Box{
-        // Content
         HorizontalPager(
             modifier = Modifier.zIndex(0f),
             state = pagerState,
         ) { page: Int ->
             when (page) {
-                0 -> ConditionView()
-                1 -> SlotView(navController = navController, showActionContent = showSlotActionView)
-                2 -> InteractionView(navController = navController)
+                0 -> ConditionView(
+                    health = health,
+                    satiety = satiety,
+                    strength = strength,
+                    sleep = sleep
+                )
+
+                1 -> SlotView(
+                    navController = navController,
+                    showActionContent = showSlotActionView,
+                    mongCode = mongCode,
+                    stateCode = stateCode,
+                    poopCount = poopCount
+                )
+
+                2 -> InteractionView(navController = navController, stateCode = stateCode)
                 3 -> ConfigureView(navController = navController)
             }
         }
-        // Film
         Film(pagerState = pagerState, zIndex = zIndex, backgroundAlpha = backgroundAlpha)
-
         HorizontalPageIndicator(
             pageIndicatorState = pageIndicatorState,
             selectedColor = PaymongNavy,
@@ -165,7 +203,8 @@ fun MainContent(
             SlotActionView(
                 navController = navController,
                 animateSlotAction = animateSlotAction,
-                hideSlotActionView = hideSlotActionView
+                hideSlotActionView = hideSlotActionView,
+                stateCode = stateCode
             )
         }
     }
@@ -194,5 +233,14 @@ fun Film(
             )
         }
     }
+}
 
+@Composable
+fun MainProcess() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Process(processSize = 30)
+    }
 }

@@ -29,6 +29,6 @@ class ConfigureViewModel @Inject constructor(
         _processCode.postValue(ConfigureCode.SIGN_OUT_FAIL)
     }
     fun googleSignOutEnd() {
-        _processCode.postValue(ConfigureCode.SIGN_OUT_END)
+        _processCode.postValue(ConfigureCode.NAVIGATE)
     }
 }

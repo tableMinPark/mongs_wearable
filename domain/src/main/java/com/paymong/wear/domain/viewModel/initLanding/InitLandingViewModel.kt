@@ -10,7 +10,6 @@ import com.paymong.wear.domain.repository.MongRepository
 import com.paymong.wear.domain.viewModel.code.InitLandingCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,7 +37,7 @@ class InitLandingViewModel @Inject constructor(
             if (isSuccess) {
                 _processCode.postValue(InitLandingCode.SIGN_IN_SUCCESS)
                 appInfoRepository.initSetAppInfo()
-                mongRepository.initSetMong(callback = { _processCode.postValue(InitLandingCode.END) })
+                mongRepository.initSetMong(callback = { _processCode.postValue(InitLandingCode.NAVIGATE) })
             } else {
                 _processCode.postValue(InitLandingCode.SIGN_IN_INIT)
             }

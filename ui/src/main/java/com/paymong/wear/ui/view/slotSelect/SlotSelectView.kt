@@ -1,21 +1,13 @@
 package com.paymong.wear.ui.view.slotSelect
 
-import android.util.Log
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
@@ -34,23 +26,23 @@ import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.HorizontalPageIndicator
 import androidx.wear.compose.material.PageIndicatorState
 import com.paymong.wear.domain.model.MongModel
-import com.paymong.wear.domain.viewModel.code.InitLandingCode
 import com.paymong.wear.domain.viewModel.code.SlotSelectCode
 import com.paymong.wear.domain.viewModel.main.SlotSelectViewModel
 import com.paymong.wear.ui.R
 import com.paymong.wear.ui.code.NavItem
 import com.paymong.wear.ui.theme.PaymongNavy
-import com.paymong.wear.ui.view.common.background.Process
 import com.paymong.wear.ui.view.common.background.SlotSelectBackground
 import kotlin.math.max
 import kotlin.math.min
+
+const val maxSlot = 3
 
 @Composable
 fun SlotSelectView(
     navController: NavController,
     slotSelectViewModel: SlotSelectViewModel = hiltViewModel()
 ) {
-    /** Data **/
+    /** Flag **/
     val processCode = slotSelectViewModel.processCode.observeAsState(SlotSelectCode.STAND_BY)
 
     /** Observer **/
@@ -70,7 +62,7 @@ fun SlotSelectView(
         SlotSelectCode.SET_SLOT -> {
             SlotSelectProcess()
         }
-        SlotSelectCode.END -> {
+        SlotSelectCode.NAVIGATE -> {
             navController.navigate(NavItem.MainNested.route) {
                 popUpTo(
                     navController.graph.id
@@ -104,7 +96,7 @@ fun SlotSelectContent(
             override val selectedPage: Int
                 get() = nowIndex.intValue
             override val pageCount: Int
-                get() = slotList.value.size + 1
+                get() = slotList.value.size + if(slotList.value.size < maxSlot) 1 else 0
         }
     }
 
@@ -143,7 +135,11 @@ fun SlotSelectContent(
                     )
                 }
                 Button(
-                    onClick = { nowIndex.intValue = min(slotList.value.size, nowIndex.intValue + 1) },
+                    onClick = {
+                        nowIndex.intValue = min(
+                            slotList.value.size + if(slotList.value.size < maxSlot) 0 else -1,
+                            nowIndex.intValue + 1)
+                    },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
                 ) {
                     Image(

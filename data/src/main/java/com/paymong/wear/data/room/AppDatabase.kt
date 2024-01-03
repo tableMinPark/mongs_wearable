@@ -7,7 +7,7 @@ import com.paymong.wear.data.room.dao.MongDao
 import com.paymong.wear.data.entity.Mong
 import com.paymong.wear.data.room.util.Converters
 
-@Database(entities = [Mong::class], version = 27)
+@Database(entities = [Mong::class], version = 28)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun mongDao(): MongDao

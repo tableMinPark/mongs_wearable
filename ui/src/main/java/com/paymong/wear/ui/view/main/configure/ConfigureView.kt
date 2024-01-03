@@ -1,6 +1,5 @@
 package com.paymong.wear.ui.view.main.configure
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -40,10 +39,10 @@ fun ConfigureView(
     navController: NavController,
     configureViewModel: ConfigureViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+
     /** Data **/
     val processCode = configureViewModel.processCode.observeAsState(ConfigureCode.STAND_BY)
-
-    Log.d("test", processCode.value.toString())
 
     /** Logic by ProcessCode **/
     when(processCode.value) {
@@ -55,12 +54,12 @@ fun ConfigureView(
         }
         ConfigureCode.SIGN_OUT_FAIL -> {
             Toast.makeText(
-                LocalContext.current,
+                context,
                 processCode.value.message,
                 Toast.LENGTH_SHORT
             ).show()
         }
-        ConfigureCode.SIGN_OUT_END -> {
+        ConfigureCode.NAVIGATE -> {
             navController.navigate(NavItem.InitLanding.route) {
                 popUpTo(
                     navController.graph.id

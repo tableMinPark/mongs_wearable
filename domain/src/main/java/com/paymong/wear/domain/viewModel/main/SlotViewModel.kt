@@ -2,24 +2,16 @@ package com.paymong.wear.domain.viewModel.main
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.paymong.wear.domain.dto.DefaultCode
-import com.paymong.wear.domain.model.MongModel
 import com.paymong.wear.domain.repository.MongRepository
 import com.paymong.wear.domain.viewModel.DefaultValue
 import com.paymong.wear.domain.viewModel.code.SlotCode
-import com.paymong.wear.domain.viewModel.code.SlotSelectCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.Objects
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,11 +19,8 @@ class SlotViewModel @Inject constructor(
     private val mongRepository: MongRepository
 ) : ViewModel() {
     val processCode: LiveData<SlotCode> get() = _processCode
-    private val _processCode = MutableLiveData(SlotCode.LOAD_MONG)
+    private val _processCode = MutableLiveData(SlotCode.STAND_BY)
 
-    var mongCode: LiveData<String> = MutableLiveData(DefaultValue.mongCode)
-    var stateCode: LiveData<String> = MutableLiveData(DefaultValue.stateCode)
-    var poopCount: LiveData<Int> = MutableLiveData(DefaultValue.poopCount)
     private var nextMongCode: LiveData<String> = MutableLiveData(DefaultValue.nextMongCode)
     private var nextStateCode: LiveData<String> = MutableLiveData(DefaultValue.nextStateCode)
 
@@ -39,12 +28,8 @@ class SlotViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             Log.d("SlotViewModel", "SlotViewModel - init!")
             val mongModel = mongRepository.getMong()
-            mongCode = mongModel.map { it.mongCode }
-            stateCode = mongModel.map { it.stateCode }
-            poopCount = mongModel.map { it.poopCount }
             nextMongCode = mongModel.map { it.nextMongCode }
             nextStateCode = mongModel.map { it.nextStateCode }
-            _processCode.postValue(SlotCode.STAND_BY)
         }
     }
 
@@ -52,7 +37,7 @@ class SlotViewModel @Inject constructor(
         Log.d("SlotViewModel", "Call - generateMong()")
         viewModelScope.launch(Dispatchers.IO) {
             _processCode.postValue(SlotCode.GENERATE_MONG)
-            mongRepository.generateMong(callback = { _processCode.postValue(SlotCode.END) })
+            mongRepository.generateMong(callback = { _processCode.postValue(SlotCode.NAVIGATE) })
         }
     }
 
