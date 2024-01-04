@@ -8,8 +8,8 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.paymong.wear.ui.code.NavItem
-import com.paymong.wear.ui.view.battle.BattleView
-import com.paymong.wear.ui.view.collection.CollectionView
+import com.paymong.wear.ui.view.mapCollection.MapCollectionView
+import com.paymong.wear.ui.view.mongCollection.MongCollectionView
 import com.paymong.wear.ui.view.developer.DeveloperView
 import com.paymong.wear.ui.view.feed.FeedSelectView
 import com.paymong.wear.ui.view.feed.FeedView
@@ -74,12 +74,6 @@ fun NavGraph () {
                 FeedSelectView(navController, if(code.isNullOrEmpty()) "FD" else code )
             }
         }
-        // 뱌툴
-        navigation(startDestination = NavItem.Battle.route, route = NavItem.BattleNested.route) {
-            composable(route = NavItem.Battle.route) {
-                BattleView(navController)
-            }
-        }
         // 훈련
         navigation(startDestination = NavItem.Training.route, route = NavItem.TrainingNested.route) {
             composable(route = NavItem.Training.route) {
@@ -92,10 +86,16 @@ fun NavGraph () {
                 WalkView(navController)
             }
         }
-        // 컬랙션
-        navigation(startDestination = NavItem.Collection.route, route = NavItem.CollectionNested.route) {
-            composable(route = NavItem.Collection.route) {
-                CollectionView()
+        // 맵 컬랙션
+        navigation(startDestination = NavItem.MapCollection.route, route = NavItem.MapCollectionNested.route) {
+            composable(route = NavItem.MapCollection.route) {
+                MapCollectionView(navController)
+            }
+        }
+        // 몽 컬랙션
+        navigation(startDestination = NavItem.MongCollection.route, route = NavItem.MongCollectionNested.route) {
+            composable(route = NavItem.MongCollection.route) {
+                MongCollectionView()
             }
         }
 

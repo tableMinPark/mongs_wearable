@@ -41,15 +41,15 @@ class MongRepositoryImpl @Inject constructor(
             1L,
             LocalDateTime.now(),
             11,
-            "CH100",
+            "CH300",
             "CH444",
             "CD000",
             "CD444",
-            1,
-            0.5f,
-            0.5f,
-            0.5f,
-            0.5f
+            4,
+            0.1f,
+            0.1f,
+            0.1f,
+            0.1f
         )
         val newMong = Mong(
             mongId = mongResModel.mongId,

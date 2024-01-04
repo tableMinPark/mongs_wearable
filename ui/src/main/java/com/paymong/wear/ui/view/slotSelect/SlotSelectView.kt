@@ -26,6 +26,7 @@ import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.HorizontalPageIndicator
 import androidx.wear.compose.material.PageIndicatorState
 import com.paymong.wear.domain.model.MongModel
+import com.paymong.wear.domain.viewModel.DefaultValue
 import com.paymong.wear.domain.viewModel.code.SlotSelectCode
 import com.paymong.wear.domain.viewModel.main.SlotSelectViewModel
 import com.paymong.wear.ui.R
@@ -35,7 +36,7 @@ import com.paymong.wear.ui.view.common.background.SlotSelectBackground
 import kotlin.math.max
 import kotlin.math.min
 
-const val maxSlot = 3
+//const val maxSlot = 4
 
 @Composable
 fun SlotSelectView(
@@ -46,6 +47,7 @@ fun SlotSelectView(
     val processCode = slotSelectViewModel.processCode.observeAsState(SlotSelectCode.STAND_BY)
 
     /** Observer **/
+    val maxSlot = slotSelectViewModel.maxSlot.observeAsState(DefaultValue.maxSlot)
     val slotList = slotSelectViewModel.slotList.observeAsState(ArrayList())
 
     /** Background **/
@@ -76,6 +78,7 @@ fun SlotSelectView(
                     slotSelectViewModel.setSlot(slotId = selectSlotId)
                 },
                 generateMong = slotSelectViewModel::generateMong,
+                maxSlot = maxSlot,
                 slotList = slotList
             )
         }
@@ -86,6 +89,7 @@ fun SlotSelectView(
 fun SlotSelectContent(
     setSlot: (Long) -> Unit,
     generateMong: () -> Unit,
+    maxSlot: State<Int>,
     slotList: State<List<MongModel>>
 ) {
     val nowIndex = remember { mutableIntStateOf(0) }
@@ -96,7 +100,7 @@ fun SlotSelectContent(
             override val selectedPage: Int
                 get() = nowIndex.intValue
             override val pageCount: Int
-                get() = slotList.value.size + if(slotList.value.size < maxSlot) 1 else 0
+                get() = slotList.value.size + if(slotList.value.size < maxSlot.value) 1 else 0
         }
     }
 
@@ -137,7 +141,7 @@ fun SlotSelectContent(
                 Button(
                     onClick = {
                         nowIndex.intValue = min(
-                            slotList.value.size + if(slotList.value.size < maxSlot) 0 else -1,
+                            slotList.value.size + if(slotList.value.size < maxSlot.value) 0 else -1,
                             nowIndex.intValue + 1)
                     },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),

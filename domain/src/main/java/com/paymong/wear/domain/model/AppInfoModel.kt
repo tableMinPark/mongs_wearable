@@ -1,5 +1,6 @@
 package com.paymong.wear.domain.model
 
 data class AppInfoModel(
-    var mapCode: String = "MP000"
+    var mapCode: String = "MP000",
+    var maxSlot: Int = 3
 )

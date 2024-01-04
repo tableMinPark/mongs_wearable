@@ -43,6 +43,9 @@ class MainViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             Log.d("MainViewModel", "MainViewModel - init!")
+            val appInfoModel = appInfoRepository.getAppInfo()
+            mapCode = appInfoModel.map { it.mapCode }
+
             val mongModel = mongRepository.getMong()
             mongCode = mongModel.map { it.mongCode }
             stateCode = mongModel.map { it.stateCode }
@@ -53,9 +56,6 @@ class MainViewModel @Inject constructor(
             satiety = mongModel.map { it.satiety }
             strength = mongModel.map { it.strength }
             sleep = mongModel.map { it.sleep }
-
-            val appInfoModel = appInfoRepository.getAppInfo()
-            mapCode = appInfoModel.map { it.mapCode }
 
             delay(300)
             _processCode.postValue(MainCode.STAND_BY)

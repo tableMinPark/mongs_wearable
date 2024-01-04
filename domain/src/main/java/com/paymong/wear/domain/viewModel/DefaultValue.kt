@@ -1,8 +1,12 @@
 package com.paymong.wear.domain.viewModel
 
 object DefaultValue {
-    const val slotId = -1L
+    /** for AppInfo **/
     const val mapCode = "MP000"
+    const val maxSlot = 3
+
+    /** for Mong **/
+    const val slotId = -1L
     const val mongCode = "CH444"
     const val stateCode = "CD444"
     const val poopCount = 0
@@ -13,5 +17,4 @@ object DefaultValue {
     const val satiety = 1.0f
     const val strength = 1.0f
     const val sleep = 1.0f
-
 }

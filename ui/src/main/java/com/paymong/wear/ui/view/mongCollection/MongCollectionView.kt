@@ -1,4 +1,4 @@
-package com.paymong.wear.ui.view.collection
+package com.paymong.wear.ui.view.mongCollection
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,20 +8,20 @@ import androidx.compose.ui.Modifier
 import androidx.wear.compose.material.Text
 
 @Composable
-fun CollectionView(
+fun MongCollectionView(
 
 ) {
 
     /** Content **/
-    CollectionContent()
+    MongCollectionContent()
 }
 
 @Composable
-fun CollectionContent() {
+fun MongCollectionContent() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "컬랙션 페이지")
+        Text(text = "몽 컬랙션 페이지")
     }
 }

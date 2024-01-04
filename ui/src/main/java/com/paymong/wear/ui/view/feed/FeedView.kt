@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.wear.compose.material.Text
 import com.paymong.wear.ui.code.NavItem
@@ -59,9 +60,7 @@ fun FeedContent(
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "밥"
-                )
+                Text(text = "밥", fontSize = 16.sp)
             }
         }
 
@@ -90,9 +89,7 @@ fun FeedContent(
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "간식"
-                )
+                Text(text = "간식", fontSize = 16.sp)
             }
         }
     }

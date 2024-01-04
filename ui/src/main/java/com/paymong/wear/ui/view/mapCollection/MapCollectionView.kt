@@ -1,4 +1,4 @@
-package com.paymong.wear.ui.view.battle
+package com.paymong.wear.ui.view.mapCollection
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,20 +9,20 @@ import androidx.navigation.NavController
 import androidx.wear.compose.material.Text
 
 @Composable
-fun BattleView(
+fun MapCollectionView(
     navController: NavController
 ) {
 
     /** Content **/
-    BattleContent()
+    MapCollectionContent()
 }
 
 @Composable
-fun BattleContent() {
+fun MapCollectionContent() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "배틀 페이지")
+        Text(text = "맵 컬렉션 페이지")
     }
 }

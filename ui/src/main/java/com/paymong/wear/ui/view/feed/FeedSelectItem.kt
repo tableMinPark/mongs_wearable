@@ -25,8 +25,8 @@ import com.paymong.wear.ui.R
 import com.paymong.wear.ui.code.FeedCode
 import com.paymong.wear.ui.view.common.background.Process
 
-const val feedNameFontSize = 16
-const val feedImageSize = 75
+const val feedNameFontSize = 13
+const val feedImageSize = 72
 
 @Composable
 fun FeedItem(

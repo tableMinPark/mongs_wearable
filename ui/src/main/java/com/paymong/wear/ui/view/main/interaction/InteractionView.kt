@@ -28,13 +28,8 @@ fun InteractionView(
 
     /** Content **/
     InteractionContent(
-        navBattle = {
-            if (state == StateCode.CD444) {
-                Toast.makeText(context, "몽을 생성해 주세요!", Toast.LENGTH_SHORT).show()
-            } else {
-                navController.navigate(NavItem.Battle.route)
-            }
-        },
+        navMapCollection = { navController.navigate(NavItem.MapCollection.route) },
+        navMongCollection = { navController.navigate(NavItem.MongCollection.route) },
         navTraining = {
             if (state == StateCode.CD444) {
                 Toast.makeText(context, "몽을 생성해 주세요!", Toast.LENGTH_SHORT).show()
@@ -48,17 +43,16 @@ fun InteractionView(
             } else {
                 navController.navigate(NavItem.Walk.route)
             }
-        },
-        navCollection = { navController.navigate(NavItem.Collection.route) },
+        }
     )
 }
 
 @Composable
 fun InteractionContent(
-    navBattle: () -> Unit,
+    navMapCollection: () -> Unit,
+    navMongCollection: () -> Unit,
     navTraining: () -> Unit,
-    navWalk: () -> Unit,
-    navCollection: () -> Unit
+    navWalk: () -> Unit
 ) {
     Box (
         modifier = Modifier.fillMaxSize(),
@@ -73,12 +67,12 @@ fun InteractionContent(
                 InteractionButton(
                     icon = R.drawable.battle,
                     border = R.drawable.interaction_bnt_pink,
-                    onClick = navBattle
+                    onClick = navMapCollection
                 )
                 InteractionButton(
                     icon = R.drawable.sleep,
                     border = R.drawable.interaction_bnt_blue,
-                    onClick = navCollection
+                    onClick = navMongCollection
                 )
             }
             Row(
