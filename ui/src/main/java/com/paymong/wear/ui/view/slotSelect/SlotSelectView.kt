@@ -25,6 +25,7 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.HorizontalPageIndicator
 import androidx.wear.compose.material.PageIndicatorState
+import com.paymong.wear.domain.model.CharacterModel
 import com.paymong.wear.domain.model.MongModel
 import com.paymong.wear.domain.viewModel.DefaultValue
 import com.paymong.wear.domain.viewModel.code.SlotSelectCode
@@ -36,8 +37,6 @@ import com.paymong.wear.ui.view.common.background.SlotSelectBackground
 import kotlin.math.max
 import kotlin.math.min
 
-//const val maxSlot = 4
-
 @Composable
 fun SlotSelectView(
     navController: NavController,
@@ -47,7 +46,9 @@ fun SlotSelectView(
     val processCode = slotSelectViewModel.processCode.observeAsState(SlotSelectCode.STAND_BY)
 
     /** Observer **/
+    val nowSlotId = slotSelectViewModel.nowSlotId.observeAsState(DefaultValue.slotId)
     val maxSlot = slotSelectViewModel.maxSlot.observeAsState(DefaultValue.maxSlot)
+    val character = slotSelectViewModel.character.observeAsState(CharacterModel())
     val slotList = slotSelectViewModel.slotList.observeAsState(ArrayList())
 
     /** Background **/
@@ -59,6 +60,9 @@ fun SlotSelectView(
             SlotSelectProcess()
         }
         SlotSelectCode.GENERATE_MONG -> {
+            SlotSelectProcess()
+        }
+        SlotSelectCode.REMOVE_MONG -> {
             SlotSelectProcess()
         }
         SlotSelectCode.SET_SLOT -> {
@@ -74,11 +78,19 @@ fun SlotSelectView(
         else -> {
             /** Content **/
             SlotSelectContent(
-                setSlot = { selectSlotId ->
-                    slotSelectViewModel.setSlot(slotId = selectSlotId)
+                setSlot = { slotId ->
+                    slotSelectViewModel.setSlot(slotId = slotId)
+                },
+                removeSlot = {slotId ->
+                    slotSelectViewModel.removeSlot(slotId = slotId)
                 },
                 generateMong = slotSelectViewModel::generateMong,
+                getMongName = { mongCode ->
+                    slotSelectViewModel.getMongName(mongCode = mongCode)
+                },
+                nowSlotId = nowSlotId,
                 maxSlot = maxSlot,
+                character = character,
                 slotList = slotList
             )
         }
@@ -88,11 +100,20 @@ fun SlotSelectView(
 @Composable
 fun SlotSelectContent(
     setSlot: (Long) -> Unit,
+    removeSlot: (Long) -> Unit,
     generateMong: () -> Unit,
+    getMongName: (String) -> Unit,
+    nowSlotId: State<Long>,
     maxSlot: State<Int>,
+    character: State<CharacterModel>,
     slotList: State<List<MongModel>>
 ) {
     val nowIndex = remember { mutableIntStateOf(0) }
+    val isSelectSlot =
+        if (nowIndex.intValue < slotList.value.size)
+            slotList.value[nowIndex.intValue].slotId == nowSlotId.value
+        else
+            false
     val pageIndicatorState: PageIndicatorState = remember {
         object : PageIndicatorState {
             override val pageOffset: Float
@@ -100,7 +121,7 @@ fun SlotSelectContent(
             override val selectedPage: Int
                 get() = nowIndex.intValue
             override val pageCount: Int
-                get() = slotList.value.size + if(slotList.value.size < maxSlot.value) 1 else 0
+                get() = slotList.value.size + if (slotList.value.size < maxSlot.value) 1 else 0
         }
     }
 
@@ -114,7 +135,14 @@ fun SlotSelectContent(
             if (slotList.value.size == nowIndex.intValue) {
                 SlotAdd(onClick = generateMong)
             } else {
-                SlotFigure(onClick = setSlot ,mong = slotList.value[nowIndex.intValue])
+                SlotFigure(
+                    setSlot = setSlot,
+                    removeSlot = removeSlot,
+                    getMongName = getMongName,
+                    isSelectSlot = isSelectSlot,
+                    character = character.value,
+                    mong = slotList.value[nowIndex.intValue]
+                )
             }
         }
         // 화살표
@@ -141,8 +169,9 @@ fun SlotSelectContent(
                 Button(
                     onClick = {
                         nowIndex.intValue = min(
-                            slotList.value.size + if(slotList.value.size < maxSlot.value) 0 else -1,
-                            nowIndex.intValue + 1)
+                            slotList.value.size + if (slotList.value.size < maxSlot.value) 0 else -1,
+                            nowIndex.intValue + 1
+                        )
                     },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
                 ) {

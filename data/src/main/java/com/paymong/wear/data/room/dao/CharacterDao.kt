@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.paymong.wear.data.entity.Character
 import com.paymong.wear.data.entity.Feed
+import com.paymong.wear.domain.model.CharacterModel
 import com.paymong.wear.domain.model.FeedModel
 
 @Dao
@@ -16,5 +17,5 @@ interface CharacterDao {
     @Query("DELETE FROM character")
     fun deleteAllCharacter()
     @Query("SELECT * FROM character WHERE code = :code")
-    fun findCharacter(code: String): LiveData<Character>
+    fun findCharacter(code: String): CharacterModel
 }

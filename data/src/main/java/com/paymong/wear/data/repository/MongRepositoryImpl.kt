@@ -3,6 +3,8 @@ package com.paymong.wear.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import com.paymong.wear.data.api.model.response.MongResModel
 import com.paymong.wear.data.room.AppDatabase
 import com.paymong.wear.data.entity.Mong
@@ -18,20 +20,20 @@ class MongRepositoryImpl @Inject constructor(
     private var slotId = -1L
 
     override suspend fun getMong(): LiveData<MongModel> {
-        val mongModel = if (slotId == -1L) {
+        return if (slotId == -1L) {
             MutableLiveData(MongModel())
         } else {
             appDatabase.mongDao().findMongBySlotId(slotId = slotId)
         }
-
-        return mongModel
     }
     override suspend fun getAllMong(): LiveData<List<MongModel>> {
         return appDatabase.mongDao().findAllMong()
     }
     override suspend fun initSetMong(callback: () -> Unit) {
-        if (appDatabase.mongDao().countMong() > 0) {
-            slotId = appDatabase.mongDao().findFirstMongSlotId()
+        slotId = if (appDatabase.mongDao().countMong() > 0) {
+            appDatabase.mongDao().findFirstMongSlotId()
+        } else {
+            -1L
         }
         callback()
     }
@@ -66,6 +68,17 @@ class MongRepositoryImpl @Inject constructor(
             sleep = mongResModel.sleep
         )
         slotId = appDatabase.mongDao().registerMong(newMong)
+        callback()
+    }
+    override suspend fun removeMong(callback: () -> Unit, slotId: Long) {
+        appDatabase.mongDao().deleteMong(slotId = slotId)
+        if (this@MongRepositoryImpl.slotId == slotId) {
+            this@MongRepositoryImpl.slotId = if (appDatabase.mongDao().countMong() > 0) {
+                appDatabase.mongDao().findFirstMongSlotId()
+            } else {
+                -1L
+            }
+        }
         callback()
     }
     override suspend fun getSlotId(): Long {

@@ -11,6 +11,8 @@ import com.paymong.wear.domain.model.MongModel
 interface MongDao {
     @Insert
     fun registerMong(mong: Mong): Long
+    @Query("DELETE FROM mong WHERE slotId = :slotId")
+    fun deleteMong(slotId: Long)
     @Query("SELECT COUNT(slotId) FROM mong")
     fun countMong(): Long
     @Query("SELECT slotId FROM mong ORDER BY slotId LIMIT 1")

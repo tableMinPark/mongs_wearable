@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.paymong.wear.domain.model.CharacterModel
 import com.paymong.wear.domain.model.MongModel
 import com.paymong.wear.domain.repository.AppInfoRepository
 import com.paymong.wear.domain.repository.MongRepository
@@ -24,7 +25,10 @@ class SlotSelectViewModel @Inject constructor(
     val processCode: LiveData<SlotSelectCode> get() = _processCode
     private val _processCode = MutableLiveData(SlotSelectCode.LOAD_MONG_LIST)
 
+    var nowSlotId: LiveData<Long> = MutableLiveData(DefaultValue.slotId)
     var maxSlot: LiveData<Int> = MutableLiveData(DefaultValue.maxSlot)
+    val character: LiveData<CharacterModel> get() = _character
+    private val _character = MutableLiveData(CharacterModel())
     var slotList: LiveData<List<MongModel>> = MutableLiveData(ArrayList())
 
     init {
@@ -32,9 +36,19 @@ class SlotSelectViewModel @Inject constructor(
             val appInfoModel = appInfoRepository.getAppInfo()
             maxSlot = appInfoModel.map { it.maxSlot }
 
+            val mongModel = mongRepository.getMong()
+            nowSlotId = mongModel.map { it.slotId }
+
             slotList = mongRepository.getAllMong()
             delay(300)
             _processCode.postValue(SlotSelectCode.STAND_BY)
+        }
+    }
+
+    fun getMongName(mongCode: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val characterModel = appInfoRepository.getCharacterInfo(code = mongCode)
+            _character.postValue(characterModel)
         }
     }
 
@@ -49,6 +63,13 @@ class SlotSelectViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _processCode.postValue(SlotSelectCode.GENERATE_MONG)
             mongRepository.generateMong(callback = { _processCode.postValue(SlotSelectCode.NAVIGATE) })
+        }
+    }
+
+    fun removeSlot(slotId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _processCode.postValue(SlotSelectCode.REMOVE_MONG)
+            mongRepository.removeMong(callback = { _processCode.postValue(SlotSelectCode.STAND_BY) }, slotId = slotId)
         }
     }
 }

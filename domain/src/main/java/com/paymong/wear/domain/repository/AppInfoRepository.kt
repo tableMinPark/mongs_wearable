@@ -2,6 +2,7 @@ package com.paymong.wear.domain.repository
 
 import androidx.lifecycle.LiveData
 import com.paymong.wear.domain.model.AppInfoModel
+import com.paymong.wear.domain.model.CharacterModel
 import com.paymong.wear.domain.model.FeedModel
 
 interface AppInfoRepository {
@@ -10,6 +11,7 @@ interface AppInfoRepository {
     fun initSetCharacterInfo()
     fun initSetFeedInfo()
     fun getAppInfo() : LiveData<AppInfoModel>
+    fun getCharacterInfo(code: String): CharacterModel
     fun getFoodList(): LiveData<List<FeedModel>>
     fun getSnackList(): LiveData<List<FeedModel>>
 

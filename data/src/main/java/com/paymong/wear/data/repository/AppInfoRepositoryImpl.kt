@@ -7,6 +7,7 @@ import com.paymong.wear.data.entity.Character
 import com.paymong.wear.data.entity.Feed
 import com.paymong.wear.data.room.AppDatabase
 import com.paymong.wear.domain.model.AppInfoModel
+import com.paymong.wear.domain.model.CharacterModel
 import com.paymong.wear.domain.model.FeedModel
 import com.paymong.wear.domain.repository.AppInfoRepository
 import kotlinx.coroutines.CoroutineScope
@@ -123,6 +124,9 @@ class AppInfoRepositoryImpl @Inject constructor(
 
     override fun getAppInfo() : LiveData<AppInfoModel> {
         return this@AppInfoRepositoryImpl.appInfoModel
+    }
+    override fun getCharacterInfo(code: String): CharacterModel {
+        return appDatabase.characterDao().findCharacter(code)
     }
     override fun getFoodList(): LiveData<List<FeedModel>> {
         return appDatabase.feedDao().findAllFeed("FD")

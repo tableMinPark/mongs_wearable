@@ -8,6 +8,7 @@ interface MongRepository {
     suspend fun getAllMong(): LiveData<List<MongModel>>
     suspend fun initSetMong(callback: () -> Unit)
     suspend fun generateMong(callback: () -> Unit)
+    suspend fun removeMong(callback: () -> Unit, slotId: Long)
     suspend fun getSlotId(): Long
     suspend fun setSlotId(callback: () -> Unit, slotId: Long)
     suspend fun getMongState(): String

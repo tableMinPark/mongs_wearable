@@ -29,6 +29,7 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.Text
+import com.paymong.wear.domain.model.CharacterModel
 import com.paymong.wear.domain.model.MongModel
 import com.paymong.wear.ui.R
 import com.paymong.wear.ui.code.MongCode
@@ -40,12 +41,17 @@ import java.time.temporal.ChronoUnit
 
 @Composable
 fun SlotFigure(
-    onClick: (Long) -> Unit,
+    setSlot: (Long) -> Unit,
+    removeSlot: (Long) -> Unit,
+    getMongName: (String) -> Unit,
+    isSelectSlot: Boolean,
+    character: CharacterModel,
     mong: MongModel
 ) {
     /** Data **/
     val age = remember { mutableStateOf("0시간 0분 0초") }
     LaunchedEffect(mong) {
+        getMongName(mong.mongCode)
         while(true) {
             val now = LocalDateTime.now()
             val hours = ChronoUnit.HOURS.between(mong.born, now)
@@ -78,7 +84,7 @@ fun SlotFigure(
                 .fillMaxWidth()
                 .weight(0.2f)
         ) {
-            Text(text = mong.mongCode, fontSize = 13.sp)
+            Text(text = character.name, fontSize = 13.sp)
         }
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -100,11 +106,12 @@ fun SlotFigure(
                 .weight(0.2f)
         ) {
             Button(
+                modifier = Modifier.padding(end = 10.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                onClick = { onClick(mong.slotId) }
+                onClick = { if(!isSelectSlot) setSlot(mong.slotId) }
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.blue_bnt),
+                    painter = painterResource(id = if(isSelectSlot) R.drawable.gray_btn else R.drawable.blue_bnt),
                     contentDescription = null
                 )
                 Text(
@@ -114,6 +121,22 @@ fun SlotFigure(
                     fontSize = 10.sp
                 )
             }
+            Button(
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                onClick = { if(!isSelectSlot) removeSlot(mong.slotId) }
+            ) {
+                Image(
+                    painter = painterResource(id = if(isSelectSlot) R.drawable.gray_btn else R.drawable.blue_bnt),
+                    contentDescription = null
+                )
+                Text(
+                    text = "삭제",
+                    textAlign = TextAlign.Center,
+                    color = Color.DarkGray,
+                    fontSize = 10.sp
+                )
+            }
+
         }
     }
 }
