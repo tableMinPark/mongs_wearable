@@ -1,4 +1,4 @@
-package com.paymong.wear.domain.viewModel.feed
+package com.paymong.wear.domain.viewModel.main
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -17,29 +17,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FeedSelectViewModel @Inject constructor(
+class InteractionViewModel @Inject constructor(
     private val appInfoRepository: AppInfoRepository
 ) : ViewModel() {
-    val processCode: LiveData<FeedSelectCode> get() = _processCode
-    private val _processCode = MutableLiveData(FeedSelectCode.LOAD_FEED_LIST)
-
     var payPoint: LiveData<Int> = MutableLiveData(DefaultValue.payPoint)
-    var foodList: LiveData<List<FeedModel>> = MutableLiveData(ArrayList())
-    var snackList: LiveData<List<FeedModel>> = MutableLiveData(ArrayList())
 
     init {
         payPoint = appInfoRepository.getAppInfoPayPoint()
-
-        viewModelScope.launch(Dispatchers.IO) {
-            foodList = appInfoRepository.getFoodList()
-            snackList = appInfoRepository.getSnackList()
-
-            delay(300)
-            _processCode.postValue(FeedSelectCode.STAND_BY)
-        }
-    }
-
-    fun feeding(feedCode: String) {
-        Log.d("FeedSelectViewModel", "Call - feeding($feedCode)")
     }
 }

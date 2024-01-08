@@ -1,8 +1,12 @@
 package com.paymong.wear.domain.viewModel
 
 object DefaultValue {
+    /** for Configure **/
+    const val sound = 1f
+
     /** for AppInfo **/
     const val mapCode = "MP000"
+    const val payPoint = 0
     const val maxSlot = 3
 
     /** for Mong **/

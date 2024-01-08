@@ -1,6 +1,8 @@
 package com.paymong.wear.ui.view.feed
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,29 +10,72 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.ButtonDefaults
+import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.Text
 import com.paymong.wear.ui.R
 import com.paymong.wear.ui.code.FeedCode
+import com.paymong.wear.ui.theme.PaymongNavy
 import com.paymong.wear.ui.view.common.background.Process
 
+const val payPointFontSize = 13
+const val priceFontSize = 13
 const val feedNameFontSize = 13
-const val feedImageSize = 72
+const val feedImageSize = 50
+
+@Composable
+fun PayPointItem(
+    payPoint: State<Int>
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .height(30.dp)
+    ) {
+        Image(
+            painter = painterResource(R.drawable.pointbackground),
+            contentDescription = null,
+            modifier = Modifier
+                .zIndex(0f)
+        )
+        Row(
+            modifier = Modifier
+                .matchParentSize()
+                .zIndex(1f)
+                .padding(start = 10.dp, end = 10.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(R.drawable.pointlogo),
+                contentDescription = null,
+                modifier = Modifier
+                    .weight(0.2f)
+            )
+            Text(
+                text = "${payPoint.value}",
+                fontSize = payPointFontSize.sp,
+                color =  PaymongNavy,
+                maxLines = 1,
+                modifier = Modifier
+                    .weight(0.8f)
+            )
+        }
+    }
+}
 
 @Composable
 fun FeedItem(
-    onClick: (String) -> Unit,
     name: String,
     code: String
 ) {
@@ -38,21 +83,23 @@ fun FeedItem(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxHeight()
-            .padding(top = 15.dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
+                .weight(0.3f)
         ) {
             Text(text = name, fontSize = feedNameFontSize.sp)
         }
 
         Row(
             horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp, bottom = 5.dp)
+                .weight(0.7f)
         ) {
             Image(
                 painter = painterResource(FeedCode.valueOf(code).code),
@@ -60,27 +107,100 @@ fun FeedItem(
                 modifier = Modifier.size(feedImageSize.dp)
             )
         }
+    }
+}
 
-        Row(
-            horizontalArrangement = Arrangement.Center,
+@Composable
+fun FeedSelectEnableButton(
+    onClick: (String) -> Unit,
+    code: String,
+    price: Int
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .height(35.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = { onClick(code) },
+            )
+    ) {
+        Image(
+            painter = painterResource(R.drawable.blue_bnt),
+            contentDescription = null,
             modifier = Modifier
-                .fillMaxWidth()
+                .zIndex(0f)
+        )
+        Row(
+            modifier = Modifier
+                .matchParentSize()
+                .zIndex(1f)
+                .padding(start = 10.dp, end = 10.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Button(
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                onClick = { onClick(code) }
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.blue_bnt),
-                    contentDescription = null
-                )
-                Text(
-                    text = "구매",
-                    fontSize = 10.sp,
-                    textAlign = TextAlign.Center,
-                    color = Color.DarkGray,
-                )
-            }
+            Image(
+                painter = painterResource(R.drawable.pointlogo),
+                contentDescription = null,
+                modifier = Modifier
+                    .weight(0.2f)
+            )
+            Text(
+                text = "$price",
+                color = PaymongNavy,
+                fontSize = priceFontSize.sp,
+                maxLines = 1,
+                modifier = Modifier
+                    .weight(0.8f)
+            )
+        }
+    }
+}
+
+@Composable
+fun FeedSelectDisableButton(
+    onClick: () -> Unit,
+    price: Int
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .height(35.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick,
+            )
+    ) {
+        Image(
+            painter = painterResource(R.drawable.gray_btn),
+            contentDescription = null,
+            modifier = Modifier
+                .zIndex(0f)
+        )
+        Row(
+            modifier = Modifier
+                .matchParentSize()
+                .zIndex(1f)
+                .padding(start = 10.dp, end = 10.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(R.drawable.pointlogo),
+                contentDescription = null,
+                modifier = Modifier
+                    .weight(0.2f)
+            )
+            Text(
+                text = "$price",
+                color = PaymongNavy,
+                fontSize = priceFontSize.sp,
+                maxLines = 1,
+                modifier = Modifier
+                    .weight(0.8f)
+            )
         }
     }
 }

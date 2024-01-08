@@ -2,30 +2,25 @@ package com.paymong.wear.domain.viewModel.main
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.paymong.wear.domain.model.MongModel
 import com.paymong.wear.domain.repository.AppInfoRepository
-import com.paymong.wear.domain.repository.MongRepository
+import com.paymong.wear.domain.repository.SlotRepository
 import com.paymong.wear.domain.viewModel.DefaultValue
-import com.paymong.wear.domain.viewModel.code.FeedSelectCode
 import com.paymong.wear.domain.viewModel.code.MainCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.Objects
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val appInfoRepository: AppInfoRepository,
-    private val mongRepository: MongRepository
+    private val slotRepository: SlotRepository
 ) : ViewModel() {
     val processCode: LiveData<MainCode> get() = _processCode
     private val _processCode = MutableLiveData(MainCode.LOAD)
@@ -40,25 +35,34 @@ class MainViewModel @Inject constructor(
     var strength: LiveData<Float> = MutableLiveData(DefaultValue.strength)
     var sleep: LiveData<Float> = MutableLiveData(DefaultValue.sleep)
 
+
+    private var sound: LiveData<Float> = MutableLiveData(DefaultValue.sound)
+
     init {
+        Log.d("MainViewModel", "MainViewModel - init!")
+        sound = appInfoRepository.getConfigureSound()
+        mapCode = appInfoRepository.getAppInfoMapCode()
+
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d("MainViewModel", "MainViewModel - init!")
-            val appInfoModel = appInfoRepository.getAppInfo()
-            mapCode = appInfoModel.map { it.mapCode }
+            viewModelScope.async {
+                val slotModel = slotRepository.getSlot()
+                mongCode = slotModel.map { it.mongCode }
+                stateCode = slotModel.map { it.stateCode }
+                poopCount = slotModel.map { it.poopCount }
 
-            val mongModel = mongRepository.getMong()
-            mongCode = mongModel.map { it.mongCode }
-            stateCode = mongModel.map { it.stateCode }
-            poopCount = mongModel.map { it.poopCount }
-
-            mongCode = mongModel.map { it.mongCode }
-            health = mongModel.map { it.health }
-            satiety = mongModel.map { it.satiety }
-            strength = mongModel.map { it.strength }
-            sleep = mongModel.map { it.sleep }
+                mongCode = slotModel.map { it.mongCode }
+                health = slotModel.map { it.health }
+                satiety = slotModel.map { it.satiety }
+                strength = slotModel.map { it.strength }
+                sleep = slotModel.map { it.sleep }
+            }.await()
 
             delay(300)
             _processCode.postValue(MainCode.STAND_BY)
+        }
+
+        sound.observeForever {
+            Log.d("MainViewModel", "sound : $it")
         }
     }
 }

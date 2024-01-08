@@ -6,10 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paymong.wear.domain.repository.AppInfoRepository
-import com.paymong.wear.domain.repository.MongRepository
+import com.paymong.wear.domain.repository.MqttRepository
+import com.paymong.wear.domain.repository.SlotRepository
 import com.paymong.wear.domain.viewModel.code.InitLandingCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,13 +19,14 @@ import javax.inject.Inject
 @HiltViewModel
 class InitLandingViewModel @Inject constructor(
     private val appInfoRepository: AppInfoRepository,
-    private val mongRepository: MongRepository
+    private val slotRepository: SlotRepository,
+    private val mqttRepository: MqttRepository
 ) : ViewModel() {
     val processCode: LiveData<InitLandingCode> get() = _processCode
     private val _processCode = MutableLiveData(InitLandingCode.STAND_BY)
 
     private fun paymongLogin(userName: String?, email: String?) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Main) {
             var isSuccess = true
 
             // 계정 데이터 유효성 체크
@@ -37,10 +40,20 @@ class InitLandingViewModel @Inject constructor(
 
             if (isSuccess) {
                 _processCode.postValue(InitLandingCode.SIGN_IN_SUCCESS)
-                appInfoRepository.initSetAppInfo()
-                appInfoRepository.initSetCharacterInfo()
-                appInfoRepository.initSetFeedInfo()
-                mongRepository.initSetMong(callback = { _processCode.postValue(InitLandingCode.NAVIGATE) })
+
+                viewModelScope.async(Dispatchers.IO) {
+                    // 구독 걸고
+                    email?.let { mqttRepository.initMqtt(email) }
+                }.await()
+
+                viewModelScope.async(Dispatchers.IO) {
+                    appInfoRepository.initSetAppInfo()
+                    appInfoRepository.initSetConfigureInfo()
+                    appInfoRepository.initSetMongInfo()
+                    appInfoRepository.initSetFeedInfo()
+                    slotRepository.initSlotInfo()
+                }.await()
+                _processCode.postValue(InitLandingCode.NAVIGATE)
             } else {
                 _processCode.postValue(InitLandingCode.SIGN_IN_INIT)
             }

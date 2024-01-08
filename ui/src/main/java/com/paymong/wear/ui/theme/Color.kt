@@ -24,6 +24,6 @@ val PaymongBlue200 = Color(0xFFD3ECFF)
 
 val PaymongPurple = Color(0xFFCCA2FE)
 
-val PaymongNavy = Color(0xFF1A1E54)
+val PaymongNavy = Color(0xFF0C4DA2)
 
 val PaymongWhite = Color(0xFFFFFFFF)

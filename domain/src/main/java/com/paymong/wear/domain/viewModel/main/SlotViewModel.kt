@@ -6,17 +6,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.paymong.wear.domain.repository.MongRepository
+import com.paymong.wear.domain.repository.SlotRepository
 import com.paymong.wear.domain.viewModel.DefaultValue
 import com.paymong.wear.domain.viewModel.code.SlotCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SlotViewModel @Inject constructor(
-    private val mongRepository: MongRepository
+    private val slotRepository: SlotRepository
 ) : ViewModel() {
     val processCode: LiveData<SlotCode> get() = _processCode
     private val _processCode = MutableLiveData(SlotCode.STAND_BY)
@@ -25,9 +26,9 @@ class SlotViewModel @Inject constructor(
     private var nextStateCode: LiveData<String> = MutableLiveData(DefaultValue.nextStateCode)
 
     init {
+        Log.d("SlotViewModel", "SlotViewModel - init!")
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d("SlotViewModel", "SlotViewModel - init!")
-            val mongModel = mongRepository.getMong()
+            val mongModel = slotRepository.getSlot()
             nextMongCode = mongModel.map { it.nextMongCode }
             nextStateCode = mongModel.map { it.nextStateCode }
         }
@@ -37,7 +38,8 @@ class SlotViewModel @Inject constructor(
         Log.d("SlotViewModel", "Call - generateMong()")
         viewModelScope.launch(Dispatchers.IO) {
             _processCode.postValue(SlotCode.GENERATE_MONG)
-            mongRepository.generateMong(callback = { _processCode.postValue(SlotCode.NAVIGATE) })
+            viewModelScope.async(Dispatchers.IO) { slotRepository.generateSlot() }.await()
+            _processCode.postValue(SlotCode.NAVIGATE)
         }
     }
 

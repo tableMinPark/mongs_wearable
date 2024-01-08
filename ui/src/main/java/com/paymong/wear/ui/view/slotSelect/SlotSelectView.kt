@@ -25,8 +25,8 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.HorizontalPageIndicator
 import androidx.wear.compose.material.PageIndicatorState
-import com.paymong.wear.domain.model.CharacterModel
 import com.paymong.wear.domain.model.MongModel
+import com.paymong.wear.domain.model.SlotModel
 import com.paymong.wear.domain.viewModel.DefaultValue
 import com.paymong.wear.domain.viewModel.code.SlotSelectCode
 import com.paymong.wear.domain.viewModel.main.SlotSelectViewModel
@@ -48,7 +48,7 @@ fun SlotSelectView(
     /** Observer **/
     val nowSlotId = slotSelectViewModel.nowSlotId.observeAsState(DefaultValue.slotId)
     val maxSlot = slotSelectViewModel.maxSlot.observeAsState(DefaultValue.maxSlot)
-    val character = slotSelectViewModel.character.observeAsState(CharacterModel())
+    val character = slotSelectViewModel.mongModel.observeAsState(MongModel())
     val slotList = slotSelectViewModel.slotList.observeAsState(ArrayList())
 
     /** Background **/
@@ -70,9 +70,7 @@ fun SlotSelectView(
         }
         SlotSelectCode.NAVIGATE -> {
             navController.navigate(NavItem.MainNested.route) {
-                popUpTo(
-                    navController.graph.id
-                )
+                popUpTo(navController.graph.id)
             }
         }
         else -> {
@@ -81,12 +79,12 @@ fun SlotSelectView(
                 setSlot = { slotId ->
                     slotSelectViewModel.setSlot(slotId = slotId)
                 },
-                removeSlot = {slotId ->
+                removeSlot = { slotId ->
                     slotSelectViewModel.removeSlot(slotId = slotId)
                 },
                 generateMong = slotSelectViewModel::generateMong,
                 getMongName = { mongCode ->
-                    slotSelectViewModel.getMongName(mongCode = mongCode)
+                    slotSelectViewModel.getMongInfo(mongCode = mongCode)
                 },
                 nowSlotId = nowSlotId,
                 maxSlot = maxSlot,
@@ -105,8 +103,8 @@ fun SlotSelectContent(
     getMongName: (String) -> Unit,
     nowSlotId: State<Long>,
     maxSlot: State<Int>,
-    character: State<CharacterModel>,
-    slotList: State<List<MongModel>>
+    character: State<MongModel>,
+    slotList: State<List<SlotModel>>
 ) {
     val nowIndex = remember { mutableIntStateOf(0) }
     val isSelectSlot =
@@ -133,11 +131,17 @@ fun SlotSelectContent(
                 .zIndex(0f)
         ) {
             if (slotList.value.size == nowIndex.intValue) {
-                SlotAdd(onClick = generateMong)
+                SlotAdd(onClick = {
+                        generateMong()
+                    }
+                )
             } else {
                 SlotFigure(
                     setSlot = setSlot,
-                    removeSlot = removeSlot,
+                    removeSlot = { slotId ->
+                        removeSlot(slotId)
+                        nowIndex.intValue = nowIndex.intValue - 1
+                    },
                     getMongName = getMongName,
                     isSelectSlot = isSelectSlot,
                     character = character.value,

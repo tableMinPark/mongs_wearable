@@ -29,8 +29,8 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.Text
-import com.paymong.wear.domain.model.CharacterModel
 import com.paymong.wear.domain.model.MongModel
+import com.paymong.wear.domain.model.SlotModel
 import com.paymong.wear.ui.R
 import com.paymong.wear.ui.code.MongCode
 import com.paymong.wear.ui.view.common.background.Process
@@ -45,8 +45,8 @@ fun SlotFigure(
     removeSlot: (Long) -> Unit,
     getMongName: (String) -> Unit,
     isSelectSlot: Boolean,
-    character: CharacterModel,
-    mong: MongModel
+    character: MongModel,
+    mong: SlotModel
 ) {
     /** Data **/
     val age = remember { mutableStateOf("0시간 0분 0초") }

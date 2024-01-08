@@ -133,7 +133,7 @@ fun ConfigureContent(
                 ConfigureButton(
                     icon = Icons.Outlined.Settings,
                     label= "앱 설정",
-                    secondaryLabel = "사운드",
+                    secondaryLabel = "사운드 크기",
                     onClick = navSetting
                 )
             }

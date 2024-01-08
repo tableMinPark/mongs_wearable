@@ -1,5 +1,6 @@
 package com.paymong.wear.ui.view.main
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
