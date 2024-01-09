@@ -22,18 +22,17 @@ class MqttRepositoryImpl @Inject constructor(
     private val dataSource: DataSource
 ) : MqttRepository {
     companion object {
+        private const val BASE_URL = "tcp://10.0.2.2:1883"
+        private val MQTT_CLIENT_ID = MqttClient.generateClientId()
     }
-    private val BASE_URL = "tcp://broker.emqx.io:1883"
-    private val MQTT_CLIENT_ID = MqttClient.generateClientId()
     private val mqttAndroidClient: MqttAndroidClient = MqttAndroidClient(context, BASE_URL, MQTT_CLIENT_ID)
+    private lateinit var email : String
 
     override fun initMqtt(email: String) {
+        this@MqttRepositoryImpl.email = email
         // MQTT 연결
         val mqttConnectOptions = MqttConnectOptions()
         mqttAndroidClient.connect(mqttConnectOptions, null, connectCallback)
-        // 구독 연결
-        mqttAndroidClient.subscribe("topic/appInfo/${email}", 0, null, subscribeCallback)
-        mqttAndroidClient.subscribe("topic/slot/${email}", 0, null, subscribeCallback)
         // 메시지 도착 시 콜백
         mqttAndroidClient.setCallback(messageCallback)
     }
@@ -42,38 +41,46 @@ class MqttRepositoryImpl @Inject constructor(
     private val connectCallback = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
             // 연결 성공 시의 처리
+            Log.d("MqttRepositoryImpl", "mqtt connect success")
+            // 구독 연결
+            mqttAndroidClient.subscribe("appInfo/${email}", 0, context, subscribeCallback)
+            mqttAndroidClient.subscribe("slot/${email}", 0, context, subscribeCallback)
         }
 
         override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-            // 연결 실패 시의 처리
+            Log.d("MqttRepositoryImpl", "mqtt connect fail: ${exception?.message}")
         }
     }
     private val subscribeCallback = object : IMqttActionListener {
         override fun onSuccess(asyncActionToken: IMqttToken?) {
             // 구독 성공 시의 처리
+            Log.d("MqttRepositoryImpl", "${asyncActionToken?.messageId} subscribe success")
         }
 
         override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
             // 구독 실패 시의 처리
+            Log.d("MqttRepositoryImpl", "${asyncActionToken?.messageId} subscribe fail: ${exception?.message}")
         }
     }
     private val messageCallback = object : MqttCallback {
         override fun connectionLost(cause: Throwable?) {
             // 연결이 끊겼을 때의 처리
+            Log.d("MqttRepositoryImpl", "mqtt connecting disable: ${cause?.message}")
         }
 
         override fun messageArrived(topic: String?, message: MqttMessage?) {
             // 메시지 도착 시의 처리 (수신)
             message?.let {
+                Log.d("MqttRepositoryImpl", "mqtt message arrived: ${message?.payload}")
                 when(topic) {
                     "appInfo" -> {
-                        Log.d("MqttRepository", "appInfo : $it")
+                        Log.d("MqttRepositoryImpl", "appInfo : ${it.payload}")
                     }
                     "slot" -> {
-                        Log.d("MqttRepository", "slot : $it")
+                        Log.d("MqttRepositoryImpl", "slot : ${it.payload}")
                     }
                     else -> {
-                        Log.d("MqttRepository", "else : $it")
+                        Log.d("MqttRepositoryImpl", "else : ${it.payload}")
                     }
                 }
             }
