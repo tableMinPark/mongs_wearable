@@ -20,4 +20,6 @@ interface AppInfoRepository {
     fun getAppInfoMapCode(): LiveData<String>
     fun getAppInfoMaxSlot(): LiveData<Int>
     fun getAppInfoPayPoint(): LiveData<Int>
+
+    fun getNetworkFlag(): LiveData<Boolean>
 }

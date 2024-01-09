@@ -36,7 +36,7 @@ class InitLandingViewModel @Inject constructor(
                 isSuccess = false
             }
             // Todo : 페이몽 로그인 로직
-            Log.d("test", "paymongLogin >> userName : $userName, email : $email")
+            Log.d("InitLandingViewModel", "call paymongLogin: [userName : $userName, email : $email]")
 
             if (isSuccess) {
                 _processCode.postValue(InitLandingCode.SIGN_IN_SUCCESS)

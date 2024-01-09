@@ -36,10 +36,12 @@ class MainViewModel @Inject constructor(
     var sleep: LiveData<Float> = MutableLiveData(DefaultValue.sleep)
 
 
+    private var networkFlag: LiveData<Boolean> = MutableLiveData(false)
     private var sound: LiveData<Float> = MutableLiveData(DefaultValue.sound)
 
     init {
         Log.d("MainViewModel", "MainViewModel - init!")
+        networkFlag = appInfoRepository.getNetworkFlag()
         sound = appInfoRepository.getConfigureSound()
         mapCode = appInfoRepository.getAppInfoMapCode()
 
@@ -61,8 +63,8 @@ class MainViewModel @Inject constructor(
             _processCode.postValue(MainCode.STAND_BY)
         }
 
-        sound.observeForever {
-            Log.d("MainViewModel", "sound : $it")
+        networkFlag.observeForever {
+            Log.d("MainViewModel", "network flag : $it")
         }
     }
 }

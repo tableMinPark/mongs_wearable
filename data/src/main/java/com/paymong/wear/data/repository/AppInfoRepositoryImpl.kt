@@ -161,4 +161,9 @@ class AppInfoRepositoryImpl @Inject constructor(
     override fun getAppInfoPayPoint(): LiveData<Int> {
         return dataSource.getPayPoint()
     }
+
+    /** 네트워크 연결 플래그 **/
+    override fun getNetworkFlag(): LiveData<Boolean> {
+        return dataSource.getNetworkFlag()
+    }
 }
