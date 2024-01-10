@@ -1,19 +1,20 @@
 package com.paymong.wear.data.module
 
-import com.paymong.wear.data.retrofit.api.AuthApi
+import android.content.Context
+import com.paymong.wear.data.mqtt.Mqtt
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ApiModule {
+object MqttModule {
     @Provides
     @Singleton
-    fun provideAuthApi(retrofit: Retrofit): AuthApi {
-        return retrofit.create(AuthApi::class.java)
+    fun bindMqtt(@ApplicationContext context: Context) : Mqtt {
+        return Mqtt(context)
     }
 }

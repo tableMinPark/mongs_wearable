@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LiveData
-import com.paymong.wear.data.entity.Mong
-import com.paymong.wear.data.entity.Feed
+import com.paymong.wear.data.room.entity.Mong
+import com.paymong.wear.data.room.entity.Feed
 import com.paymong.wear.data.room.AppDatabase
 import com.paymong.wear.domain.model.AppInfoModel
 import com.paymong.wear.domain.model.MongModel

@@ -1,8 +1,8 @@
 package com.paymong.wear.data.repository
 
 import android.util.Log
-import com.paymong.wear.data.api.retrofit.AuthApi
-import com.paymong.wear.data.api.model.request.LoginReqModel
+import com.paymong.wear.data.retrofit.api.AuthApi
+import com.paymong.wear.data.retrofit.model.request.LoginReqModel
 import com.paymong.wear.domain.dto.request.LoginReqDto
 import com.paymong.wear.domain.repository.AuthRepository
 import javax.inject.Inject

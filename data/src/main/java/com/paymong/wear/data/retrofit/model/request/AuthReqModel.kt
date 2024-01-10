@@ -1,4 +1,4 @@
-package com.paymong.wear.data.api.model.request
+package com.paymong.wear.data.retrofit.model.request
 
 data class LoginReqModel(
     val playerId: String

@@ -5,7 +5,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.paymong.wear.data.entity.Feed
+import com.paymong.wear.data.room.entity.Feed
 import com.paymong.wear.domain.model.FeedModel
 
 @Dao

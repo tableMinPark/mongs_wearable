@@ -1,4 +1,4 @@
-package com.paymong.wear.data.api.model.response
+package com.paymong.wear.data.retrofit.model.response
 
 data class LoginResModel(
     val accessToken: String,

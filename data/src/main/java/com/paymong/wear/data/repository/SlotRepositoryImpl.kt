@@ -2,9 +2,9 @@ package com.paymong.wear.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.paymong.wear.data.api.model.response.MongResModel
+import com.paymong.wear.data.retrofit.model.response.MongResModel
 import com.paymong.wear.data.room.AppDatabase
-import com.paymong.wear.data.entity.Slot
+import com.paymong.wear.data.room.entity.Slot
 import com.paymong.wear.domain.model.SlotModel
 import com.paymong.wear.domain.repository.SlotRepository
 import com.paymong.wear.domain.viewModel.DefaultValue

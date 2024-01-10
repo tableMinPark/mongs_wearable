@@ -1,5 +1,8 @@
 package com.paymong.wear.domain.repository
 
 interface MqttRepository {
-    fun initMqtt(email: String)
+    fun connectAfterLogin(email: String)
+    fun disConnectAfterLogout()
+    fun connectAfterResume()
+    fun disConnectAfterPause()
 }

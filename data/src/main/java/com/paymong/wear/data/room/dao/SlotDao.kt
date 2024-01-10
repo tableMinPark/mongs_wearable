@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.paymong.wear.data.entity.Slot
+import com.paymong.wear.data.room.entity.Slot
 import com.paymong.wear.domain.model.SlotModel
 
 @Dao

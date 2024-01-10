@@ -12,7 +12,6 @@ import com.paymong.wear.domain.viewModel.code.InitLandingCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -43,7 +42,7 @@ class InitLandingViewModel @Inject constructor(
 
                 viewModelScope.async(Dispatchers.IO) {
                     // 구독 걸고
-                    email?.let { mqttRepository.initMqtt(email) }
+                    email?.let { mqttRepository.connectAfterLogin(email) }
                 }.await()
 
                 viewModelScope.async(Dispatchers.IO) {

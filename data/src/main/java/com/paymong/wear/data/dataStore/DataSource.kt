@@ -95,9 +95,11 @@ class DataSource @Inject constructor(
             preferences[NETWORK_FLAG]!!
         }.asLiveData()
     }
-    suspend fun setNetworkFlag(flag: Boolean) {
-        context.configure.edit { preferences ->
-            preferences[NETWORK_FLAG] = flag
+    fun setNetworkFlag(flag: Boolean) {
+        CoroutineScope(Dispatchers.IO).launch {
+            context.configure.edit { preferences ->
+                preferences[NETWORK_FLAG] = flag
+            }
         }
     }
 }
