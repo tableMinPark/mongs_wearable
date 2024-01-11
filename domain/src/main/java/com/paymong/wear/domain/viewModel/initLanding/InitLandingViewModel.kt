@@ -42,7 +42,7 @@ class InitLandingViewModel @Inject constructor(
 
                 viewModelScope.async(Dispatchers.IO) {
                     // 구독 걸고
-                    email?.let { mqttRepository.connectAfterLogin(email) }
+                    email?.let { mqttRepository.connectBeforeInit(email) }
                 }.await()
 
                 viewModelScope.async(Dispatchers.IO) {

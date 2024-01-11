@@ -17,7 +17,10 @@ class MqttRepositoryImpl @Inject constructor(
 ) : MqttRepository {
     private var isReconnect : Boolean = false
 
-    override fun connectAfterLogin(email: String) {
+    override fun initDataReset() {
+        mqtt.reset()
+    }
+    override fun connectBeforeInit(email: String) {
         isReconnect = true
         dataSource.setNetworkFlag(false)
 
@@ -32,8 +35,22 @@ class MqttRepositoryImpl @Inject constructor(
         // 연결 시도
         mqtt.connect()
     }
+    override fun connectAfterInit() {
+        if (!mqtt.isInit()) {
+            return
+        }
 
-    override fun disConnectAfterLogout() {
+        // TODO : 재 연결이기 때문에 API 호출하여 데이터 동기화 필요함
+
+        isReconnect = true
+        mqtt.connect()
+    }
+    override fun disConnectNotReset() {
+        isReconnect = false
+        // 연결 해제
+        mqtt.disConnect()
+    }
+    override fun disConnectAndReset() {
         isReconnect = false
         // 연결 해제
         mqtt.disConnect()
@@ -41,33 +58,22 @@ class MqttRepositoryImpl @Inject constructor(
         mqtt.reset()
     }
 
-    override fun connectAfterResume() {
-        isReconnect = true
-        // 초기화 완료 시에만 연결 시도 (로그인 이후 경우에 시도)
-        if (mqtt.isInit()) {
-            mqtt.connect()
-        }
-    }
-    override fun disConnectAfterPause() {
-        isReconnect = false
-        // 연결 해제
-        mqtt.disConnect()
-    }
-
     /** Message Arrived Listener **/
     private val messageCallback = object : MqttCallback {
         override fun connectionLost(cause: Throwable?) {
             // 연결이 끊겼을 때의 처리
-            Log.d("MqttRepositoryImpl", "mqtt connecting disable: ${cause?.message}")
-            if (isReconnect) {
-                mqtt.connect()
+            Log.d("MqttRepositoryImpl", "[MQTT CONNECT DISABLE] [mqtt connecting disable: ${cause?.message}]")
+            if (!isReconnect) {
+                return
             }
+            mqtt.connect()
         }
 
         override fun messageArrived(topic: String?, message: MqttMessage?) {
             // 메시지 도착 시의 처리 (수신)
             message?.let {
                 Log.d("MqttRepositoryImpl", "data : $it")
+                // TODO : 도착한 문자열 데이터를 파싱 후, ROOM 에 데이터 동기화
             }
         }
 

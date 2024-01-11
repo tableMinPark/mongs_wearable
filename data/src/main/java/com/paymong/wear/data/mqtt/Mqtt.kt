@@ -54,7 +54,7 @@ class Mqtt @Inject constructor(
         this@Mqtt.connectDisableCallback = connectDisableCallback
         this@Mqtt.connectSuccessCallback = connectSuccessCallback
         // Topic 명 정의
-        dataTopic = "appInfo/${email}"
+        dataTopic = "data/${email}"
     }
 
     fun reset() {

@@ -11,13 +11,12 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     @Inject
     lateinit var mqttRepository: MqttRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        mqttRepository.initDataReset()
         setContent {
             PaymongTheme {
                 NavGraph()
@@ -26,12 +25,17 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onResume() {
+        mqttRepository.connectAfterInit()
         super.onResume()
-        mqttRepository.connectAfterResume()
     }
 
     override fun onPause() {
+        mqttRepository.disConnectNotReset()
         super.onPause()
-        mqttRepository.disConnectAfterPause()
+    }
+
+    override fun onDestroy() {
+        mqttRepository.initDataReset()
+        super.onDestroy()
     }
 }
