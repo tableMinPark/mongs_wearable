@@ -1,6 +1,6 @@
 package com.paymong.wear.data.mqtt.model.response
 
-data class MongStateResModel(
+data class StatusResModel(
     val mongId: Long,
 
     var health: Float,

@@ -14,7 +14,7 @@ import com.paymong.wear.data.room.util.Converters
 @Database(entities = [Slot::class, Feed::class, Mong::class], version = 34)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun slotDao(): SlotDao
+    abstract fun slotBySlotIdDao(): SlotDao
     abstract fun feedDao(): FeedDao
     abstract fun mongDao(): MongDao
 }

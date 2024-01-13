@@ -22,13 +22,20 @@ interface SlotDao {
     @Query("SELECT * FROM slot")
     fun findAll(): LiveData<List<SlotModel>>
     @Query("UPDATE slot SET nextStateCode = :nextStateCode WHERE slotId = :slotId")
-    fun setNextState(nextStateCode: String, slotId: Long)
+    fun modifyNextStateBySlotId(nextStateCode: String, slotId: Long)
     @Query("SELECT nextStateCode FROM slot WHERE slotId = :slotId")
-    fun getNextState(slotId: Long): String
+    fun findNextStateBySlotId(slotId: Long): String
     @Query("UPDATE slot SET stateCode = :stateCode WHERE slotId = :slotId")
-    fun setState(stateCode: String, slotId: Long)
+    fun modifyStateBySlotId(stateCode: String, slotId: Long)
     @Query("SELECT stateCode FROM slot WHERE slotId = :slotId")
-    fun getState(slotId: Long): String
+    fun findStateBySlotId(slotId: Long): String
     @Query("UPDATE slot SET poopCount = :poopCount WHERE slotId = :slotId")
-    fun setPoopCount(poopCount: Int, slotId: Long)
+    fun modifyPoopCountBySlotId(poopCount: Int, slotId: Long)
+
+    /** MQTT **/
+    @Query("UPDATE slot SET health = :health, satiety = :satiety, strength = :strength, sleep = :sleep WHERE mongId = :mongId")
+    fun modifyStatusByMongId(mongId: Long, health: Float, satiety: Float, strength: Float, sleep: Float)
+    @Query("UPDATE slot SET stateCode = :stateCode WHERE mongId = :mongId")
+    fun modifyStateByMongId(mongId: Long, stateCode: String)
+
 }

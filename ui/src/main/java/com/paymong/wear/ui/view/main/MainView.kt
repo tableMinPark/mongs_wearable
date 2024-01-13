@@ -67,9 +67,9 @@ fun MainView(
     val poopCount = mainViewModel.poopCount.observeAsState(DefaultValue.poopCount)
 
     val health = mainViewModel.health.observeAsState(DefaultValue.health)
-    val satiety = mainViewModel.health.observeAsState(DefaultValue.satiety)
-    val strength = mainViewModel.health.observeAsState(DefaultValue.strength)
-    val sleep = mainViewModel.health.observeAsState(DefaultValue.sleep)
+    val satiety = mainViewModel.satiety.observeAsState(DefaultValue.satiety)
+    val strength = mainViewModel.strength.observeAsState(DefaultValue.strength)
+    val sleep = mainViewModel.sleep.observeAsState(DefaultValue.sleep)
 
     /** Data **/
     val map = MapCode.valueOf(mapCode.value)
