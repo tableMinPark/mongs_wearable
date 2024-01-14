@@ -46,16 +46,17 @@ class SlotViewModel @Inject constructor(
     fun evolutionStart() {
         Log.d("SlotViewModel", "Call - evolutionStart()")
         // 진화 중 상태로 변경
-//        mongRepository.setStateCode("CD010")
-//        _stateCode.postValue("CD010")
+        viewModelScope.launch(Dispatchers.IO) {
+            slotRepository.setSlotMongState("CD010")
+        }
     }
 
     fun evolutionEnd() {
         Log.d("SlotViewModel", "Call - evolutionEnd()")
-//        _mongCode.postValue(_nextMongCode.value)
-//        _nextMongCode.postValue("CH444")
-//        _stateCode.postValue(_nextStateCode.value)
-//        _nextStateCode.postValue("CD444")
+        viewModelScope.launch(Dispatchers.IO) {
+            slotRepository.setSlotStateToNextState()
+            slotRepository.setSlotMongCodeToNextMongCode()
+        }
     }
 
     fun graduation() {
@@ -64,17 +65,4 @@ class SlotViewModel @Inject constructor(
 //        _stateCode.postValue("CD444")
 //        _poopCount.postValue(0)
     }
-
-    // TODO : 카프카 클라이언트가 Repository의 값을 변경하면 옵저버가 감지하기 때문에 필요없음
-//    private fun updateForEvolution(nextMongCode: String, stateCode: String) {
-//        this.nextMongCode = nextMongCode
-//        this.nextStateCode = this.stateCode
-//        this.stateCode = stateCode
-//    }
-
-    // TODO : 카프카 클라이언트가 Repository의 값을 변경하면 옵저버가 감지하기 때문에 필요없음
-//    private fun updateForGraduation() {
-//
-//        this.stateCode = "CD006"
-//    }
 }

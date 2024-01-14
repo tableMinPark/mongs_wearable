@@ -41,12 +41,10 @@ class SlotActionViewModel @Inject constructor(
     fun stroke() {
         viewModelScope.launch(Dispatchers.IO) {
             Log.d("SlotActionViewModel", "Call - stroke()")
-            val nextMongState = slotRepository.getSlotMongState()
-            slotRepository.setSlotMongState("CD009")
-            delay(1000)
-            slotRepository.setSlotMongState(nextMongState)
-
+            slotRepository.setSlotNextStateToState("CD009")
             // TODO : stroke action (API)
+            delay(5000)
+            slotRepository.setSlotStateToNextState()
         }
     }
 }

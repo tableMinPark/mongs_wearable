@@ -9,6 +9,7 @@ import com.paymong.wear.data.mqtt.code.MqttCode
 import com.paymong.wear.data.mqtt.model.response.MapResModel
 import com.paymong.wear.data.mqtt.model.response.EvolutionResModel
 import com.paymong.wear.data.mqtt.model.response.GraduationResModel
+import com.paymong.wear.data.mqtt.model.response.StateResModel
 import com.paymong.wear.data.mqtt.model.response.StatusResModel
 import com.paymong.wear.data.room.AppDatabase
 import com.paymong.wear.data.util.GsonDateFormatAdapter
@@ -42,12 +43,14 @@ class MqttRepositoryImpl @Inject constructor(
     private fun liveUpdateData() {
         CoroutineScope(Dispatchers.IO).launch {
             while(isUpdate) {
+                Log.d("MqttRepositoryImpl", "[MQTT UPDATE DATA] job: ${arrivedMessage.size}")
                 while(!arrivedMessage.isEmpty()) {
                     updateData(json = arrivedMessage.poll()!!)
-                    delay(1000)
+                    delay(5000)
                 }
-                delay(1000)
+                delay(5000)
             }
+            Log.d("MqttRepositoryImpl", "[MQTT UPDATE DATA] stop")
         }
     }
 
@@ -61,10 +64,7 @@ class MqttRepositoryImpl @Inject constructor(
         mqtt.init(
             email = email,
             messageCallback = messageCallback,
-            connectDisableCallback = {
-                dataSource.setNetworkFlag(false)
-                isUpdate = false
-            },
+            connectDisableCallback = { dataSource.setNetworkFlag(false) },
             connectSuccessCallback = {
                 dataSource.setNetworkFlag(true)
                 isUpdate = true
@@ -97,14 +97,22 @@ class MqttRepositoryImpl @Inject constructor(
         mqtt.reset()
     }
 
-    private fun updateMap(data: String) {
+    private fun updateMap(json: String) {
         CoroutineScope(Dispatchers.IO).launch {
+            val resModel = gson.fromJson(json, Map::class.java)
+            val data = resModel["data"].toString()
+
+            Log.d("MqttRepositoryImpl", "[UPDATE MAP] data : $data")
             val mapResModel = gson.fromJson(data, MapResModel::class.java)
             dataSource.setMapCode(mapCode = mapResModel.mapCode)
         }
     }
-    private fun updateStatus(data: String) {
+    private fun updateStatus(json: String) {
         CoroutineScope(Dispatchers.IO).launch {
+            val resModel = gson.fromJson(json, Map::class.java)
+            val data = resModel["data"].toString()
+
+            Log.d("MqttRepositoryImpl", "[UPDATE STATUS] data : $data")
             val statusResModel = gson.fromJson(data, StatusResModel::class.java)
 
             appDatabase.slotDao().modifyStatusByMongId(
@@ -116,14 +124,43 @@ class MqttRepositoryImpl @Inject constructor(
             )
         }
     }
-    private fun updateEvolution(data: String) {
+    private fun updateState(json: String) {
         CoroutineScope(Dispatchers.IO).launch {
+            val resModel = gson.fromJson(json, Map::class.java)
+            val data = resModel["data"].toString()
+
+            Log.d("MqttRepositoryImpl", "[UPDATE STATE] data : $data")
+            val stateResModel = gson.fromJson(data, StateResModel::class.java)
+
+            val stateCode = appDatabase.slotDao().findStateByMongId(mongId = stateResModel.mongId)
+
+            // 진화 대기, 진화 중 상태인 경우 nextStateCode 를 변경함
+            if (stateCode in arrayListOf("CH007", "CH008", "CH009", "CH010")) {
+                appDatabase.slotDao().modifyNextStateByMongId(
+                    mongId = stateResModel.mongId,
+                    nextStateCode = stateResModel.stateCode
+                )
+            } else {
+                appDatabase.slotDao().modifyStateByMongId(
+                    mongId = stateResModel.mongId,
+                    stateCode = stateResModel.stateCode
+                )
+            }
+        }
+    }
+    private fun updateEvolution(json: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val resModel = gson.fromJson(json, Map::class.java)
+            val data = resModel["data"].toString()
+
+            Log.d("MqttRepositoryImpl", "[UPDATE EVOLUTION] data : $data")
             val evolutionResModel = gson.fromJson(data, EvolutionResModel::class.java)
 
             val stateCode = appDatabase.slotDao().findStateByMongId(evolutionResModel.mongId)
-            // 현재 상태 이후 진행 (먹는 중, 행복, 진화 중)
-            if (stateCode in arrayListOf("CD008", "CD009", "CD010")) {
-                arrivedMessage.add(data)
+            // 현재 상태 이후 진행 (수면, 먹는 중, 행복, 진화 중)
+            if (stateCode in arrayListOf("CD002", "CD008", "CD009", "CD010")) {
+                Log.d("MqttRepositoryImpl", "[WAIT JOB] stateCode: $stateCode, data: $data")
+                arrivedMessage.add(json)
                 return@launch
             }
             // 현재 상태가 아래와 같을 경우 수정 하지 않음 (죽음, 졸업, 진화 대기)
@@ -131,6 +168,10 @@ class MqttRepositoryImpl @Inject constructor(
                 return@launch
             }
 
+            appDatabase.slotDao().modifyNextStateByMongId(
+                nextStateCode = stateCode,
+                mongId = evolutionResModel.mongId
+            )
             appDatabase.slotDao().modifyStateByMongId(
                 mongId = evolutionResModel.mongId,
                 stateCode = evolutionResModel.stateCode
@@ -141,14 +182,18 @@ class MqttRepositoryImpl @Inject constructor(
             )
         }
     }
-    private fun updateGraduation(data: String) {
+    private fun updateGraduation(json: String) {
         CoroutineScope(Dispatchers.IO).launch {
+            val resModel = gson.fromJson(json, Map::class.java)
+            val data = resModel["data"].toString()
+
+            Log.d("MqttRepositoryImpl", "[UPDATE GRADUATION] data : $data")
             val graduationResModel = gson.fromJson(data, GraduationResModel::class.java)
 
             val stateCode = appDatabase.slotDao().findStateByMongId(graduationResModel.mongId)
-            // 현재 상태 이후 진행 (진화 대기, 먹는 중, 행복, 진화 중)
-            if (stateCode in arrayListOf( "CD007", "CD008", "CD009", "CD010")) {
-                arrivedMessage.add(data)
+            // 현재 상태 이후 진행 (수면, 진화 대기, 먹는 중, 행복, 진화 중)
+            if (stateCode in arrayListOf("CD002", "CD007", "CD008", "CD009", "CD010")) {
+                arrivedMessage.add(json)
                 return@launch
             }
             // 현재 상태가 아래와 같을 경우 수정 하지 않음 (죽음, 졸업)
@@ -166,28 +211,28 @@ class MqttRepositoryImpl @Inject constructor(
     private fun updateData(json: String) {
         try {
             val resModel = gson.fromJson(json, Map::class.java)
-            val code = MqttCode.valueOf(resModel["code"].toString())
-
-            val data = resModel["data"].toString()
-            Log.d("MqttRepositoryImpl", "code : $code, data : $data")
 
             // code 값에 따라 적합한 Model 에 매핑
-            return when (code) {
+            return when (MqttCode.valueOf(resModel["code"].toString())) {
                 /** 맵 **/
                 MqttCode.MAP -> {
-                    updateMap(data)
+                    updateMap(json)
                 }
                 /** 지수 **/
                 MqttCode.STATUS -> {
-                    updateStatus(data)
+                    updateStatus(json)
+                }
+                /** 상태 **/
+                MqttCode.STATE -> {
+                    updateState(json)
                 }
                 /** 진화 **/
                 MqttCode.EVOLUTION -> {
-                    updateEvolution(data)
+                    updateEvolution(json)
                 }
                 /** 졸업 **/
                 MqttCode.GRADUATION -> {
-                    updateGraduation(data)
+                    updateGraduation(json)
                 }
             }
         } catch (e: Exception) {
@@ -200,10 +245,11 @@ class MqttRepositoryImpl @Inject constructor(
         override fun connectionLost(cause: Throwable?) {
             // 연결이 끊겼을 때의 처리
             Log.d("MqttRepositoryImpl", "[MQTT CONNECT DISABLE] [mqtt connecting disable: ${cause?.message}]")
-            if (!isReconnect) {
-                return
+            // 연결이 끊겼을 때, 업데이트 반복문 중지
+            isUpdate = false
+            if (isReconnect) {
+                mqtt.connect()
             }
-            mqtt.connect()
         }
 
         override fun messageArrived(topic: String?, message: MqttMessage?) {
