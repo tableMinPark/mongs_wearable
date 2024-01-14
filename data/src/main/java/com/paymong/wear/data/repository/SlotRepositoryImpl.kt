@@ -17,8 +17,8 @@ class SlotRepositoryImpl @Inject constructor(
     private var slotId = DefaultValue.slotId
 
     override fun initSlotInfo() {
-        slotId = if (appDatabase.slotBySlotIdDao().count() > 0) {
-            appDatabase.slotBySlotIdDao().findFirstBySlotId()
+        slotId = if (appDatabase.slotDao().count() > 0) {
+            appDatabase.slotDao().findFirstBySlotId()
         } else {
             -1L
         }
@@ -27,49 +27,49 @@ class SlotRepositoryImpl @Inject constructor(
         return if (slotId == -1L) {
             MutableLiveData(SlotModel())
         } else {
-            appDatabase.slotBySlotIdDao().findBySlotId(slotId = slotId)
+            appDatabase.slotDao().findBySlotId(slotId = slotId)
         }
     }
     override suspend fun getAllSlot(): LiveData<List<SlotModel>> {
-        return appDatabase.slotBySlotIdDao().findAll()
+        return appDatabase.slotDao().findAll()
     }
     override suspend fun setSlot(slotId: Long) {
         this@SlotRepositoryImpl.slotId = slotId
     }
     override suspend fun getSlotMongState(): String {
-        return appDatabase.slotBySlotIdDao().findStateBySlotId(slotId = slotId)
+        return appDatabase.slotDao().findStateBySlotId(slotId = slotId)
     }
     override suspend fun setSlotMongState(stateCode: String) {
-        appDatabase.slotBySlotIdDao().modifyStateBySlotId(stateCode = stateCode, slotId = slotId)
+        appDatabase.slotDao().modifyStateBySlotId(stateCode = stateCode, slotId = slotId)
     }
     override suspend fun setSlotMongPoopCount(poopCount: Int) {
-        appDatabase.slotBySlotIdDao().modifyPoopCountBySlotId(poopCount = poopCount, slotId = slotId)
+        appDatabase.slotDao().modifyPoopCountBySlotId(poopCount = poopCount, slotId = slotId)
     }
     override suspend fun setSlotMongSleep() {
-        val nextStateCode = appDatabase.slotBySlotIdDao().findStateBySlotId(slotId = slotId);
-        appDatabase.slotBySlotIdDao().modifyNextStateBySlotId(nextStateCode = nextStateCode, slotId = slotId)
-        appDatabase.slotBySlotIdDao().modifyStateBySlotId(stateCode = "CD002", slotId = slotId)
+        val nextStateCode = appDatabase.slotDao().findStateBySlotId(slotId = slotId);
+        appDatabase.slotDao().modifyNextStateBySlotId(nextStateCode = nextStateCode, slotId = slotId)
+        appDatabase.slotDao().modifyStateBySlotId(stateCode = "CD002", slotId = slotId)
     }
     override suspend fun setSlotMongWakeUp() {
-        val stateCode = appDatabase.slotBySlotIdDao().findNextStateBySlotId(slotId = slotId);
-        appDatabase.slotBySlotIdDao().modifyNextStateBySlotId(nextStateCode = "CD444", slotId = slotId)
-        appDatabase.slotBySlotIdDao().modifyStateBySlotId(stateCode = stateCode, slotId = slotId)
+        val stateCode = appDatabase.slotDao().findNextStateBySlotId(slotId = slotId);
+        appDatabase.slotDao().modifyNextStateBySlotId(nextStateCode = "CD444", slotId = slotId)
+        appDatabase.slotDao().modifyStateBySlotId(stateCode = stateCode, slotId = slotId)
     }
     override suspend fun generateSlot() {
         // TODO : 몽 생성 (API)
         val mongResModel = MongResModel(
             1L,
             LocalDateTime.now(),
-            11,
-            "CH300",
+            0,
+            "CH000",
             "CH444",
             "CD000",
             "CD444",
             4,
-            0.1f,
-            0.1f,
-            0.1f,
-            0.1f
+            0.0f,
+            0.0f,
+            0.0f,
+            0.0f
         )
         val newSlot = Slot(
             mongId = mongResModel.mongId,
@@ -85,13 +85,13 @@ class SlotRepositoryImpl @Inject constructor(
             strength = mongResModel.strength,
             sleep = mongResModel.sleep
         )
-        slotId = appDatabase.slotBySlotIdDao().register(newSlot)
+        slotId = appDatabase.slotDao().register(newSlot)
     }
     override suspend fun removeSlot(slotId: Long) {
-        appDatabase.slotBySlotIdDao().deleteBySlotId(slotId = slotId)
+        appDatabase.slotDao().deleteBySlotId(slotId = slotId)
         if (this@SlotRepositoryImpl.slotId == slotId) {
-            this@SlotRepositoryImpl.slotId = if (appDatabase.slotBySlotIdDao().count() > 0) {
-                appDatabase.slotBySlotIdDao().findFirstBySlotId()
+            this@SlotRepositoryImpl.slotId = if (appDatabase.slotDao().count() > 0) {
+                appDatabase.slotDao().findFirstBySlotId()
             } else {
                 -1L
             }

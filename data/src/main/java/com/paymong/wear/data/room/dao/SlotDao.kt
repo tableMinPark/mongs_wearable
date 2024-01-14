@@ -37,5 +37,8 @@ interface SlotDao {
     fun modifyStatusByMongId(mongId: Long, health: Float, satiety: Float, strength: Float, sleep: Float)
     @Query("UPDATE slot SET stateCode = :stateCode WHERE mongId = :mongId")
     fun modifyStateByMongId(mongId: Long, stateCode: String)
-
+    @Query("UPDATE slot SET nextMongCode = :nextMongCode WHERE mongId = :mongId")
+    fun modifyNextMongCodeByMongId(mongId: Long, nextMongCode: String)
+    @Query("SELECT stateCode FROM slot WHERE mongId = :mongId")
+    fun findStateByMongId(mongId: Long): String
 }

@@ -11,10 +11,10 @@ import com.paymong.wear.data.room.dao.MongDao
 import com.paymong.wear.data.room.dao.FeedDao
 import com.paymong.wear.data.room.util.Converters
 
-@Database(entities = [Slot::class, Feed::class, Mong::class], version = 34)
+@Database(entities = [Slot::class, Feed::class, Mong::class], version = 35)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun slotBySlotIdDao(): SlotDao
+    abstract fun slotDao(): SlotDao
     abstract fun feedDao(): FeedDao
     abstract fun mongDao(): MongDao
 }

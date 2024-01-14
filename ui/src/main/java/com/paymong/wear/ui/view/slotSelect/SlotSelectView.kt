@@ -140,7 +140,7 @@ fun SlotSelectContent(
                     setSlot = setSlot,
                     removeSlot = { slotId ->
                         removeSlot(slotId)
-                        nowIndex.intValue = nowIndex.intValue - 1
+                        nowIndex.intValue = max(nowIndex.intValue - 1, 0)
                     },
                     getMongName = getMongName,
                     isSelectSlot = isSelectSlot,
