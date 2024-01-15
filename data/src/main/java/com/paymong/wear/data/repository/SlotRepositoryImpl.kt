@@ -46,6 +46,7 @@ class SlotRepositoryImpl @Inject constructor(
             "CH444",
             "CD000",
             "CD444",
+            "SH444",
             4,
             0.0f,
             0.0f,
@@ -87,6 +88,9 @@ class SlotRepositoryImpl @Inject constructor(
         val nextStateCode = appDatabase.slotDao().findNextStateBySlotId(slotId = slotId)
         appDatabase.slotDao().modifyStateBySlotId(stateCode = nextStateCode, slotId = slotId)
         appDatabase.slotDao().modifyNextStateBySlotId(nextStateCode = "CD444", slotId = slotId)
+    }
+    override suspend fun setSlotShift(shiftCode: String) {
+        appDatabase.slotDao().modifyShiftBySlotId(shiftCode = shiftCode, slotId = slotId)
     }
     override suspend fun setSlotMongCodeToNextMongCode() {
         val nextMongCode = appDatabase.slotDao().findNextMongCodeBySlotId(slotId = slotId)

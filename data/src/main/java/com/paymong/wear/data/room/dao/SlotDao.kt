@@ -40,6 +40,8 @@ interface SlotDao {
     fun modifyNextStateBySlotId(nextStateCode: String, slotId: Long)
     @Query("UPDATE slot SET stateCode = :stateCode WHERE slotId = :slotId")
     fun modifyStateBySlotId(stateCode: String, slotId: Long)
+    @Query("UPDATE slot SET shiftCode = :shiftCode WHERE slotId = :slotId")
+    fun modifyShiftBySlotId(shiftCode: String, slotId: Long)
     @Query("UPDATE slot SET poopCount = :poopCount WHERE slotId = :slotId")
     fun modifyPoopCountBySlotId(poopCount: Int, slotId: Long)
 
@@ -48,6 +50,8 @@ interface SlotDao {
     fun modifyStatusByMongId(mongId: Long, health: Float, satiety: Float, strength: Float, sleep: Float)
     @Query("UPDATE slot SET stateCode = :stateCode WHERE mongId = :mongId")
     fun modifyStateByMongId(mongId: Long, stateCode: String)
+    @Query("UPDATE slot SET shiftCode = :shiftCode WHERE mongId = :mongId")
+    fun modifyShiftByMongId(shiftCode: String, mongId: Long)
     @Query("UPDATE slot SET nextStateCode = :nextStateCode WHERE mongId = :mongId")
     fun modifyNextStateByMongId(mongId: Long, nextStateCode: String)
     @Query("UPDATE slot SET nextMongCode = :nextMongCode WHERE mongId = :mongId")

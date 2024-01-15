@@ -2,5 +2,5 @@ package com.paymong.wear.data.mqtt.model.response
 
 data class GraduationResModel(
     val mongId: Long,
-    val stateCode: String
+    val shiftCode: String
 )

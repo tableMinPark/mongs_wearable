@@ -11,6 +11,7 @@ data class MongResModel(
 
     var stateCode: String,
     var nextStateCode: String,
+    var shiftCode: String,
     var poopCount: Int,
 
     var health: Float,

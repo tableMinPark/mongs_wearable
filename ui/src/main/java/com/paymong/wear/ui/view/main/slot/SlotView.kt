@@ -16,6 +16,7 @@ import com.paymong.wear.domain.viewModel.code.SlotCode
 import com.paymong.wear.domain.viewModel.main.SlotViewModel
 import com.paymong.wear.ui.code.MongCode
 import com.paymong.wear.ui.code.NavItem
+import com.paymong.wear.ui.code.ShiftCode
 import com.paymong.wear.ui.code.StateCode
 import com.paymong.wear.ui.view.common.character.Character
 
@@ -25,6 +26,7 @@ fun SlotView(
     showActionContent: () -> Unit,
     mongCode: State<String>,
     stateCode: State<String>,
+    shiftCode: State<String>,
     poopCount: State<Int>,
     slotViewModel: SlotViewModel = hiltViewModel()
 ) {
@@ -46,6 +48,7 @@ fun SlotView(
         else -> {
             SlotContent(
                 mongCode = mongCode,
+                shiftCode = shiftCode,
                 stateCode = stateCode,
                 poopCount = poopCount,
                 evolutionStart = slotViewModel::evolutionStart,
@@ -61,6 +64,7 @@ fun SlotView(
 @Composable
 fun SlotContent(
     mongCode: State<String>,
+    shiftCode: State<String>,
     stateCode: State<String>,
     poopCount: State<Int>,
     evolutionStart: () -> Unit,
@@ -71,6 +75,7 @@ fun SlotContent(
 ) {
     /** Data **/
     val mong = MongCode.valueOf(mongCode.value)
+    val shift = ShiftCode.valueOf(shiftCode.value)
     val state = StateCode.valueOf(stateCode.value)
     val poop = poopCount.value
 
@@ -80,9 +85,9 @@ fun SlotContent(
             .padding(bottom = 10.dp)
             .zIndex(0f)
     ) {
-        val zIndex = if (state in arrayListOf(
-                StateCode.CD006,
-                StateCode.CD010
+        val zIndex = if (shift in arrayListOf(
+                ShiftCode.SH002,
+                ShiftCode.SH004
             )
         ) 1f else -1f
 
@@ -90,29 +95,55 @@ fun SlotContent(
         Box(
             modifier = Modifier.zIndex(0f)
         ) {
-            when (state) {
-                StateCode.CD005 -> Dead()
-                StateCode.CD007 -> EvolutionReady(evolutionStart = evolutionStart)
-                StateCode.CD010 -> {
-                    Box(
-                        contentAlignment = Alignment.BottomCenter,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        Character(mong = mong)
-                    }
+            // 몽이 없는 경우
+            if (state == StateCode.CD444) {
+                Empty(onClick = generateMong)
+            }
+            // 죽은 경우
+            else if (shift == ShiftCode.SH001) {
+                Dead()
+            }
+            // 수면, 먹는중, 행복 상태인 경우
+            else if (state in arrayListOf(
+                StateCode.CD002,
+                StateCode.CD008,
+                StateCode.CD009
+            )) {
+                Box(
+                    contentAlignment = Alignment.BottomCenter,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Character(
+                        state = state,
+                        mong = mong,
+                        showSlotActionView = showSlotActionView
+                    )
                 }
-                StateCode.CD444 -> Empty(onClick = generateMong)
-                else -> {
-                    Box(
-                        contentAlignment = Alignment.BottomCenter,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        Character(
-                            state = state,
-                            mong = mong,
-                            showSlotActionView = showSlotActionView
-                        )
-                    }
+            }
+            // 진화 대기 경우
+            else if (shift == ShiftCode.SH003) {
+                EvolutionReady(evolutionStart = evolutionStart)
+            }
+            // 진화 중인 경우
+            else if (shift == ShiftCode.SH004) {
+                Box(
+                    contentAlignment = Alignment.BottomCenter,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Character(mong = mong)
+                }
+            }
+            // 그 외의 경우
+            else {
+                Box(
+                    contentAlignment = Alignment.BottomCenter,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Character(
+                        state = state,
+                        mong = mong,
+                        showSlotActionView = showSlotActionView
+                    )
                 }
             }
         }
@@ -122,14 +153,8 @@ fun SlotContent(
             modifier = Modifier
                 .zIndex(2f)
         ) {
-            if (state !in arrayOf(
-                    StateCode.CD005,
-                    StateCode.CD006,
-                    StateCode.CD007,
-                    StateCode.CD010,
-                    StateCode.CD444
-                )
-            ) {
+            // 몽이 존재 하고 변화 상태가 아닌 경우
+            if (state != StateCode.CD444 && shift == ShiftCode.SH444) {
                 Poop(poop)
             }
         }
@@ -139,11 +164,17 @@ fun SlotContent(
             modifier = Modifier
                 .zIndex(zIndex)
         ) {
-            when (state) {
-                StateCode.CD009 -> Heart()
-                StateCode.CD006 -> GraduationEffect(graduation = graduation)
-                StateCode.CD010 -> EvolutionEffect(evolutionEnd = evolutionEnd)
-                else -> {}
+            // 쓰다 듬기 한 경우 (수면 중 일 수가 없음)
+            if (state == StateCode.CD009) {
+                Heart()
+            }
+            // 졸업한 경우 (수면 중 일 수가 없음)
+            else if (shift == ShiftCode.SH002) {
+                GraduationEffect(graduation = graduation)
+            }
+            // 진화 중인 경우 (수면 중 일 수가 없음)
+            else if (shift == ShiftCode.SH004) {
+                EvolutionEffect(evolutionEnd = evolutionEnd)
             }
         }
     }

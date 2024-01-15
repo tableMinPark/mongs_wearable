@@ -12,6 +12,7 @@ data class SlotModel(
 
     var stateCode: String = "CD444",
     var nextStateCode: String = "CD444",
+    var shiftCode: String = "SH444",
     var poopCount: Int = 0,
 
     var health: Float = 0f,

@@ -13,6 +13,7 @@ object DefaultValue {
     const val slotId = -1L
     const val mongCode = "CH444"
     const val stateCode = "CD444"
+    const val shiftCode = "SH444"
     const val poopCount = 0
     const val nextMongCode: String = "CH444"
     const val nextStateCode: String = "CD444"

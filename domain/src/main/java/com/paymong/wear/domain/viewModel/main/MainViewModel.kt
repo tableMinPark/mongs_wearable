@@ -28,6 +28,7 @@ class MainViewModel @Inject constructor(
     var mapCode: LiveData<String> = MutableLiveData(DefaultValue.mapCode)
     var mongCode: LiveData<String> = MutableLiveData(DefaultValue.mongCode)
     var stateCode: LiveData<String> = MutableLiveData(DefaultValue.stateCode)
+    var shiftCode: LiveData<String> = MutableLiveData(DefaultValue.shiftCode)
     var poopCount: LiveData<Int> = MutableLiveData(DefaultValue.poopCount)
 
     var health: LiveData<Float> = MutableLiveData(DefaultValue.health)
@@ -50,6 +51,7 @@ class MainViewModel @Inject constructor(
                 val slotModel = slotRepository.getSlot()
                 mongCode = slotModel.map { it.mongCode }
                 stateCode = slotModel.map { it.stateCode }
+                shiftCode = slotModel.map { it.shiftCode }
                 poopCount = slotModel.map { it.poopCount }
 
                 mongCode = slotModel.map { it.mongCode }

@@ -13,6 +13,7 @@ interface SlotRepository {
     suspend fun removeSlot(slotId: Long)
     suspend fun setSlotNextStateToState(stateCode: String)
     suspend fun setSlotStateToNextState()
+    suspend fun setSlotShift(shiftCode: String)
     suspend fun setSlotMongCodeToNextMongCode()
     // Colum
     suspend fun getSlotMongState(): String

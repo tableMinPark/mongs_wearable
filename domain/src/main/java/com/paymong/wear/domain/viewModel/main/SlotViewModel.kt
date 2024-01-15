@@ -45,24 +45,22 @@ class SlotViewModel @Inject constructor(
 
     fun evolutionStart() {
         Log.d("SlotViewModel", "Call - evolutionStart()")
-        // 진화 중 상태로 변경
         viewModelScope.launch(Dispatchers.IO) {
-            slotRepository.setSlotMongState("CD010")
+            // 진화 중 상태로 변경
+            slotRepository.setSlotShift("SH004")
         }
     }
 
     fun evolutionEnd() {
         Log.d("SlotViewModel", "Call - evolutionEnd()")
         viewModelScope.launch(Dispatchers.IO) {
-            slotRepository.setSlotStateToNextState()
+            // 변화 중지 상태로 변경
+            slotRepository.setSlotShift("SH444")
             slotRepository.setSlotMongCodeToNextMongCode()
         }
     }
 
     fun graduation() {
         Log.d("SlotViewModel", "Call - graduation()")
-//        _mongCode.postValue("CH444")
-//        _stateCode.postValue("CD444")
-//        _poopCount.postValue(0)
     }
 }

@@ -64,6 +64,7 @@ fun MainView(
     val mapCode = mainViewModel.mapCode.observeAsState(DefaultValue.mapCode)
     val mongCode = mainViewModel.mongCode.observeAsState(DefaultValue.mongCode)
     val stateCode = mainViewModel.stateCode.observeAsState(DefaultValue.stateCode)
+    val shiftCode = mainViewModel.shiftCode.observeAsState(DefaultValue.shiftCode)
     val poopCount = mainViewModel.poopCount.observeAsState(DefaultValue.poopCount)
 
     val health = mainViewModel.health.observeAsState(DefaultValue.health)
@@ -89,6 +90,7 @@ fun MainView(
             /** Content **/
             MainContent(
                 mongCode = mongCode,
+                shiftCode = shiftCode,
                 stateCode = stateCode,
                 poopCount = poopCount,
                 health = health,
@@ -105,6 +107,7 @@ fun MainView(
 @Composable
 fun MainContent(
     mongCode: State<String>,
+    shiftCode: State<String>,
     stateCode: State<String>,
     poopCount: State<Int>,
     health: State<Float>,
@@ -180,6 +183,7 @@ fun MainContent(
                     showActionContent = showSlotActionView,
                     mongCode = mongCode,
                     stateCode = stateCode,
+                    shiftCode = shiftCode,
                     poopCount = poopCount
                 )
 
