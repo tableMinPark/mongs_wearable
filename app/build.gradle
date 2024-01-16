@@ -54,8 +54,13 @@ dependencies {
     // dagger-hilt
     implementation "com.google.dagger:hilt-android:2.48.1"
     kapt 'com.google.dagger:hilt-compiler:2.48.1'
+    // inject
+    implementation group: 'javax.inject', name: 'javax.inject', version: '1'
     // compose
     implementation "androidx.activity:activity-compose:1.8.1"
+    // MQTT
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
+    implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
 }
 
 kapt {

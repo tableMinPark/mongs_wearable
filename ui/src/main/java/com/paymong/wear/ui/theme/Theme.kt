@@ -8,8 +8,8 @@ import androidx.wear.compose.material.MaterialTheme
 private val colors = Colors(
     primary = Purple500,
     primaryVariant = Purple700,
-    secondary = PaymongRed200,
-    secondaryVariant = PaymongRed
+    secondary = PaymongPink200,
+    secondaryVariant = PaymongPink
 )
 
 @Composable

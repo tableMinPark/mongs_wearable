@@ -1,0 +1,164 @@
+{
+  "project_info": {
+    "project_number": "561491513972",
+    "project_id": "paymong-7a7a5",
+    "storage_bucket": "paymong-7a7a5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:561491513972:android:34bef9680ba89094ec7721",
+        "android_client_info": {
+          "package_name": "com.paymong"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "561491513972-6gi1efb185delnbio22d0mhan9tbpasi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.paymong",
+            "certificate_hash": "00317650e1c7c9783ba0cd879c6f653818a38340"
+          }
+        },
+        {
+          "client_id": "561491513972-79jfk14dj168glbubp9ut7bo6u2cei6k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.paymong",
+            "certificate_hash": "37e97b0d8accd02ed287875b4054be5b52624069"
+          }
+        },
+        {
+          "client_id": "561491513972-7a0adm1fdg15b5tv4lpmdjogqs5c1s2k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.paymong",
+            "certificate_hash": "42a06d159b5b12d6fd5367d39edca1e26f420d6b"
+          }
+        },
+        {
+          "client_id": "561491513972-7n9e3ghnvhpl46rhjoli519nqhagpno7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.paymong",
+            "certificate_hash": "b0cfa3be977391d2e80e6d59322526e914f0dfe9"
+          }
+        },
+        {
+          "client_id": "561491513972-aj7ckoun4clp072av4l9r4rfp7v1gn1b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.paymong",
+            "certificate_hash": "9c9c178e67fb7f71894a6b50d2f2aabd7f20a709"
+          }
+        },
+        {
+          "client_id": "561491513972-f4k38tpq6fk04l2ecjd2bjbmh7bqkm1g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.paymong",
+            "certificate_hash": "2a3a4050ac6100d36d659252ccef90bf4b5f4f3b"
+          }
+        },
+        {
+          "client_id": "561491513972-hbmshtmtgi5g3lc6fgniotmep9dtlmds.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.paymong",
+            "certificate_hash": "787fa849c358a3c71bd29728060994c78ac7270c"
+          }
+        },
+        {
+          "client_id": "561491513972-kou0jpcvgf48pho4i0k6kd940p3o2j33.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.paymong",
+            "certificate_hash": "3b7e2245d65353e73f291c7404b034d421a35ca1"
+          }
+        },
+        {
+          "client_id": "561491513972-mv30tqashuei89gkq0m96mutvr9vgjqu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.paymong",
+            "certificate_hash": "7cf32302ad942f387345e67775e2ed688388bb18"
+          }
+        },
+        {
+          "client_id": "561491513972-uk2ds1qgtmofmem93r8is1ss5s8q5160.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.paymong",
+            "certificate_hash": "390cdeefb85bc56147b8cc7429f07146a72b2dce"
+          }
+        },
+        {
+          "client_id": "561491513972-uukbg0habltgui1ukqan6eum7v9m5baj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.paymong",
+            "certificate_hash": "9051bf2a57bc75ef20e05c5897115717eeba6b1b"
+          }
+        },
+        {
+          "client_id": "561491513972-v5k6da9dftep808qa6k51hc246uao7vg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.paymong",
+            "certificate_hash": "51de0a1075fa0f83ce1987998dd133b350f84e21"
+          }
+        },
+        {
+          "client_id": "561491513972-b5qe05f4k7bnb6ca5hns00470cvbmkak.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnWfhJ96NJCgA5-ASnQOW2yNMW1KpU2Ro"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "561491513972-b5qe05f4k7bnb6ca5hns00470cvbmkak.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:561491513972:android:4e05bf231c39ba7cec7721",
+        "android_client_info": {
+          "package_name": "com.paymong.wear"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "561491513972-b5qe05f4k7bnb6ca5hns00470cvbmkak.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnWfhJ96NJCgA5-ASnQOW2yNMW1KpU2Ro"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "561491513972-b5qe05f4k7bnb6ca5hns00470cvbmkak.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

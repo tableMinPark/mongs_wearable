@@ -19,7 +19,7 @@ val SMALL = Typography(
         textAlign = TextAlign.Center,
         fontFamily = dalMooRi,
         lineHeight = 50.sp,
-        fontSize = 15.sp,
+        fontSize = 12.sp,
         fontWeight = FontWeight.Light,
         color = PaymongWhite
     ),
@@ -27,25 +27,33 @@ val SMALL = Typography(
     body2 = TextStyle(
         textAlign = TextAlign.Center,
         fontFamily = dalMooRi,
-        fontSize = 15.sp,
+        fontSize = 12.sp,
         fontWeight = FontWeight.Light,
-        color = PaymongRed200
+        color = PaymongPink200
     ),
-    // FigureView (캐릭터 화면)
+    // Main (한 줄)
     display1 = TextStyle(
         textAlign = TextAlign.Center,
         fontFamily = dalMooRi,
-        lineHeight = 50.sp,
-        fontSize = 15.sp,
+        fontSize = 12.sp,
         fontWeight = FontWeight.Light,
         color = PaymongWhite
     ),
-    // InformationView -> InformationItem (캐릭터 정보)
+    // Main (두 줄 이상 간격 중간)
     display2 = TextStyle(
         textAlign = TextAlign.Center,
         fontFamily = dalMooRi,
+        lineHeight = 16.sp,
+        fontSize = 12.sp,
+        fontWeight = FontWeight.Light,
+        color = PaymongWhite
+    ),
+    // Main (두 줄 이상 간격 많음)
+    display3 = TextStyle(
+        textAlign = TextAlign.Center,
+        fontFamily = dalMooRi,
         lineHeight = 50.sp,
-        fontSize = 15.sp,
+        fontSize = 12.sp,
         fontWeight = FontWeight.Light,
         color = PaymongWhite
     )
@@ -68,19 +76,27 @@ val BIG = Typography(
         fontFamily = dalMooRi,
         fontSize = 15.sp,
         fontWeight = FontWeight.Light,
-        color = PaymongRed200
+        color = PaymongPink200
     ),
-    // FigureView (캐릭터 화면)
+    // Main (한 줄)
     display1 = TextStyle(
         textAlign = TextAlign.Center,
         fontFamily = dalMooRi,
-        lineHeight = 50.sp,
         fontSize = 15.sp,
         fontWeight = FontWeight.Light,
         color = PaymongWhite
     ),
-    // InformationView -> InformationItem (캐릭터 정보)
+    // Main (두 줄 이상 간격 중간)
     display2 = TextStyle(
+        textAlign = TextAlign.Center,
+        fontFamily = dalMooRi,
+        lineHeight = 22.sp,
+        fontSize = 15.sp,
+        fontWeight = FontWeight.Light,
+        color = PaymongWhite
+    ),
+    // Main (두 줄 이상 간격 많음)
+    display3 = TextStyle(
         textAlign = TextAlign.Center,
         fontFamily = dalMooRi,
         lineHeight = 50.sp,
