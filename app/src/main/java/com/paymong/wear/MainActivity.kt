@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.paymong.wear.domain.repository.MqttRepository
 import com.paymong.wear.ui.theme.PaymongTheme
-import com.paymong.wear.ui.view.NavGraph
+import com.paymong.wear.ui.view_.NavGraph
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -16,26 +16,27 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mqttRepository.initDataReset()
+//        mqttRepository.initDataReset()
         setContent {
             PaymongTheme {
+//                com.paymong.wear.ui.view.NavGraph()
                 NavGraph()
             }
         }
     }
 
     override fun onResume() {
-        mqttRepository.connectAfterInit()
+//        mqttRepository.connectAfterInit()
         super.onResume()
     }
 
     override fun onPause() {
-        mqttRepository.disConnectNotReset()
+//        mqttRepository.disConnectNotReset()
         super.onPause()
     }
 
     override fun onDestroy() {
-        mqttRepository.initDataReset()
+//        mqttRepository.initDataReset()
         super.onDestroy()
     }
 }

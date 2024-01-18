@@ -192,6 +192,7 @@ fun MainContent(
             }
         }
         Film(pagerState = pagerState, zIndex = zIndex, backgroundAlpha = backgroundAlpha)
+
         HorizontalPageIndicator(
             pageIndicatorState = pageIndicatorState,
             selectedColor = PaymongNavy,
@@ -202,6 +203,7 @@ fun MainContent(
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 7.dp)
         )
+
         Box(
             modifier = Modifier.zIndex(3f)
         ) {
@@ -212,40 +214,5 @@ fun MainContent(
                 stateCode = stateCode
             )
         }
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun Film(
-    pagerState: PagerState,
-    zIndex: State<Float>,
-    backgroundAlpha: State<Float>
-) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .zIndex(zIndex.value)
-            .fillMaxSize()
-            .background(color = Color.Black.copy(alpha = backgroundAlpha.value))
-    ) {
-        if (zIndex.value == 1f && pagerState.currentPageOffsetFraction == 0f) {
-            Icon(
-                imageVector = Icons.Outlined.Lock, contentDescription = null,
-                modifier = Modifier
-                    .alpha(alpha = 0.8f)
-                    .size(70.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun MainProcess() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Process(processSize = 30)
     }
 }

@@ -74,7 +74,7 @@ fun SlotActionView(
                     Toast.makeText(context, "수면 상태 입니다!", Toast.LENGTH_SHORT).show()
                 } else {
                     hideSlotActionView()
-                    navController.navigate(NavItem.Feed.route)
+                    navController.navigate(NavItem.FeedMenu.route)
                 }
             },
             setStroke = {

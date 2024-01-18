@@ -1,8 +1,7 @@
-package com.paymong.wear.ui.view.common.auth
+package com.paymong.wear.ui.googleSign
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable

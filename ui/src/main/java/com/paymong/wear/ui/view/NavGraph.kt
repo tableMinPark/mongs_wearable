@@ -58,8 +58,8 @@ fun NavGraph () {
             }
         }
         // 상점
-        navigation(startDestination = NavItem.Feed.route, route = NavItem.FeedNested.route) {
-            composable(route = NavItem.Feed.route) {
+        navigation(startDestination = NavItem.FeedMenu.route, route = NavItem.FeedNested.route) {
+            composable(route = NavItem.FeedMenu.route) {
                 FeedView(navController)
             }
             composable(
