@@ -1,0 +1,52 @@
+package com.paymong.wear.ui.global.resource
+
+import com.paymong.wear.ui.R
+
+enum class MapResourceCode (
+    val code: Int
+) {
+    MP000(R.drawable.main_bg),
+    MP001(R.drawable.mp001),
+    MP002(R.drawable.mp002),
+    MP003(R.drawable.mp003),
+    MP004(R.drawable.mp004),
+    MP005(R.drawable.mp005),
+    MP006(R.drawable.mp006),
+    MP007(R.drawable.mp007),
+    MP008(R.drawable.mp008),
+    MP009(R.drawable.mp009),
+    MP010(R.drawable.mp010),
+    MP011(R.drawable.mp011),
+    MP012(R.drawable.mp012),
+    MP013(R.drawable.mp013),
+    MP014(R.drawable.mp014),
+    MP015(R.drawable.mp015),
+    MP016(R.drawable.mp016),
+    MP017(R.drawable.mp017),
+    MP018(R.drawable.mp018),
+    MP019(R.drawable.mp019),
+    MP020(R.drawable.mp020),
+    MP021(R.drawable.mp021),
+    MP022(R.drawable.mp022),
+    MP023(R.drawable.mp023),
+    MP024(R.drawable.mp024),
+    MP025(R.drawable.mp025),
+    MP026(R.drawable.mp026),
+    MP027(R.drawable.mp027),
+    MP028(R.drawable.mp028),
+    MP029(R.drawable.mp029),
+    MP030(R.drawable.mp030),
+    MP031(R.drawable.mp031),
+    MP032(R.drawable.mp032),
+    MP033(R.drawable.mp033),
+    MP034(R.drawable.mp034),
+    MP035(R.drawable.mp035),
+    MP036(R.drawable.mp036),
+    MP037(R.drawable.mp037),
+    MP038(R.drawable.mp038),
+    MP039(R.drawable.mp039),
+    MP040(R.drawable.mp040),
+    MP041(R.drawable.mp041),
+    MP042(R.drawable.mp042),
+    MP043(R.drawable.mp043)
+}

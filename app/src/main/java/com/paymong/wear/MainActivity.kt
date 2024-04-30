@@ -1,42 +1,58 @@
 package com.paymong.wear
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.paymong.wear.domain.repository.MqttRepository
-import com.paymong.wear.ui.theme.PaymongTheme
-import com.paymong.wear.ui.view_.NavGraph
+import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.paymong.wear.domain.viewModel.mainActivity.MainActivityViewModel
+import com.paymong.wear.ui.global.theme.PaymongTheme
+import com.paymong.wear.ui.view.NavGraph
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import android.Manifest
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var mqttRepository: MqttRepository
+    private val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        mqttRepository.initDataReset()
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+            PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
+            PackageManager.PERMISSION_GRANTED) {
+            val permissions = arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+            ActivityCompat.requestPermissions(this, permissions, 100)
+        }
+        mainActivityViewModel.updateBuildVersion(BuildConfig.VERSION_NAME)
+        mainActivityViewModel.initMqtt()
         setContent {
             PaymongTheme {
-//                com.paymong.wear.ui.view.NavGraph()
                 NavGraph()
             }
         }
     }
 
     override fun onResume() {
-//        mqttRepository.connectAfterInit()
+        mainActivityViewModel.reconnectMqtt()
         super.onResume()
     }
 
     override fun onPause() {
-//        mqttRepository.disConnectNotReset()
+        mainActivityViewModel.disconnectMqtt()
         super.onPause()
     }
 
     override fun onDestroy() {
-//        mqttRepository.initDataReset()
+        mainActivityViewModel.disconnectMqtt()
+        mainActivityViewModel.initMqtt()
         super.onDestroy()
     }
 }
