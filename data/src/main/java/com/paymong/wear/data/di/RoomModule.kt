@@ -2,7 +2,7 @@ package com.paymong.wear.data.di
 
 import android.content.Context
 import androidx.room.Room
-import com.paymong.wear.data.room.RoomDB
+import com.paymong.wear.data.room.client.RoomDB
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,6 +1,6 @@
 package com.paymong.wear.data.api.interceptor
 
-import com.paymong.wear.data.dataStore.token.TokenDataStore
+import com.paymong.wear.data.dataStore.TokenDataStore
 import com.paymong.wear.domain.repository.auth.AuthRepository
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor

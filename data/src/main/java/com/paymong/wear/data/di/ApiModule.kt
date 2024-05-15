@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.paymong.wear.data.api.interceptor.AuthorizationInterceptor
 import com.paymong.wear.data.api.interceptor.HttpLogInterceptor
-import com.paymong.wear.data.dataStore.token.TokenDataStore
+import com.paymong.wear.data.dataStore.TokenDataStore
 import com.paymong.wear.data.utils.GsonDateFormatAdapter
 import com.paymong.wear.domain.repository.auth.AuthRepository
 import dagger.Module
@@ -22,7 +22,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ApiModule {
     private const val GATEWAY_URL = "http://wearable.mongs.site:8000"
-//    private const val GATEWAY_URL = "http://10.0.2.2:8000"
     const val TIMEOUT = 180L
 
     val gson: Gson = GsonBuilder()

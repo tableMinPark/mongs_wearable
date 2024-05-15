@@ -12,6 +12,7 @@ import com.paymong.wear.ui.global.theme.PaymongTheme
 import com.paymong.wear.ui.view.NavGraph
 import dagger.hilt.android.AndroidEntryPoint
 import android.Manifest
+import org.eclipse.paho.android.service.BuildConfig
 
 
 @AndroidEntryPoint
@@ -31,8 +32,10 @@ class MainActivity : ComponentActivity() {
             )
             ActivityCompat.requestPermissions(this, permissions, 100)
         }
+
         mainActivityViewModel.updateBuildVersion(BuildConfig.VERSION_NAME)
         mainActivityViewModel.initMqtt()
+
         setContent {
             PaymongTheme {
                 NavGraph()

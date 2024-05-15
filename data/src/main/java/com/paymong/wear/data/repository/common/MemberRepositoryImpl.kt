@@ -1,8 +1,8 @@
 package com.paymong.wear.data.repository.common
 
 import androidx.lifecycle.LiveData
-import com.paymong.wear.data.api.member.MemberApi
-import com.paymong.wear.data.dataStore.member.MemberDataStore
+import com.paymong.wear.data.api.client.MemberApi
+import com.paymong.wear.data.dataStore.MemberDataStore
 import com.paymong.wear.domain.error.CommonErrorCode
 import com.paymong.wear.domain.exception.CommonException
 import com.paymong.wear.domain.repository.common.MemberRepository

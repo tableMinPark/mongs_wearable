@@ -1,7 +1,7 @@
 package com.paymong.wear.data.repository.collection
 
-import com.paymong.wear.data.api.collection.CollectionApi
-import com.paymong.wear.data.room.RoomDB
+import com.paymong.wear.data.api.client.CollectionApi
+import com.paymong.wear.data.room.client.RoomDB
 import com.paymong.wear.domain.error.CollectionErrorCode
 import com.paymong.wear.domain.exception.CollectionException
 import com.paymong.wear.domain.repository.collection.CollectionRepository

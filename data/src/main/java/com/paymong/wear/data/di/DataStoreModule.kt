@@ -1,10 +1,10 @@
 package com.paymong.wear.data.di
 
 import android.content.Context
-import com.paymong.wear.data.dataStore.configure.ConfigureDataStore
-import com.paymong.wear.data.dataStore.device.DeviceDataStore
-import com.paymong.wear.data.dataStore.member.MemberDataStore
-import com.paymong.wear.data.dataStore.token.TokenDataStore
+import com.paymong.wear.data.dataStore.ConfigureDataStore
+import com.paymong.wear.data.dataStore.DeviceDataStore
+import com.paymong.wear.data.dataStore.MemberDataStore
+import com.paymong.wear.data.dataStore.TokenDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

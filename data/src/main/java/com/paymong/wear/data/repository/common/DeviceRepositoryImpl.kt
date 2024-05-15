@@ -1,7 +1,7 @@
 package com.paymong.wear.data.repository.common
 
 import androidx.lifecycle.LiveData
-import com.paymong.wear.data.dataStore.device.DeviceDataStore
+import com.paymong.wear.data.dataStore.DeviceDataStore
 import com.paymong.wear.domain.repository.common.DeviceRepository
 import javax.inject.Inject
 

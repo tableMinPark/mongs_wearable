@@ -1,11 +1,11 @@
 package com.paymong.wear.data.repository.feedback
 
-import com.paymong.wear.data.api.feedback.FeedbackApi
-import com.paymong.wear.data.api.feedback.dto.request.RegisterFeedbackReqDto
-import com.paymong.wear.data.api.feedback.vo.FeedbackLogVo
-import com.paymong.wear.data.api.feedback.vo.FeedbackVo
-import com.paymong.wear.data.room.RoomDB
-import com.paymong.wear.data.room.feedback.FeedbackLog
+import com.paymong.wear.data.api.client.FeedbackApi
+import com.paymong.wear.data.dto.feedback.req.RegisterFeedbackReqDto
+import com.paymong.wear.data.vo.FeedbackLogVo
+import com.paymong.wear.data.vo.FeedbackVo
+import com.paymong.wear.data.room.client.RoomDB
+import com.paymong.wear.data.room.entity.FeedbackLog
 import com.paymong.wear.domain.error.FeedbackErrorCode
 import com.paymong.wear.domain.exception.FeedbackException
 import com.paymong.wear.domain.repository.feedback.FeedbackRepository
@@ -16,11 +16,13 @@ class FeedbackRepositoryImpl @Inject constructor(
     private val feedbackApi: FeedbackApi
 ) : FeedbackRepository {
     override suspend fun addFeedbackLog(groupCode: String, location: String, message: String) {
-        roomDB.feedbackLogDao().register(FeedbackLog(
+        roomDB.feedbackLogDao().register(
+            FeedbackLog(
             groupCode = groupCode,
             location = location,
             message = message,
-        ))
+        )
+        )
     }
 
     override suspend fun feedback(code: String, groupCode: String, message: String) {

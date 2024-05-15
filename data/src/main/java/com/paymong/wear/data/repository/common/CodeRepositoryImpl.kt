@@ -1,13 +1,12 @@
 package com.paymong.wear.data.repository.common
 
 import android.util.Log
-import com.paymong.wear.data.api.common.CommonApi
-import com.paymong.wear.data.dataStore.device.DeviceDataStore
-import com.paymong.wear.data.room.RoomDB
-import com.paymong.wear.data.room.feedbackCode.FeedbackCode
-import com.paymong.wear.data.room.foodCode.FoodCode
-import com.paymong.wear.data.room.mapCode.MapCode
-import com.paymong.wear.data.room.mongCode.MongCode
+import com.paymong.wear.data.api.client.CommonApi
+import com.paymong.wear.data.dataStore.DeviceDataStore
+import com.paymong.wear.data.room.client.RoomDB
+import com.paymong.wear.data.room.entity.FoodCode
+import com.paymong.wear.data.room.entity.MapCode
+import com.paymong.wear.data.room.entity.MongCode
 import com.paymong.wear.domain.error.CommonErrorCode
 import com.paymong.wear.domain.exception.CommonException
 import com.paymong.wear.domain.repository.common.CodeRepository
@@ -62,7 +61,6 @@ class CodeRepositoryImpl @Inject constructor(
                 val mapCodeDao = roomDB.mapCodeDao()
                 val mongCodeDao = roomDB.mongCodeDao()
                 val foodCodeDao = roomDB.foodCodeDao()
-                val feedbackCodeDao = roomDB.feedbackCodeDao()
 
                 mapCodeDao.deleteAll()
                 findCodeResDto.mapCodeList.forEach { findMapCodeResDto ->
@@ -92,7 +90,8 @@ class CodeRepositoryImpl @Inject constructor(
                     val addHealthy = findFoodCodeResDto.addHealthy
                     val addSleep = findFoodCodeResDto.addSleep
                     val newestVersion = findFoodCodeResDto.buildVersion
-                    foodCodeDao.register(FoodCode(
+                    foodCodeDao.register(
+                        FoodCode(
                         code = code,
                         groupCode = groupCode,
                         name = name,
@@ -104,15 +103,6 @@ class CodeRepositoryImpl @Inject constructor(
                         addSleep = addSleep,
                         buildVersion = newestVersion)
                     )
-                }
-
-                feedbackCodeDao.deleteAll()
-                findCodeResDto.feedbackCodeList.forEach { findFeedbackCodeResDto ->
-                    val code = findFeedbackCodeResDto.code
-                    val groupCode = findFeedbackCodeResDto.groupCode
-                    val message = findFeedbackCodeResDto.message
-                    val newestVersion = findFeedbackCodeResDto.buildVersion
-                    feedbackCodeDao.register(FeedbackCode(code = code, groupCode = groupCode, message = message, buildVersion = newestVersion))
                 }
             }
         } else {

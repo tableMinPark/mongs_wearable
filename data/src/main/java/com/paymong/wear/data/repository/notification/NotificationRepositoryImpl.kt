@@ -1,8 +1,7 @@
 package com.paymong.wear.data.repository.notification
 
-import com.paymong.wear.data.api.notification.NotificationApi
+import com.paymong.wear.data.api.client.MqttApi
 import com.paymong.wear.data.repository.notification.callback.CallbackRepository
-import com.paymong.wear.data.repository.notification.callback.CallbackRepositoryImpl
 import com.paymong.wear.data.repository.notification.callback.MessageCallback
 import com.paymong.wear.data.repository.notification.callback.SubscribeCallback
 import com.paymong.wear.domain.repository.common.DeviceRepository
@@ -14,7 +13,7 @@ import javax.inject.Inject
 
 class NotificationRepositoryImpl @Inject constructor(
     private val deviceRepository: DeviceRepository,
-    private val notificationApi: NotificationApi,
+    private val mqttApi: MqttApi,
     private val callbackRepository: CallbackRepository
 ) : NotificationRepository {
 
@@ -24,7 +23,7 @@ class NotificationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun initializeNotification(accountId: Long) {
-        notificationApi.init(
+        mqttApi.init(
             messageCallback = MessageCallback(callbackRepository),
             connectDisableCallback = {
                 CoroutineScope(Dispatchers.IO).launch {
@@ -35,21 +34,21 @@ class NotificationRepositoryImpl @Inject constructor(
                 CoroutineScope(Dispatchers.IO).launch {
                     deviceRepository.setNetworkFlag(true)
                 }
-                val subscribeCallback = SubscribeCallback(disconnect = { notificationApi.disConnect() })
-                notificationApi.subscribe("$TOPIC/$accountId", subscribeCallback)
+                val subscribeCallback = SubscribeCallback(disconnect = { mqttApi.disConnect() })
+                mqttApi.subscribe("$TOPIC/$accountId", subscribeCallback)
             }
         )
     }
 
     override suspend fun reconnectNotification() {
-        notificationApi.connect()
+        mqttApi.connect()
     }
 
     override suspend fun disconnectNotification() {
-        notificationApi.disConnect()
+        mqttApi.disConnect()
     }
 
     override suspend fun resetNotification() {
-        notificationApi.reset()
+        mqttApi.reset()
     }
 }

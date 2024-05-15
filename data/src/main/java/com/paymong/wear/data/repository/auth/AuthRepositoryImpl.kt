@@ -1,11 +1,11 @@
 package com.paymong.wear.data.repository.auth
 
 import android.util.Log
-import com.paymong.wear.data.api.auth.AuthApi
-import com.paymong.wear.data.api.auth.dto.request.LoginReqDto
-import com.paymong.wear.data.api.auth.dto.request.LogoutReqDto
-import com.paymong.wear.data.api.auth.dto.request.ReissueReqDto
-import com.paymong.wear.data.dataStore.token.TokenDataStore
+import com.paymong.wear.data.api.client.AuthApi
+import com.paymong.wear.data.dto.auth.req.LoginReqDto
+import com.paymong.wear.data.dto.auth.req.LogoutReqDto
+import com.paymong.wear.data.dto.auth.req.ReissueReqDto
+import com.paymong.wear.data.dataStore.TokenDataStore
 import com.paymong.wear.domain.error.AuthErrorCode
 import com.paymong.wear.domain.exception.AuthException
 import com.paymong.wear.domain.repository.auth.AuthRepository

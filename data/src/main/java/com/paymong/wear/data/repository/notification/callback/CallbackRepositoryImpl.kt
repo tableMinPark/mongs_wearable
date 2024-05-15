@@ -25,8 +25,8 @@ import com.paymong.wear.data.api.notification.dto.response.PublishTrainingVo
 import com.paymong.wear.data.api.notification.dto.response.PublishWeightVo
 import com.paymong.wear.data.repository.code.Shift
 import com.paymong.wear.data.repository.code.State
-import com.paymong.wear.data.room.RoomDB
-import com.paymong.wear.data.room.slot.Slot
+import com.paymong.wear.data.room.client.RoomDB
+import com.paymong.wear.data.room.entity.Slot
 import com.paymong.wear.data.utils.GsonDateFormatAdapter
 import java.lang.reflect.Type
 import java.time.LocalDateTime
