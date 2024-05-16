@@ -26,8 +26,8 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.HorizontalPageIndicator
 import androidx.wear.compose.material.PageIndicatorState
-import com.paymong.wear.domain.refac.vo.FoodCodeVo
-import com.paymong.wear.domain.refac.vo.SlotVo
+import com.paymong.wear.domain.vo.FoodVo
+import com.paymong.wear.domain.vo.SlotVo
 import com.paymong.wear.ui.R
 import com.paymong.wear.ui.global.component.LoadingBar
 import com.paymong.wear.ui.global.component.PayPoint
@@ -41,7 +41,7 @@ import kotlin.math.min
 @Composable
 fun FeedSelectContent(
     slotVo: State<SlotVo>,
-    feedItemList: State<List<FoodCodeVo>>,
+    feedItemList: State<List<FoodVo>>,
     isLoadingBarShow: State<Boolean>,
     isFeedItemListLoad: State<Boolean>,
     feed: (String) -> Unit,

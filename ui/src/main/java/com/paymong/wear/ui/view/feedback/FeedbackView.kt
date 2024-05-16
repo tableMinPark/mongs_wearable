@@ -1,7 +1,6 @@
 package com.paymong.wear.ui.view.feedback
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,9 +14,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.paymong.wear.domain.DefaultValue
 import com.paymong.wear.domain.processCode.FeedbackProcessCode
-import com.paymong.wear.domain.viewModel.feedback.FeedbackViewModel
+import com.paymong.wear.ui.viewModel.feedback.FeedbackViewModel
 import com.paymong.wear.ui.global.component.FeedbackBackground
 import kotlinx.coroutines.delay
 

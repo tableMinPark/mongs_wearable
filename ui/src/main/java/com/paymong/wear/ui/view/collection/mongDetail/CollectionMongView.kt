@@ -9,8 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.paymong.wear.domain.DefaultValue
-import com.paymong.wear.domain.viewModel.collection.CollectionMongViewModel
+import com.paymong.wear.ui.viewModel.collection.CollectionMongViewModel
 import com.paymong.wear.ui.global.component.CollectionMongBackground
 
 @Composable
@@ -19,7 +18,7 @@ fun CollectionMongView(
     code: String,
     collectionMongViewModel: CollectionMongViewModel = hiltViewModel()
 ) {
-    val mongCodeVo = collectionMongViewModel.mongCodeVo.observeAsState(DefaultValue.MONG_CODE_VO)
+    val mongCodeVo = collectionMongViewModel.mongVo.observeAsState(DefaultValue.MONG_CODE_VO)
 
     Box {
         /** Background **/
@@ -32,7 +31,7 @@ fun CollectionMongView(
         }
 
         CollectionMongContent(
-            mongCodeVo = mongCodeVo,
+            mongVo = mongCodeVo,
             navCollectionSelect = { navController.popBackStack() }
         )
     }

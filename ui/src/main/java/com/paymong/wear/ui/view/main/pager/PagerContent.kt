@@ -21,7 +21,7 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.wear.compose.material.HorizontalPageIndicator
 import androidx.wear.compose.material.PageIndicatorState
-import com.paymong.wear.domain.refac.vo.SlotVo
+import com.paymong.wear.domain.vo.SlotVo
 import com.paymong.wear.ui.global.theme.PaymongNavy
 import com.paymong.wear.ui.global.component.LoadingBar
 import com.paymong.wear.ui.view.main.condition.MainConditionView

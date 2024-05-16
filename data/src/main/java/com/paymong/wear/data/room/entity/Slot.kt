@@ -2,8 +2,8 @@ package com.paymong.wear.data.room.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.paymong.wear.data.repository.code.Shift
-import com.paymong.wear.data.repository.code.State
+import com.paymong.wear.data.code.Shift
+import com.paymong.wear.data.code.State
 import com.paymong.wear.domain.code.ShiftCode
 import com.paymong.wear.domain.code.StateCode
 import java.time.LocalDateTime

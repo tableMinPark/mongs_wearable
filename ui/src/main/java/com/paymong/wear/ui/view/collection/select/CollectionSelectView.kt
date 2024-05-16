@@ -14,9 +14,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.paymong.wear.domain.DefaultValue
 import com.paymong.wear.domain.processCode.CollectionSelectProcessCode
-import com.paymong.wear.domain.viewModel.collection.CollectionSelectViewModel
+import com.paymong.wear.ui.viewModel.collection.CollectionSelectViewModel
 import com.paymong.wear.ui.global.resource.NavItem
 import com.paymong.wear.ui.global.component.CollectionSelectBackground
 import kotlinx.coroutines.delay

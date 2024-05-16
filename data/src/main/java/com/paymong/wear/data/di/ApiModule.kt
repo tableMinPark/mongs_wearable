@@ -4,9 +4,9 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.paymong.wear.data.api.interceptor.AuthorizationInterceptor
 import com.paymong.wear.data.api.interceptor.HttpLogInterceptor
-import com.paymong.wear.data.dataStore.TokenDataStore
 import com.paymong.wear.data.utils.GsonDateFormatAdapter
-import com.paymong.wear.domain.repository.auth.AuthRepository
+import com.paymong.wear.domain.repositroy.AuthRepository
+import com.paymong.wear.domain.repositroy.DeviceRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,11 +50,8 @@ object ApiModule {
     }
     @Provides
     @Singleton
-    fun provideAuthorizationInterceptor(tokenDataStore: TokenDataStore, authRepository: AuthRepository) : AuthorizationInterceptor {
-        return AuthorizationInterceptor(
-            tokenDataStore,
-            authRepository
-        )
+    fun provideAuthorizationInterceptor(deviceRepository: DeviceRepository, authRepository: AuthRepository) : AuthorizationInterceptor {
+        return AuthorizationInterceptor(deviceRepository, authRepository)
     }
     @Provides
     @Singleton

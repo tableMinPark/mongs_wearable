@@ -25,7 +25,7 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.HorizontalPageIndicator
 import androidx.wear.compose.material.PageIndicatorState
-import com.paymong.wear.domain.refac.vo.SlotVo
+import com.paymong.wear.domain.vo.SlotVo
 import com.paymong.wear.ui.R
 import com.paymong.wear.ui.global.dialog.ConfirmDialog
 import com.paymong.wear.ui.global.theme.PaymongNavy

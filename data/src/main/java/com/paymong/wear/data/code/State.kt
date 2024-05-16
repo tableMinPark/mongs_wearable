@@ -1,4 +1,4 @@
-package com.paymong.wear.data.repository.code
+package com.paymong.wear.data.code
 
 import com.paymong.wear.domain.code.StateCode
 

@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.paymong.wear.domain.viewModel.initLanding.InitLandingViewModel
+import com.paymong.wear.ui.viewModel.initLanding.InitLandingViewModel
 import com.paymong.wear.domain.processCode.InitLandingProcessCode
 import com.paymong.wear.ui.global.resource.NavItem
 import com.paymong.wear.ui.global.googleSign.GoogleSignIn

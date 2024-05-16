@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.paymong.wear.domain.viewModel.collection.CollectionMapViewModel
+import com.paymong.wear.ui.viewModel.collection.CollectionMapViewModel
 import com.paymong.wear.ui.global.resource.NavItem
 import com.paymong.wear.ui.global.component.CollectionMapBackground
 

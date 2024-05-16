@@ -11,7 +11,7 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
-import com.paymong.wear.domain.refac.vo.SlotVo
+import com.paymong.wear.domain.vo.SlotVo
 import com.paymong.wear.ui.R
 import com.paymong.wear.ui.global.theme.PaymongBlue
 import com.paymong.wear.ui.global.theme.PaymongGreen

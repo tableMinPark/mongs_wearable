@@ -1,7 +1,7 @@
 package com.paymong.wear.data.api.interceptor
 
-import com.paymong.wear.data.dataStore.TokenDataStore
-import com.paymong.wear.domain.repository.auth.AuthRepository
+import com.paymong.wear.domain.repositroy.AuthRepository
+import com.paymong.wear.domain.repositroy.DeviceRepository
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Interceptor.Chain
@@ -9,11 +9,11 @@ import okhttp3.Response
 import java.lang.RuntimeException
 
 class AuthorizationInterceptor (
-    private val tokenDataStore: TokenDataStore,
+    private val deviceRepository: DeviceRepository,
     private val authRepository: AuthRepository
 ) : Interceptor {
     override fun intercept(chain: Chain): Response {
-        val accessToken = tokenDataStore.findAccessToken()
+        val accessToken = runBlocking { return@runBlocking deviceRepository.getAccessToken() }
         val newRequest = chain.request().newBuilder()
             .addHeader("Authorization", "Bearer $accessToken")
             .build()
@@ -29,9 +29,18 @@ class AuthorizationInterceptor (
     }
     private fun reissueAndRetry(chain: Chain) : Response {
         try {
-            runBlocking { authRepository.reissue() }
+            val accessToken = runBlocking {
+                val refreshToken = deviceRepository.getRefreshToken()
+                val loginModel = authRepository.reissue(refreshToken = refreshToken)
+                val newAccessToken = loginModel.accessToken
+                val newRefreshToken = loginModel.refreshToken
 
-            val accessToken = tokenDataStore.findAccessToken()
+                deviceRepository.setAccessToken(accessToken = newAccessToken)
+                deviceRepository.setRefreshToken(refreshToken = newRefreshToken)
+
+                return@runBlocking newAccessToken
+            }
+
             val newRequest = chain.request().newBuilder()
                 .addHeader("Authorization", "Bearer $accessToken")
                 .build()

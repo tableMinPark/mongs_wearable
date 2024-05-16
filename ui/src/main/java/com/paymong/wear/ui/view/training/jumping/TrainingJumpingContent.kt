@@ -28,9 +28,9 @@ import com.paymong.wear.ui.global.resource.MongResourceCode
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.wear.compose.material.Text
-import com.paymong.wear.domain.viewModel.training.CharacterState
-import com.paymong.wear.domain.viewModel.training.HurdleState
-import com.paymong.wear.domain.viewModel.training.TrainingJumpingViewModel
+import com.paymong.wear.ui.viewModel.training.CharacterState
+import com.paymong.wear.ui.viewModel.training.HurdleState
+import com.paymong.wear.ui.viewModel.training.TrainingJumpingViewModel
 import com.paymong.wear.ui.R
 
 @Composable

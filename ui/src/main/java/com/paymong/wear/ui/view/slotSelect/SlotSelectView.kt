@@ -19,8 +19,7 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.paymong.wear.domain.processCode.SlotSelectProcessCode
-import com.paymong.wear.domain.DefaultValue
-import com.paymong.wear.domain.viewModel.slotSelect.SlotSelectViewModel
+import com.paymong.wear.ui.viewModel.slotSelect.SlotSelectViewModel
 import com.paymong.wear.ui.global.component.LoadingBar
 import com.paymong.wear.ui.global.resource.NavItem
 import com.paymong.wear.ui.global.component.SlotSelectBackground

@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.paymong.wear.ui.global.resource.MongResourceCode
 import com.paymong.wear.domain.code.ShiftCode
-import com.paymong.wear.domain.refac.vo.SlotVo
+import com.paymong.wear.domain.vo.SlotVo
 import com.paymong.wear.ui.global.component.Mong
 import com.paymong.wear.ui.view.main.slot.component.Dead
 import com.paymong.wear.ui.view.main.slot.component.Empty

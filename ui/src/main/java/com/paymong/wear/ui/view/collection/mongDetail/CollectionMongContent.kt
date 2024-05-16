@@ -17,7 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.Text
-import com.paymong.wear.domain.refac.vo.MongCodeVo
+import com.paymong.wear.domain.vo.MongVo
 import com.paymong.wear.ui.R
 import com.paymong.wear.ui.global.component.Mong
 import com.paymong.wear.ui.global.resource.MongResourceCode
@@ -26,7 +26,7 @@ import com.paymong.wear.ui.view.collection.component.ListButton
 
 @Composable
 fun CollectionMongContent(
-    mongCodeVo: State<MongCodeVo>,
+    mongVo: State<MongVo>,
     navCollectionSelect: () -> Unit
 ) {
     Box(
@@ -46,7 +46,7 @@ fun CollectionMongContent(
                     .fillMaxWidth()
                     .weight(0.22f)
             ) {
-                Text(text = mongCodeVo.value.name)
+                Text(text = mongVo.value.name)
             }
             Row(
                 horizontalArrangement = Arrangement.Center,
@@ -60,7 +60,7 @@ fun CollectionMongContent(
                     modifier = Modifier
                 ) {
                     Mong(
-                        mong = MongResourceCode.valueOf(mongCodeVo.value.code),
+                        mong = MongResourceCode.valueOf(mongVo.value.code),
                         modifier = Modifier
                             .zIndex(3.2f)
                             .padding(bottom = 10.dp),

@@ -15,8 +15,7 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.paymong.wear.domain.processCode.FeedSelectProcessCode
-import com.paymong.wear.domain.DefaultValue
-import com.paymong.wear.domain.viewModel.feed.FeedSelectViewModel
+import com.paymong.wear.ui.viewModel.feed.FeedSelectViewModel
 import com.paymong.wear.ui.global.resource.NavItem
 import com.paymong.wear.ui.global.component.FeedSelectBackground
 import kotlinx.coroutines.delay

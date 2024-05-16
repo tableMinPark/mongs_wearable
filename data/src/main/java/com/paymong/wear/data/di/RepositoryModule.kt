@@ -1,16 +1,16 @@
 package com.paymong.wear.data.di
 
-import com.paymong.wear.data.repository.auth.AuthRepositoryImpl
-import com.paymong.wear.data.repository.collection.CollectionRepositoryImpl
-import com.paymong.wear.data.repository.common.CodeRepositoryImpl
-import com.paymong.wear.data.repository.common.ConfigureRepositoryImpl
-import com.paymong.wear.data.repository.common.DeviceRepositoryImpl
-import com.paymong.wear.data.repository.common.MemberRepositoryImpl
-import com.paymong.wear.data.repository.feedback.FeedbackRepositoryImpl
-import com.paymong.wear.data.repository.notification.NotificationRepositoryImpl
-import com.paymong.wear.data.repository.notification.callback.CallbackRepository
-import com.paymong.wear.data.repository.notification.callback.CallbackRepositoryImpl
-import com.paymong.wear.data.repository.slot.SlotRepositoryImpl
+import com.paymong.wear.data.repository_.auth.AuthRepositoryImpl
+import com.paymong.wear.data.repository_.collection.CollectionRepositoryImpl
+import com.paymong.wear.data.repository_.common.CodeRepositoryImpl
+import com.paymong.wear.data.repository_.common.ConfigureRepositoryImpl
+import com.paymong.wear.data.repository_.common.DeviceRepositoryImpl
+import com.paymong.wear.data.repository_.common.MemberRepositoryImpl
+import com.paymong.wear.data.repository_.feedback.FeedbackRepositoryImpl
+import com.paymong.wear.data.repository_.notification.NotificationRepositoryImpl
+import com.paymong.wear.data.repository_.notification.callback.CallbackRepository
+import com.paymong.wear.data.repository_.notification.callback.CallbackRepositoryImpl
+import com.paymong.wear.data.repository_.slot.SlotRepositoryImpl
 import com.paymong.wear.domain.repository.auth.AuthRepository
 import com.paymong.wear.domain.repository.collection.CollectionRepository
 import com.paymong.wear.domain.repository.common.CodeRepository
