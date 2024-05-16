@@ -9,7 +9,7 @@ import com.paymong.wear.domain.processCode.MainProcessCode
 import com.paymong.wear.domain.repository.common.ConfigureRepository
 import com.paymong.wear.domain.repository.common.MemberRepository
 import com.paymong.wear.domain.repository.slot.SlotRepository
-import com.paymong.wear.domain.repository.slot.vo.SlotVo
+import com.paymong.wear.domain.refac.vo.SlotVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

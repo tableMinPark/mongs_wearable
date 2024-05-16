@@ -9,7 +9,7 @@ import com.paymong.wear.domain.error.FeedbackErrorCode
 import com.paymong.wear.domain.exception.ErrorException
 import com.paymong.wear.domain.processCode.FeedbackProcessCode
 import com.paymong.wear.domain.repository.common.CodeRepository
-import com.paymong.wear.domain.repository.common.vo.FeedbackCodeVo
+import com.paymong.wear.domain.refac.repository.common.vo.FeedbackCodeVo
 import com.paymong.wear.domain.repository.feedback.FeedbackRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

@@ -17,7 +17,7 @@ import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Text
-import com.paymong.wear.domain.repository.common.vo.FeedbackCodeVo
+import com.paymong.wear.domain.refac.repository.common.vo.FeedbackCodeVo
 import com.paymong.wear.ui.global.dialog.ConfirmDialog
 import com.paymong.wear.ui.view.feedback.component.Feedback
 

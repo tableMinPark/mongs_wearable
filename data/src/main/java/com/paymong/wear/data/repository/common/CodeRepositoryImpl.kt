@@ -10,10 +10,10 @@ import com.paymong.wear.data.room.entity.MongCode
 import com.paymong.wear.domain.error.CommonErrorCode
 import com.paymong.wear.domain.exception.CommonException
 import com.paymong.wear.domain.repository.common.CodeRepository
-import com.paymong.wear.domain.repository.common.vo.FeedbackCodeVo
-import com.paymong.wear.domain.repository.common.vo.FoodCodeVo
-import com.paymong.wear.domain.repository.common.vo.MapCodeVo
-import com.paymong.wear.domain.repository.common.vo.MongCodeVo
+import com.paymong.wear.domain.refac.repository.common.vo.FeedbackCodeVo
+import com.paymong.wear.domain.refac.vo.FoodCodeVo
+import com.paymong.wear.domain.refac.vo.MapCodeVo
+import com.paymong.wear.domain.refac.vo.MongCodeVo
 import javax.inject.Inject
 
 
@@ -124,7 +124,8 @@ class CodeRepositoryImpl @Inject constructor(
             val addHealthy = foodCode.addHealthy
             val addSleep = foodCode.addSleep
 
-            foodCodeVoList.add(FoodCodeVo(
+            foodCodeVoList.add(
+                FoodCodeVo(
                 code = code,
                 name = name,
                 price = price,
@@ -133,7 +134,8 @@ class CodeRepositoryImpl @Inject constructor(
                 addSatiety = addSatiety,
                 addHealthy = addHealthy,
                 addSleep = addSleep,
-            ))
+            )
+            )
         }
 
         return foodCodeVoList

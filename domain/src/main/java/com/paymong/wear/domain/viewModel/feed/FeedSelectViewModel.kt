@@ -1,6 +1,5 @@
 package com.paymong.wear.domain.viewModel.feed
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,10 +9,10 @@ import com.paymong.wear.domain.code.FeedbackCode
 import com.paymong.wear.domain.exception.ErrorException
 import com.paymong.wear.domain.processCode.FeedSelectProcessCode
 import com.paymong.wear.domain.repository.common.CodeRepository
-import com.paymong.wear.domain.repository.common.vo.FoodCodeVo
+import com.paymong.wear.domain.refac.vo.FoodCodeVo
 import com.paymong.wear.domain.repository.feedback.FeedbackRepository
 import com.paymong.wear.domain.repository.slot.SlotRepository
-import com.paymong.wear.domain.repository.slot.vo.SlotVo
+import com.paymong.wear.domain.refac.vo.SlotVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

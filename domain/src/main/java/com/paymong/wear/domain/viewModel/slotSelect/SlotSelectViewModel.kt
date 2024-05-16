@@ -4,11 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.paymong.wear.domain.repository.slot.vo.SlotVo
+import com.paymong.wear.domain.refac.vo.SlotVo
 import com.paymong.wear.domain.processCode.SlotSelectProcessCode
 import com.paymong.wear.domain.DefaultValue
 import com.paymong.wear.domain.code.FeedbackCode
-import com.paymong.wear.domain.error.AuthErrorCode
 import com.paymong.wear.domain.exception.ErrorException
 import com.paymong.wear.domain.repository.common.MemberRepository
 import com.paymong.wear.domain.repository.feedback.FeedbackRepository

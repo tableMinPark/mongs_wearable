@@ -23,7 +23,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.paymong.wear.domain.repository.collection.vo.CollectionVo
+import com.paymong.wear.domain.refac.vo.CollectionVo
 import com.paymong.wear.ui.R
 import com.paymong.wear.ui.global.component.LoadingBar
 import com.paymong.wear.ui.global.resource.MapResourceCode

@@ -1,4 +1,4 @@
-package com.paymong.wear.domain.repository.slot.vo
+package com.paymong.wear.domain.refac.vo
 
 import com.paymong.wear.domain.DefaultValue
 import com.paymong.wear.domain.code.ShiftCode

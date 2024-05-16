@@ -26,8 +26,8 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.HorizontalPageIndicator
 import androidx.wear.compose.material.PageIndicatorState
-import com.paymong.wear.domain.repository.common.vo.FoodCodeVo
-import com.paymong.wear.domain.repository.slot.vo.SlotVo
+import com.paymong.wear.domain.refac.vo.FoodCodeVo
+import com.paymong.wear.domain.refac.vo.SlotVo
 import com.paymong.wear.ui.R
 import com.paymong.wear.ui.global.component.LoadingBar
 import com.paymong.wear.ui.global.component.PayPoint

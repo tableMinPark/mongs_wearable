@@ -3,8 +3,8 @@ package com.paymong.wear.domain.repository.slot
 import androidx.lifecycle.LiveData
 import com.paymong.wear.domain.code.ShiftCode
 import com.paymong.wear.domain.code.StateCode
-import com.paymong.wear.domain.repository.common.vo.FeedHistoryVo
-import com.paymong.wear.domain.repository.slot.vo.SlotVo
+import com.paymong.wear.domain.refac.repository.common.vo.FeedHistoryVo
+import com.paymong.wear.domain.refac.vo.SlotVo
 
 interface SlotRepository {
     suspend fun initializeSlot()

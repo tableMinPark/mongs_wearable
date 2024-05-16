@@ -8,8 +8,7 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.paymong.wear.domain.processCode.SlotSelectProcessCode
-import com.paymong.wear.domain.repository.slot.vo.SlotVo
+import com.paymong.wear.domain.refac.vo.SlotVo
 import com.paymong.wear.domain.viewModel.main.MainInteractionViewModel
 import com.paymong.wear.ui.global.resource.NavItem
 

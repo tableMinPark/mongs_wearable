@@ -5,7 +5,7 @@ import com.paymong.wear.data.room.client.RoomDB
 import com.paymong.wear.domain.error.CollectionErrorCode
 import com.paymong.wear.domain.exception.CollectionException
 import com.paymong.wear.domain.repository.collection.CollectionRepository
-import com.paymong.wear.domain.repository.collection.vo.CollectionVo
+import com.paymong.wear.domain.refac.vo.CollectionVo
 import javax.inject.Inject
 
 class CollectionRepositoryImpl @Inject constructor(

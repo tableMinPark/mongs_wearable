@@ -1,9 +1,9 @@
 package com.paymong.wear.domain.repository.common
 
-import com.paymong.wear.domain.repository.common.vo.FeedbackCodeVo
-import com.paymong.wear.domain.repository.common.vo.FoodCodeVo
-import com.paymong.wear.domain.repository.common.vo.MapCodeVo
-import com.paymong.wear.domain.repository.common.vo.MongCodeVo
+import com.paymong.wear.domain.refac.repository.common.vo.FeedbackCodeVo
+import com.paymong.wear.domain.refac.vo.FoodCodeVo
+import com.paymong.wear.domain.refac.vo.MapCodeVo
+import com.paymong.wear.domain.refac.vo.MongCodeVo
 
 interface CodeRepository {
     suspend fun initializeCode()

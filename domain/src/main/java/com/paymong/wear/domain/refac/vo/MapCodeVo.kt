@@ -1,4 +1,4 @@
-package com.paymong.wear.domain.repository.common.vo
+package com.paymong.wear.domain.refac.vo
 
 data class MapCodeVo(
     val code: String,

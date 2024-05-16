@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paymong.wear.domain.DefaultValue
 import com.paymong.wear.domain.repository.common.CodeRepository
-import com.paymong.wear.domain.repository.common.vo.MongCodeVo
+import com.paymong.wear.domain.refac.vo.MongCodeVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

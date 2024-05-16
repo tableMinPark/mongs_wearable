@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paymong.wear.domain.code.FeedbackCode
 import com.paymong.wear.domain.exception.ErrorException
-import com.paymong.wear.domain.repository.collection.vo.CollectionVo
+import com.paymong.wear.domain.refac.vo.CollectionVo
 import com.paymong.wear.domain.processCode.CollectionSelectProcessCode
 import com.paymong.wear.domain.repository.collection.CollectionRepository
 import com.paymong.wear.domain.repository.feedback.FeedbackRepository

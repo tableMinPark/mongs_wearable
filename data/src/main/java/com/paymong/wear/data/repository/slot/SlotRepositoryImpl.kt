@@ -18,9 +18,9 @@ import com.paymong.wear.domain.error.CommonErrorCode
 import com.paymong.wear.domain.error.ManagementErrorCode
 import com.paymong.wear.domain.exception.CommonException
 import com.paymong.wear.domain.exception.ManagementException
-import com.paymong.wear.domain.repository.common.vo.FeedHistoryVo
+import com.paymong.wear.domain.refac.repository.common.vo.FeedHistoryVo
 import com.paymong.wear.domain.repository.slot.SlotRepository
-import com.paymong.wear.domain.repository.slot.vo.SlotVo
+import com.paymong.wear.domain.refac.vo.SlotVo
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 

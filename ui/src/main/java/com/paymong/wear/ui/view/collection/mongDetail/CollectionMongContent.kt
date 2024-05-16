@@ -17,7 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.Text
-import com.paymong.wear.domain.repository.common.vo.MongCodeVo
+import com.paymong.wear.domain.refac.vo.MongCodeVo
 import com.paymong.wear.ui.R
 import com.paymong.wear.ui.global.component.Mong
 import com.paymong.wear.ui.global.resource.MongResourceCode
