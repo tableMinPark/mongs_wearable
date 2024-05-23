@@ -14,9 +14,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiMqttModule {
-    /** Mqtt Server Host **/
     private const val BASE_URL = "tcp://wearable.mongs.site:1883"
-    /** Mqtt Client Id **/
     private val MQTT_CLIENT_ID = MqttClient.generateClientId()
 
     @Provides

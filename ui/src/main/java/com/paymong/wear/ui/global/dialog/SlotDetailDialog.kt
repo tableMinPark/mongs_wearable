@@ -1,5 +1,6 @@
 package com.paymong.wear.ui.global.dialog
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -21,8 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.Text
 import com.paymong.wear.ui.R
 import com.paymong.wear.ui.global.component.PayPoint
@@ -30,13 +34,10 @@ import com.paymong.wear.ui.global.theme.PaymongBlue
 import com.paymong.wear.ui.global.theme.PaymongGreen
 import com.paymong.wear.ui.global.theme.PaymongPink
 import com.paymong.wear.ui.global.theme.PaymongYellow
-import com.paymong.wear.ui.view.slotSelect.component.SlotDetailCondition
-import com.paymong.wear.ui.view.slotSelect.component.SlotDetailTab
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import kotlin.math.round
-
 
 const val ROUND_SIZE = 10
 const val SLOT_DETAIL_WIDTH = 140
@@ -222,5 +223,53 @@ fun SlotDetailDialog(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun SlotDetailCondition(
+    icon: Int,
+    progress: Float,
+    indicatorColor: Color
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.padding(5.dp)
+    ) {
+        Image(
+            painter = painterResource(icon),
+            contentDescription = null,
+            modifier = Modifier.size(18.dp)
+        )
+        CircularProgressIndicator(
+            modifier = Modifier.size(36.dp),
+            startAngle = 271f,
+            endAngle = 270f,
+            progress = progress / 100,
+            strokeWidth = 2.dp,
+            indicatorColor = indicatorColor,
+        )
+    }
+}
+
+@Composable
+fun SlotDetailTab(
+    color: Color,
+    text: String,
+    onClick: () -> Unit,
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .clip(RoundedCornerShape(topStart = ROUND_SIZE.dp, topEnd = ROUND_SIZE.dp))
+            .size(width = 42.dp, height = 30.dp)
+            .background(color = color)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick,
+            )
+    ) {
+        Text(text = text, fontSize = 10.sp, color = Color.Black)
     }
 }

@@ -18,7 +18,9 @@ class MqttApi @Inject constructor(
 ) {
     /** Flag **/
     private var isInit: Boolean = false
-    private var isConnected : Boolean = false
+    private var isConnected: Boolean = false
+    private var isMemberSubscribe: Boolean = false
+    private var isMongSubscribe: Boolean = false
     /** Mqtt Object **/
     private lateinit var messageCallback: MqttCallback
     private lateinit var connectDisableCallback: () -> Unit
@@ -64,8 +66,13 @@ class MqttApi @Inject constructor(
         }
     }
     /** Mqtt 구독 해제 **/
-    fun disSubscribe(topic: String, mqttActionListener: IMqttActionListener) {
-        Log.d("Matt", "[DIS_SUBSCRIBE $topic]")
+    fun disSubscribe(topic: String) {
+        if (this.isConnected) {
+            this.mqttAndroidClient.unsubscribe(topic)
+            Log.d("Matt", "[DIS_SUBSCRIBE $topic]")
+        } else {
+            Log.d("Matt", "[DIS_SUBSCRIBE $topic FAIL] NOT CONNECT BROKER")
+        }
     }
     /** Mqtt 연결 **/
     fun connect() {

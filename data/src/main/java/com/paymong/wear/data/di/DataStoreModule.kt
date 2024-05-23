@@ -15,11 +15,6 @@ import javax.inject.Singleton
 object DataStoreModule {
     @Provides
     @Singleton
-    fun bindConfigureDataStore(@ApplicationContext context: Context) : ConfigureDataStore {
-        return ConfigureDataStore(context)
-    }
-    @Provides
-    @Singleton
     fun bindDeviceDataStore(@ApplicationContext context: Context) : DeviceDataStore {
         return DeviceDataStore(context)
     }
@@ -27,10 +22,5 @@ object DataStoreModule {
     @Singleton
     fun bindMemberDataStore(@ApplicationContext context: Context) : MemberDataStore {
         return MemberDataStore(context)
-    }
-    @Provides
-    @Singleton
-    fun bindTokenDataStore(@ApplicationContext context: Context) : TokenDataStore {
-        return TokenDataStore(context)
     }
 }

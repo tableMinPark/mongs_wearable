@@ -19,7 +19,6 @@ import com.paymong.wear.ui.R
 import com.paymong.wear.ui.global.theme.PaymongYellow
 import com.paymong.wear.ui.global.theme.PaymongYellow200
 
-
 @Composable
 fun StarPoint(
     width: Int = 90,

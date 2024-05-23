@@ -9,5 +9,4 @@ data class FoodCodeModel(
     val addSatiety: Double,
     val addHealthy: Double,
     val addSleep: Double,
-    val isCanBuy: Boolean = true
 )

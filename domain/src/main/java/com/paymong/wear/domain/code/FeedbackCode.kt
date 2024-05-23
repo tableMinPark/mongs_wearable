@@ -1,7 +1,5 @@
 package com.paymong.wear.domain.code
 
-import com.paymong.wear.domain.error.ErrorCode
-
 enum class FeedbackCode(
     val groupCode: String
 ) {

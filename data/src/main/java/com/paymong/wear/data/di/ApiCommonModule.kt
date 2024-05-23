@@ -15,15 +15,17 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiCommonModule {
+
     private const val COMMON_URL = "http://wearable.mongs.site:8000"
+    private const val TIMEOUT = 180L
 
     @Provides
     @Singleton
     fun provideCommonApi(httpLogInterceptor: HttpLogInterceptor): CommonApi {
         val okHttpClient = OkHttpClient.Builder()
-            .connectTimeout(ApiModule.TIMEOUT, TimeUnit.SECONDS)
-            .readTimeout(ApiModule.TIMEOUT, TimeUnit.SECONDS)
-            .writeTimeout(ApiModule.TIMEOUT, TimeUnit.SECONDS)
+            .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(TIMEOUT, TimeUnit.SECONDS)
+            .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
             .addInterceptor(httpLogInterceptor)
             .build()
 
@@ -32,6 +34,7 @@ object ApiCommonModule {
             .addConverterFactory(GsonConverterFactory.create(ApiModule.gson))
             .client(okHttpClient)
             .build()
+
         return retrofit.create(CommonApi::class.java)
     }
 }

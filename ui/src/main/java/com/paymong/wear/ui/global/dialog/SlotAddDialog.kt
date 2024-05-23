@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.Text
-import com.paymong.wear.ui.view.slotSelect.component.SlotButton
-import com.paymong.wear.ui.view.slotSelect.component.InputName
+import com.paymong.wear.ui.global.component.BlueButton
+import com.paymong.wear.ui.global.component.InputBox
 
 
 @Composable
@@ -60,7 +60,7 @@ fun SlotAdd(
                     .fillMaxWidth()
                     .weight(0.3f)
             ) {
-                InputName(
+                InputBox(
                     inputName = inputName.value,
                     changeInputName = { inputName.value = it }
                 )
@@ -72,13 +72,13 @@ fun SlotAdd(
                     .fillMaxWidth()
                     .weight(0.4f)
             ) {
-                SlotButton(
+                BlueButton(
                     disable = false,
                     text = "취소",
                     onClick = isSlotAddDisable,
                     modifier = Modifier.padding(end = 5.dp)
                 )
-                SlotButton(
+                BlueButton(
                     disable = false,
                     text = "생성",
                     onClick = {

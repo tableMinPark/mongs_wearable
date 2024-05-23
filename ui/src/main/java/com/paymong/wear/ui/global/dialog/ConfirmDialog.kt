@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.Text
-import com.paymong.wear.ui.view.slotSelect.component.SlotButton
+import com.paymong.wear.ui.global.component.BlueButton
 
 
 @Composable
@@ -54,13 +54,13 @@ fun ConfirmDialog(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                SlotButton(
+                BlueButton(
                     disable = false,
                     text = "닫기",
                     onClick = cancel,
                     modifier = Modifier.padding(end = 5.dp)
                 )
-                SlotButton(
+                BlueButton(
                     disable = false,
                     text = "확인",
                     onClick = confirm,

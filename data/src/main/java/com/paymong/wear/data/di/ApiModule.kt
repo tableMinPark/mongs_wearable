@@ -2,11 +2,14 @@ package com.paymong.wear.data.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.paymong.wear.data.api.client.AuthApi
+import com.paymong.wear.data.api.client.CollectionApi
 import com.paymong.wear.data.api.interceptor.AuthorizationInterceptor
 import com.paymong.wear.data.api.interceptor.HttpLogInterceptor
 import com.paymong.wear.data.utils.GsonDateFormatAdapter
 import com.paymong.wear.domain.repositroy.AuthRepository
 import com.paymong.wear.domain.repositroy.DeviceRepository
+import com.paymong.wear.domain.repositroy.MemberRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +25,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ApiModule {
     private const val GATEWAY_URL = "http://wearable.mongs.site:8000"
-    const val TIMEOUT = 180L
+    private const val TIMEOUT = 180L
 
     val gson: Gson = GsonBuilder()
         .registerTypeAdapter(LocalDateTime::class.java, GsonDateFormatAdapter())
@@ -50,8 +53,8 @@ object ApiModule {
     }
     @Provides
     @Singleton
-    fun provideAuthorizationInterceptor(deviceRepository: DeviceRepository, authRepository: AuthRepository) : AuthorizationInterceptor {
-        return AuthorizationInterceptor(deviceRepository, authRepository)
+    fun provideAuthorizationInterceptor(memberRepository: MemberRepository, authRepository: AuthRepository) : AuthorizationInterceptor {
+        return AuthorizationInterceptor(memberRepository, authRepository)
     }
     @Provides
     @Singleton

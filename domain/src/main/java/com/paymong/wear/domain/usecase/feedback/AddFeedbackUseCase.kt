@@ -6,7 +6,7 @@ import javax.inject.Inject
 class AddFeedbackUseCase @Inject constructor(
     private val feedbackRepository: FeedbackRepository
 ) {
-    suspend operator fun invoke(code: String, message: String) {
-        feedbackRepository.addFeedback(code = code, message = message)
+    suspend operator fun invoke(groupCode: String, message: String) {
+        feedbackRepository.addFeedback(groupCode = groupCode, message = message)
     }
 }

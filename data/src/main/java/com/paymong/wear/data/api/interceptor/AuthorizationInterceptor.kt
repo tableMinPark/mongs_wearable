@@ -2,6 +2,7 @@ package com.paymong.wear.data.api.interceptor
 
 import com.paymong.wear.domain.repositroy.AuthRepository
 import com.paymong.wear.domain.repositroy.DeviceRepository
+import com.paymong.wear.domain.repositroy.MemberRepository
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Interceptor.Chain
@@ -9,11 +10,11 @@ import okhttp3.Response
 import java.lang.RuntimeException
 
 class AuthorizationInterceptor (
-    private val deviceRepository: DeviceRepository,
+    private val memberRepository: MemberRepository,
     private val authRepository: AuthRepository
 ) : Interceptor {
     override fun intercept(chain: Chain): Response {
-        val accessToken = runBlocking { return@runBlocking deviceRepository.getAccessToken() }
+        val accessToken = runBlocking { return@runBlocking memberRepository.getAccessToken() }
         val newRequest = chain.request().newBuilder()
             .addHeader("Authorization", "Bearer $accessToken")
             .build()
@@ -30,13 +31,13 @@ class AuthorizationInterceptor (
     private fun reissueAndRetry(chain: Chain) : Response {
         try {
             val accessToken = runBlocking {
-                val refreshToken = deviceRepository.getRefreshToken()
-                val loginModel = authRepository.reissue(refreshToken = refreshToken)
-                val newAccessToken = loginModel.accessToken
-                val newRefreshToken = loginModel.refreshToken
+                val refreshToken = memberRepository.getRefreshToken()
+                val reissueModel = authRepository.reissue(refreshToken = refreshToken)
+                val newAccessToken = reissueModel.accessToken
+                val newRefreshToken = reissueModel.refreshToken
 
-                deviceRepository.setAccessToken(accessToken = newAccessToken)
-                deviceRepository.setRefreshToken(refreshToken = newRefreshToken)
+                memberRepository.setAccessToken(accessToken = newAccessToken)
+                memberRepository.setRefreshToken(refreshToken = newRefreshToken)
 
                 return@runBlocking newAccessToken
             }

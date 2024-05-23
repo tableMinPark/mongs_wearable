@@ -16,14 +16,15 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ApiAuthModule {
     private const val AUTH_URL = "http://wearable.mongs.site:8000"
+    private const val TIMEOUT = 180L
 
     @Provides
     @Singleton
     fun provideAuthApi(httpLogInterceptor: HttpLogInterceptor): AuthApi {
         val okHttpClient = OkHttpClient.Builder()
-            .connectTimeout(ApiModule.TIMEOUT, TimeUnit.SECONDS)
-            .readTimeout(ApiModule.TIMEOUT, TimeUnit.SECONDS)
-            .writeTimeout(ApiModule.TIMEOUT, TimeUnit.SECONDS)
+            .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(TIMEOUT, TimeUnit.SECONDS)
+            .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
             .addInterceptor(httpLogInterceptor)
             .build()
 
@@ -32,6 +33,7 @@ object ApiAuthModule {
             .addConverterFactory(GsonConverterFactory.create(ApiModule.gson))
             .client(okHttpClient)
             .build()
+
         return retrofit.create(AuthApi::class.java)
     }
 }

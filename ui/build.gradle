@@ -42,9 +42,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.android.gms:play-services-auth:20.7.0'
     // google-map
-    implementation "com.google.android.gms:play-services-maps:18.2.0"
-    implementation "com.google.android.gms:play-services-location:21.1.0"
-    implementation "com.google.maps.android:maps-compose:2.9.0"
+//    implementation "com.google.android.gms:play-services-maps:18.2.0"
+//    implementation "com.google.android.gms:play-services-location:21.1.0"
+//    implementation "com.google.maps.android:maps-compose:2.9.0"
     // coil (gif)
     implementation 'io.coil-kt:coil-compose:2.5.0'
     implementation 'io.coil-kt:coil-gif:2.5.0'
@@ -62,5 +62,5 @@ dependencies {
     // liveData
     implementation "androidx.compose.runtime:runtime-livedata:1.5.4"
     // billing
-    implementation("com.android.billingclient:billing-ktx:6.0.1")
+    implementation "com.android.billingclient:billing-ktx:6.0.1"
 }

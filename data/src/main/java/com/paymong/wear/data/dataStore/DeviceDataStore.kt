@@ -72,6 +72,11 @@ class DeviceDataStore @Inject constructor(
         }
     }
 
+    suspend fun setDeviceId(deviceId: String) {
+        context.device.edit { preferences ->
+            preferences[DEVICE_ID] = deviceId
+        }
+    }
     suspend fun getDeviceId(): String {
         return context.device.data.map { preferences ->
             preferences[DEVICE_ID]!!
