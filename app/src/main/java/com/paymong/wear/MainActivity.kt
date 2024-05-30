@@ -7,10 +7,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.paymong.wear.ui.viewModel.MainActivityViewModel
+import com.paymong.wear.ui.viewModel.mainActivity.MainActivityViewModel
 import com.paymong.wear.ui.global.theme.PaymongTheme
 import dagger.hilt.android.AndroidEntryPoint
 import android.Manifest
+import android.util.Log
+import com.paymong.wear.ui.view.main.MainView
 import org.eclipse.paho.android.service.BuildConfig
 
 
@@ -32,12 +34,12 @@ class MainActivity : ComponentActivity() {
             ActivityCompat.requestPermissions(this, permissions, 100)
         }
 
-        mainActivityViewModel.initDeviceInfo(BuildConfig.VERSION_NAME)
+        mainActivityViewModel.initDeviceInfo(applicationContext.packageManager.getPackageInfo(packageName, 0).versionName)
         mainActivityViewModel.initMqtt()
 
         setContent {
             PaymongTheme {
-//                NavGraph()
+                MainView()
             }
         }
     }

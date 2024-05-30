@@ -1,5 +1,6 @@
-package com.paymong.wear.ui.viewModel
+package com.paymong.wear.ui.viewModel.mainActivity
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paymong.wear.domain.client.MqttClient

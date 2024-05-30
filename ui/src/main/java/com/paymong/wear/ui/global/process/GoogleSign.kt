@@ -1,4 +1,4 @@
-package com.paymong.wear.ui.global.googleSign
+package com.paymong.wear.ui.global.process
 
 import android.app.Activity
 import android.content.Context
@@ -14,20 +14,11 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun GoogleSignInCheck(
-    success: (email: String?, userName: String?) -> Unit,
+    success: (email: String?, name: String?) -> Unit,
     fail: () -> Unit,
     context: Context = LocalContext.current
 ) {
     LaunchedEffect(Unit) {
-        delay(800)
-        val account = GoogleSignIn.getLastSignedInAccount(context)
-        if (account != null) {
-            val userName = account.givenName
-            val email = account.email
-            success(email, userName)
-        } else {
-            fail()
-        }
     }
 }
 
@@ -37,25 +28,8 @@ fun GoogleSignIn(
     fail: () -> Unit,
     context: Context = LocalContext.current
 ) {
-    val resultLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).result
-            val userName = account.givenName
-            val email = account.email
-            success(email, userName)
-        } else {
-            fail()
-        }
-    }
 
     LaunchedEffect(Unit) {
-        delay(800)
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build()
-        val client = GoogleSignIn.getClient(context, gso)
-        val signInIntent = client.signInIntent
-        resultLauncher.launch(signInIntent)
     }
 }
 

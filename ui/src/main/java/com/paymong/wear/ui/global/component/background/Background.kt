@@ -1,4 +1,4 @@
-package com.paymong.wear.ui.global.component
+package com.paymong.wear.ui.global.component.background
 
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable

@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import com.paymong.wear.data.dataStore.DeviceDataStore
 import com.paymong.wear.data.dataStore.MemberDataStore
 import com.paymong.wear.domain.repositroy.DeviceRepository
+import java.util.UUID
 import javax.inject.Inject
 
 class DeviceRepositoryImpl @Inject constructor(
-    private val memberDataStore: MemberDataStore,
     private val deviceDataStore: DeviceDataStore,
 ): DeviceRepository {
     override suspend fun setBuildVersion(buildVersion: String) {

@@ -1,4 +1,4 @@
-package com.paymong.wear.ui.global.component
+package com.paymong.wear.ui.global.component.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -10,6 +10,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.ImageLoader
@@ -21,22 +23,20 @@ import com.paymong.wear.domain.code.StateCode
 
 @Composable
 fun Mong(
+    mong: MongResourceCode,
     state: StateCode = StateCode.NORMAL,
     isHappy: Boolean = false,
     isEating: Boolean = false,
     isSleeping: Boolean = false,
-    mong: MongResourceCode,
     onClick: () -> Unit = {},
     ratio: Float = 1f,
     isPng: Boolean = false,
-    modifier: Modifier
+    modifier: Modifier = Modifier,
 ) {
-    /** gif 이미지 로더 **/
     val imageLoader = ImageLoader.Builder(LocalContext.current)
         .components { add(ImageDecoderDecoder.Factory()) }
         .build()
 
-    /** 몽 **/
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier.clickable(
@@ -45,22 +45,19 @@ fun Mong(
             onClick = onClick
         )
     ) {
-        /** 몸 **/
         Box(
             modifier = Modifier.zIndex(0f)
         ) {
             Image(
-                painter = rememberAsyncImagePainter(
-                    model = if (isPng) mong.pngCode else mong.gifCode,
-                    imageLoader = imageLoader
-                ),
+                painter = rememberAsyncImagePainter(model = if (isPng) mong.pngCode else mong.gifCode, imageLoader = imageLoader),
                 contentDescription = null,
                 modifier = Modifier
                     .size((120 * ratio).dp)
             )
         }
-        /** 표정 **/
+
         val isEgg = mong.code.replace("CH", "").toInt() < 100
+
         if (!isPng && !isEgg) {
             Box(
                 modifier = Modifier.zIndex(0f)
@@ -83,10 +80,7 @@ fun Mong(
                 }
 
                 Image(
-                    painter = rememberAsyncImagePainter(
-                        model = expression,
-                        imageLoader = imageLoader
-                    ),
+                    painter = rememberAsyncImagePainter(model = expression, imageLoader = imageLoader),
                     contentDescription = null,
                     modifier = Modifier
                         .align(Alignment.Center)
@@ -95,4 +89,10 @@ fun Mong(
             }
         }
     }
+}
+
+@Preview(device = Devices.WEAR_OS_SMALL_ROUND)
+@Composable
+private fun MongPreview() {
+    Mong(mong = MongResourceCode.CH100, isPng = true)
 }

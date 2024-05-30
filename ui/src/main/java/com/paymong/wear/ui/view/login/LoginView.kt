@@ -1,0 +1,142 @@
+package com.paymong.wear.ui.view.login
+
+import android.app.Activity
+import android.content.Context
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.paymong.wear.ui.global.component.background.LoginBackground
+import com.paymong.wear.ui.global.component.button.GoogleSignInButton
+import com.paymong.wear.ui.global.component.common.LoadingBar
+import com.paymong.wear.ui.global.component.common.Logo
+import com.paymong.wear.ui.global.resource.NavItem
+import com.paymong.wear.ui.viewModel.login.LoginViewModel
+import com.paymong.wear.ui.viewModel.login.LoginViewModel.UiState
+
+@Composable
+fun LoginView(
+    navController: NavController = rememberSwipeDismissableNavController(),
+    loginViewModel: LoginViewModel = hiltViewModel(),
+) {
+    Box {
+        LoginBackground()
+        LoginContent(
+            login = loginViewModel::login,
+            uiState = loginViewModel.uiState,
+        )
+    }
+
+    if (loginViewModel.uiState.navMainPagerView) {
+        navController.navigate(NavItem.MainPager.route) {
+            popUpTo(navController.graph.id)
+        }
+    }
+}
+
+@Composable
+private fun LoginContent(
+    login: (email: String?, name: String?) -> Unit,
+    uiState: UiState = UiState(),
+    context: Context = LocalContext.current,
+) {
+    // 구글 로그인 확인
+    LaunchedEffect(Unit) {
+        val account = GoogleSignIn.getLastSignedInAccount(context)
+        if (account != null) {
+            login(account.email, account.givenName)
+        } else {
+            uiState.loadingBar = false
+            uiState.signInButton = true
+        }
+    }
+
+    // 구글 로그인
+    val googleLoginLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).result
+            login(account.email, account.givenName)
+        } else {
+            uiState.loadingBar = false
+            uiState.signInButton = true
+        }
+    }
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .zIndex(1f),
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                verticalAlignment = Alignment.Bottom,
+                modifier = Modifier.weight(0.6f)
+            ) {
+                Logo()
+            }
+
+            Spacer(modifier = Modifier.height(5.dp))
+
+            Row(
+                verticalAlignment = Alignment.Top,
+                modifier = Modifier.weight(0.4f)
+            ) {
+                if (uiState.signInButton) {
+                    GoogleSignInButton(
+                        onClick = {
+                            uiState.loadingBar = true
+                            uiState.signInButton = false
+
+                            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                .requestEmail()
+                                .build()
+                            val client = GoogleSignIn.getClient(context, gso)
+                            val signInIntent = client.signInIntent
+                            googleLoginLauncher.launch(signInIntent)
+                        }
+                    )
+                }
+
+                if (uiState.loadingBar) {
+                    LoadingBar()
+                }
+            }
+        }
+    }
+}
+
+@Preview(showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
+@Composable
+private fun LoginViewPreview() {
+    Box {
+        LoginBackground()
+        LoginContent(
+            login = {email, name -> Log.d("preView", "email: $email, name: $name") },
+            uiState = UiState(loadingBar = false, signInButton = true),
+        )
+    }
+}

@@ -1,5 +1,11 @@
 package com.paymong.wear.data.api.interceptor
 
+import com.paymong.wear.data.api.client.AuthApi
+import com.paymong.wear.data.dataStore.MemberDataStore
+import com.paymong.wear.data.dto.auth.req.ReissueReqDto
+import com.paymong.wear.domain.error.RepositoryErrorCode
+import com.paymong.wear.domain.exception.ApiException
+import com.paymong.wear.domain.model.ReissueModel
 import com.paymong.wear.domain.repositroy.AuthRepository
 import com.paymong.wear.domain.repositroy.DeviceRepository
 import com.paymong.wear.domain.repositroy.MemberRepository
@@ -10,11 +16,11 @@ import okhttp3.Response
 import java.lang.RuntimeException
 
 class AuthorizationInterceptor (
-    private val memberRepository: MemberRepository,
-    private val authRepository: AuthRepository
+    private val memberDataStore: MemberDataStore,
+    private val authApi: AuthApi,
 ) : Interceptor {
     override fun intercept(chain: Chain): Response {
-        val accessToken = runBlocking { return@runBlocking memberRepository.getAccessToken() }
+        val accessToken = runBlocking { return@runBlocking memberDataStore.getAccessToken() }
         val newRequest = chain.request().newBuilder()
             .addHeader("Authorization", "Bearer $accessToken")
             .build()
@@ -31,15 +37,26 @@ class AuthorizationInterceptor (
     private fun reissueAndRetry(chain: Chain) : Response {
         try {
             val accessToken = runBlocking {
-                val refreshToken = memberRepository.getRefreshToken()
-                val reissueModel = authRepository.reissue(refreshToken = refreshToken)
-                val newAccessToken = reissueModel.accessToken
-                val newRefreshToken = reissueModel.refreshToken
+                val refreshToken = memberDataStore.getRefreshToken()
+                val res = authApi.reissue(
+                    ReissueReqDto(
+                        refreshToken = refreshToken,
+                    )
+                )
 
-                memberRepository.setAccessToken(accessToken = newAccessToken)
-                memberRepository.setRefreshToken(refreshToken = newRefreshToken)
+                if (res.isSuccessful) {
+                    res.body()?.let { body ->
+                        val newAccessToken = body.accessToken
+                        val newRefreshToken = body.refreshToken
 
-                return@runBlocking newAccessToken
+                        memberDataStore.setAccessToken(accessToken = newAccessToken)
+                        memberDataStore.setRefreshToken(refreshToken = newRefreshToken)
+
+                        return@runBlocking newAccessToken
+                    }
+                } else {
+                    throw ApiException(RepositoryErrorCode.REISSUE_FAIL)
+                }
             }
 
             val newRequest = chain.request().newBuilder()

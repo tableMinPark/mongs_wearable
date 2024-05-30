@@ -31,16 +31,16 @@ class DeviceDataStore @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             context.device.edit { preferences ->
                 if (!preferences.contains(BUILD_VERSION)) {
-                    preferences[BUILD_VERSION] = ""
+                    preferences[BUILD_VERSION] = "1.0.0"
                 }
                 if (!preferences.contains(CODE_INTEGRITY)) {
                     preferences[CODE_INTEGRITY] = ""
                 }
                 if (!preferences.contains(DEVICE_ID)) {
-                    preferences[DEVICE_ID] = ""
+                    preferences[DEVICE_ID] = UUID.randomUUID().toString().replace("-", "")
                 }
                 if (!preferences.contains(BACKGROUND_MAP_CODE)) {
-                    preferences[BACKGROUND_MAP_CODE] = ""
+                    preferences[BACKGROUND_MAP_CODE] = "MP000"
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.paymong.wear.domain.usecase.auth
 
+import android.util.Log
 import com.paymong.wear.domain.client.MqttClient
 import com.paymong.wear.domain.code.FeedbackCode
 import com.paymong.wear.domain.error.UseCaseErrorCode
@@ -11,6 +12,7 @@ import com.paymong.wear.domain.repositroy.DeviceRepository
 import com.paymong.wear.domain.repositroy.FeedbackRepository
 import com.paymong.wear.domain.repositroy.MemberRepository
 import com.paymong.wear.domain.repositroy.SlotRepository
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(
@@ -22,9 +24,10 @@ class LoginUseCase @Inject constructor(
     private val slotRepository: SlotRepository,
     private val feedbackRepository: FeedbackRepository
 ) {
-    suspend operator fun invoke(email: String?, name: String?) {
+    suspend operator fun invoke(email: String?, name: String?): Boolean {
         try {
             val deviceId = deviceRepository.getDeviceId()
+            Log.d("LoginUserCase", "deviceId: $deviceId, email: $email, name: $name")
             val loginModel = authRepository.login(deviceId = deviceId, email = email!!, name = name!!)
 
             val accountId = loginModel.accountId
@@ -47,12 +50,14 @@ class LoginUseCase @Inject constructor(
             slotRepository.setSlots(accountId = accountId)
             mqttClient.setConnection(accountId = accountId)
 
+            return true
         } catch (e: ErrorException) {
             feedbackRepository.addFeedbackLog(
                 groupCode = FeedbackCode.AUTH.groupCode,
                 location = "LoginUseCase",
                 message = e.errorCode.message(),
             )
+            return false
         }
     }
 }

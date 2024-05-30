@@ -6,6 +6,7 @@ import com.paymong.wear.data.api.client.AuthApi
 import com.paymong.wear.data.api.client.CollectionApi
 import com.paymong.wear.data.api.interceptor.AuthorizationInterceptor
 import com.paymong.wear.data.api.interceptor.HttpLogInterceptor
+import com.paymong.wear.data.dataStore.MemberDataStore
 import com.paymong.wear.data.utils.GsonDateFormatAdapter
 import com.paymong.wear.domain.repositroy.AuthRepository
 import com.paymong.wear.domain.repositroy.DeviceRepository
@@ -53,8 +54,8 @@ object ApiModule {
     }
     @Provides
     @Singleton
-    fun provideAuthorizationInterceptor(memberRepository: MemberRepository, authRepository: AuthRepository) : AuthorizationInterceptor {
-        return AuthorizationInterceptor(memberRepository, authRepository)
+    fun provideAuthorizationInterceptor(memberDataStore: MemberDataStore, authApi: AuthApi) : AuthorizationInterceptor {
+        return AuthorizationInterceptor(memberDataStore, authApi)
     }
     @Provides
     @Singleton
