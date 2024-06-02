@@ -2,7 +2,6 @@ package com.paymong.wear.ui.view.login
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -17,8 +16,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,10 +29,6 @@ import com.paymong.wear.ui.global.component.common.LoadingBar
 import com.paymong.wear.ui.global.component.common.Logo
 import com.paymong.wear.ui.global.resource.NavItem
 import com.paymong.wear.ui.viewModel.login.LoginViewModel
-import com.paymong.wear.ui.viewModel.login.LoginViewModel.UiState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 fun LoginView(
@@ -58,10 +51,11 @@ fun LoginView(
     }
 }
 
+
 @Composable
 private fun LoginContent(
     login: (email: String?, name: String?) -> Unit,
-    uiState: UiState = UiState(),
+    uiState: LoginViewModel.UiState = LoginViewModel.UiState(),
     context: Context = LocalContext.current,
     modifier: Modifier = Modifier.zIndex(0f)
 ) {
@@ -99,13 +93,13 @@ private fun LoginContent(
                 verticalAlignment = Alignment.Bottom,
                 modifier = Modifier.weight(0.6f)
             ) {
-                Logo()
+                Logo(isOpen = !uiState.signInButton)
             }
 
             Spacer(modifier = Modifier.height(5.dp))
 
             Row(
-                verticalAlignment = Alignment.Top,
+                verticalAlignment = if (uiState.signInButton) Alignment.Top else Alignment.CenterVertically,
                 modifier = Modifier.weight(0.4f)
             ) {
                 if (uiState.signInButton) {
@@ -134,17 +128,5 @@ private fun LoginContent(
                 }
             }
         }
-    }
-}
-
-@Preview(showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
-@Composable
-private fun LoginViewPreview() {
-    Box {
-        LoginBackground()
-        LoginContent(
-            login = {email, name -> Log.d("preView", "email: $email, name: $name") },
-            uiState = UiState(loadingBar = false, signInButton = true),
-        )
     }
 }

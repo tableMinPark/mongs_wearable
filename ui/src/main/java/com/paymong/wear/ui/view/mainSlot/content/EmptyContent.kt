@@ -1,4 +1,4 @@
-package com.paymong.wear.ui.view.mainSlot
+package com.paymong.wear.ui.view.mainSlot.content
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,12 +28,11 @@ import com.paymong.wear.ui.global.theme.DAL_MU_RI
 import com.paymong.wear.ui.global.theme.PaymongWhite
 
 @Composable
-fun Dead(
+fun EmptyContent(
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
     Box(
-        contentAlignment = Alignment.BottomCenter,
         modifier = modifier
             .fillMaxSize()
             .clickable(
@@ -42,24 +41,48 @@ fun Dead(
                 onClick = onClick
             )
     ) {
-        Image(
-            modifier = Modifier.padding(bottom = 25.dp).size(130.dp),
-            painter = painterResource(R.drawable.rip),
-            contentDescription = null
-        )
+        Box(
+            contentAlignment = Alignment.BottomCenter,
+            modifier = Modifier
+                .zIndex(1f)
+                .fillMaxSize()
+        ) {
+            Image(
+                modifier = Modifier.padding(bottom = 25.dp).size(100.dp),
+                painter = painterResource(R.drawable.egg_blind),
+                contentDescription = null
+            )
+        }
+
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .zIndex(2f)
+                .background(color = Color.Black.copy(alpha = 0.6f))
+                .fillMaxSize()
+        ) {
+            Text(
+                text = "화면을 클릭하여\n\n슬롯을 선택해주세요",
+                textAlign = TextAlign.Center,
+                fontFamily = DAL_MU_RI,
+                fontWeight = FontWeight.Light,
+                fontSize = 16.sp,
+                color = PaymongWhite,
+            )
+        }
     }
 }
 
 @Preview(showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
 @Composable
-private fun DeadPreview() {
+private fun EmptyPreview() {
     MainPagerBackground()
-    Dead()
+    EmptyContent()
 }
 
 @Preview(showSystemUi = true, device = Devices.WEAR_OS_LARGE_ROUND)
 @Composable
-private fun DeadLargePreview() {
+private fun EmptyLargePreview() {
     MainPagerBackground()
-    Dead()
+    EmptyContent()
 }

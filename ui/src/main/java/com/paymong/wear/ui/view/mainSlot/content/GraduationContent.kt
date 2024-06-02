@@ -1,10 +1,11 @@
-package com.paymong.wear.ui.view.mainSlot
+package com.paymong.wear.ui.view.mainSlot.content
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -14,15 +15,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.Text
+import com.paymong.wear.domain.vo.SlotVo
 import com.paymong.wear.ui.global.component.background.MainPagerBackground
+import com.paymong.wear.ui.global.component.common.Mong
+import com.paymong.wear.ui.global.resource.MongResourceCode
 import com.paymong.wear.ui.global.theme.DAL_MU_RI
 import com.paymong.wear.ui.global.theme.PaymongWhite
 
 @Composable
-fun EvolutionReadyEffect(
+fun GraduationContent(
+    slotVo: SlotVo,
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
@@ -37,27 +43,47 @@ fun EvolutionReadyEffect(
                 onClick = onClick
             )
     ) {
-        Text(
-            text = "진화를 위해\n\n화면을 터치해주세요",
-            textAlign = TextAlign.Center,
-            fontFamily = DAL_MU_RI,
-            fontWeight = FontWeight.Light,
-            fontSize = 16.sp,
-            color = PaymongWhite,
-        )
+        Box(
+            contentAlignment = Alignment.BottomCenter,
+            modifier = Modifier
+                .zIndex(1f)
+                .fillMaxSize()
+        ) {
+            Mong(
+                mong = MongResourceCode.valueOf(slotVo.mongCode),
+                modifier = Modifier.padding(bottom = 25.dp)
+            )
+        }
+
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .zIndex(2f)
+                .background(color = Color.Black.copy(alpha = 0.6f))
+                .fillMaxSize()
+        ) {
+            Text(
+                text = "졸업을 위해\n\n화면을 터치해주세요",
+                textAlign = TextAlign.Center,
+                fontFamily = DAL_MU_RI,
+                fontWeight = FontWeight.Light,
+                fontSize = 16.sp,
+                color = PaymongWhite,
+            )
+        }
     }
 }
 
 @Preview(showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
 @Composable
-private fun EvolutionReadyEffectPreview() {
+private fun GraduationContentPreview() {
     MainPagerBackground()
-    EvolutionReadyEffect()
+    GraduationContent(slotVo = SlotVo(mongCode = "CH100"))
 }
 
 @Preview(showSystemUi = true, device = Devices.WEAR_OS_LARGE_ROUND)
 @Composable
-private fun EvolutionReadyEffectLargePreview() {
+private fun GraduationContentLargePreview() {
     MainPagerBackground()
-    EvolutionReadyEffect()
+    GraduationContent(slotVo = SlotVo(mongCode = "CH100"))
 }

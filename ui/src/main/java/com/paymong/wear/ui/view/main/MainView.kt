@@ -31,5 +31,8 @@ fun MainView () {
         composable(route = NavItem.MainPager.route) {
             MainPagerView(navController = navController, scrollPage = scrollPage, pagerState = pagerState)
         }
+        composable(route = NavItem.SlotPick.route) {
+
+        }
     }
 }

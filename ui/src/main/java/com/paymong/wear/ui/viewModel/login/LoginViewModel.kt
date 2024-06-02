@@ -22,9 +22,9 @@ class LoginViewModel @Inject constructor(
 
     fun login(email: String?, name: String?) {
         viewModelScope.launch(Dispatchers.IO) {
-            delay(1000)
             try {
                 loginUseCase(email!!, name!!)
+                delay(1000)
                 uiState.navMainPagerView = true
             } catch (e: UseCaseException) {
                 uiState.loadingBar = false

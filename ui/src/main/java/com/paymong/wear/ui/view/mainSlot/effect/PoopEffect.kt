@@ -1,4 +1,4 @@
-package com.paymong.wear.ui.view.mainSlot
+package com.paymong.wear.ui.view.mainSlot.effect
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -26,7 +26,7 @@ val poopPadding = arrayOf(
 )
 
 @Composable
-fun Poop(
+fun PoopEffect(
     poopCount: Int = 0,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
@@ -48,12 +48,12 @@ fun Poop(
 @Composable
 private fun PoopPreview() {
     MainPagerBackground()
-    Poop(poopCount = 4)
+    PoopEffect(poopCount = 4)
 }
 
 @Preview(showSystemUi = true, device = Devices.WEAR_OS_LARGE_ROUND)
 @Composable
 private fun PoopLargePreview() {
     MainPagerBackground()
-    Poop(poopCount = 4)
+    PoopEffect(poopCount = 4)
 }

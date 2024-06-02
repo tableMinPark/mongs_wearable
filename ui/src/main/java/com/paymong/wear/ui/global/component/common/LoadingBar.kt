@@ -16,8 +16,8 @@ import com.paymong.wear.ui.R
 
 @Composable
 fun LoadingBar(
-    height: Int = 50,
-    width: Int = 50,
+    height: Int = 40,
+    width: Int = 40,
 ) {
     val imageLoader = ImageLoader.Builder(LocalContext.current)
         .components { add(ImageDecoderDecoder.Factory()) }

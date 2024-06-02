@@ -12,6 +12,7 @@ import com.paymong.wear.domain.usecase.slot.GetNowSlotUseCase
 import com.paymong.wear.domain.vo.SlotVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,6 +30,7 @@ class MainPagerViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             slotVo = getNowSlotUseCase()
             backgroundMapCode = getBackgroundMapCodeUseCase()
+            delay(800)
             uiState.loadingBar = false
         }
     }

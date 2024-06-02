@@ -16,23 +16,31 @@ import com.paymong.wear.ui.global.component.button.BlueButton
 
 @Composable
 fun Logo(
-    height: Int = 80,
-    width: Int = 100,
+    isOpen: Boolean = true,
 ) {
-    val logo = painterResource(R.drawable.watch_logo)
-
-    Image(
-        painter = logo,
-        contentDescription = null,
-        modifier = Modifier
-            .height(height.dp)
-            .width(width.dp),
-        contentScale = ContentScale.FillBounds
-    )
+    if (isOpen) {
+        Image(
+            painter = painterResource(R.drawable.logo_open),
+            contentDescription = null,
+            modifier = Modifier
+                .height(90.dp)
+                .width(75.dp),
+            contentScale = ContentScale.FillBounds
+        )
+    } else {
+        Image(
+            painter = painterResource(R.drawable.logo_not_open),
+            contentDescription = null,
+            modifier = Modifier
+                .height(95.dp)
+                .width(80.dp),
+            contentScale = ContentScale.FillBounds
+        )
+    }
 }
 
 @Preview(device = Devices.WEAR_OS_SMALL_ROUND)
 @Composable
 private fun LogoPreview() {
-    Logo()
+    Logo(isOpen = false)
 }

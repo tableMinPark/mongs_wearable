@@ -1,4 +1,4 @@
-package com.paymong.wear.ui.view.mainSlot
+package com.paymong.wear.ui.view.mainSlot.content
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,7 +28,7 @@ import com.paymong.wear.ui.global.theme.DAL_MU_RI
 import com.paymong.wear.ui.global.theme.PaymongWhite
 
 @Composable
-fun Delete(
+fun DeleteContent(
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
@@ -77,12 +77,12 @@ fun Delete(
 @Composable
 private fun DeletePreview() {
     MainPagerBackground()
-    Delete()
+    DeleteContent()
 }
 
 @Preview(showSystemUi = true, device = Devices.WEAR_OS_LARGE_ROUND)
 @Composable
 private fun DeleteLargePreview() {
     MainPagerBackground()
-    Delete()
+    DeleteContent()
 }

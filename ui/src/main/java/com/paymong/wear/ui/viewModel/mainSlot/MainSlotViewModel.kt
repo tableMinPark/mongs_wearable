@@ -1,5 +1,8 @@
 package com.paymong.wear.ui.viewModel.mainSlot
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.paymong.wear.domain.usecase.slot.EvoluteNowSlotUseCase
@@ -34,5 +37,11 @@ class MainSlotViewModel @Inject constructor(
         }
     }
 
-    class UiState () {}
+    class UiState (
+        isEvolution: Boolean = false,
+        isGraduation: Boolean = false,
+    ) {
+        var isEvolution by mutableStateOf(isEvolution)
+        var isGraduation by mutableStateOf(isGraduation)
+    }
 }

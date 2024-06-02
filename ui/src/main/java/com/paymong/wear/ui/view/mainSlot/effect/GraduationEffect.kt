@@ -1,4 +1,4 @@
-package com.paymong.wear.ui.view.mainSlot
+package com.paymong.wear.ui.view.mainSlot.effect
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
