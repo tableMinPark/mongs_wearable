@@ -9,7 +9,7 @@ import com.paymong.wear.data.room.entity.FoodCode
 import com.paymong.wear.data.room.entity.MapCode
 import com.paymong.wear.data.room.entity.MongCode
 import com.paymong.wear.domain.error.RepositoryErrorCode
-import com.paymong.wear.domain.exception.ApiException
+import com.paymong.wear.domain.exception.parent.ApiException
 import com.paymong.wear.domain.model.FoodCodeModel
 import com.paymong.wear.domain.model.MongCodeModel
 import com.paymong.wear.domain.model.VersionModel

@@ -13,7 +13,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val setBackgroundMapCodeUseCase: SetBackgroundMapCodeUseCase,
     private val deviceRepository: DeviceRepository,
     private val mqttClient: MqttClient,
 ) : ViewModel() {
@@ -40,7 +39,6 @@ class MainActivityViewModel @Inject constructor(
 
     fun initDeviceInfo(buildVersion: String) {
         viewModelScope.launch(Dispatchers.Main) {
-            setBackgroundMapCodeUseCase()
             deviceRepository.setBuildVersion(buildVersion)
         }
     }

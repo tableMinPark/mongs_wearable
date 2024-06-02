@@ -30,10 +30,9 @@ class MessageCallback (
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val json = it.toString()
-
-                    Log.d("MessageCallback", "json: $json")
-
                     val response = gson.fromJson(json, BasicPublish::class.java)
+
+                    Log.i("MessageCallback", "[${response.code}] $json")
 
                     when (response.code) {
                         PublishCode.MEMBER_STAR_POINT -> {
@@ -71,7 +70,5 @@ class MessageCallback (
         }
     }
     override fun deliveryComplete(token: IMqttDeliveryToken?) {}
-    override fun connectionLost(cause: Throwable?) {
-        Log.d("MqttRepositoryImpl", "[MQTT CONNECT DISABLE]")
-    }
+    override fun connectionLost(cause: Throwable?) {}
 }

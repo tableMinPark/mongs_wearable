@@ -8,7 +8,7 @@ import com.paymong.wear.data.dto.management.request.RegisterMongReqDto
 import com.paymong.wear.data.room.client.RoomDB
 import com.paymong.wear.data.room.entity.Slot
 import com.paymong.wear.domain.error.RepositoryErrorCode
-import com.paymong.wear.domain.exception.FailException
+import com.paymong.wear.domain.exception.parent.RepositoryException
 import com.paymong.wear.domain.model.FeedLogModel
 import com.paymong.wear.domain.repositroy.ManagementRepository
 import javax.inject.Inject
@@ -51,7 +51,7 @@ class ManagementRepositoryImpl @Inject constructor(
                 }
             }
         } else {
-            throw FailException(RepositoryErrorCode.ADD_MONG_FAIL)
+            throw RepositoryException(RepositoryErrorCode.ADD_MONG_FAIL)
         }
     }
     override suspend fun delete(mongId: Long) {
@@ -62,7 +62,7 @@ class ManagementRepositoryImpl @Inject constructor(
                 roomDB.slotDao().deleteByMongId(mongId = body.mongId)
             }
         } else {
-            throw FailException(RepositoryErrorCode.DELETE_MONG_FAIL)
+            throw RepositoryException(RepositoryErrorCode.DELETE_MONG_FAIL)
         }
     }
     override suspend fun getFeedLog(mongId: Long): List<FeedLogModel> {
@@ -79,7 +79,7 @@ class ManagementRepositoryImpl @Inject constructor(
             }
         }
 
-        throw FailException(RepositoryErrorCode.NOT_FOUND_FEED_LOG)
+        throw RepositoryException(RepositoryErrorCode.NOT_FOUND_FEED_LOG)
     }
     override suspend fun feed(mongId: Long, code: String) {
         val res = managementApi.feedMong(
@@ -101,7 +101,7 @@ class ManagementRepositoryImpl @Inject constructor(
                 )
             }
         } else {
-            throw FailException(RepositoryErrorCode.FEED_MONG_FAIL)
+            throw RepositoryException(RepositoryErrorCode.FEED_MONG_FAIL)
         }
     }
     override suspend fun graduate(mongId: Long) {
@@ -112,7 +112,7 @@ class ManagementRepositoryImpl @Inject constructor(
                 roomDB.slotDao().deleteByMongId(mongId = body.mongId)
             }
         } else {
-            throw FailException(RepositoryErrorCode.GRADUATE_MONG_FAIL)
+            throw RepositoryException(RepositoryErrorCode.GRADUATE_MONG_FAIL)
         }
     }
     override suspend fun evolution(mongId: Long) {
@@ -134,7 +134,7 @@ class ManagementRepositoryImpl @Inject constructor(
                 )
             }
         } else {
-            throw FailException(RepositoryErrorCode.EVOLUTION_MONG_FAIL)
+            throw RepositoryException(RepositoryErrorCode.EVOLUTION_MONG_FAIL)
         }
     }
     override suspend fun sleeping(mongId: Long) {
@@ -148,7 +148,7 @@ class ManagementRepositoryImpl @Inject constructor(
                 )
             }
         } else {
-            throw FailException(RepositoryErrorCode.SLEEPING_MONG_FAIL)
+            throw RepositoryException(RepositoryErrorCode.SLEEPING_MONG_FAIL)
         }
     }
     override suspend fun stroke(mongId: Long) {
@@ -162,7 +162,7 @@ class ManagementRepositoryImpl @Inject constructor(
                 )
             }
         } else {
-            throw FailException(RepositoryErrorCode.STROKE_MONG_FAIL)
+            throw RepositoryException(RepositoryErrorCode.STROKE_MONG_FAIL)
         }
     }
     override suspend fun poopClean(mongId: Long) {
@@ -177,7 +177,7 @@ class ManagementRepositoryImpl @Inject constructor(
                 )
             }
         } else {
-            throw FailException(RepositoryErrorCode.POOP_CLEAN_FAIL)
+            throw RepositoryException(RepositoryErrorCode.POOP_CLEAN_FAIL)
         }
     }
 }

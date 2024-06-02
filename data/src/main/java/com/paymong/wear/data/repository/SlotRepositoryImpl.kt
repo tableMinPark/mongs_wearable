@@ -3,12 +3,11 @@ package com.paymong.wear.data.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.paymong.wear.data.api.client.ManagementApi
-import com.paymong.wear.data.api.client.MqttApi
 import com.paymong.wear.data.room.client.RoomDB
 import com.paymong.wear.data.room.entity.Slot
 import com.paymong.wear.domain.error.RepositoryErrorCode
-import com.paymong.wear.domain.exception.ApiException
-import com.paymong.wear.domain.exception.RoomException
+import com.paymong.wear.domain.exception.parent.ApiException
+import com.paymong.wear.domain.exception.parent.RoomException
 import com.paymong.wear.domain.model.SlotModel
 import com.paymong.wear.domain.repositroy.SlotRepository
 import com.paymong.wear.domain.vo.SlotVo
@@ -23,6 +22,9 @@ class SlotRepositoryImpl @Inject constructor(
 
         if (res.isSuccessful) {
             res.body()?.let { body ->
+                val selectedSlotMongId = if (roomDB.slotDao().countIsSelectedTrue() > 0) roomDB.slotDao().findByIsSelectedTrue().mongId else -1L
+                roomDB.slotDao().deleteAll()
+
                 body.forEach {
                     roomDB.slotDao().register(
                         Slot(
@@ -43,6 +45,10 @@ class SlotRepositoryImpl @Inject constructor(
                             born = it.born,
                         )
                     )
+                }
+
+                if (selectedSlotMongId >= 0L && roomDB.slotDao().countByMongId(selectedSlotMongId) > 0) {
+                    roomDB.slotDao().modifyIsSelectedByMongId(selectedSlotMongId, true)
                 }
             }
         } else {

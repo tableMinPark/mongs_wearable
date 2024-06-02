@@ -1,12 +1,13 @@
 package com.paymong.wear.ui.viewModel.login
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.paymong.wear.domain.exception.parent.UseCaseException
 import com.paymong.wear.domain.usecase.auth.LoginUseCase
+import com.paymong.wear.ui.viewModel.mainPager.MainPagerViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -19,19 +20,13 @@ class LoginViewModel @Inject constructor(
 ): ViewModel() {
     val uiState: UiState = UiState()
 
-    fun googleLogin() {
-
-    }
-
     fun login(email: String?, name: String?) {
-        viewModelScope.launch (Dispatchers.IO) {
-            delay(2000)
-            val isSuccess = loginUseCase(email!!, name!!)
-            Log.d("LoginViewModel.login", "isSuccess: $isSuccess")
-
-            if (isSuccess) {
+        viewModelScope.launch(Dispatchers.IO) {
+            delay(1000)
+            try {
+                loginUseCase(email!!, name!!)
                 uiState.navMainPagerView = true
-            } else {
+            } catch (e: UseCaseException) {
                 uiState.loadingBar = false
                 uiState.signInButton = true
             }

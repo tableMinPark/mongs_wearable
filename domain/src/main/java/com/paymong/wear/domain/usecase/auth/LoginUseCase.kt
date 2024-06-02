@@ -4,15 +4,15 @@ import android.util.Log
 import com.paymong.wear.domain.client.MqttClient
 import com.paymong.wear.domain.code.FeedbackCode
 import com.paymong.wear.domain.error.UseCaseErrorCode
-import com.paymong.wear.domain.exception.ErrorException
-import com.paymong.wear.domain.exception.FailException
+import com.paymong.wear.domain.exception.child.MustUpdateAppException
+import com.paymong.wear.domain.exception.parent.RepositoryException
+import com.paymong.wear.domain.exception.parent.UseCaseException
 import com.paymong.wear.domain.repositroy.AuthRepository
 import com.paymong.wear.domain.repositroy.CodeRepository
 import com.paymong.wear.domain.repositroy.DeviceRepository
 import com.paymong.wear.domain.repositroy.FeedbackRepository
 import com.paymong.wear.domain.repositroy.MemberRepository
 import com.paymong.wear.domain.repositroy.SlotRepository
-import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(
@@ -24,10 +24,9 @@ class LoginUseCase @Inject constructor(
     private val slotRepository: SlotRepository,
     private val feedbackRepository: FeedbackRepository
 ) {
-    suspend operator fun invoke(email: String?, name: String?): Boolean {
+    suspend operator fun invoke(email: String?, name: String?) {
         try {
             val deviceId = deviceRepository.getDeviceId()
-            Log.d("LoginUserCase", "deviceId: $deviceId, email: $email, name: $name")
             val loginModel = authRepository.login(deviceId = deviceId, email = email!!, name = name!!)
 
             val accountId = loginModel.accountId
@@ -41,7 +40,7 @@ class LoginUseCase @Inject constructor(
 
             val versionModel = codeRepository.validationVersion(codeIntegrity = codeIntegrity, buildVersion = buildVersion)
             if (versionModel.updateApp) {
-                throw FailException(UseCaseErrorCode.MUST_UPDATE_APP)
+                throw MustUpdateAppException(UseCaseErrorCode.MUST_UPDATE_APP)
             } else if(versionModel.updateCode) {
                 codeRepository.setCodes(codeIntegrity = codeIntegrity, buildVersion = buildVersion)
             }
@@ -50,14 +49,14 @@ class LoginUseCase @Inject constructor(
             slotRepository.setSlots(accountId = accountId)
             mqttClient.setConnection(accountId = accountId)
 
-            return true
-        } catch (e: ErrorException) {
+        } catch (e: RepositoryException) {
             feedbackRepository.addFeedbackLog(
                 groupCode = FeedbackCode.AUTH.groupCode,
                 location = "LoginUseCase",
                 message = e.errorCode.message(),
             )
-            return false
+
+            throw UseCaseException(e.errorCode)
         }
     }
 }

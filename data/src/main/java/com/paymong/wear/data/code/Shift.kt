@@ -7,7 +7,7 @@ enum class Shift(
 ) {
     SH000(ShiftCode.NORMAL),
     SH001(ShiftCode.DEAD),
-    SH002(ShiftCode.GRADUATION_READY),
+    SH002(ShiftCode.GRADUATE_READY),
     SH003(ShiftCode.EVOLUTION_READY),
     SH004(ShiftCode.EVOLUTION),
     SH444(ShiftCode.EMPTY),

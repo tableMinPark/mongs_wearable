@@ -2,7 +2,7 @@ package com.paymong.wear.domain.usecase.slot
 
 import android.util.Log
 import com.paymong.wear.domain.client.MqttClient
-import com.paymong.wear.domain.exception.RoomException
+import com.paymong.wear.domain.exception.parent.RoomException
 import com.paymong.wear.domain.repositroy.SlotRepository
 import javax.inject.Inject
 

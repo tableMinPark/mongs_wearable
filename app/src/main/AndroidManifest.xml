@@ -17,7 +17,6 @@
         android:usesCleartextTraffic="true">
         <uses-library android:name="com.google.android.wearable" android:required="true" />
         <meta-data android:name="com.google.android.wearable.standalone" android:value="true" />
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCrOnEWC6DlYSkiwEAgpdmx78pJ7ptd_qs" />
 
         <service android:name="org.eclipse.paho.android.service.MqttService" />
         <activity

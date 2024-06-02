@@ -9,15 +9,13 @@ class SubscribeCallback(
 ) : IMqttActionListener {
 
     override fun onSuccess(asyncActionToken: IMqttToken?) {
-        // 구독 성공 시의 처리
         asyncActionToken?.let {
-            Log.d("Matt", "[SUBSCRIBE ${it.topics[0]} SUCCESS]")
+            Log.i("SubscribeCallback", "[${it.topics[0]}] subscribe.")
         }
     }
     override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-        // 구독 실패 시의 처리
         asyncActionToken?.let {
-            Log.d("Matt", "[SUBSCRIBE ${it.topics} FAIL]")
+            Log.i("SubscribeCallback", "[${it.topics[0]}] subscribe fail.")
             disconnect()
         }
     }

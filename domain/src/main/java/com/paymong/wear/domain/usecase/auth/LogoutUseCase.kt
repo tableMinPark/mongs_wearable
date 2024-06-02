@@ -2,7 +2,7 @@ package com.paymong.wear.domain.usecase.auth
 
 import com.paymong.wear.domain.client.MqttClient
 import com.paymong.wear.domain.code.FeedbackCode
-import com.paymong.wear.domain.exception.ErrorException
+import com.paymong.wear.domain.exception.parent.ErrorException
 import com.paymong.wear.domain.repositroy.AuthRepository
 import com.paymong.wear.domain.repositroy.FeedbackRepository
 import com.paymong.wear.domain.repositroy.MemberRepository

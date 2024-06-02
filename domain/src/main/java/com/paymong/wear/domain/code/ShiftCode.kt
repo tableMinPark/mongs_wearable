@@ -6,9 +6,11 @@ enum class ShiftCode(
 ) {
     NORMAL("SH000", "기본"),
     DEAD("SH001", "죽음"),
-    GRADUATION_READY("SH002", "졸업 대기"),
+    GRADUATE_READY("SH002", "졸업 대기"),
     EVOLUTION_READY("SH003", "진화 대기"),
-    EVOLUTION("SH004", "진화 중"),
+    GRADUATE("SH004", "졸업"),
+    EVOLUTION("SH005", "진화 중"),
     EMPTY("SH444", "없음"),
-    DELETE("SH999", "삭제")
+    DELETE("SH999", "삭제"),
+    ;
 }

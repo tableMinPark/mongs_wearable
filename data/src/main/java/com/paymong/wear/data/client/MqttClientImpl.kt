@@ -1,5 +1,6 @@
 package com.paymong.wear.data.client
 
+import android.util.Log
 import com.paymong.wear.data.api.client.MqttApi
 import com.paymong.wear.data.callback.MessageCallback
 import com.paymong.wear.data.repository.RealTimeRepositoryImpl
@@ -19,8 +20,11 @@ class MqttClientImpl @Inject constructor(
     override suspend fun setConnection(accountId: Long) {
         mqttApi.init(
             messageCallback = MessageCallback(realTimeRepositoryImpl = realTimeRepositoryImpl),
-            connectDisableCallback = { },
+            connectDisableCallback = {
+                Log.e("MqttApi", "mqtt connect fail.")
+            },
             connectSuccessCallback = {
+                Log.i("MqttApi", "mqtt connect.")
                 mqttApi.subscribe(
                     topic = "$MEMBER_TOPIC/$accountId",
                     mqttActionListener = SubscribeCallback(disconnect = { mqttApi.disConnect() })

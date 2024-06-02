@@ -33,6 +33,9 @@ import com.paymong.wear.ui.global.component.common.Logo
 import com.paymong.wear.ui.global.resource.NavItem
 import com.paymong.wear.ui.viewModel.login.LoginViewModel
 import com.paymong.wear.ui.viewModel.login.LoginViewModel.UiState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginView(
@@ -44,6 +47,7 @@ fun LoginView(
         LoginContent(
             login = loginViewModel::login,
             uiState = loginViewModel.uiState,
+            modifier = Modifier.zIndex(1f)
         )
     }
 
@@ -59,6 +63,7 @@ private fun LoginContent(
     login: (email: String?, name: String?) -> Unit,
     uiState: UiState = UiState(),
     context: Context = LocalContext.current,
+    modifier: Modifier = Modifier.zIndex(0f)
 ) {
     // 구글 로그인 확인
     LaunchedEffect(Unit) {
@@ -84,9 +89,7 @@ private fun LoginContent(
 
     Box(
         contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .fillMaxSize()
-            .zIndex(1f),
+        modifier = modifier.fillMaxSize(),
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -111,12 +114,17 @@ private fun LoginContent(
                             uiState.loadingBar = true
                             uiState.signInButton = false
 
+                            val account = GoogleSignIn.getLastSignedInAccount(context)
                             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                                 .requestEmail()
                                 .build()
                             val client = GoogleSignIn.getClient(context, gso)
-                            val signInIntent = client.signInIntent
-                            googleLoginLauncher.launch(signInIntent)
+
+                            if (account != null) {
+                                client.signOut()
+                            }
+
+                            googleLoginLauncher.launch(client.signInIntent)
                         }
                     )
                 }

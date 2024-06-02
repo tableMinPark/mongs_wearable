@@ -1,16 +1,12 @@
 package com.paymong.wear.data.repository
 
-import android.util.Log
 import com.paymong.wear.data.api.client.AuthApi
 import com.paymong.wear.data.dto.auth.req.LoginReqDto
 import com.paymong.wear.data.dto.auth.req.LogoutReqDto
-import com.paymong.wear.data.dto.auth.req.ReissueReqDto
 import com.paymong.wear.domain.error.RepositoryErrorCode
-import com.paymong.wear.domain.exception.ApiException
+import com.paymong.wear.domain.exception.parent.ApiException
 import com.paymong.wear.domain.model.LoginModel
-import com.paymong.wear.domain.model.ReissueModel
 import com.paymong.wear.domain.repositroy.AuthRepository
-import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -34,6 +30,7 @@ class AuthRepositoryImpl @Inject constructor(
                 )
             }
         }
+
         throw ApiException(RepositoryErrorCode.LOGIN_FAIL)
     }
     override suspend fun logout(refreshToken: String): Long {

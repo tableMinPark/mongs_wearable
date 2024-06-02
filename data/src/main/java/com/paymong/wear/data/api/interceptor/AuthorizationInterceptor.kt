@@ -4,11 +4,7 @@ import com.paymong.wear.data.api.client.AuthApi
 import com.paymong.wear.data.dataStore.MemberDataStore
 import com.paymong.wear.data.dto.auth.req.ReissueReqDto
 import com.paymong.wear.domain.error.RepositoryErrorCode
-import com.paymong.wear.domain.exception.ApiException
-import com.paymong.wear.domain.model.ReissueModel
-import com.paymong.wear.domain.repositroy.AuthRepository
-import com.paymong.wear.domain.repositroy.DeviceRepository
-import com.paymong.wear.domain.repositroy.MemberRepository
+import com.paymong.wear.domain.exception.parent.ApiException
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Interceptor.Chain

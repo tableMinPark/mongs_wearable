@@ -7,7 +7,7 @@ import com.paymong.wear.data.room.entity.FeedbackLog
 import com.paymong.wear.data.vo.FeedbackLogVo
 import com.paymong.wear.data.vo.FeedbackVo
 import com.paymong.wear.domain.error.RepositoryErrorCode
-import com.paymong.wear.domain.exception.ApiException
+import com.paymong.wear.domain.exception.parent.ApiException
 import com.paymong.wear.domain.repositroy.FeedbackRepository
 import javax.inject.Inject
 

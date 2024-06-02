@@ -13,7 +13,7 @@ class HttpLogInterceptor : Interceptor {
 
         return try {
             val response = chain.proceed(chain.request())
-            Log.d("HttpLogInterceptor", "[${response.code()}] [${request.url()}]")
+            Log.i("HttpLogInterceptor", "[${response.code()}] ${request.method()} ${request.url()}")
             response
         } catch (_: ConnectException) {
             Response.Builder()

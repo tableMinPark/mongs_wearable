@@ -94,5 +94,5 @@ fun Mong(
 @Preview(device = Devices.WEAR_OS_SMALL_ROUND)
 @Composable
 private fun MongPreview() {
-    Mong(mong = MongResourceCode.CH100, isPng = true)
+    Mong(mong = MongResourceCode.CH000, isPng = true)
 }

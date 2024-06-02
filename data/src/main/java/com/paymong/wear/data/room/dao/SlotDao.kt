@@ -3,6 +3,7 @@ package com.paymong.wear.data.room.dao
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.paymong.wear.data.code.Shift
@@ -29,7 +30,7 @@ interface SlotDao {
      */
     @Update
     fun modifySlot(slot: Slot)
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun register(slot: Slot)
     @Query("DELETE FROM slot WHERE mongId NOT IN ( :mongIdList )")
     fun deleteByMongIdIn(mongIdList: List<Long>)
@@ -53,6 +54,8 @@ interface SlotDao {
     fun deleteByMongId(mongId: Long)
     @Query("DELETE FROM slot WHERE shiftCode = :shiftCode")
     fun deleteByIsDeletedTrue(shiftCode: ShiftCode = ShiftCode.DELETE)
+    @Query("DELETE FROM slot")
+    fun deleteAll()
 
     /**
      *

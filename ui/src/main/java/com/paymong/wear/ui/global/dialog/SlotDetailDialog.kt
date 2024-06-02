@@ -307,8 +307,6 @@ private fun SlotDetailCondition(
         CircularProgressIndicator(
             modifier = Modifier.size(36.dp),
             trackColor = Color.LightGray,
-            startAngle = 271f,
-            endAngle = 270f,
             progress = progress / 100,
             strokeWidth = 2.dp,
             indicatorColor = indicatorColor,

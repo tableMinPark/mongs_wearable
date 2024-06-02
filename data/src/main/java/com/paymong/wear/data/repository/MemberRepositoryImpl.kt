@@ -1,11 +1,10 @@
 package com.paymong.wear.data.repository
 
-import androidx.datastore.dataStore
 import androidx.lifecycle.LiveData
 import com.paymong.wear.data.api.client.MemberApi
 import com.paymong.wear.data.dataStore.MemberDataStore
 import com.paymong.wear.domain.error.RepositoryErrorCode
-import com.paymong.wear.domain.exception.ApiException
+import com.paymong.wear.domain.exception.parent.ApiException
 import com.paymong.wear.domain.repositroy.MemberRepository
 import javax.inject.Inject
 

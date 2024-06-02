@@ -3,7 +3,7 @@ package com.paymong.wear.data.repository
 import com.paymong.wear.data.api.client.CollectionApi
 import com.paymong.wear.data.room.client.RoomDB
 import com.paymong.wear.domain.error.RepositoryErrorCode
-import com.paymong.wear.domain.exception.ApiException
+import com.paymong.wear.domain.exception.parent.ApiException
 import com.paymong.wear.domain.model.CollectionModel
 import com.paymong.wear.domain.repositroy.CollectionRepository
 import javax.inject.Inject
