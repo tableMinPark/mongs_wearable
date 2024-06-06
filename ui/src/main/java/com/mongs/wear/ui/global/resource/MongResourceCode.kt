@@ -1,0 +1,47 @@
+package com.mongs.wear.ui.global.resource
+
+import com.mongs.wear.ui.R
+
+enum class MongResourceCode(
+    val pngCode: Int,
+    val gifCode: Int,
+    val code: String,
+    val isEgg: Boolean,
+) {
+    CH000(R.drawable.ch000, R.drawable.ch000g, "CH000", true),
+    CH001(R.drawable.ch001, R.drawable.ch001g, "CH001", true),
+    CH002(R.drawable.ch002, R.drawable.ch002g, "CH002", true),
+    CH003(R.drawable.ch003, R.drawable.ch003g, "CH003", true),
+    CH004(R.drawable.ch004, R.drawable.ch004g, "CH004", true),
+    CH005(R.drawable.ch005, R.drawable.ch005g, "CH005", true),
+    CH100(R.drawable.ch100, R.drawable.ch100g, "CH100", false),
+    CH101(R.drawable.ch101, R.drawable.ch101g, "CH101", false),
+    CH102(R.drawable.ch102, R.drawable.ch102g, "CH102", false),
+    CH200(R.drawable.ch200, R.drawable.ch200g, "CH200", false),
+    CH210(R.drawable.ch210, R.drawable.ch210g, "CH210", false),
+    CH220(R.drawable.ch220, R.drawable.ch220g, "CH220", false),
+    CH230(R.drawable.ch230, R.drawable.ch230g, "CH230", false),
+    CH201(R.drawable.ch201, R.drawable.ch201g, "CH201", false),
+    CH211(R.drawable.ch211, R.drawable.ch211g, "CH211", false),
+    CH221(R.drawable.ch221, R.drawable.ch221g, "CH221", false),
+    CH231(R.drawable.ch231, R.drawable.ch231g, "CH231", false),
+    CH202(R.drawable.ch202, R.drawable.ch202g, "CH202", false),
+    CH212(R.drawable.ch212, R.drawable.ch212g, "CH212", false),
+    CH222(R.drawable.ch222, R.drawable.ch222g, "CH222", false),
+    CH232(R.drawable.ch232, R.drawable.ch232g, "CH232", false),
+    CH203(R.drawable.ch203, R.drawable.ch203, "CH203", false),
+    CH300(R.drawable.ch300, R.drawable.ch300g, "CH300", false),
+    CH310(R.drawable.ch310, R.drawable.ch310g, "CH310", false),
+    CH320(R.drawable.ch320, R.drawable.ch320g, "CH320", false),
+    CH330(R.drawable.ch330, R.drawable.ch330g, "CH330", false),
+    CH301(R.drawable.ch301, R.drawable.ch301g, "CH301", false),
+    CH311(R.drawable.ch311, R.drawable.ch311g, "CH311", false),
+    CH321(R.drawable.ch321, R.drawable.ch321g, "CH321", false),
+    CH331(R.drawable.ch331, R.drawable.ch331g, "CH331", false),
+    CH302(R.drawable.ch302, R.drawable.ch302g, "CH302", false),
+    CH312(R.drawable.ch312, R.drawable.ch312g, "CH312", false),
+    CH322(R.drawable.ch322, R.drawable.ch322g, "CH322", false),
+    CH332(R.drawable.ch332, R.drawable.ch332g, "CH332", false),
+    CH303(R.drawable.ch303, R.drawable.ch303, "CH303", false),
+    CH444(R.drawable.none, R.drawable.none, "CH444", false)
+}
