@@ -3,9 +3,8 @@ package com.mongs.wear.domain.usecase.auth
 import com.mongs.wear.domain.client.MqttClient
 import com.mongs.wear.domain.code.FeedbackCode
 import com.mongs.wear.domain.error.UseCaseErrorCode
-import com.mongs.wear.domain.exception.child.MustUpdateAppException
-import com.mongs.wear.domain.exception.parent.RepositoryException
-import com.mongs.wear.domain.exception.parent.UseCaseException
+import com.mongs.wear.domain.exception.RepositoryException
+import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.repositroy.AuthRepository
 import com.mongs.wear.domain.repositroy.CodeRepository
 import com.mongs.wear.domain.repositroy.DeviceRepository
@@ -39,14 +38,16 @@ class LoginUseCase @Inject constructor(
 
             val versionModel = codeRepository.validationVersion(codeIntegrity = codeIntegrity, buildVersion = buildVersion)
             if (versionModel.updateApp) {
-                throw MustUpdateAppException(UseCaseErrorCode.MUST_UPDATE_APP)
+                throw UseCaseException(UseCaseErrorCode.MUST_UPDATE_APP)
             } else if(versionModel.updateCode) {
                 codeRepository.setCodes(codeIntegrity = codeIntegrity, buildVersion = buildVersion)
             }
 
-            memberRepository.setMember(accountId = accountId)
-            slotRepository.setSlots(accountId = accountId)
             mqttClient.setConnection(accountId = accountId)
+            mqttClient.subScribeMember(accountId = accountId)
+
+            memberRepository.setMember()
+            slotRepository.setSlots()
 
         } catch (e: RepositoryException) {
             feedbackRepository.addFeedbackLog(

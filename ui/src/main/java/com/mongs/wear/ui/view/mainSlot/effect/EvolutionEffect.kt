@@ -46,7 +46,7 @@ private val delayList = listOf(
     100L,
     300L,
     300L,
-    300L
+    800L,
 )
 
 @Composable
@@ -65,6 +65,7 @@ fun EvolutionEffect(
                 nowStep = step
                 delay(delayList[step])
             }
+            delay(2000)
             evolution()
         }
 
@@ -72,6 +73,11 @@ fun EvolutionEffect(
             contentAlignment = Alignment.BottomCenter,
             modifier = modifier.fillMaxSize(),
         ) {
+            Mong(
+                mong = MongResourceCode.valueOf(slotVo.mongCode),
+                modifier = Modifier.padding(bottom = 25.dp),
+                isPng = true,
+            )
             Image(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -93,34 +99,14 @@ fun EvolutionEffect(
                     onClick = runEvolution
                 )
         ) {
-            Box(
-                contentAlignment = Alignment.BottomCenter,
-                modifier = Modifier
-                    .zIndex(1f)
-                    .fillMaxSize()
-            ) {
-                Mong(
-                    mong = MongResourceCode.valueOf(slotVo.mongCode),
-                    modifier = Modifier.padding(bottom = 25.dp)
-                )
-            }
-
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .zIndex(2f)
-                    .background(color = Color.Black.copy(alpha = 0.6f))
-                    .fillMaxSize()
-            ) {
-                Text(
-                    text = "진화를 위해\n\n화면을 터치해주세요",
-                    textAlign = TextAlign.Center,
-                    fontFamily = DAL_MU_RI,
-                    fontWeight = FontWeight.Light,
-                    fontSize = 16.sp,
-                    color = PaymongWhite,
-                )
-            }
+            Text(
+                text = "진화를 위해\n\n화면을 터치해주세요",
+                textAlign = TextAlign.Center,
+                fontFamily = DAL_MU_RI,
+                fontWeight = FontWeight.Light,
+                fontSize = 16.sp,
+                color = PaymongWhite,
+            )
         }
     }
 }
@@ -131,7 +117,7 @@ private fun EvolutionEffectPreview() {
     Box {
         MainPagerBackground()
         EvolutionEffect(
-            slotVo = SlotVo(),
+            slotVo = SlotVo(mongCode = "CH102"),
             isEvolution = false,
             evolution = {} ,
             runEvolution = {}
@@ -146,7 +132,7 @@ private fun LargeEvolutionEffectPreview() {
     Box {
         MainPagerBackground()
         EvolutionEffect(
-            slotVo = SlotVo(),
+            slotVo = SlotVo(mongCode = "CH102"),
             isEvolution = false,
             evolution = {} ,
             runEvolution = {}

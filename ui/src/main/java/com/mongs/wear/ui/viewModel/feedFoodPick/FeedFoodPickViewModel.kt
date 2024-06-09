@@ -1,6 +1,5 @@
 package com.mongs.wear.ui.viewModel.feedFoodPick
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,35 +7,35 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.exception.parent.UseCaseException
+import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.usecase.feed.FeedUseCase
 import com.mongs.wear.domain.usecase.feed.GetFoodCodesUseCase
+import com.mongs.wear.domain.usecase.slot.GetNowSlotPayPointUseCase
 import com.mongs.wear.domain.vo.FoodVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FeedFoodPickViewModel @Inject constructor(
     private val getFoodCodesUseCase: GetFoodCodesUseCase,
+    private val getNowSlotPayPointUseCase: GetNowSlotPayPointUseCase,
     private val feedUseCase: FeedUseCase,
 ): ViewModel() {
     val uiState: UiState = UiState()
 
+    var payPoint: LiveData<Int> = MutableLiveData()
     val foodVoList: LiveData<List<FoodVo>> get() = _foodVoList
     private val _foodVoList = MutableLiveData<List<FoodVo>>()
-    var payPoint: LiveData<Int> = MutableLiveData()
 
     fun loadData() {
         viewModelScope.launch (Dispatchers.IO) {
             try {
+                payPoint = getNowSlotPayPointUseCase()
                 _foodVoList.postValue(getFoodCodesUseCase())
-                delay(800)
                 uiState.loadingBar = false
             } catch (e: UseCaseException) {
-                e.printStackTrace()
                 uiState.navFeedMenu = true
             }
         }
@@ -44,9 +43,13 @@ class FeedFoodPickViewModel @Inject constructor(
 
     fun buyFood(foodCode: String) {
         viewModelScope.launch (Dispatchers.IO) {
-            feedUseCase(code = foodCode)
-            delay(800)
-            uiState.navMainPager = true
+            try {
+                uiState.buyDialog = false
+                feedUseCase(code = foodCode)
+            } catch (_: UseCaseException) {
+            } finally {
+                uiState.navMainPager = true
+            }
         }
     }
 

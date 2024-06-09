@@ -5,11 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.exception.parent.UseCaseException
+import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.usecase.auth.LogoutUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,10 +22,10 @@ class MainConfigureViewModel @Inject constructor(
         viewModelScope.launch (Dispatchers.IO) {
             try {
                 logoutUseCase()
-                delay(1000)
                 uiState.navLoginView = true
             } catch (e: UseCaseException) {
                 uiState.loadingBar = false
+                uiState.logoutDialog = false
             }
         }
     }

@@ -37,7 +37,4 @@ dependencies {
     implementation "androidx.hilt:hilt-navigation-compose:1.2.0"
     // livedata
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.8.1"
-//    // room
-//    implementation 'androidx.room:room-runtime:2.6.0'
-//    kapt "androidx.room:room-compiler:2.6.0"
 }

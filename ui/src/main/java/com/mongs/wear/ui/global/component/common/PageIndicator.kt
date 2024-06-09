@@ -32,7 +32,7 @@ fun PageIndicator(
             override val selectedPage: Int
                 get() = pagerState.currentPage
             override val pageCount: Int
-                get() = 4
+                get() = pagerState.pageCount
         }
     }
 
@@ -50,7 +50,6 @@ fun PageIndicator(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PageIndicator(
     pageIndicatorState: PageIndicatorState,
@@ -75,6 +74,6 @@ fun PageIndicator(
 @Composable
 private fun PageIndicatorPreview() {
     PageIndicator(
-        pagerState = rememberPagerState(initialPage = 1) { 4 }
+        pagerState = rememberPagerState(initialPage = 2) { 5 }
     )
 }

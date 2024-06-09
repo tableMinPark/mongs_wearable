@@ -2,6 +2,8 @@ package com.mongs.wear.data.repository
 
 import androidx.lifecycle.LiveData
 import com.mongs.wear.data.dataStore.DeviceDataStore
+import com.mongs.wear.domain.error.RepositoryErrorCode
+import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.repositroy.DeviceRepository
 import javax.inject.Inject
 
@@ -9,27 +11,59 @@ class DeviceRepositoryImpl @Inject constructor(
     private val deviceDataStore: DeviceDataStore,
 ): DeviceRepository {
     override suspend fun setBuildVersion(buildVersion: String) {
-        deviceDataStore.setBuildVersion(buildVersion = buildVersion)
+        try {
+            deviceDataStore.setBuildVersion(buildVersion = buildVersion)
+        } catch (e: RuntimeException) {
+            throw RepositoryException(RepositoryErrorCode.SET_BUILD_VERSION_FAIL)
+        }
     }
     override suspend fun getBuildVersion(): String {
-        return deviceDataStore.getBuildVersion()
+        try {
+            return deviceDataStore.getBuildVersion()
+        } catch (e: RuntimeException) {
+            throw RepositoryException(RepositoryErrorCode.GET_BUILD_VERSION_FAIL)
+        }
     }
     override suspend fun setCodeIntegrity(codeIntegrity: String) {
-        deviceDataStore.setCodeIntegrity(codeIntegrity = codeIntegrity)
+        try {
+            deviceDataStore.setCodeIntegrity(codeIntegrity = codeIntegrity)
+        } catch (e: RuntimeException) {
+            throw RepositoryException(RepositoryErrorCode.SET_CODE_INTEGRITY_FAIL)
+        }
     }
     override suspend fun getCodeIntegrity(): String {
-        return deviceDataStore.getCodeIntegrity()
+        try {
+            return deviceDataStore.getCodeIntegrity()
+        } catch (e: RuntimeException) {
+            throw RepositoryException(RepositoryErrorCode.GET_CODE_INTEGRITY_FAIL)
+        }
     }
     override suspend fun setDeviceId(deviceId: String) {
-        deviceDataStore.setDeviceId(deviceId = deviceId)
+        try {
+            deviceDataStore.setDeviceId(deviceId = deviceId)
+        } catch (e: RuntimeException) {
+            throw RepositoryException(RepositoryErrorCode.SET_DEVICE_ID_FAIL)
+        }
     }
     override suspend fun getDeviceId(): String {
-        return deviceDataStore.getDeviceId()
+        try {
+            return deviceDataStore.getDeviceId()
+        } catch (e: RuntimeException) {
+            throw RepositoryException(RepositoryErrorCode.GET_DEVICE_ID_FAIL)
+        }
     }
     override suspend fun setBackgroundMapCode(code: String) {
-        deviceDataStore.setBackgroundMapCode(backgroundMapCode = code)
+        try {
+            deviceDataStore.setBackgroundMapCode(backgroundMapCode = code)
+        } catch (e: RuntimeException) {
+            throw RepositoryException(RepositoryErrorCode.SET_BACKGROUND_MAP_CODE_FAIL)
+        }
     }
     override suspend fun getBackgroundMapCode(): LiveData<String> {
-        return deviceDataStore.getBackgroundMapCodeLive()
+        try {
+            return deviceDataStore.getBackgroundMapCodeLive()
+        } catch (e: RuntimeException) {
+            throw RepositoryException(RepositoryErrorCode.GET_BACKGROUND_MAP_CODE_FAIL)
+        }
     }
 }

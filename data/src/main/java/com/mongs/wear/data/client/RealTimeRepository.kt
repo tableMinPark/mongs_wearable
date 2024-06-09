@@ -1,13 +1,13 @@
 package com.mongs.wear.data.client
 
 interface RealTimeRepository {
-    suspend fun memberStarPointCallback(json: String)
-    suspend fun mongCodeCallback(json: String)
-    suspend fun mongExpCallback(json: String)
-    suspend fun mongIsSleepingCallback(json: String)
-    suspend fun mongPayPointCallback(json: String)
-    suspend fun mongPoopCountCallback(json: String)
-    suspend fun mongShiftCallback(json: String)
-    suspend fun mongStateCallback(json: String)
-    suspend fun mongStatusCallback(json: String)
+    suspend fun memberStarPointCallback(dataJson: String)
+    suspend fun mongCodeCallback(dataJson: String)
+    suspend fun mongExpCallback(dataJson: String)
+    suspend fun mongIsSleepingCallback(dataJson: String)
+    suspend fun mongPayPointCallback(dataJson: String)
+    suspend fun mongPoopCountCallback(dataJson: String)
+    suspend fun mongShiftCallback(dataJson: String)
+    suspend fun mongStateCallback(dataJson: String)
+    suspend fun mongStatusCallback(dataJson: String)
 }

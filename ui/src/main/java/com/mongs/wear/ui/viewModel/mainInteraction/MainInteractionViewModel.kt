@@ -1,8 +1,12 @@
 package com.mongs.wear.ui.viewModel.mainInteraction
 
-import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mongs.wear.domain.error.RepositoryErrorCode
+import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.usecase.slot.PoopCleanNowSlotUseCase
 import com.mongs.wear.domain.usecase.slot.SleepingNowSlotUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,19 +21,35 @@ class MainInteractionViewModel @Inject constructor(
 ): ViewModel() {
     val uiState: UiState = UiState()
 
-    fun sleep() {
+    fun sleeping() {
         viewModelScope.launch (Dispatchers.IO) {
-            Log.d("test", "sleep call")
-//            sleepingNowSlotUseCase()
+            try {
+                sleepingNowSlotUseCase()
+                uiState.navMainSlotView = true
+            } catch (e: UseCaseException) {
+                uiState.alertSleepingFail = true
+            }
         }
     }
-    fun poop() {
+    fun poopClean() {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d("test", "poop call")
-//            poopCleanNowSlotUseCase()
+            try {
+                poopCleanNowSlotUseCase()
+                uiState.navMainSlotView = true
+            } catch (e: UseCaseException) {
+                uiState.alertPoopCleanFail = true
+            }
         }
     }
 
 
-    class UiState () {}
+    class UiState (
+        navMainSlotView: Boolean = false,
+        alertSleepingFail: Boolean = false,
+        alertPoopCleanFail: Boolean = false,
+    ) {
+        var navMainSlotView by mutableStateOf(navMainSlotView)
+        var alertSleepingFail by mutableStateOf(alertSleepingFail)
+        var alertPoopCleanFail by mutableStateOf(alertPoopCleanFail)
+    }
 }

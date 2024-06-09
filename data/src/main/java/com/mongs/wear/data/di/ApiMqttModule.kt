@@ -20,6 +20,6 @@ object ApiMqttModule {
     @Provides
     @Singleton
     fun provideMqtt(@ApplicationContext context: Context) : MqttApi {
-        return MqttApi(context, MqttAndroidClient(context, BASE_URL, MQTT_CLIENT_ID))
+        return MqttApi(MqttAndroidClient(context, BASE_URL, MQTT_CLIENT_ID))
     }
 }

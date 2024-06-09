@@ -25,6 +25,8 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ManagementApi {
+    @GET("/management/{mongId}")
+    suspend fun findMong(@Path("mongId") mongId: Long) : Response<FindMongResDto>
     @GET("/management")
     suspend fun findMong() : Response<List<FindMongResDto>>
     @POST("/management")

@@ -34,7 +34,7 @@ import androidx.navigation.NavController
 import androidx.wear.compose.material.PageIndicatorState
 import androidx.wear.compose.material.Text
 import com.mongs.wear.domain.vo.SnackVo
-import com.mongs.wear.ui.global.component.background.FeedMenuBackground
+import com.mongs.wear.ui.global.component.background.FeedNestedBackground
 import com.mongs.wear.ui.global.component.button.BlueButton
 import com.mongs.wear.ui.global.component.button.LeftButton
 import com.mongs.wear.ui.global.component.button.RightButton
@@ -73,7 +73,7 @@ fun FeedSnackPickView(
 
     Box {
         if (feedSnackPickViewModel.uiState.loadingBar) {
-            FeedMenuBackground()
+            FeedNestedBackground()
             FeedSnackPickLoadingBar()
         } else if (feedSnackPickViewModel.uiState.detailDialog) {
             FeedItemDetailDialog(
@@ -88,9 +88,7 @@ fun FeedSnackPickView(
             ConfirmDialog(
                 text = "구매하시겠습니까?",
                 confirm = {
-                    scrollPage(1)
                     feedSnackPickViewModel.uiState.loadingBar = true
-                    feedSnackPickViewModel.uiState.buyDialog = false
                     feedSnackPickViewModel.buySnack(snackCode = snackVoList.value[snackVoIndex.intValue].code)
                 },
                 cancel = {
@@ -98,7 +96,7 @@ fun FeedSnackPickView(
                 }
             )
         } else {
-            FeedMenuBackground()
+            FeedNestedBackground()
             PageIndicator(
                 pageIndicatorState = pageIndicatorState,
                 modifier = Modifier.zIndex(1f)
@@ -116,6 +114,7 @@ fun FeedSnackPickView(
     }
 
     if (feedSnackPickViewModel.uiState.navMainPager) {
+        scrollPage(2)
         navController.popBackStack(route = NavItem.FeedNested.route, inclusive = true)
     }
     if (feedSnackPickViewModel.uiState.navFeedMenu) {
@@ -252,8 +251,9 @@ private fun FeedSnackPickContent(
                     .weight(0.25f)
             ) {
                 BlueButton(
-                    text = "${snackVo.price}",
-                    disable = !snackVo.isCanBuy,
+                    text = "$${snackVo.price}",
+                    width = 70,
+                    disable = !snackVo.isCanBuy || snackVo.price > payPoint,
                     onClick = { if (snackVo.isCanBuy) buyDialog() },
                 )
             }
@@ -267,7 +267,7 @@ private fun FeedSnackPickContent(
 @Composable
 private fun FeedSnackPickViewPreview() {
     Box {
-        FeedMenuBackground()
+        FeedNestedBackground()
         FeedSnackPickContent(
             payPoint = 0,
             snackVo = SnackVo(isCanBuy = true),
@@ -284,7 +284,7 @@ private fun FeedSnackPickViewPreview() {
 @Composable
 private fun LargeFeedSnackPickViewPreview() {
     Box {
-        FeedMenuBackground()
+        FeedNestedBackground()
         FeedSnackPickContent(
             payPoint = 0,
             snackVo = SnackVo(isCanBuy = true),

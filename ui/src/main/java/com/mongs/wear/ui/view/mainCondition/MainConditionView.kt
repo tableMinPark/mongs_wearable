@@ -20,7 +20,6 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.wear.compose.material.CircularProgressIndicator
 import com.mongs.wear.domain.vo.SlotVo
 import com.mongs.wear.ui.R
@@ -30,13 +29,11 @@ import com.mongs.wear.ui.global.theme.PaymongBlue
 import com.mongs.wear.ui.global.theme.PaymongGreen
 import com.mongs.wear.ui.global.theme.PaymongPink
 import com.mongs.wear.ui.global.theme.PaymongYellow
-import com.mongs.wear.ui.viewModel.mainCondition.MainConditionViewModel
 
 @Composable
 fun MainConditionView(
     slotVo: State<SlotVo>,
     isPageChanging: State<Boolean>,
-    mainConditionViewModel: MainConditionViewModel = hiltViewModel(),
 ) {
     Box {
         if (!isPageChanging.value) {

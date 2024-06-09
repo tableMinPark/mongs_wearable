@@ -4,7 +4,6 @@ import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.mongs.wear.data.api.code.PublishCode
-import com.mongs.wear.data.dto.mqtt.res.BasicPublish
 import com.mongs.wear.data.repository.RealTimeRepositoryImpl
 import com.mongs.wear.data.utils.GsonDateFormatAdapter
 import kotlinx.coroutines.CoroutineScope
@@ -15,6 +14,10 @@ import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.lang.Exception
 import java.time.LocalDateTime
+import com.google.gson.reflect.TypeToken
+import com.mongs.wear.data.dto.mqtt.res.BasicPublish
+import com.mongs.wear.data.dto.mqtt.res.MongExpVo
+import java.lang.reflect.Type
 
 
 class MessageCallback (
@@ -25,44 +28,52 @@ class MessageCallback (
         .registerTypeAdapter(LocalDateTime::class.java, GsonDateFormatAdapter())
         .create()
 
+    private val listType: Type = object : TypeToken<List<BasicPublish<Any>>>() {}.type
+
+
     override fun messageArrived(topic: String?, message: MqttMessage?) {
         message?.let {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val json = it.toString()
-                    val response = gson.fromJson(json, BasicPublish::class.java)
 
-                    Log.i("MessageCallback", "[${response.code}] $json")
+                    Log.i("MessageCallback", "[] $json")
+                    val body: List<BasicPublish<Any>> = gson.fromJson(json, listType)
 
-                    when (response.code) {
-                        PublishCode.MEMBER_STAR_POINT -> {
-                            realTimeRepositoryImpl.memberStarPointCallback(json)
+                    body.sortedByDescending { it.createdAt }
+                        .distinctBy { it.code }
+                        .forEach {
+                            val dataJson = gson.toJson(it.data)
+                            when (it.code) {
+                                PublishCode.MEMBER_STAR_POINT -> {
+                                    realTimeRepositoryImpl.memberStarPointCallback(dataJson)
+                                }
+                                PublishCode.MONG_CODE -> {
+                                    realTimeRepositoryImpl.mongCodeCallback(dataJson)
+                                }
+                                PublishCode.MONG_EXP -> {
+                                    realTimeRepositoryImpl.mongExpCallback(dataJson)
+                                }
+                                PublishCode.MONG_IS_SLEEPING -> {
+                                    realTimeRepositoryImpl.mongIsSleepingCallback(dataJson)
+                                }
+                                PublishCode.MONG_PAY_POINT -> {
+                                    realTimeRepositoryImpl.mongPayPointCallback(dataJson)
+                                }
+                                PublishCode.MONG_POOP_COUNT -> {
+                                    realTimeRepositoryImpl.mongPoopCountCallback(dataJson)
+                                }
+                                PublishCode.MONG_SHIFT -> {
+                                    realTimeRepositoryImpl.mongShiftCallback(dataJson)
+                                }
+                                PublishCode.MONG_STATE -> {
+                                    realTimeRepositoryImpl.mongStateCallback(dataJson)
+                                }
+                                PublishCode.MONG_STATUS -> {
+                                    realTimeRepositoryImpl.mongStatusCallback(dataJson)
+                                }
+                            }
                         }
-                        PublishCode.MONG_CODE -> {
-                            realTimeRepositoryImpl.mongCodeCallback(json)
-                        }
-                        PublishCode.MONG_EXP -> {
-                            realTimeRepositoryImpl.mongExpCallback(json)
-                        }
-                        PublishCode.MONG_IS_SLEEPING -> {
-                            realTimeRepositoryImpl.mongIsSleepingCallback(json)
-                        }
-                        PublishCode.MONG_PAY_POINT -> {
-                            realTimeRepositoryImpl.mongPayPointCallback(json)
-                        }
-                        PublishCode.MONG_POOP_COUNT -> {
-                            realTimeRepositoryImpl.mongPoopCountCallback(json)
-                        }
-                        PublishCode.MONG_SHIFT -> {
-                            realTimeRepositoryImpl.mongShiftCallback(json)
-                        }
-                        PublishCode.MONG_STATE -> {
-                            realTimeRepositoryImpl.mongStateCallback(json)
-                        }
-                        PublishCode.MONG_STATUS -> {
-                            realTimeRepositoryImpl.mongStatusCallback(json)
-                        }
-                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }

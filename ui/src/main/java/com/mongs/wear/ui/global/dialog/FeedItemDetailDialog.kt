@@ -55,13 +55,13 @@ fun FeedItemDetailDialog(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(25.dp))
             ImageDetail(image = R.drawable.health, value = addHealthy, modifier = Modifier.weight(0.2f))
             ImageDetail(image = R.drawable.satiety, value = addSatiety, modifier = Modifier.weight(0.2f))
             ImageDetail(image = R.drawable.strength, value = addStrength, modifier = Modifier.weight(0.2f))
             ImageDetail(image = R.drawable.sleep, value = addSleep, modifier = Modifier.weight(0.2f))
             TextDetail(text = "Kg", value = addWeight, modifier = Modifier.weight(0.2f))
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(25.dp))
         }
     }
 }
@@ -96,7 +96,7 @@ private fun ImageDetail(
             textAlign = TextAlign.Center,
             fontFamily = DAL_MU_RI,
             fontWeight = FontWeight.Light,
-            fontSize = 18.sp,
+            fontSize = 20.sp,
             color = PaymongWhite,
             maxLines = 1,
             modifier = Modifier.weight(0.8f)
@@ -139,7 +139,7 @@ private fun TextDetail(
             textAlign = TextAlign.Center,
             fontFamily = DAL_MU_RI,
             fontWeight = FontWeight.Light,
-            fontSize = 18.sp,
+            fontSize = 20.sp,
             color = PaymongWhite,
             maxLines = 1,
             modifier = Modifier.weight(0.8f),

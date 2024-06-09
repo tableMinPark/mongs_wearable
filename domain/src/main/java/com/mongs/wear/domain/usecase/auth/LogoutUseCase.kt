@@ -2,9 +2,8 @@ package com.mongs.wear.domain.usecase.auth
 
 import com.mongs.wear.domain.client.MqttClient
 import com.mongs.wear.domain.code.FeedbackCode
-import com.mongs.wear.domain.exception.parent.ErrorException
-import com.mongs.wear.domain.exception.parent.RepositoryException
-import com.mongs.wear.domain.exception.parent.UseCaseException
+import com.mongs.wear.domain.exception.RepositoryException
+import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.repositroy.AuthRepository
 import com.mongs.wear.domain.repositroy.FeedbackRepository
 import com.mongs.wear.domain.repositroy.MemberRepository
@@ -18,12 +17,12 @@ class LogoutUseCase @Inject constructor(
 ) {
     suspend operator fun invoke() {
         try {
-            val refreshToken = memberRepository.getRefreshToken();
-
+            val refreshToken = memberRepository.getRefreshToken()
             authRepository.logout(refreshToken = refreshToken)
-            mqttClient.disconnect()
-            mqttClient.resetConnection()
 
+            mqttClient.disSubScribeMember()
+            mqttClient.disSubScribeMong()
+            mqttClient.resetConnection()
         } catch (e: RepositoryException) {
             feedbackRepository.addFeedbackLog(
                 groupCode = FeedbackCode.AUTH.groupCode,

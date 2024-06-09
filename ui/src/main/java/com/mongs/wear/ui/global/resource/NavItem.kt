@@ -14,9 +14,7 @@ sealed class NavItem(val route: String) {
     object CollectionNested: NavItem("CollectionNested")
     object CollectionMenu: NavItem("CollectionMenu")
     object CollectionMapPick: NavItem("CollectionMapPick")
-    object CollectionMapDetail: NavItem("CollectionMapDetail")
     object CollectionMongPick: NavItem("CollectionMongPick")
-    object CollectionMongDetail: NavItem("CollectionMongDetail")
     /* SlotPick */
     object SlotPick: NavItem("SlotPick")
     /* Payment */

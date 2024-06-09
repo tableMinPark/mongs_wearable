@@ -5,93 +5,80 @@ import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.IMqttActionListener
 import org.eclipse.paho.client.mqttv3.IMqttToken
 import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
+import org.eclipse.paho.client.mqttv3.MqttException
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class MqttApi @Inject constructor(
-    private val context: Context,
     private val mqttAndroidClient: MqttAndroidClient
 ) {
-    private var isInit: Boolean = false
-    private var isConnected: Boolean = false
-
-    private lateinit var messageCallback: MqttCallback
-    private lateinit var connectDisableCallback: () -> Unit
-    private lateinit var connectSuccessCallback: () -> Unit
-
-    private val connectCallback = object : IMqttActionListener {
-        override fun onSuccess(asyncActionToken: IMqttToken?) {
-            CoroutineScope(Dispatchers.IO).launch {
-                this@MqttApi.isConnected = true
-                this@MqttApi.mqttAndroidClient.setCallback(this@MqttApi.messageCallback)
-                this@MqttApi.connectSuccessCallback()
+    suspend fun connect(messageCallback: MqttCallback) {
+        withContext(Dispatchers.IO) {
+            val options = MqttConnectOptions().apply {
+//                this.userName = username
+//                this.password = password?.toCharArray()
             }
-        }
-        override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-            CoroutineScope(Dispatchers.IO).launch {
-                this@MqttApi.isConnected = false
-                this@MqttApi.connectDisableCallback()
+
+            try {
+                mqttAndroidClient.setCallback(messageCallback)
+                mqttAndroidClient.connect(options).await()
+                Log.i("MqttApi", "connect.")
+            } catch (e: MqttException) {
+                Log.e("MqttApi", "connect fail.")
             }
         }
     }
 
-    fun init(
-        messageCallback: MqttCallback,
-        connectDisableCallback: () -> Unit,
-        connectSuccessCallback: () -> Unit
-    ) {
-        this.messageCallback = messageCallback
-        this.connectDisableCallback = connectDisableCallback
-        this.connectSuccessCallback = connectSuccessCallback
-        this.isInit = true
-        this.isConnected = false
-        this.connect()
-    }
-
-    fun subscribe(topic: String, mqttActionListener: IMqttActionListener) {
-        if (this.isConnected) {
-            this.mqttAndroidClient.subscribe(topic, 2, context, mqttActionListener)
-        } else {
-            Log.e("MqttApi", "[$topic] subscribe fail.")
+    suspend fun disConnect() {
+        withContext(Dispatchers.IO) {
+            if (mqttAndroidClient.isConnected) {
+                mqttAndroidClient.disconnect().await()
+                Log.i("MqttApi", "disconnect.")
+            } else {
+                Log.w("MqttApi", "disConnect fail.")
+            }
         }
     }
 
-    fun disSubscribe(topic: String) {
-        if (this.isConnected) {
-            this.mqttAndroidClient.unsubscribe(topic)
-            Log.i("MqttApi", "[$topic] disSubscribe.")
-        } else {
-            Log.w("MqttApi", "[$topic] not connected.")
+    suspend fun subscribe(topic: String) {
+        withContext(Dispatchers.IO) {
+            if (mqttAndroidClient.isConnected) {
+                mqttAndroidClient.subscribe(topic, 2).await()
+                Log.i("MqttApi", "[$topic] subscribe.")
+            } else {
+                Log.e("MqttApi", "[$topic] subscribe fail.")
+            }
         }
     }
 
-    fun connect() {
-        if (this.isInit) {
-            this.mqttAndroidClient.connect(MqttConnectOptions(), context, connectCallback)
-            Log.i("MqttApi", "connect.")
-        } else {
-            Log.w("MqttApi", "not init.")
+    suspend fun disSubscribe(topic: String) {
+        withContext(Dispatchers.IO) {
+            if (mqttAndroidClient.isConnected) {
+                mqttAndroidClient.unsubscribe(topic).await()
+                Log.i("MqttApi", "[$topic] unSubscribe.")
+            } else {
+                Log.e("MqttApi", "[$topic] unSubscribe fail.")
+            }
         }
     }
 
-    fun disConnect() {
-        if (this.isConnected) {
-            this.mqttAndroidClient.disconnect()
-            this.isConnected = false
-            Log.i("MqttApi", "disconnect.")
-        } else {
-            Log.w("MqttApi", "not connected.")
-        }
-    }
+    private suspend fun IMqttToken.await() = suspendCancellableCoroutine { cont ->
+        actionCallback = object : IMqttActionListener {
+            override fun onSuccess(asyncActionToken: IMqttToken?) {
+                cont.resume(Unit)
+            }
 
-    fun reset() {
-        this.disConnect()
-        this.isInit = false
-        this.isConnected = false
-        Log.i("MqttApi", "reset.")
+            override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+                cont.resumeWithException(exception ?: Exception("Unknown error"))
+            }
+        }
     }
 }

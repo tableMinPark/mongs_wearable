@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -67,7 +68,7 @@ fun Mong(
             }
         }
 
-        if (!isPng && !mong.isEgg) {
+        if (!isPng && mong.hasExpression) {
             Box(
                 modifier = Modifier.zIndex(1f)
             ) {
@@ -94,6 +95,7 @@ fun Mong(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .size((35 * ratio).dp)
+                        .offset(y = mong.yOffset.dp, x = mong.xOffset.dp)
                 )
             }
         }
@@ -103,5 +105,5 @@ fun Mong(
 @Preview(device = Devices.WEAR_OS_SMALL_ROUND)
 @Composable
 private fun MongPreview() {
-    Mong(mong = MongResourceCode.CH100, isPng = true)
+    Mong(mong = MongResourceCode.CH201, isPng = false)
 }

@@ -17,7 +17,7 @@ fun MainSlotEffect(
     slotVo: SlotVo,
     isPageChanging: Boolean,
     evolution: () -> Unit,
-    graduationCheck: () -> Unit,
+    graduationReady: () -> Unit,
     uiState: UiState,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
@@ -35,7 +35,7 @@ fun MainSlotEffect(
         ShiftCode.GRADUATE_READY -> {
             if (!isPageChanging && !slotVo.isGraduateCheck) {
                 GraduationEffect(
-                    graduationCheck = graduationCheck,
+                    graduationReady = graduationReady,
                     modifier = modifier,
                 )
             } else if(!isPageChanging) {

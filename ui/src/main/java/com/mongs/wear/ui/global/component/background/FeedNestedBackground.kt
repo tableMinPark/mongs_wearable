@@ -14,7 +14,7 @@ import androidx.compose.ui.zIndex
 import com.mongs.wear.ui.global.resource.MapResourceCode
 
 @Composable
-fun FeedMenuBackground(
+fun FeedNestedBackground(
     modifier: Modifier = Modifier.zIndex(0f)
 ) {
     val mapResourceCode = MapResourceCode.MP000.code
@@ -25,7 +25,7 @@ fun FeedMenuBackground(
     ) {
         Image(
             painter = painterResource(mapResourceCode),
-            contentDescription = "LoginBackground",
+            contentDescription = "FeedNestedBackground",
             contentScale = ContentScale.Crop
         )
     }
@@ -33,6 +33,6 @@ fun FeedMenuBackground(
 
 @Preview(showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
 @Composable
-private fun FeedMenuBackgroundPreview() {
-    LoginBackground()
+private fun FeedNestedBackgroundPreview() {
+    FeedNestedBackground()
 }

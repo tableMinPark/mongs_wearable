@@ -25,10 +25,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.wear.compose.material.Text
-import com.mongs.wear.ui.global.component.background.FeedMenuBackground
+import com.mongs.wear.ui.global.component.background.FeedNestedBackground
 import com.mongs.wear.ui.global.resource.NavItem
 import com.mongs.wear.ui.global.theme.DAL_MU_RI
-import com.mongs.wear.ui.global.theme.PaymongNavy
 import com.mongs.wear.ui.global.theme.PaymongWhite
 
 @Composable
@@ -36,7 +35,7 @@ fun FeedMenuView(
     navController: NavController,
 ) {
     Box {
-        FeedMenuBackground()
+        FeedNestedBackground()
         FeedMenuContent(
             feedFoodPick = {
                 navController.navigate(NavItem.FeedFoodPick.route)
@@ -131,7 +130,7 @@ private fun FeedMenuContent(
 @Composable
 private fun FeedMenuViewPreview() {
     Box {
-        FeedMenuBackground()
+        FeedNestedBackground()
         FeedMenuContent(
             feedFoodPick = {},
             feedSnackPick = {},
@@ -144,7 +143,7 @@ private fun FeedMenuViewPreview() {
 @Composable
 private fun LargeFeedMenuViewPreview() {
     Box {
-        FeedMenuBackground()
+        FeedNestedBackground()
         FeedMenuContent(
             feedFoodPick = {},
             feedSnackPick = {},

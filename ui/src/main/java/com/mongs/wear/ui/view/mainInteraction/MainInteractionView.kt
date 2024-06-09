@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,17 +38,15 @@ fun MainInteractionView(
     slotVo: State<SlotVo>,
     mainInteractionViewModel: MainInteractionViewModel = hiltViewModel(),
     context: Context = LocalContext.current,
-
-    ) {
+) {
     val isEgg = MongResourceCode.valueOf(slotVo.value.mongCode).isEgg
     val isMongEmpty = slotVo.value.shiftCode == ShiftCode.EMPTY || slotVo.value.shiftCode == ShiftCode.DELETE || slotVo.value.shiftCode == ShiftCode.DEAD
     val isGraduateReady = slotVo.value.shiftCode == ShiftCode.GRADUATE_READY
 
     Box {
         MainInteractionContent(
-            slotVo = slotVo.value,
             feed = {
-                if (isMongEmpty || isEgg) {
+                if (isMongEmpty || isEgg || slotVo.value.isSleeping) {
                     Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
                 } else {
                     navController.navigate(NavItem.FeedNested.route)
@@ -60,43 +59,57 @@ fun MainInteractionView(
                 if (isMongEmpty || isGraduateReady || isEgg) {
                     Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
                 } else {
-                    mainInteractionViewModel.sleep()
-                    scrollPage(1)
+                    mainInteractionViewModel.sleeping()
                 }
             },
             slotPick = {
                 navController.navigate(NavItem.SlotPick.route)
             },
             poopClean = {
-                if (isMongEmpty || isGraduateReady || isEgg) {
+                if (isMongEmpty || isGraduateReady || isEgg ||  slotVo.value.isSleeping) {
                     Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
                 } else {
-                    mainInteractionViewModel.poop()
-                    scrollPage(1)
+                    mainInteractionViewModel.poopClean()
                 }
             },
             training = {
-                if (isMongEmpty || isEgg) {
-                    Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
-                } else {
-//                    navController.navigate(NavItem.SlotPick.route)
-                }
+                Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()
+//                if (isMongEmpty || isEgg ||  slotVo.value.isSleeping) {
+//                    Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
+//                } else {
+//                    navController.navigate(NavItem.TrainingNested.route)
+//                }
             },
             battle = {
-                if (isMongEmpty || isEgg) {
-                    Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
-                } else {
-//                    navController.navigate(NavItem.SlotPick.route)
-                }
+                Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()
+//                if (isMongEmpty || isEgg || slotVo.value.isSleeping) {
+//                    Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
+//                } else {
+//                    navController.navigate(NavItem.BattleNested.route)
+//                }
             },
             modifier = Modifier.zIndex(1f)
         )
+    }
+
+    if (mainInteractionViewModel.uiState.navMainSlotView) {
+        mainInteractionViewModel.uiState.navMainSlotView = false
+        scrollPage(2)
+    }
+
+    if (mainInteractionViewModel.uiState.alertSleepingFail) {
+        mainInteractionViewModel.uiState.alertSleepingFail = false
+        Toast.makeText(context, "잠시후 다시 시도", Toast.LENGTH_SHORT).show()
+    }
+
+    if (mainInteractionViewModel.uiState.alertPoopCleanFail) {
+        mainInteractionViewModel.uiState.alertPoopCleanFail = false
+        Toast.makeText(context, "잠시후 다시 시도", Toast.LENGTH_SHORT).show()
     }
 }
 
 @Composable
 private fun MainInteractionContent(
-    slotVo: SlotVo,
     feed: () -> Unit,
     collection: () -> Unit,
     sleeping: () -> Unit,
@@ -189,7 +202,6 @@ private fun MainInteractionViewPreView() {
     Box {
         MainPagerBackground()
         MainInteractionContent(
-            slotVo = SlotVo(),
             training = {},
             battle = {},
             feed = {},
@@ -208,7 +220,6 @@ private fun LargeMainInteractionViewPreView() {
     Box {
         MainPagerBackground()
         MainInteractionContent(
-            slotVo = SlotVo(),
             training = {},
             battle = {},
             feed = {},

@@ -3,7 +3,7 @@ package com.mongs.wear.data.repository
 import com.mongs.wear.data.api.client.CollectionApi
 import com.mongs.wear.data.room.client.RoomDB
 import com.mongs.wear.domain.error.RepositoryErrorCode
-import com.mongs.wear.domain.exception.parent.ApiException
+import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.model.CollectionModel
 import com.mongs.wear.domain.repositroy.CollectionRepository
 import javax.inject.Inject
@@ -16,28 +16,31 @@ class CollectionRepositoryImpl @Inject constructor(
         val res = collectionApi.findMapCollection()
 
         if (res.isSuccessful) {
-            res.body()?.let { body ->
+            val body = res.body()!!
+            try {
                 return body.map { mapCollection ->
-                    val mapCode = roomDB.mapCodeDao().findByCode(code = mapCollection.code)
-
+                    val mapCode = roomDB.mapCodeDao().selectByCode(code = mapCollection.code)
                     CollectionModel(
                         code = mapCollection.code,
                         name = mapCode.name,
                         disable = mapCollection.disable,
                     )
                 }
+            } catch (e: RuntimeException) {
+                throw RepositoryException(RepositoryErrorCode.GET_MAP_COLLECTIONS_FAIL)
             }
+        } else {
+            throw RepositoryException(RepositoryErrorCode.GET_MAP_COLLECTIONS_FAIL)
         }
-
-        throw ApiException(RepositoryErrorCode.FIND_MAP_COLLECTION_FAIL)
     }
     override suspend fun getMongCollections(): List<CollectionModel> {
         val res = collectionApi.findMongCollection()
 
         if (res.isSuccessful) {
-            res.body()?.let { body ->
+            val body = res.body()!!
+            try {
                 return body.map { mongCollection ->
-                    val mongCode = roomDB.mongCodeDao().findByCode(code = mongCollection.code)
+                    val mongCode = roomDB.mongCodeDao().selectByCode(code = mongCollection.code)
 
                     CollectionModel(
                         code = mongCollection.code,
@@ -45,9 +48,11 @@ class CollectionRepositoryImpl @Inject constructor(
                         disable = mongCollection.disable,
                     )
                 }
+            } catch (e: RuntimeException) {
+                throw RepositoryException(RepositoryErrorCode.GET_MONG_COLLECTIONS_FAIL)
             }
+        } else {
+            throw RepositoryException(RepositoryErrorCode.GET_MONG_COLLECTIONS_FAIL)
         }
-
-        throw ApiException(RepositoryErrorCode.FIND_MONG_COLLECTION_FAIL)
     }
 }

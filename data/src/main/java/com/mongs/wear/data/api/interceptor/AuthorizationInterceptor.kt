@@ -4,7 +4,7 @@ import com.mongs.wear.data.api.client.AuthApi
 import com.mongs.wear.data.dataStore.MemberDataStore
 import com.mongs.wear.data.dto.auth.req.ReissueReqDto
 import com.mongs.wear.domain.error.RepositoryErrorCode
-import com.mongs.wear.domain.exception.parent.ApiException
+import com.mongs.wear.domain.exception.RepositoryException
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Interceptor.Chain
@@ -50,9 +50,9 @@ class AuthorizationInterceptor (
 
                         return@runBlocking newAccessToken
                     }
-                } else {
-                    throw ApiException(RepositoryErrorCode.REISSUE_FAIL)
                 }
+
+                throw RepositoryException(RepositoryErrorCode.REISSUE_FAIL)
             }
 
             val newRequest = chain.request().newBuilder()

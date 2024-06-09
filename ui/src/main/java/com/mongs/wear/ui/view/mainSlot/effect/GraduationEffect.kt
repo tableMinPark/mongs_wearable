@@ -32,12 +32,12 @@ private val delayList = listOf(
     300L,
     400L,
     500L,
-    1000,
+    2000L,
 )
 
 @Composable
 fun GraduationEffect(
-    graduationCheck: () -> Unit = {},
+    graduationReady: () -> Unit = {},
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
     var nowStep by remember { mutableIntStateOf(0) }
@@ -47,7 +47,7 @@ fun GraduationEffect(
             nowStep = step
             delay(delayList[step])
         }
-        graduationCheck()
+        graduationReady()
     }
 
     Box(

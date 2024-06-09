@@ -8,7 +8,7 @@ import com.mongs.wear.data.room.entity.FeedbackLog
 @Dao
 interface FeedbackLogDao {
     @Insert
-    fun register(feedbackLog: FeedbackLog)
+    fun insert(feedbackLog: FeedbackLog)
     @Query("SELECT * FROM feedback_log WHERE groupCode = :groupCode")
-    fun findByGroupCode(groupCode: String): List<FeedbackLog>
+    fun selectByGroupCode(groupCode: String): List<FeedbackLog>
 }

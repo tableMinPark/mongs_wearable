@@ -33,103 +33,53 @@ class RealTimeRepositoryImpl @Inject constructor(
         .create()
 
     // CALLBACK
-    override suspend fun memberStarPointCallback(json: String) {
-        val type: Type = object : TypeToken<BasicPublish<MemberStarPointVo>>() {}.type
-        val res: BasicPublish<MemberStarPointVo> = gson.fromJson(json, type)
-        val body = res.data
-
-        memberDataStore.setStarPoint(starPoint = body.starPoint)
+    override suspend fun memberStarPointCallback(dataJson: String) {
+        val data: MemberStarPointVo = gson.fromJson(dataJson, MemberStarPointVo::class.java)
+        memberDataStore.setStarPoint(starPoint = data.starPoint)
     }
-
-    override suspend fun mongCodeCallback(json: String) {
-        val type: Type = object : TypeToken<BasicPublish<MongCodeVo>>() {}.type
-        val res: BasicPublish<MongCodeVo> = gson.fromJson(json, type)
-        val body = res.data
-
-        roomDB.slotDao().findByMongId(mongId = body.mongId).let { slot ->
-            slot.mongCode = body.mongCode
-            roomDB.slotDao().update(slot)
-        }
+    override suspend fun mongCodeCallback(dataJson: String) {
+        val data: MongCodeVo = gson.fromJson(dataJson, MongCodeVo::class.java)
+        roomDB.slotDao().updateMongCodeByMqtt(mongId = data.mongId, mongCode = data.mongCode)
     }
-
-    override suspend fun mongExpCallback(json: String) {
-        val type: Type = object : TypeToken<BasicPublish<MongExpVo>>() {}.type
-        val res: BasicPublish<MongExpVo> = gson.fromJson(json, type)
-        val body = res.data
-
-        roomDB.slotDao().findByMongId(mongId = body.mongId).let { slot ->
-            slot.exp = body.expPercent
-            roomDB.slotDao().update(slot)
-        }
+    override suspend fun mongExpCallback(dataJson: String) {
+        val data: MongExpVo = gson.fromJson(dataJson, MongExpVo::class.java)
+        roomDB.slotDao().updateExpByMqtt(mongId = data.mongId, exp = data.expPercent)
     }
-
-    override suspend fun mongIsSleepingCallback(json: String) {
-        val type: Type = object : TypeToken<BasicPublish<MongIsSleepingVo>>() {}.type
-        val res: BasicPublish<MongIsSleepingVo> = gson.fromJson(json, type)
-        val body = res.data
-
-        roomDB.slotDao().findByMongId(mongId = body.mongId).let { slot ->
-            slot.isSleeping = body.isSleeping
-            roomDB.slotDao().update(slot)
-        }
+    override suspend fun mongIsSleepingCallback(dataJson: String) {
+        val data: MongIsSleepingVo = gson.fromJson(dataJson, MongIsSleepingVo::class.java)
+        roomDB.slotDao().updateIsSleepingByMqtt(mongId = data.mongId, isSleeping = data.isSleeping)
     }
-
-    override suspend fun mongPayPointCallback(json: String) {
-        val type: Type = object : TypeToken<BasicPublish<MongPayPointVo>>() {}.type
-        val res: BasicPublish<MongPayPointVo> = gson.fromJson(json, type)
-        val body = res.data
-
-        roomDB.slotDao().findByMongId(mongId = body.mongId).let { slot ->
-            slot.payPoint = body.payPoint
-            roomDB.slotDao().update(slot)
-        }
+    override suspend fun mongPayPointCallback(dataJson: String) {
+        val data: MongPayPointVo = gson.fromJson(dataJson, MongPayPointVo::class.java)
+        roomDB.slotDao().updatePayPointByMqtt(mongId = data.mongId, payPoint = data.payPoint)
     }
-
-    override suspend fun mongPoopCountCallback(json: String) {
-        val type: Type = object : TypeToken<BasicPublish<MongPoopCountVo>>() {}.type
-        val res: BasicPublish<MongPoopCountVo> = gson.fromJson(json, type)
-        val body = res.data
-
-        roomDB.slotDao().findByMongId(mongId = body.mongId).let { slot ->
-            slot.poopCount = body.poopCount
-            roomDB.slotDao().update(slot)
-        }
+    override suspend fun mongPoopCountCallback(dataJson: String) {
+        val data: MongPoopCountVo = gson.fromJson(dataJson, MongPoopCountVo::class.java)
+        roomDB.slotDao().updatePoopCountByMqtt(mongId = data.mongId, poopCount = data.poopCount)
     }
-
-    override suspend fun mongShiftCallback(json: String) {
-        val type: Type = object : TypeToken<BasicPublish<MongShiftVo>>() {}.type
-        val res: BasicPublish<MongShiftVo> = gson.fromJson(json, type)
-        val body = res.data
-
-        roomDB.slotDao().findByMongId(mongId = body.mongId).let { slot ->
-            slot.shiftCode = Shift.valueOf(body.shiftCode).code
-            roomDB.slotDao().update(slot)
-        }
+    override suspend fun mongShiftCallback(dataJson: String) {
+        val data: MongShiftVo = gson.fromJson(dataJson, MongShiftVo::class.java)
+        roomDB.slotDao().updateShiftCodeByMqtt(
+            mongId = data.mongId,
+            shiftCode = Shift.valueOf(data.shiftCode).code
+        )
     }
-
-    override suspend fun mongStateCallback(json: String) {
-        val type: Type = object : TypeToken<BasicPublish<MongStateVo>>() {}.type
-        val res: BasicPublish<MongStateVo> = gson.fromJson(json, type)
-        val body = res.data
-
-        roomDB.slotDao().findByMongId(mongId = body.mongId).let { slot ->
-            slot.stateCode = State.valueOf(body.stateCode).code
-            roomDB.slotDao().update(slot)
-        }
+    override suspend fun mongStateCallback(dataJson: String) {
+        val data: MongStateVo = gson.fromJson(dataJson, MongStateVo::class.java)
+        roomDB.slotDao().updateStateCodeByMqtt(
+            mongId = data.mongId,
+            stateCode = State.valueOf(data.stateCode).code
+        )
     }
-
-    override suspend fun mongStatusCallback(json: String) {
-        val type: Type = object : TypeToken<BasicPublish<MongStatusVo>>() {}.type
-        val res: BasicPublish<MongStatusVo> = gson.fromJson(json, type)
-        val body = res.data
-
-        roomDB.slotDao().findByMongId(mongId = body.mongId).let { slot ->
-            slot.weight = body.weight
-            slot.strength = body.strengthPercent
-            slot.satiety = body.satietyPercent
-            slot.healthy = body.healthyPercent
-            slot.sleep = body.sleepPercent
-            roomDB.slotDao().update(slot)
-        }
+    override suspend fun mongStatusCallback(dataJson: String) {
+        val data: MongStatusVo = gson.fromJson(dataJson, MongStatusVo::class.java)
+        roomDB.slotDao().updateStatusByMqtt(
+            mongId = data.mongId,
+            weight = data.weight,
+            strength = data.strengthPercent,
+            satiety = data.satietyPercent,
+            healthy = data.healthyPercent,
+            sleep = data.sleepPercent
+        )
     }
 }

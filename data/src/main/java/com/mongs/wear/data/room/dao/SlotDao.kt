@@ -6,202 +6,79 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.mongs.wear.data.room.entity.MongCode
 import com.mongs.wear.data.room.entity.Slot
 import com.mongs.wear.domain.code.ShiftCode
 import com.mongs.wear.domain.code.StateCode
+import java.lang.Thread.State
 
 @Dao
 interface SlotDao {
+
+    /**
+     * SELECT 메서드
+     */
+    @Query("SELECT * FROM slot WHERE mongId = :mongId")
+    fun selectByMongId(mongId: Long): Slot
+    @Query("SELECT * FROM slot WHERE mongId = :mongId")
+    fun selectByMongIdLive(mongId: Long): LiveData<Slot>
+    @Query("SELECT * FROM slot WHERE isSelected = true")
+    fun selectByIsSelectedTrue(): Slot?
+    @Query("SELECT * FROM slot")
+    fun selectAll(): List<Slot>
+    @Query("SELECT * FROM slot")
+    fun selectAllLive(): LiveData<List<Slot>>
+
+    /**
+     * INSERT 메서드
+     */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(slot: Slot)
+
+    /**
+     * UPDATE 메서드
+     */
     @Update
     fun update(slot: Slot)
-    /**
-     *
-     * id 값 조회
-     *
-     */
-    @Query("SELECT mongId FROM slot WHERE isSelected = 1")
-    fun findMongIdIsSelectedTrue(): Long?
+    @Query("UPDATE slot SET isSelected = :isSelected WHERE mongId = :mongId")
+    fun updateIsSelectedBySetNowSlot(mongId: Long, isSelected: Boolean)
+    @Query("UPDATE slot SET payPoint = :payPoint, weight = :weight, strength = :strength, satiety = :satiety, healthy = :healthy, sleep = :sleep, exp = :exp WHERE mongId = :mongId")
+    fun updateByFeedMong(mongId: Long, payPoint: Int, weight: Double, strength: Double, satiety: Double, healthy: Double, sleep: Double, exp: Double)
+    @Query("UPDATE slot SET isGraduateCheck = true WHERE mongId = :mongId")
+    fun updateByGraduateReadyMong(mongId: Long)
+    @Query("UPDATE slot SET mongCode = :mongCode, shiftCode = :shiftCode, stateCode = :stateCode, weight = :weight, strength = :strength, satiety = :satiety, healthy = :healthy, sleep = :sleep, exp = :exp WHERE mongId = :mongId")
+    fun updateByEvolutionMong(mongId: Long, mongCode: String, shiftCode: ShiftCode, stateCode: StateCode, weight: Double, strength: Double, satiety: Double, healthy: Double, sleep: Double, exp: Double)
+    @Query("UPDATE slot SET isSleeping = :isSleeping WHERE mongId = :mongId")
+    fun updateBySleepingMong(mongId: Long, isSleeping: Boolean)
+    @Query("UPDATE slot SET exp = :exp WHERE mongId = :mongId")
+    fun updateByStrokeMong(mongId: Long, exp: Double)
+    @Query("UPDATE slot SET poopCount = :poopCount, exp = :exp WHERE mongId = :mongId")
+    fun updateByPoopCleanMong(mongId: Long, poopCount: Int, exp: Double)
+    @Query("UPDATE slot SET isHappy = :isHappy WHERE mongId = :mongId")
+    fun updateIsHappyByStrokeMong(mongId: Long, isHappy: Boolean)
+    @Query("UPDATE slot SET isEating = :isEating WHERE mongId = :mongId")
+    fun updateIsEatingByFeedMong(mongId: Long, isEating: Boolean)
+
+    @Query("UPDATE slot SET mongCode = :mongCode WHERE mongId = :mongId")
+    fun updateMongCodeByMqtt(mongId: Long, mongCode: String)
+    @Query("UPDATE slot SET exp = :exp WHERE mongId = :mongId")
+    fun updateExpByMqtt(mongId: Long, exp: Double)
+    @Query("UPDATE slot SET isSleeping = :isSleeping WHERE mongId = :mongId")
+    fun updateIsSleepingByMqtt(mongId: Long, isSleeping: Boolean)
+    @Query("UPDATE slot SET payPoint = :payPoint WHERE mongId = :mongId")
+    fun updatePayPointByMqtt(mongId: Long, payPoint: Int)
+    @Query("UPDATE slot SET poopCount = :poopCount WHERE mongId = :mongId")
+    fun updatePoopCountByMqtt(mongId: Long, poopCount: Int)
+    @Query("UPDATE slot SET shiftCode = :shiftCode WHERE mongId = :mongId")
+    fun updateShiftCodeByMqtt(mongId: Long, shiftCode: ShiftCode)
+    @Query("UPDATE slot SET stateCode = :stateCode WHERE mongId = :mongId")
+    fun updateStateCodeByMqtt(mongId: Long, stateCode: StateCode)
+    @Query("UPDATE slot SET weight = :weight, strength = :strength, satiety = :satiety, healthy = :healthy, sleep = :sleep WHERE mongId = :mongId")
+    fun updateStatusByMqtt(mongId: Long, weight: Double, strength: Double, satiety: Double, healthy: Double, sleep: Double)
 
     /**
-     *
-     * 슬롯 관리 (생성, 삭제, 전체 조회 등)
-     *
+     * DELETE 메서드
      */
-    @Update
-    fun modifySlot(slot: Slot)
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun register(slot: Slot)
-    @Query("DELETE FROM slot WHERE mongId NOT IN ( :mongIdList )")
-    fun deleteByMongIdIn(mongIdList: List<Long>)
-    @Query("SELECT * FROM slot WHERE mongId = :mongId")
-    fun findByMongId(mongId: Long): Slot
-    @Query("SELECT mongId FROM slot ORDER BY mongId DESC LIMIT 1")
-    fun findTopMongIdOrderByMongId(): Long?
-    @Query("SELECT COUNT(mongId) FROM slot WHERE isSelected = 1")
-    fun countIsSelectedTrue(): Int
-    @Query("SELECT COUNT(mongId) FROM slot WHERE mongId = :mongId")
-    fun countByMongId(mongId: Long): Int
-    @Query("UPDATE slot SET isSelected = :isSelected WHERE mongId = :mongId")
-    fun modifyIsSelectedByMongId(mongId: Long, isSelected: Boolean)
-    @Query("SELECT * FROM slot WHERE isSelected = 1")
-    fun findByIsSelectedTrue(): Slot
-    @Query("SELECT * FROM slot WHERE isSelected = 1")
-    fun findByIsSelectedTrueLive(): LiveData<Slot>
-    @Query("SELECT * FROM slot")
-    fun findAll(): LiveData<List<Slot>>
     @Query("DELETE FROM slot WHERE mongId = :mongId")
     fun deleteByMongId(mongId: Long)
-    @Query("DELETE FROM slot WHERE shiftCode = :shiftCode")
-    fun deleteByIsDeletedTrue(shiftCode: ShiftCode = ShiftCode.DELETE)
-    @Query("DELETE FROM slot")
-    fun deleteAll()
-
-    /**
-     *
-     * 상태 변경 사항 적용
-     *
-     */
-    @Query("UPDATE slot SET stateCode = :stateCode WHERE isSelected = 1")
-    fun modifyStateCodeIsSelectedTrue(stateCode: StateCode)
-    @Query("SELECT stateCode FROM slot WHERE isSelected = 1")
-    fun findStateCodeIsSelectedTrue(): String
-    @Query("UPDATE slot SET shiftCode = :shiftCode WHERE isSelected = 1")
-    fun modifyShiftCodeIsSelectedTrue(shiftCode: ShiftCode)
-    @Query("SELECT shiftCode FROM slot WHERE isSelected = 1")
-    fun findShiftCodeIsSelectedTrue(): String
-    @Query("UPDATE slot SET isHappy = :isHappy WHERE mongId = :mongId")
-    fun modifyIsHappyByMongId(isHappy: Boolean, mongId: Long)
-    @Query("UPDATE slot SET isEating = :isEating WHERE mongId = :mongId")
-    fun modifyIsEatingByMongId(isEating: Boolean, mongId: Long)
-
-    /**
-     *
-     * 지수 변경 사항 적용
-     *
-     */
-    @Query("UPDATE slot SET " +
-            "weight = :weight, " +
-            "strength = :strength, " +
-            "satiety = :satiety, " +
-            "healthy = :healthy, " +
-            "sleep = :sleep " +
-            "WHERE mongId = :mongId")
-    fun modifyStatusByMongId(
-        mongId: Long,
-        weight: Double,
-        strength: Double,
-        satiety: Double,
-        healthy: Double,
-        sleep: Double)
-    @Query("UPDATE slot SET poopCount = :poopCount WHERE mongId = :mongId")
-    fun modifyPoopCountByMongId(mongId: Long, poopCount: Int)
-
-    /**
-     *
-     * 스케줄링 이후 변경 사항 적용
-     *
-     */
-    @Query("UPDATE slot SET shiftCode = :shiftCode WHERE mongId = :mongId")
-    fun modifyShiftCodeByMongId(mongId: Long, shiftCode: ShiftCode)
-    @Query("UPDATE slot SET stateCode = :stateCode WHERE mongId = :mongId")
-    fun modifyStateCodeByMongId(mongId: Long, stateCode: StateCode)
-    @Query("UPDATE slot SET isGraduateCheck = true WHERE mongId = :mongId")
-    fun modifyIsGraduateCheckTrueByMongId(mongId: Long)
-
-
-    /**
-     *
-     * 활동 이후 변경 사항 적용
-     *
-     */
-    @Query("UPDATE slot SET shiftCode = :shiftCode WHERE mongId = :mongId")
-    fun modifyAfterEvolutionReady(mongId: Long, shiftCode: ShiftCode)
-    @Query("UPDATE slot SET exp = :exp WHERE mongId = :mongId")
-    fun modifyAfterStroke(mongId: Long, exp: Double)
-    @Query("UPDATE slot SET isSleeping = :isSleeping WHERE mongId = :mongId")
-    fun modifyAfterSleeping(mongId: Long, isSleeping: Boolean)
-    @Query("UPDATE slot SET poopCount = :poopCount, exp = :exp WHERE mongId = :mongId")
-    fun modifyAfterPoopClean(mongId: Long, poopCount: Int, exp: Double)
-    @Query("UPDATE slot SET " +
-            "shiftCode = :shiftCode, " +
-            "stateCode = :stateCode, " +
-            "weight = :weight, " +
-            "strength = :strength, " +
-            "satiety = :satiety, " +
-            "healthy = :healthy, " +
-            "sleep = :sleep, " +
-            "exp = :exp, " +
-            "poopCount = :poopCount," +
-            "isSleeping = :isSleeping " +
-            "WHERE mongId = :mongId")
-    fun modifyAfterDead(
-        mongId: Long,
-        shiftCode: ShiftCode,
-        stateCode: StateCode,
-        weight: Double,
-        strength: Double,
-        satiety: Double,
-        healthy: Double,
-        sleep: Double,
-        exp: Double,
-        poopCount: Int,
-        isSleeping: Boolean)
-    @Query("UPDATE slot SET " +
-            "weight = :weight, " +
-            "strength = :strength, " +
-            "satiety = :satiety, " +
-            "healthy = :healthy, " +
-            "sleep = :sleep, " +
-            "exp = :exp, " +
-            "payPoint = :payPoint " +
-            "WHERE mongId = :mongId")
-    fun modifyAfterFeed(
-        mongId: Long,
-        weight: Double,
-        strength: Double,
-        satiety: Double,
-        healthy: Double,
-        sleep: Double,
-        exp: Double,
-        payPoint: Int)
-    @Query("UPDATE slot SET " +
-            "weight = :weight, " +
-            "strength = :strength, " +
-            "satiety = :satiety, " +
-            "healthy = :healthy, " +
-            "sleep = :sleep, " +
-            "exp = :exp, " +
-            "stateCode = :stateCode, " +
-            "shiftCode = :shiftCode, " +
-            "mongCode = :mongCode " +
-            "WHERE mongId = :mongId")
-    fun modifyAfterEvolution(
-        mongId: Long,
-        mongCode: String,
-        weight: Double,
-        strength: Double,
-        satiety: Double,
-        healthy: Double,
-        sleep: Double,
-        shiftCode: ShiftCode,
-        stateCode: StateCode,
-        exp: Double)
-    @Query("UPDATE slot SET " +
-            "weight = :weight, " +
-            "strength = :strength, " +
-            "satiety = :satiety, " +
-            "healthy = :healthy, " +
-            "sleep = :sleep, " +
-            "exp = :exp, " +
-            "payPoint = :payPoint " +
-            "WHERE mongId = :mongId")
-    fun modifyAfterTraining(
-        mongId: Long,
-        weight: Double,
-        strength: Double,
-        satiety: Double,
-        healthy: Double,
-        sleep: Double,
-        exp: Double,
-        payPoint: Int)
 }

@@ -1,4 +1,4 @@
-package com.mongs.wear.domain.exception.parent
+package com.mongs.wear.domain.exception
 
 import com.mongs.wear.domain.error.ErrorCode
 

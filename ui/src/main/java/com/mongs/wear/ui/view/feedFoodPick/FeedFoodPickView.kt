@@ -1,6 +1,5 @@
 package com.mongs.wear.ui.view.feedFoodPick
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -35,7 +34,7 @@ import androidx.navigation.NavController
 import androidx.wear.compose.material.PageIndicatorState
 import androidx.wear.compose.material.Text
 import com.mongs.wear.domain.vo.FoodVo
-import com.mongs.wear.ui.global.component.background.FeedMenuBackground
+import com.mongs.wear.ui.global.component.background.FeedNestedBackground
 import com.mongs.wear.ui.global.component.button.BlueButton
 import com.mongs.wear.ui.global.component.button.LeftButton
 import com.mongs.wear.ui.global.component.button.RightButton
@@ -74,7 +73,7 @@ fun FeedFoodPickView(
 
     Box {
         if (feedFoodPickViewModel.uiState.loadingBar) {
-            FeedMenuBackground()
+            FeedNestedBackground()
             FeedFoodPickLoadingBar()
         } else if (feedFoodPickViewModel.uiState.detailDialog) {
             FeedItemDetailDialog(
@@ -89,9 +88,7 @@ fun FeedFoodPickView(
             ConfirmDialog(
                 text = "구매하시겠습니까?",
                 confirm = {
-                    scrollPage(1)
                     feedFoodPickViewModel.uiState.loadingBar = true
-                    feedFoodPickViewModel.uiState.buyDialog = false
                     feedFoodPickViewModel.buyFood(foodVoList.value[foodVoIndex.intValue].code)
                 },
                 cancel = {
@@ -99,7 +96,7 @@ fun FeedFoodPickView(
                 }
             )
         } else {
-            FeedMenuBackground()
+            FeedNestedBackground()
             PageIndicator(
                 pageIndicatorState = pageIndicatorState,
                 modifier = Modifier.zIndex(1f)
@@ -117,6 +114,7 @@ fun FeedFoodPickView(
     }
 
     if (feedFoodPickViewModel.uiState.navMainPager) {
+        scrollPage(2)
         navController.popBackStack(route = NavItem.FeedNested.route, inclusive = true)
     }
     if (feedFoodPickViewModel.uiState.navFeedMenu) {
@@ -162,6 +160,7 @@ private fun FeedFoodPickContent(
             Spacer(modifier = Modifier.height(15.dp))
 
             Row(
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -253,11 +252,10 @@ private fun FeedFoodPickContent(
                     .weight(0.25f)
             ) {
                 BlueButton(
-                    text = "${foodVo.price}",
-                    height = 35,
+                    text = "$${foodVo.price}",
                     width = 70,
-                    disable = !foodVo.isCanBuy,
-                    onClick = { if (foodVo.isCanBuy) buyDialog() },
+                    disable = !foodVo.isCanBuy || foodVo.price > payPoint,
+                    onClick = buyDialog,
                 )
             }
 
@@ -270,7 +268,20 @@ private fun FeedFoodPickContent(
 @Composable
 private fun FeedSnackPickViewPreview() {
     Box {
-        FeedMenuBackground()
+        FeedNestedBackground()
+        PageIndicator(
+            pageIndicatorState = remember {
+                object : PageIndicatorState {
+                    override val pageOffset: Float
+                        get() = 0f
+                    override val selectedPage: Int
+                        get() = 0
+                    override val pageCount: Int
+                        get() = 5
+                }
+            },
+            modifier = Modifier.zIndex(1f)
+        )
         FeedFoodPickContent(
             payPoint = 0,
             foodVo = FoodVo(name = "별사탕", isCanBuy = true),
@@ -287,7 +298,20 @@ private fun FeedSnackPickViewPreview() {
 @Composable
 private fun LargeFeedSnackPickViewPreview() {
     Box {
-        FeedMenuBackground()
+        FeedNestedBackground()
+        PageIndicator(
+            pageIndicatorState = remember {
+                object : PageIndicatorState {
+                    override val pageOffset: Float
+                        get() = 0f
+                    override val selectedPage: Int
+                        get() = 0
+                    override val pageCount: Int
+                        get() = 5
+                }
+            },
+            modifier = Modifier.zIndex(1f)
+        )
         FeedFoodPickContent(
             payPoint = 0,
             foodVo = FoodVo(name = "별사탕", isCanBuy = true),

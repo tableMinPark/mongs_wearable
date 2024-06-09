@@ -11,28 +11,38 @@ import com.mongs.wear.ui.viewModel.mainActivity.MainActivityViewModel
 import com.mongs.wear.ui.global.theme.MongsTheme
 import dagger.hilt.android.AndroidEntryPoint
 import android.Manifest
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import com.mongs.wear.ui.view.main.MainView
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val mainActivityViewModel: MainActivityViewModel by viewModels()
+    private lateinit var sensorManager: SensorManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-            PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
-            PackageManager.PERMISSION_GRANTED) {
+        if (
+//            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+//            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED
+        ) {
             val permissions = arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+//                Manifest.permission.ACCESS_FINE_LOCATION,
+//                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACTIVITY_RECOGNITION,
             )
             ActivityCompat.requestPermissions(this, permissions, 100)
         }
 
-        mainActivityViewModel.initDeviceInfo(applicationContext.packageManager.getPackageInfo(packageName, 0).versionName)
+        sensorManager = application.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        mainActivityViewModel.initSensor(sensorManager = sensorManager)
+        mainActivityViewModel.initDeviceInfo(buildVersion = applicationContext.packageManager.getPackageInfo(packageName, 0).versionName)
         mainActivityViewModel.initMqtt()
 
         setContent {

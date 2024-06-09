@@ -16,7 +16,7 @@ class SubscribeCallback(
     override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
         asyncActionToken?.let {
             Log.i("SubscribeCallback", "[${it.topics[0]}] subscribe fail.")
-            disconnect()
+//            disconnect()
         }
     }
 }

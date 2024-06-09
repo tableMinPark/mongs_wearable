@@ -3,8 +3,9 @@ package com.mongs.wear.data.repository
 import com.mongs.wear.data.api.client.AuthApi
 import com.mongs.wear.data.dto.auth.req.LoginReqDto
 import com.mongs.wear.data.dto.auth.req.LogoutReqDto
+import com.mongs.wear.domain.client.MqttClient
 import com.mongs.wear.domain.error.RepositoryErrorCode
-import com.mongs.wear.domain.exception.parent.ApiException
+import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.model.LoginModel
 import com.mongs.wear.domain.repositroy.AuthRepository
 import javax.inject.Inject
@@ -22,16 +23,16 @@ class AuthRepositoryImpl @Inject constructor(
         )
 
         if (res.isSuccessful) {
-            res.body()?.let { body ->
-                return LoginModel(
-                    accountId = body.accountId,
-                    accessToken = body.accessToken,
-                    refreshToken = body.refreshToken,
-                )
-            }
-        }
+            val body = res.body()!!
 
-        throw ApiException(RepositoryErrorCode.LOGIN_FAIL)
+            return LoginModel(
+                accountId = body.accountId,
+                accessToken = body.accessToken,
+                refreshToken = body.refreshToken,
+            )
+        } else {
+            throw RepositoryException(RepositoryErrorCode.LOGIN_FAIL)
+        }
     }
     override suspend fun logout(refreshToken: String): Long {
         val res = authApi.logout(
@@ -41,11 +42,10 @@ class AuthRepositoryImpl @Inject constructor(
         )
 
         if (res.isSuccessful) {
-            res.body()?.let { body ->
-                return body.accountId
-            }
+            val body = res.body()!!
+            return body.accountId
+        } else {
+            throw RepositoryException(RepositoryErrorCode.LOGOUT_FAIL)
         }
-
-        throw ApiException(RepositoryErrorCode.LOGOUT_FAIL)
     }
 }

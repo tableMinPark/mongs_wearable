@@ -1,9 +1,12 @@
 package com.mongs.wear.ui.view.mainSlot
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.zIndex
@@ -12,6 +15,7 @@ import androidx.navigation.NavController
 import com.mongs.wear.domain.code.ShiftCode
 import com.mongs.wear.domain.vo.SlotVo
 import com.mongs.wear.ui.global.component.background.MainPagerBackground
+import com.mongs.wear.ui.global.resource.MongResourceCode
 import com.mongs.wear.ui.global.resource.NavItem
 import com.mongs.wear.ui.viewModel.mainSlot.MainSlotViewModel
 import com.mongs.wear.ui.viewModel.mainSlot.MainSlotViewModel.UiState
@@ -25,24 +29,39 @@ fun MainSlotView(
     mainSlotViewModel: MainSlotViewModel = hiltViewModel(),
 ) {
     Box {
+        val isEgg = MongResourceCode.valueOf(slotVo.value.mongCode).isEgg
+
         MainSlotContent(
             slotVo = slotVo.value,
             isPageChanging = isPageChanging.value,
-            stroke = mainSlotViewModel::stroke,
+            stroke = {
+                if (!isEgg && !slotVo.value.isSleeping) {
+                    mainSlotViewModel.stroke()
+                }
+            },
             navSlotPick = {
-                scrollPage(2)
+                scrollPage(3)
                 navController.navigate(NavItem.SlotPick.route)
             },
+            uiState = mainSlotViewModel.uiState,
             modifier = Modifier.zIndex(1f)
         )
         MainSlotEffect(
             slotVo = slotVo.value,
             isPageChanging = isPageChanging.value,
             evolution = mainSlotViewModel::evolution,
-            graduationCheck = mainSlotViewModel::graduationCheck,
+            graduationReady = mainSlotViewModel::graduationReady,
             uiState = mainSlotViewModel.uiState,
             modifier = Modifier.zIndex(2f),
         )
+        if (slotVo.value.isSleeping && !isPageChanging.value) {
+            Box(
+                modifier = Modifier
+                    .background(color = Color.Black.copy(alpha = 0.5f))
+                    .fillMaxSize()
+                    .zIndex(3f)
+            )
+        }
     }
 }
 
@@ -61,12 +80,13 @@ private fun MainSlotViewPreview() {
             isPageChanging = false,
             stroke = {},
             navSlotPick = {},
+            uiState = UiState(),
             modifier = Modifier.zIndex(1f),
         )
         MainSlotEffect(
             slotVo = slotVo,
             evolution = {},
-            graduationCheck = {},
+            graduationReady = {},
             isPageChanging = false,
             uiState = UiState(),
             modifier = Modifier.zIndex(2f),
@@ -89,13 +109,14 @@ private fun MainSlotViewLargePreview() {
             isPageChanging = false,
             stroke = {},
             navSlotPick = {},
+            uiState = UiState(),
             modifier = Modifier.zIndex(1f),
         )
         MainSlotEffect(
             slotVo = slotVo,
             isPageChanging = false,
             evolution = {},
-            graduationCheck = {},
+            graduationReady = {},
             uiState = UiState(),
             modifier = Modifier.zIndex(2f),
         )

@@ -1,7 +1,7 @@
 package com.mongs.wear.domain.usecase.feed
 
-import com.mongs.wear.domain.exception.parent.RepositoryException
-import com.mongs.wear.domain.exception.parent.UseCaseException
+import com.mongs.wear.domain.exception.RepositoryException
+import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.repositroy.CodeRepository
 import com.mongs.wear.domain.repositroy.ManagementRepository
 import com.mongs.wear.domain.repositroy.SlotRepository

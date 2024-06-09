@@ -3,6 +3,7 @@ package com.mongs.wear.data.dataStore
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LiveData
@@ -25,6 +26,7 @@ class MemberDataStore @Inject constructor(
         private val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
         private val STAR_POINT = intPreferencesKey("STAR_POINT")
         private val MAX_SLOT = intPreferencesKey("MAX_SLOT")
+        private val WALKING_COUNT = intPreferencesKey("WALKING_COUNT")
     }
 
     init {
@@ -42,10 +44,12 @@ class MemberDataStore @Inject constructor(
                 if (!preferences.contains(MAX_SLOT)) {
                     preferences[MAX_SLOT] = 1
                 }
+                if (!preferences.contains(WALKING_COUNT)) {
+                    preferences[WALKING_COUNT] = 0
+                }
             }
         }
     }
-
     suspend fun setAccessToken(accessToken: String) {
         context.member.edit { preferences ->
             preferences[ACCESS_TOKEN] = accessToken
@@ -58,7 +62,6 @@ class MemberDataStore @Inject constructor(
             }.first()
         }
     }
-
     suspend fun setRefreshToken(refreshToken: String) {
         context.member.edit { preferences ->
             preferences[REFRESH_TOKEN] = refreshToken
@@ -71,7 +74,6 @@ class MemberDataStore @Inject constructor(
             }.first()
         }
     }
-
     suspend fun setStarPoint(starPoint: Int) {
         context.member.edit { preferences ->
             preferences[STAR_POINT] = starPoint
@@ -82,17 +84,35 @@ class MemberDataStore @Inject constructor(
             preferences[STAR_POINT]!!
         }.asLiveData()
     }
-
     suspend fun setMaxSlot(maxSlot: Int) {
         context.member.edit { preferences ->
             preferences[MAX_SLOT] = maxSlot
         }
     }
-    suspend fun getMaxSlot(): Int {
+    suspend fun getMaxSlotLive(): LiveData<Int> {
         return runBlocking {
             context.member.data.map { preferences ->
                 preferences[MAX_SLOT]!!
+            }.asLiveData()
+        }
+    }
+    suspend fun setWalkingCount(walkingCount: Int) {
+        context.member.edit { preferences ->
+            preferences[WALKING_COUNT] = walkingCount
+        }
+    }
+    suspend fun getWalkingCount(): Int {
+        return runBlocking {
+            context.member.data.map { preferences ->
+                preferences[WALKING_COUNT]!!
             }.first()
+        }
+    }
+    suspend fun getWalkingCountLive(): LiveData<Int> {
+        return runBlocking {
+            context.member.data.map { preferences ->
+                preferences[WALKING_COUNT]!!
+            }.asLiveData()
         }
     }
 }

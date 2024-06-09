@@ -48,7 +48,6 @@ fun MainConfigureView(
                 text = "로그아웃\n하시겠습니까?",
                 confirm = {
                     mainConfigureViewModel.uiState.loadingBar = true
-
                     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                         .build()
                     val client = GoogleSignIn.getClient(context, gso)
@@ -66,13 +65,15 @@ fun MainConfigureView(
         } else {
             MainConfigureContent(
                 payment = {
-                    navController.navigate(NavItem.PaymentNested.route)
+                    Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()
+//                    navController.navigate(NavItem.PaymentNested.route)
                 },
                 mapSearch = {
                     Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()
                 },
                 feedback = {
-                    navController.navigate(NavItem.Feedback.route)
+                    Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()
+//                    navController.navigate(NavItem.Feedback.route)
                 },
                 logout = {
                     mainConfigureViewModel.uiState.logoutDialog = true

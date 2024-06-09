@@ -10,6 +10,7 @@ import com.mongs.wear.ui.view.mainSlot.content.DeleteContent
 import com.mongs.wear.ui.view.mainSlot.content.EmptyContent
 import com.mongs.wear.ui.view.mainSlot.content.GraduatedContent
 import com.mongs.wear.ui.view.mainSlot.content.NormalContent
+import com.mongs.wear.ui.viewModel.mainSlot.MainSlotViewModel.UiState
 
 @Composable
 fun MainSlotContent(
@@ -17,6 +18,7 @@ fun MainSlotContent(
     isPageChanging: Boolean,
     stroke: () -> Unit,
     navSlotPick: () -> Unit,
+    uiState: UiState,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
     when (slotVo.shiftCode) {
@@ -35,16 +37,18 @@ fun MainSlotContent(
         ShiftCode.GRADUATE_READY -> {
             NormalContent(
                 slotVo = slotVo,
-                stroke = stroke,
+                stroke = {},
                 modifier = modifier,
             )
         }
         ShiftCode.EVOLUTION_READY -> {
-            NormalContent(
-                slotVo = slotVo,
-                stroke = stroke,
-                modifier = modifier,
-            )
+            if (!uiState.isEvolution) {
+                NormalContent(
+                    slotVo = slotVo,
+                    stroke = {},
+                    modifier = modifier,
+                )
+            }
         }
         ShiftCode.GRADUATE -> {
             GraduatedContent(

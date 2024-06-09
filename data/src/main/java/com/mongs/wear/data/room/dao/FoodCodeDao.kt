@@ -8,14 +8,10 @@ import com.mongs.wear.data.room.entity.FoodCode
 
 @Dao
 interface FoodCodeDao {
-    @Query("SELECT * FROM food_code")
-    fun findAll(): List<FoodCode>
-    @Query("SELECT COUNT(*) FROM food_code")
-    fun countAll(): Int
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun register(foodCode: FoodCode)
+    fun insert(foodCode: FoodCode)
     @Query("DELETE FROM food_code")
     fun deleteAll()
     @Query("SELECT * FROM food_code WHERE groupCode = :groupCode")
-    fun findByGroupCode(groupCode: String): List<FoodCode>
+    fun selectByGroupCode(groupCode: String): List<FoodCode>
 }

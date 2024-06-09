@@ -16,7 +16,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "paymong"
+rootProject.name = "mongs"
 include ':app'
 include ':ui'
 include ':domain'

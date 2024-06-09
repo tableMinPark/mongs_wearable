@@ -1,7 +1,7 @@
-package com.mongs.wear.domain.exception.parent
+package com.mongs.wear.domain.exception
 
 import com.mongs.wear.domain.error.ErrorCode
 
-open class RepositoryException (
+open class UseCaseException (
     errorCode: ErrorCode,
 ): ErrorException(errorCode)

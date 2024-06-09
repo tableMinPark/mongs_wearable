@@ -45,7 +45,7 @@ fun BlueButton(
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
-                onClick = onClick,
+                onClick = { if (!disable) onClick() },
             ),
     ) {
         val buttonImage = if (disable) R.drawable.gray_btn else R.drawable.blue_bnt

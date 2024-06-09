@@ -8,14 +8,10 @@ import com.mongs.wear.data.room.entity.MongCode
 
 @Dao
 interface MongCodeDao {
-    @Query("SELECT * FROM mong_code")
-    fun findAll(): List<MongCode>
-    @Query("SELECT COUNT(*) FROM mong_code")
-    fun countAll(): Int
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun register(mongCode: MongCode)
+    fun insert(mongCode: MongCode)
     @Query("DELETE FROM mong_code")
     fun deleteAll()
     @Query("SELECT * FROM mong_code WHERE code = :code")
-    fun findByCode(code: String): MongCode
+    fun selectByCode(code: String): MongCode
 }

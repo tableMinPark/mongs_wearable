@@ -26,7 +26,7 @@ import com.mongs.wear.ui.R
 
 @Composable
 fun LeftButton(
-    height: Int = 50,
+    height: Int = 45,
     width: Int = 20,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,

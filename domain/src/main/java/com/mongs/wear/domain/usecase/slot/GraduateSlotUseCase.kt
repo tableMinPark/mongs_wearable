@@ -1,5 +1,7 @@
 package com.mongs.wear.domain.usecase.slot
 
+import com.mongs.wear.domain.exception.RepositoryException
+import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.repositroy.ManagementRepository
 import com.mongs.wear.domain.repositroy.SlotRepository
 import javax.inject.Inject
@@ -9,9 +11,11 @@ class GraduateSlotUseCase @Inject constructor(
     private val managementRepository: ManagementRepository,
 ) {
     suspend operator fun invoke() {
-        val slotModel = slotRepository.getNowSlot()
-        val mongId = slotModel.mongId
-
-        managementRepository.graduate(mongId = mongId)
+        try {
+            val slotModel = slotRepository.getNowSlot()
+            managementRepository.graduateMong(mongId = slotModel.mongId)
+        } catch (e: RepositoryException) {
+            throw UseCaseException(e.errorCode)
+        }
     }
 }

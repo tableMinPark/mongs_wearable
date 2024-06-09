@@ -9,7 +9,7 @@ import com.mongs.wear.data.room.entity.FoodCode
 import com.mongs.wear.data.room.entity.MapCode
 import com.mongs.wear.data.room.entity.MongCode
 import com.mongs.wear.domain.error.RepositoryErrorCode
-import com.mongs.wear.domain.exception.parent.ApiException
+import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.model.FoodCodeModel
 import com.mongs.wear.domain.model.MongCodeModel
 import com.mongs.wear.domain.model.VersionModel
@@ -31,19 +31,17 @@ class CodeRepositoryImpl @Inject constructor(
         )
 
         if (res.isSuccessful) {
-            res.body()?.let { body ->
-                return VersionModel(
-                    newestBuildVersion = body.newestBuildVersion,
-                    createdAt = body.createdAt,
-                    updateApp = body.updateApp,
-                    updateCode = body.updateCode,
-                )
-            }
+            val body = res.body()!!
+            return VersionModel(
+                newestBuildVersion = body.newestBuildVersion,
+                createdAt = body.createdAt,
+                updateApp = body.updateApp,
+                updateCode = body.updateCode,
+            )
+        } else {
+            throw RepositoryException(RepositoryErrorCode.VALIDATION_VERSION_FAIL)
         }
-
-        throw ApiException(RepositoryErrorCode.VALIDATION_VERSION_FAIL)
     }
-
     override suspend fun setCodes(codeIntegrity: String, buildVersion: String) {
         val res = commonApi.findCode(
             FindCodeReqDto(
@@ -52,10 +50,12 @@ class CodeRepositoryImpl @Inject constructor(
         )
 
         if (res.isSuccessful) {
-            res.body()?.let { body ->
+            val body = res.body()!!
+
+            try {
                 roomDB.mapCodeDao().deleteAll()
                 body.mapCodeList.forEach { mapCode ->
-                    roomDB.mapCodeDao().register(
+                    roomDB.mapCodeDao().insert(
                         MapCode(
                             code = mapCode.code,
                             name = mapCode.name,
@@ -66,7 +66,7 @@ class CodeRepositoryImpl @Inject constructor(
 
                 roomDB.mongCodeDao().deleteAll()
                 body.mongCodeList.forEach { mongCode ->
-                    roomDB.mongCodeDao().register(
+                    roomDB.mongCodeDao().insert(
                         MongCode(
                             code = mongCode.code,
                             name = mongCode.name,
@@ -77,7 +77,7 @@ class CodeRepositoryImpl @Inject constructor(
 
                 roomDB.foodCodeDao().deleteAll()
                 body.foodCodeList.forEach { foodCode ->
-                    roomDB.foodCodeDao().register(
+                    roomDB.foodCodeDao().insert(
                         FoodCode(
                             code = foodCode.code,
                             name = foodCode.name,
@@ -94,45 +94,59 @@ class CodeRepositoryImpl @Inject constructor(
                 }
 
                 deviceDataStore.setCodeIntegrity(codeIntegrity = body.codeIntegrity)
+            } catch (e: RuntimeException) {
+                throw RepositoryException(RepositoryErrorCode.SET_CODES_FAIL)
             }
         } else {
-            throw ApiException(RepositoryErrorCode.SYNC_CODE_FAIL)
+            throw RepositoryException(RepositoryErrorCode.SET_CODES_FAIL)
         }
     }
     override suspend fun getMongCode(code: String): MongCodeModel {
-        return roomDB.mongCodeDao().findByCode(code = code).let { mongCode ->
-            MongCodeModel(
-                code = mongCode.code,
-                name = mongCode.name,
-            )
+        try {
+            return roomDB.mongCodeDao().selectByCode(code = code).let { mongCode ->
+                MongCodeModel(
+                    code = mongCode.code,
+                    name = mongCode.name,
+                )
+            }
+        } catch (e: RuntimeException) {
+            throw RepositoryException(RepositoryErrorCode.GET_MONG_CODE_FAIL)
         }
     }
     override suspend fun getFoodCodes(): List<FoodCodeModel> {
-        return roomDB.foodCodeDao().findByGroupCode("FD").map { foodCode ->
-            FoodCodeModel(
-                code = foodCode.code,
-                name = foodCode.name,
-                price = foodCode.price,
-                addWeight = foodCode.addWeight,
-                addStrength = foodCode.addStrength,
-                addSatiety = foodCode.addSatiety,
-                addHealthy = foodCode.addHealthy,
-                addSleep = foodCode.addSleep,
-            )
+        try {
+            return roomDB.foodCodeDao().selectByGroupCode("FD").map { foodCode ->
+                FoodCodeModel(
+                    code = foodCode.code,
+                    name = foodCode.name,
+                    price = foodCode.price,
+                    addWeight = foodCode.addWeight,
+                    addStrength = foodCode.addStrength,
+                    addSatiety = foodCode.addSatiety,
+                    addHealthy = foodCode.addHealthy,
+                    addSleep = foodCode.addSleep,
+                )
+            }
+        } catch (e: RuntimeException) {
+            throw RepositoryException(RepositoryErrorCode.GET_FOOD_CODES_FAIL)
         }
     }
     override suspend fun getSnackCodes(): List<FoodCodeModel> {
-        return roomDB.foodCodeDao().findByGroupCode("SN").map { foodCode ->
-            FoodCodeModel(
-                code = foodCode.code,
-                name = foodCode.name,
-                price = foodCode.price,
-                addWeight = foodCode.addWeight,
-                addStrength = foodCode.addStrength,
-                addSatiety = foodCode.addSatiety,
-                addHealthy = foodCode.addHealthy,
-                addSleep = foodCode.addSleep,
-            )
+        try {
+            return roomDB.foodCodeDao().selectByGroupCode("SN").map { foodCode ->
+                FoodCodeModel(
+                    code = foodCode.code,
+                    name = foodCode.name,
+                    price = foodCode.price,
+                    addWeight = foodCode.addWeight,
+                    addStrength = foodCode.addStrength,
+                    addSatiety = foodCode.addSatiety,
+                    addHealthy = foodCode.addHealthy,
+                    addSleep = foodCode.addSleep,
+                )
+            }
+        } catch (e: RuntimeException) {
+            throw RepositoryException(RepositoryErrorCode.GET_SNACK_CODES_FAIL)
         }
     }
 }

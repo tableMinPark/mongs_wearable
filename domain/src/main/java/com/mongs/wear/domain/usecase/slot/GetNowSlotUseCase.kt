@@ -1,9 +1,11 @@
 package com.mongs.wear.domain.usecase.slot
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
-import com.mongs.wear.domain.exception.parent.RoomException
+import com.mongs.wear.domain.code.ShiftCode
+import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.repositroy.SlotRepository
 import com.mongs.wear.domain.vo.SlotVo
 import javax.inject.Inject
@@ -13,6 +15,7 @@ class GetNowSlotUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(): LiveData<SlotVo> {
         try {
+            Log.d("Render Test", "GetNowSlotUseCase")
             val slotModel = slotRepository.getNowSlotLive()
             return slotModel.map {
                 SlotVo(
@@ -37,7 +40,7 @@ class GetNowSlotUseCase @Inject constructor(
                     isGraduateCheck = it.isGraduateCheck,
                 )
             }
-        } catch (e: RoomException) {
+        } catch (e: RepositoryException) {
             return MutableLiveData(SlotVo())
         }
     }
