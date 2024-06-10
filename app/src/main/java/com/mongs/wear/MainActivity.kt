@@ -22,7 +22,6 @@ import com.mongs.wear.ui.view.main.MainView
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val mainActivityViewModel: MainActivityViewModel by viewModels()
-    private lateinit var sensorManager: SensorManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +39,6 @@ class MainActivity : ComponentActivity() {
             ActivityCompat.requestPermissions(this, permissions, 100)
         }
 
-        sensorManager = application.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        mainActivityViewModel.initSensor(sensorManager = sensorManager)
         mainActivityViewModel.initDeviceInfo(buildVersion = applicationContext.packageManager.getPackageInfo(packageName, 0).versionName)
         mainActivityViewModel.initMqtt()
 
@@ -53,11 +50,13 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onResume() {
+        mainActivityViewModel.initSensor(sensorManager = application.getSystemService(Context.SENSOR_SERVICE) as SensorManager)
         mainActivityViewModel.reconnectMqtt()
         super.onResume()
     }
 
     override fun onPause() {
+        mainActivityViewModel.resetSensor()
         mainActivityViewModel.disconnectMqtt()
         super.onPause()
     }

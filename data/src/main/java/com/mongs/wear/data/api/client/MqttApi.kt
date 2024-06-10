@@ -1,18 +1,16 @@
 package com.mongs.wear.data.api.client
 
-import android.content.Context
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import org.eclipse.paho.android.service.MqttAndroidClient
+import info.mqtt.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.IMqttActionListener
 import org.eclipse.paho.client.mqttv3.IMqttToken
 import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 import org.eclipse.paho.client.mqttv3.MqttException
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -30,9 +28,9 @@ class MqttApi @Inject constructor(
             try {
                 mqttAndroidClient.setCallback(messageCallback)
                 mqttAndroidClient.connect(options).await()
-                Log.i("MqttApi", "connect.")
+                Timber.tag("MqttApi").i("connect.")
             } catch (e: MqttException) {
-                Log.e("MqttApi", "connect fail.")
+                Timber.tag("MqttApi").e("connect fail.")
             }
         }
     }
@@ -41,9 +39,9 @@ class MqttApi @Inject constructor(
         withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
                 mqttAndroidClient.disconnect().await()
-                Log.i("MqttApi", "disconnect.")
+                Timber.tag("MqttApi").i("disconnect.")
             } else {
-                Log.w("MqttApi", "disConnect fail.")
+                Timber.tag("MqttApi").w("disConnect fail.")
             }
         }
     }
@@ -52,9 +50,9 @@ class MqttApi @Inject constructor(
         withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
                 mqttAndroidClient.subscribe(topic, 2).await()
-                Log.i("MqttApi", "[$topic] subscribe.")
+                Timber.tag("MqttApi").i("%s] subscribe.", "[" + topic)
             } else {
-                Log.e("MqttApi", "[$topic] subscribe fail.")
+                Timber.tag("MqttApi").e("%s] subscribe fail.", "[" + topic)
             }
         }
     }

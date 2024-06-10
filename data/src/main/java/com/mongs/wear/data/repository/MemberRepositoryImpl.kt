@@ -115,6 +115,13 @@ class MemberRepositoryImpl @Inject constructor(
             throw RepositoryException(RepositoryErrorCode.SET_WALKING_COUNT_FAIL)
         }
     }
+    override suspend fun getWalkingCount(): Int {
+        try {
+            return memberDataStore.getWalkingCount()
+        } catch (e: RuntimeException) {
+            throw RepositoryException(RepositoryErrorCode.SET_WALKING_COUNT_FAIL)
+        }
+    }
     override suspend fun getWalkingCountLive(): LiveData<Int> {
         try {
             return memberDataStore.getWalkingCountLive()
@@ -122,7 +129,6 @@ class MemberRepositoryImpl @Inject constructor(
             throw RepositoryException(RepositoryErrorCode.GET_WALKING_COUNT_FAIL)
         }
     }
-
     override suspend fun addWalkingCount(addWalkingCount: Int) {
         try {
             val walkingCount = memberDataStore.getWalkingCount()

@@ -14,6 +14,7 @@ interface MemberRepository {
     suspend fun setMaxSlot(maxSlot: Int)
     suspend fun getMaxSlotLive(): LiveData<Int>
     suspend fun setWalkingCount(walkingCount: Int)
+    suspend fun getWalkingCount(): Int
     suspend fun getWalkingCountLive(): LiveData<Int>
     suspend fun addWalkingCount(addWalkingCount: Int)
 }

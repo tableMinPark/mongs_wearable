@@ -4,6 +4,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.domain.client.MqttClient
@@ -26,30 +27,32 @@ class MainActivityViewModel @Inject constructor(
     private val mqttClient: MqttClient,
 ) : ViewModel() {
 
-    private var initWalkingStep: Int = -1
+    private lateinit var sensorManager: SensorManager
+    private lateinit var stepSensorEventListener: SensorEventListener
 
     fun initSensor(sensorManager: SensorManager) {
-        val stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
-        val stepSensorEventListener = object : SensorEventListener {
+        this.sensorManager = sensorManager
+        stepSensorEventListener = object : SensorEventListener {
             override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
             override fun onSensorChanged(event: SensorEvent) {
                 val nowWalkingStep = event.values[0].toInt()
-                if (initWalkingStep < 0) {
-                    initWalkingStep = nowWalkingStep
-                } else {
-                    viewModelScope.launch(Dispatchers.IO) {
-                        memberRepository.addWalkingCount(
-                            addWalkingCount = max(0, nowWalkingStep - initWalkingStep)
-                        )
-                    }
+                viewModelScope.launch(Dispatchers.IO) {
+                    memberRepository.addWalkingCount(addWalkingCount = 1)
                 }
             }
         }
         sensorManager.registerListener(
             stepSensorEventListener,
-            stepSensor,
+            sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),      //TYPE_STEP_COUNTER  TYPE_RELATIVE_HUMIDITY
             SensorManager.SENSOR_DELAY_FASTEST
         )
+    }
+
+    fun resetSensor() {
+        runBlocking(Dispatchers.IO) {
+            sensorManager.unregisterListener(stepSensorEventListener)
+
+        }
     }
 
     fun initMqtt() {
