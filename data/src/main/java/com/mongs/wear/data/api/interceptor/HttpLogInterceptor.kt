@@ -5,7 +5,6 @@ import okhttp3.Interceptor
 import okhttp3.Protocol
 import okhttp3.Response
 import okhttp3.ResponseBody
-import timber.log.Timber
 import java.net.ConnectException
 
 class HttpLogInterceptor : Interceptor {
@@ -14,8 +13,7 @@ class HttpLogInterceptor : Interceptor {
 
         return try {
             val response = chain.proceed(chain.request())
-            Timber.tag("HttpLogInterceptor")
-                .i("[" + response.code() + "] " + request.method() + " " + request.url())
+            Log.i("HttpLogInterceptor", "[${response.code()}] ${request.method()} ${request.url()}")
             response
         } catch (_: ConnectException) {
             Response.Builder()

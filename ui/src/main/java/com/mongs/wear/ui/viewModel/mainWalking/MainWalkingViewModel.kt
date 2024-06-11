@@ -1,6 +1,5 @@
 package com.mongs.wear.ui.viewModel.mainWalking
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.domain.exception.UseCaseException
+import com.mongs.wear.domain.usecase.member.ExchangePayPointWalkingUseCase
 import com.mongs.wear.domain.usecase.member.GetWalkingCountUseCase
 import com.mongs.wear.domain.usecase.slot.GetNowSlotPayPointUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +20,7 @@ import javax.inject.Inject
 class MainWalkingViewModel @Inject constructor(
     private val getNowSlotPayPointUseCase: GetNowSlotPayPointUseCase,
     private val getWalkingCountUseCase: GetWalkingCountUseCase,
+    private val exchangePayPointWalkingUseCase: ExchangePayPointWalkingUseCase,
 ): ViewModel() {
     val uiState: UiState = UiState()
 
@@ -32,15 +33,20 @@ class MainWalkingViewModel @Inject constructor(
                 payPoint = getNowSlotPayPointUseCase()
                 walkingCount = getWalkingCountUseCase()
                 uiState.loadingBar = false
-            } catch (_: UseCaseException) {
+            } catch (e: UseCaseException) {
+                e.printStackTrace()
             }
 
         }
     }
 
-    fun chargePayPoint(chargePayPoint: Int) {
+    fun chargePayPoint(walkingCount: Int) {
         viewModelScope.launch (Dispatchers.IO) {
-            uiState.chargePayPointDialog = false
+            try {
+                exchangePayPointWalkingUseCase(walkingCount = walkingCount)
+                uiState.chargePayPointDialog = false
+            } catch (_: UseCaseException) {
+            }
         }
     }
 

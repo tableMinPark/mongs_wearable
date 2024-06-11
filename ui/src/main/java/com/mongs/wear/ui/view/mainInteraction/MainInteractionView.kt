@@ -73,20 +73,18 @@ fun MainInteractionView(
                 }
             },
             training = {
-                Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()
-//                if (isMongEmpty || isEgg ||  slotVo.value.isSleeping) {
-//                    Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
-//                } else {
-//                    navController.navigate(NavItem.TrainingNested.route)
-//                }
+                if (isMongEmpty || isEgg ||  slotVo.value.isSleeping) {
+                    Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
+                } else {
+                    navController.navigate(NavItem.TrainingNested.route)
+                }
             },
             battle = {
-                Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()
-//                if (isMongEmpty || isEgg || slotVo.value.isSleeping) {
-//                    Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
-//                } else {
-//                    navController.navigate(NavItem.BattleNested.route)
-//                }
+                if (isMongEmpty || isEgg || slotVo.value.isSleeping) {
+                    Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
+                } else {
+                    navController.navigate(NavItem.BattleNested.route)
+                }
             },
             modifier = Modifier.zIndex(1f)
         )

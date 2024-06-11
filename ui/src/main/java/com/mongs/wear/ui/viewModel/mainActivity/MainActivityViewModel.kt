@@ -31,27 +31,34 @@ class MainActivityViewModel @Inject constructor(
     private lateinit var stepSensorEventListener: SensorEventListener
 
     fun initSensor(sensorManager: SensorManager) {
-        this.sensorManager = sensorManager
-        stepSensorEventListener = object : SensorEventListener {
-            override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
-            override fun onSensorChanged(event: SensorEvent) {
-                val nowWalkingStep = event.values[0].toInt()
-                viewModelScope.launch(Dispatchers.IO) {
-                    memberRepository.addWalkingCount(addWalkingCount = 1)
+        try {
+            this.sensorManager = sensorManager
+            stepSensorEventListener = object : SensorEventListener {
+                override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
+                override fun onSensorChanged(event: SensorEvent) {
+                    val nowWalkingStep = event.values[0].toInt()
+                    viewModelScope.launch(Dispatchers.IO) {
+                        memberRepository.addWalkingCount(addWalkingCount = 1)
+                    }
                 }
             }
+            sensorManager.registerListener(
+                stepSensorEventListener,
+                sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),      //TYPE_STEP_COUNTER  TYPE_RELATIVE_HUMIDITY
+                SensorManager.SENSOR_DELAY_FASTEST
+            )
+        } catch (e: RuntimeException) {
+            e.printStackTrace()
         }
-        sensorManager.registerListener(
-            stepSensorEventListener,
-            sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),      //TYPE_STEP_COUNTER  TYPE_RELATIVE_HUMIDITY
-            SensorManager.SENSOR_DELAY_FASTEST
-        )
     }
 
     fun resetSensor() {
         runBlocking(Dispatchers.IO) {
-            sensorManager.unregisterListener(stepSensorEventListener)
-
+            try {
+                sensorManager.unregisterListener(stepSensorEventListener)
+            } catch (e: RuntimeException) {
+                e.printStackTrace()
+            }
         }
     }
 

@@ -24,4 +24,13 @@ sealed class NavItem(val route: String) {
     object PaymentExchangePayPoint: NavItem("PaymentExchangePayPoint")
     /* Feedback */
     object Feedback: NavItem("Feedback")
+    /* Training */
+    object TrainingNested: NavItem("TrainingNested")
+    object TrainingMenu: NavItem("TrainingMenu")
+    object TrainingJumping: NavItem("TrainingJumping")
+
+    /* Battle */
+    object BattleNested: NavItem("BattleNested")
+    object BattleMenu: NavItem("BattleMenu")
+
 }

@@ -1,8 +1,11 @@
 package com.mongs.wear.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.mongs.wear.data.api.client.MemberApi
 import com.mongs.wear.data.dataStore.MemberDataStore
+import com.mongs.wear.data.dto.member.req.ExchangePayPointWalkingReqDto
+import com.mongs.wear.data.room.client.RoomDB
 import com.mongs.wear.domain.error.RepositoryErrorCode
 import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.repositroy.MemberRepository
@@ -10,7 +13,8 @@ import javax.inject.Inject
 
 class MemberRepositoryImpl @Inject constructor(
     private val memberApi: MemberApi,
-    private val memberDataStore: MemberDataStore
+    private val memberDataStore: MemberDataStore,
+    private val roomDB: RoomDB,
 ): MemberRepository {
 
     override suspend fun setMember() {
@@ -135,6 +139,27 @@ class MemberRepositoryImpl @Inject constructor(
             memberDataStore.setWalkingCount(walkingCount = walkingCount + addWalkingCount)
         } catch (e: RuntimeException) {
             throw RepositoryException(RepositoryErrorCode.SET_WALKING_COUNT_FAIL)
+        }
+    }
+
+    override suspend fun exchangePayPointWalking(mongId: Long, walkingCount: Int) {
+        val res = memberApi.exchangePayPointWalking(exchangePayPointWalkingReqDto =
+            ExchangePayPointWalkingReqDto(
+                mongId = mongId,
+                walkingCount = walkingCount
+            )
+        )
+
+        if (res.isSuccessful) {
+            val body = res.body()!!
+            try {
+                memberDataStore.setWalkingCount(walkingCount = walkingCount - body.subWalkingCount)
+                roomDB.slotDao().updatePayPointByExchangeWalking(mongId = body.mongId, payPoint = body.payPoint)
+            } catch (e: RuntimeException) {
+                throw RepositoryException(RepositoryErrorCode.EXCHANGE_PAY_POINT_WALKING_FAIL)
+            }
+        } else {
+            throw RepositoryException(RepositoryErrorCode.EXCHANGE_PAY_POINT_WALKING_FAIL)
         }
     }
 }

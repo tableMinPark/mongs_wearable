@@ -61,6 +61,7 @@ enum class RepositoryErrorCode(
     GET_STAR_POINT_FAIL(""),
     SET_WALKING_COUNT_FAIL(""),
     GET_WALKING_COUNT_FAIL(""),
+    EXCHANGE_PAY_POINT_WALKING_FAIL(""),
     ;
     override fun message(): String {
         return message

@@ -65,8 +65,7 @@ fun MainConfigureView(
         } else {
             MainConfigureContent(
                 payment = {
-                    Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()
-//                    navController.navigate(NavItem.PaymentNested.route)
+                    navController.navigate(NavItem.PaymentNested.route)
                 },
                 mapSearch = {
                     Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()

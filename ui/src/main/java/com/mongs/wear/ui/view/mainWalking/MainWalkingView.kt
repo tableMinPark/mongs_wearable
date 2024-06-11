@@ -1,10 +1,5 @@
 package com.mongs.wear.ui.view.mainWalking
 
-import android.content.Context
-import android.hardware.Sensor
-import android.hardware.SensorManager
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -20,12 +15,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -36,6 +31,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.wear.compose.material.Text
+import com.mongs.wear.domain.code.ShiftCode
+import com.mongs.wear.domain.vo.SlotVo
 import com.mongs.wear.ui.R
 import com.mongs.wear.ui.global.component.background.MainPagerBackground
 import com.mongs.wear.ui.global.component.button.BlueButton
@@ -49,8 +46,8 @@ import com.mongs.wear.ui.viewModel.mainWalking.MainWalkingViewModel.UiState
 
 @Composable
 fun MainWalkingView(
+    slotVo: State<SlotVo>,
     mainWalkingViewModel: MainWalkingViewModel = hiltViewModel(),
-    context: Context = LocalContext.current
 ) {
     Box {
         if (mainWalkingViewModel.uiState.loadingBar) {
@@ -58,20 +55,19 @@ fun MainWalkingView(
         } else {
             val payPoint = mainWalkingViewModel.payPoint.observeAsState(0)
             val walkingCount = mainWalkingViewModel.walkingCount.observeAsState(0)
-//            val chargePayPoint = 10 * (walkingCount.value / 100)
-            val chargePayPoint = walkingCount.value
+            val chargePayPoint = 10 * (walkingCount.value / 100)
 
             if(mainWalkingViewModel.uiState.chargePayPointDialog) {
                 ConfirmDialog(
                     text = "$$chargePayPoint\n환전하시겠습니까?",
                     confirm = {
-                        mainWalkingViewModel.chargePayPoint(chargePayPoint = chargePayPoint)
-                        Toast.makeText(context, "$chargePayPoint 포인트 환전", Toast.LENGTH_SHORT).show()
+                        mainWalkingViewModel.chargePayPoint(walkingCount = walkingCount.value)
                     },
                     cancel = { mainWalkingViewModel.uiState.chargePayPointDialog = false }
                 )
             } else {
                 MainWalkingContent(
+                    slotVo = slotVo.value,
                     chargePayPoint = chargePayPoint,
                     payPoint = payPoint.value,
                     walkingCount = walkingCount.value,
@@ -101,6 +97,7 @@ private fun MainWalkingLoadingBar(
 
 @Composable
 private fun MainWalkingContent(
+    slotVo: SlotVo,
     chargePayPoint: Int,
     payPoint: Int,
     walkingCount: Int,
@@ -205,7 +202,7 @@ private fun MainWalkingContent(
                 BlueButton(
                     text = "환전",
                     width = 70,
-                    disable = false,
+                    disable = chargePayPoint == 0 || slotVo.shiftCode == ShiftCode.EMPTY,
                     onClick = { uiState.chargePayPointDialog = true },
                 )
             }
@@ -221,7 +218,8 @@ private fun MainWalkingViewPreview() {
     Box {
         MainPagerBackground()
         MainWalkingContent(
-            chargePayPoint = 0,
+            slotVo = SlotVo(),
+            chargePayPoint = 200,
             payPoint = 0,
             walkingCount = 200,
             uiState = UiState(),
@@ -236,7 +234,8 @@ private fun LargeMainWalkingViewPreview() {
     Box {
         MainPagerBackground()
         MainWalkingContent(
-            chargePayPoint = 0,
+            slotVo = SlotVo(),
+            chargePayPoint = 100,
             payPoint = 0,
             walkingCount = 100,
             uiState = UiState(),

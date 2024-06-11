@@ -17,4 +17,5 @@ interface MemberRepository {
     suspend fun getWalkingCount(): Int
     suspend fun getWalkingCountLive(): LiveData<Int>
     suspend fun addWalkingCount(addWalkingCount: Int)
+    suspend fun exchangePayPointWalking(mongId: Long, walkingCount: Int)
 }

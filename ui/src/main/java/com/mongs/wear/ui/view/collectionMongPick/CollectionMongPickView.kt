@@ -51,14 +51,6 @@ fun CollectionMongPickView(
         if (collectionMongPickViewModel.uiState.loadingBar) {
             CollectionNestedBackground()
             CollectionMongPickLoadingBar(modifier = Modifier.zIndex(1f))
-        } else if (collectionMongPickViewModel.uiState.detailDialog && mongCollectionIndex.intValue >= 0) {
-            CollectionNestedBackground()
-            MongCollectionDetailDialog(
-                name = mongCollectionVoList.value[mongCollectionIndex.intValue].name,
-                mongCode = mongCollectionVoList.value[mongCollectionIndex.intValue].code,
-                onClick = { collectionMongPickViewModel.uiState.detailDialog = false },
-                modifier = Modifier.zIndex(1f),
-            )
         } else {
             CollectionNestedBackground()
             CollectionMongPickContent(
@@ -70,6 +62,14 @@ fun CollectionMongPickView(
                 mongCollectionVoList = mongCollectionVoList.value,
                 modifier = Modifier.zIndex(1f)
             )
+            if (collectionMongPickViewModel.uiState.detailDialog && mongCollectionIndex.intValue >= 0) {
+                MongCollectionDetailDialog(
+                    name = mongCollectionVoList.value[mongCollectionIndex.intValue].name,
+                    mongCode = mongCollectionVoList.value[mongCollectionIndex.intValue].code,
+                    onClick = { collectionMongPickViewModel.uiState.detailDialog = false },
+                    modifier = Modifier.zIndex(2f),
+                )
+            }
         }
     }
 

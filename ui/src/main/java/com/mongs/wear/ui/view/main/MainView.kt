@@ -9,6 +9,7 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.mongs.wear.ui.global.resource.NavItem
+import com.mongs.wear.ui.view.battleMenu.BattleMenuView
 import com.mongs.wear.ui.view.collectionMapPick.CollectionMapPickView
 import com.mongs.wear.ui.view.collectionMenu.CollectionMenuView
 import com.mongs.wear.ui.view.collectionMongPick.CollectionMongPickView
@@ -22,6 +23,8 @@ import com.mongs.wear.ui.view.paymentChargeStarPoint.PaymentChargeStarPointView
 import com.mongs.wear.ui.view.paymentExchangePayPoint.PaymentExchangePayPointView
 import com.mongs.wear.ui.view.paymentMenu.PaymentMenuView
 import com.mongs.wear.ui.view.slotPick.SlotPickView
+import com.mongs.wear.ui.view.trainingJumping.TrainingJumpingView
+import com.mongs.wear.ui.view.trainingMenu.TrainingMenuView
 import kotlinx.coroutines.launch
 
 
@@ -87,6 +90,21 @@ fun MainView () {
 
         composable(route = NavItem.Feedback.route) {
             FeedbackView(navController = navController)
+        }
+
+        navigation(startDestination = NavItem.TrainingMenu.route, route = NavItem.TrainingNested.route) {
+            composable(route = NavItem.TrainingMenu.route) {
+                TrainingMenuView(navController = navController)
+            }
+            composable(route = NavItem.TrainingJumping.route) {
+                TrainingJumpingView(navController = navController)
+            }
+        }
+
+        navigation(startDestination = NavItem.BattleMenu.route, route = NavItem.BattleNested.route) {
+            composable(route = NavItem.BattleMenu.route) {
+                BattleMenuView(navController = navController)
+            }
         }
     }
 }

@@ -129,7 +129,10 @@ private fun MainPagerContent(
     ) {
         HorizontalPager(state = pagerState) { page: Int ->
             when (page) {
-                0 -> MainWalkingView()
+                0 -> MainWalkingView(
+                    slotVo = slotVo,
+                )
+
                 1 -> MainConditionView(
                     slotVo = slotVo,
                     isPageChanging = isPageChanging,
