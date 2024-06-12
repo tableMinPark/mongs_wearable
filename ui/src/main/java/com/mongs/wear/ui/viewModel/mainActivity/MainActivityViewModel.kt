@@ -51,7 +51,6 @@ class MainActivityViewModel @Inject constructor(
             e.printStackTrace()
         }
     }
-
     fun resetSensor() {
         runBlocking(Dispatchers.IO) {
             try {
@@ -61,7 +60,6 @@ class MainActivityViewModel @Inject constructor(
             }
         }
     }
-
     fun initMqtt() {
         viewModelScope.launch(Dispatchers.IO) {
             runBlocking {
@@ -73,7 +71,6 @@ class MainActivityViewModel @Inject constructor(
             }
         }
     }
-
     fun reconnectMqtt() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -94,7 +91,6 @@ class MainActivityViewModel @Inject constructor(
             }
         }
     }
-
     fun disconnectMqtt() {
         viewModelScope.launch(Dispatchers.IO) {
             runBlocking {
@@ -106,7 +102,6 @@ class MainActivityViewModel @Inject constructor(
             }
         }
     }
-
     fun initDeviceInfo(buildVersion: String) {
         viewModelScope.launch(Dispatchers.Main) {
             try {

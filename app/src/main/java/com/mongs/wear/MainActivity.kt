@@ -16,6 +16,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.util.Log
 import com.mongs.wear.ui.view.main.MainView
 
 
@@ -59,11 +60,5 @@ class MainActivity : ComponentActivity() {
         mainActivityViewModel.resetSensor()
         mainActivityViewModel.disconnectMqtt()
         super.onPause()
-    }
-
-    override fun onDestroy() {
-        mainActivityViewModel.disconnectMqtt()
-        mainActivityViewModel.initMqtt()
-        super.onDestroy()
     }
 }

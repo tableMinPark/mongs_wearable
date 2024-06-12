@@ -6,5 +6,5 @@ import java.time.LocalDateTime
 data class BasicPublish<T>(
     val code: PublishCode,
     val data: T,
-    val createdAt: LocalDateTime,
+    val createdAt: LocalDateTime = LocalDateTime.now(),
 )

@@ -15,7 +15,7 @@ import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-class MqttApi @Inject constructor(
+class MqttBattleApi @Inject constructor(
     private val mqttAndroidClient: MqttAndroidClient
 ) {
     suspend fun connect(messageCallback: MqttCallback) {
@@ -28,9 +28,9 @@ class MqttApi @Inject constructor(
             try {
                 mqttAndroidClient.setCallback(messageCallback)
                 mqttAndroidClient.connect(options).await()
-                Log.i("MqttApi", "connect.")
+                Log.i("MqttBattleApi", "connect.")
             } catch (e: MqttException) {
-                Log.e("MqttApi", "connect fail.")
+                Log.e("MqttBattleApi", "connect fail.")
             }
         }
     }
@@ -39,9 +39,9 @@ class MqttApi @Inject constructor(
         withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
                 mqttAndroidClient.disconnect().await()
-                Log.i("MqttApi", "disConnect.")
+                Log.i("MqttBattleApi", "disConnect.")
             } else {
-                Log.e("MqttApi", "disConnect fail.")
+                Log.e("MqttBattleApi", "disConnect fail.")
             }
         }
     }
@@ -50,9 +50,9 @@ class MqttApi @Inject constructor(
         withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
                 mqttAndroidClient.subscribe(topic, 2).await()
-                Log.i("MqttApi", "[$topic] subscribe.")
+                Log.i("MqttBattleApi", "[$topic] subscribe.")
             } else {
-                Log.e("MqttApi", "[$topic] subscribe fail.")
+                Log.e("MqttBattleApi", "[$topic] subscribe fail.")
             }
         }
     }
@@ -61,9 +61,9 @@ class MqttApi @Inject constructor(
         withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
                 mqttAndroidClient.unsubscribe(topic).await()
-                Log.i("MqttApi", "[$topic] unSubscribe.")
+                Log.i("MqttBattleApi", "[$topic] unSubscribe.")
             } else {
-                Log.e("MqttApi", "[$topic] unSubscribe fail.")
+                Log.e("MqttBattleApi", "[$topic] unSubscribe fail.")
             }
         }
     }
@@ -72,9 +72,9 @@ class MqttApi @Inject constructor(
         withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
                 mqttAndroidClient.publish(topic = topic, payload = payload.toByteArray(), qos = 2, retained = true).await()
-                Log.i("MqttApi", "[$topic] produce.")
+                Log.i("MqttBattleApi", "[$topic] produce.")
             } else {
-                Log.e("MqttApi", "[$topic] produce fail.")
+                Log.e("MqttBattleApi", "[$topic] produce fail.")
             }
         }
     }

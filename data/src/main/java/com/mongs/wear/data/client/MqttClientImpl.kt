@@ -1,14 +1,15 @@
 package com.mongs.wear.data.client
 
-import android.util.Log
 import com.mongs.wear.data.api.client.MqttApi
 import com.mongs.wear.data.callback.MessageCallback
-import com.mongs.wear.data.repository.RealTimeRepositoryImpl
+import com.mongs.wear.data.dataStore.MemberDataStore
+import com.mongs.wear.data.room.client.RoomDB
 import com.mongs.wear.domain.client.MqttClient
 import javax.inject.Inject
 
 class MqttClientImpl @Inject constructor(
-    private val realTimeRepositoryImpl: RealTimeRepositoryImpl,
+    private val memberDataStore: MemberDataStore,
+    private val roomDB: RoomDB,
     private val mqttApi: MqttApi,
 ): MqttClient {
 
@@ -26,11 +27,19 @@ class MqttClientImpl @Inject constructor(
     }
 
     override suspend fun setConnection(accountId: Long) {
-        mqttApi.connect(messageCallback = MessageCallback(realTimeRepositoryImpl = realTimeRepositoryImpl))
+        mqttApi.connect(messageCallback = MessageCallback(
+                memberDataStore = memberDataStore,
+                roomDB = roomDB
+            )
+        )
     }
 
     override suspend fun reconnect(resetMember: () -> Unit, resetSlot: () -> Unit) {
-        mqttApi.connect(messageCallback = MessageCallback(realTimeRepositoryImpl = realTimeRepositoryImpl))
+        mqttApi.connect(messageCallback = MessageCallback(
+                memberDataStore = memberDataStore,
+                roomDB = roomDB
+            )
+        )
         if (memberTopic.isNotBlank()) {
             resetMember()
             mqttApi.subscribe(topic = memberTopic)
@@ -62,6 +71,7 @@ class MqttClientImpl @Inject constructor(
     override suspend fun disSubScribeMember() {
         if (memberTopic.isNotBlank()) {
             mqttApi.disSubscribe(topic = memberTopic)
+            memberTopic = ""
         }
     }
 
@@ -77,6 +87,7 @@ class MqttClientImpl @Inject constructor(
     override suspend fun disSubScribeMong() {
         if (mongTopic.isNotBlank()) {
             mqttApi.disSubscribe(topic = mongTopic)
+            mongTopic = ""
         }
     }
 }

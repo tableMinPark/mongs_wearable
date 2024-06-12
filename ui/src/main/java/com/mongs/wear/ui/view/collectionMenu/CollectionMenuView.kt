@@ -36,13 +36,11 @@ import com.mongs.wear.ui.global.theme.PaymongWhite
 @Composable
 fun CollectionMenuView(
     navController: NavController,
-    context: Context = LocalContext.current,
 ) {
     Box {
         CollectionNestedBackground()
         CollectionMenuContent(
             collectionMapPick = {
-//                Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()
                 navController.navigate(NavItem.CollectionMapPick.route)
             },
             collectionMongPick = {

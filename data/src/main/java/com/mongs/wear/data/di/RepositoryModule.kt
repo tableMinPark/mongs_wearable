@@ -1,16 +1,16 @@
 package com.mongs.wear.data.di
 
-import com.mongs.wear.data.client.RealTimeRepository
 import com.mongs.wear.data.repository.AuthRepositoryImpl
+import com.mongs.wear.data.repository.BattleRepositoryImpl
 import com.mongs.wear.data.repository.CodeRepositoryImpl
 import com.mongs.wear.data.repository.CollectionRepositoryImpl
 import com.mongs.wear.data.repository.DeviceRepositoryImpl
 import com.mongs.wear.data.repository.FeedbackRepositoryImpl
 import com.mongs.wear.data.repository.ManagementRepositoryImpl
 import com.mongs.wear.data.repository.MemberRepositoryImpl
-import com.mongs.wear.data.repository.RealTimeRepositoryImpl
 import com.mongs.wear.data.repository.SlotRepositoryImpl
 import com.mongs.wear.domain.repositroy.AuthRepository
+import com.mongs.wear.domain.repositroy.BattleRepository
 import com.mongs.wear.domain.repositroy.CodeRepository
 import com.mongs.wear.domain.repositroy.CollectionRepository
 import com.mongs.wear.domain.repositroy.DeviceRepository
@@ -50,8 +50,8 @@ abstract class RepositoryModule {
     abstract fun bindMemberRepository(repository: MemberRepositoryImpl): MemberRepository
     @Binds
     @Singleton
-    abstract fun bindRealTimeRepository(repository: RealTimeRepositoryImpl): RealTimeRepository
+    abstract fun bindSlotRepository(repository: SlotRepositoryImpl): SlotRepository
     @Binds
     @Singleton
-    abstract fun bindSlotRepository(repository: SlotRepositoryImpl): SlotRepository
+    abstract fun bindBattleRepository(repository: BattleRepositoryImpl): BattleRepository
 }
