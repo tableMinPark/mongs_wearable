@@ -1,6 +1,5 @@
 package com.mongs.wear.data.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.mongs.wear.data.api.client.ManagementApi
@@ -8,17 +7,16 @@ import com.mongs.wear.data.code.Shift
 import com.mongs.wear.data.code.State
 import com.mongs.wear.data.room.client.RoomDB
 import com.mongs.wear.data.room.entity.Slot
-import com.mongs.wear.domain.client.MqttClient
+import com.mongs.wear.domain.client.MqttEventClient
 import com.mongs.wear.domain.error.RepositoryErrorCode
 import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.model.SlotModel
 import com.mongs.wear.domain.repositroy.SlotRepository
 import com.mongs.wear.domain.vo.SlotVo
-import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class SlotRepositoryImpl @Inject constructor(
-    private val mqttClient: MqttClient,
+    private val mqttEventClient: MqttEventClient,
     private val roomDB: RoomDB,
     private val managementApi: ManagementApi,
 ): SlotRepository {
@@ -112,7 +110,7 @@ class SlotRepositoryImpl @Inject constructor(
                         roomDB.slotDao().update(slot = roomSlot)
 
                         if (roomSlot.isSelected) {
-                            mqttClient.subScribeMong(mongId = roomSlot.mongId)
+                            mqttEventClient.subScribeMong(mongId = roomSlot.mongId)
                         }
                     }
                 }
@@ -161,7 +159,7 @@ class SlotRepositoryImpl @Inject constructor(
                 roomDB.slotDao().updateIsSelectedBySetNowSlot(slot.mongId, false)
             }
             roomDB.slotDao().updateIsSelectedBySetNowSlot(mongId, true)
-            mqttClient.subScribeMong(mongId = mongId)
+            mqttEventClient.subScribeMong(mongId = mongId)
 
         } catch (e: RuntimeException) {
             throw RepositoryException(RepositoryErrorCode.SET_NOW_SLOT_FAIL)

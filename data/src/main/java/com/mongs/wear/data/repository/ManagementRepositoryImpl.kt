@@ -3,8 +3,8 @@ package com.mongs.wear.data.repository
 import com.mongs.wear.data.api.client.ManagementApi
 import com.mongs.wear.data.code.Shift
 import com.mongs.wear.data.code.State
-import com.mongs.wear.data.dto.management.request.FeedMongReqDto
-import com.mongs.wear.data.dto.management.request.RegisterMongReqDto
+import com.mongs.wear.data.dto.management.req.FeedMongReqDto
+import com.mongs.wear.data.dto.management.req.RegisterMongReqDto
 import com.mongs.wear.data.room.client.RoomDB
 import com.mongs.wear.data.room.entity.Slot
 import com.mongs.wear.domain.error.RepositoryErrorCode

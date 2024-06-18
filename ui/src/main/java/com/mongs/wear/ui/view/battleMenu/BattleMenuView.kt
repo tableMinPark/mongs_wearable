@@ -31,10 +31,12 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.wear.compose.material.Text
-import com.mongs.wear.domain.vo.BattleRoomVo
+import com.mongs.wear.domain.vo.MatchVo
 import com.mongs.wear.ui.R
-import com.mongs.wear.ui.global.component.background.BattleNestedBackground
+import com.mongs.wear.ui.global.component.background.BattleMenuBackground
+import com.mongs.wear.ui.global.component.button.BlueButton
 import com.mongs.wear.ui.global.component.common.LoadingBar
+import com.mongs.wear.ui.global.resource.NavItem
 import com.mongs.wear.ui.global.theme.DAL_MU_RI
 import com.mongs.wear.ui.global.theme.PaymongPink200
 import com.mongs.wear.ui.global.theme.PaymongWhite
@@ -45,36 +47,70 @@ fun BattleMenuView(
     navController: NavController,
     battleMenuViewModel: BattleMenuViewModel = hiltViewModel(),
 ) {
-    val battleRoomVo = battleMenuViewModel.battleRoomVo.observeAsState(BattleRoomVo())
-    Log.d("BattleMenuView", "$battleRoomVo")
+    val matchVo = battleMenuViewModel.matchVo.observeAsState(MatchVo())
+    Log.d("BattleMenuView", "$matchVo")
 
     Box {
         if (battleMenuViewModel.uiState.loadingBar) {
-            BattleNestedBackground()
-            BattleMenuLoadingBar(modifier = Modifier.zIndex(1f))
+            BattleMenuBackground()
+            BattleMenuLoadingBar(
+                matchWaitCancel = {
+                    battleMenuViewModel.matchWaitCancel()
+                },
+                modifier = Modifier.zIndex(1f)
+            )
+
         } else {
-            BattleNestedBackground()
+            BattleMenuBackground()
             BattleMenuContent(
                 battle = {
                     battleMenuViewModel.uiState.loadingBar = true
-                    battleMenuViewModel.matchSearch()
-//                navController.navigate(NavItem.BattleMatch.route)
+                    battleMenuViewModel.matchWait()
                 },
                 modifier = Modifier.zIndex(1f),
             )
         }
     }
+
+    if (battleMenuViewModel.uiState.navBattleMatchView) {
+        navController.navigate(NavItem.BattleMatch.route)
+    }
 }
 
 @Composable
 private fun BattleMenuLoadingBar(
+    matchWaitCancel: () -> Unit,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize(),
     ) {
-        LoadingBar()
+        Column(
+            modifier = Modifier.fillMaxHeight()
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.7f)
+            ) {
+                LoadingBar()
+            }
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.3f)
+            ) {
+                BlueButton(
+                    text = "매칭 취소",
+                    width = 100,
+                    onClick = matchWaitCancel,
+                )
+            }
+        }
     }
 }
 
@@ -188,11 +224,14 @@ private fun BattleMenuContent(
 @Composable
 private fun FeedMenuViewPreview() {
     Box {
-        BattleNestedBackground()
-        BattleMenuContent(
-            battle = {},
-            modifier = Modifier.zIndex(1f),
+        BattleMenuBackground()
+        BattleMenuLoadingBar(
+            matchWaitCancel = {}
         )
+//        BattleMenuContent(
+//            battle = {},
+//            modifier = Modifier.zIndex(1f),
+//        )
     }
 }
 
@@ -200,7 +239,7 @@ private fun FeedMenuViewPreview() {
 @Composable
 private fun LargeFeedMenuViewPreview() {
     Box {
-        BattleNestedBackground()
+        BattleMenuBackground()
         BattleMenuContent(
             battle = {},
             modifier = Modifier.zIndex(1f),

@@ -1,7 +1,6 @@
 package com.mongs.wear.data.di
 
 import android.content.Context
-import com.mongs.wear.data.api.client.MqttApi
 import com.mongs.wear.data.api.client.MqttBattleApi
 import dagger.Module
 import dagger.Provides

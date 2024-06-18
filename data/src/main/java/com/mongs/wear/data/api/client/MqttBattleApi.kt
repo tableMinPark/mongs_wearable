@@ -1,16 +1,15 @@
 package com.mongs.wear.data.api.client
 
 import android.util.Log
+import info.mqtt.android.service.MqttAndroidClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import info.mqtt.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.IMqttActionListener
 import org.eclipse.paho.client.mqttv3.IMqttToken
 import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 import org.eclipse.paho.client.mqttv3.MqttException
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -72,7 +71,7 @@ class MqttBattleApi @Inject constructor(
         withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
                 mqttAndroidClient.publish(topic = topic, payload = payload.toByteArray(), qos = 2, retained = true).await()
-                Log.i("MqttBattleApi", "[$topic] produce.")
+                Log.i("MqttBattleApi", "[$topic] : $payload")
             } else {
                 Log.e("MqttBattleApi", "[$topic] produce fail.")
             }

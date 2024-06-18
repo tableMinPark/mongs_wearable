@@ -1,7 +1,6 @@
 package com.mongs.wear.data.di
 
 import android.content.Context
-import com.mongs.wear.data.dataStore.BattleDataStore
 import com.mongs.wear.data.dataStore.DeviceDataStore
 import com.mongs.wear.data.dataStore.MemberDataStore
 import dagger.Module
@@ -23,10 +22,5 @@ object DataStoreModule {
     @Singleton
     fun bindMemberDataStore(@ApplicationContext context: Context) : MemberDataStore {
         return MemberDataStore(context)
-    }
-    @Provides
-    @Singleton
-    fun bindBattleDataStore(@ApplicationContext context: Context) : BattleDataStore {
-        return BattleDataStore(context)
     }
 }

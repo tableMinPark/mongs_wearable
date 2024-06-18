@@ -3,10 +3,10 @@ package com.mongs.wear.domain.client
 interface MqttBattleClient {
     suspend fun setConnection()
     suspend fun disconnect()
-    suspend fun subScribeBattleMatch(mongId: Long)
+    suspend fun subScribeBattleSearch(deviceId: String)
+    suspend fun disSubScribeBattleSearch()
+    suspend fun subScribeBattleMatch(roomId: String)
     suspend fun disSubScribeBattleMatch()
-    suspend fun produceBattleMatch(mongId: Long, data: Any)
-    suspend fun subScribeBattleRound(roomId: String)
-    suspend fun disSubScribeBattleRound()
-    suspend fun produceBattleRound(roomId: String, data: Any)
+    suspend fun produceBattleMatchEnter(roomId: String, playerId: String)
+    suspend fun produceBattleMatchExit(mongId: Long, roomId: String)
 }

@@ -3,7 +3,6 @@ package com.mongs.wear.data.repository
 import com.mongs.wear.data.api.client.AuthApi
 import com.mongs.wear.data.dto.auth.req.LoginReqDto
 import com.mongs.wear.data.dto.auth.req.LogoutReqDto
-import com.mongs.wear.domain.client.MqttClient
 import com.mongs.wear.domain.error.RepositoryErrorCode
 import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.model.LoginModel

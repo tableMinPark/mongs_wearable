@@ -8,46 +8,50 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.domain.exception.UseCaseException
-import com.mongs.wear.domain.usecase.battle.GetBattleRoomUseCase
-import com.mongs.wear.domain.usecase.battle.MatchExitUseCase
-import com.mongs.wear.domain.usecase.battle.MatchSearchUseCase
-import com.mongs.wear.domain.vo.BattleRoomVo
+import com.mongs.wear.domain.usecase.battle.MatchWaitCancelUseCase
+import com.mongs.wear.domain.usecase.battle.MatchWaitUseCase
+import com.mongs.wear.domain.vo.MatchVo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class BattleMenuViewModel @Inject constructor(
-    private val getBattleRoomUseCase: GetBattleRoomUseCase,
-    private val matchSearchUseCase: MatchSearchUseCase,
-    private val matchExitUseCase: MatchExitUseCase,
+    private val matchWaitUseCase: MatchWaitUseCase,
+    private val matchWaitCancelUseCase: MatchWaitCancelUseCase,
 ): ViewModel() {
     val uiState: UiState = UiState()
 
-    var battleRoomVo: LiveData<BattleRoomVo> = MutableLiveData(BattleRoomVo())
+    var matchVo: LiveData<MatchVo> = MutableLiveData(MatchVo())
 
-    fun matchSearch() {
-        val timeoutJob: Job  = viewModelScope.launch (Dispatchers.IO) {
+    fun matchWait() {
+        viewModelScope.launch (Dispatchers.IO) {
             try {
-                delay(300000)
-                matchExitUseCase()
-                uiState.loadingBar = false
+                matchWaitUseCase()
             } catch (e: UseCaseException) {
+                e.printStackTrace()
                 uiState.loadingBar = false
             }
         }
+    }
 
+    fun matchWaitCancel() {
         viewModelScope.launch (Dispatchers.IO) {
             try {
-                battleRoomVo = getBattleRoomUseCase()
-                matchSearchUseCase()
-                timeoutJob.start()
-            } catch (e: UseCaseException) {
+                matchWaitCancelUseCase()
                 uiState.loadingBar = false
+            } catch (e: UseCaseException) {
+                e.printStackTrace()
             }
+        }
+    }
+
+    override fun onCleared() {
+        CoroutineScope(Dispatchers.IO).launch {
+            matchWaitCancelUseCase()
+            super.onCleared()
         }
     }
 

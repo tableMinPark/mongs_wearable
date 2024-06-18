@@ -62,6 +62,12 @@ enum class RepositoryErrorCode(
     SET_WALKING_COUNT_FAIL(""),
     GET_WALKING_COUNT_FAIL(""),
     EXCHANGE_PAY_POINT_WALKING_FAIL(""),
+
+    GET_MATCH_FAIL(""),
+    GET_MATCH_PLAYER_FAIL(""),
+    MATCH_WAIT_FAIL(""),
+    MATCH_WAIT_CANCEL_FAIL(""),
+    MATCH_START_FAIL(""),
     ;
     override fun message(): String {
         return message

@@ -1,9 +1,9 @@
 package com.mongs.wear.data.di
 
 import com.mongs.wear.data.client.MqttBattleClientImpl
-import com.mongs.wear.data.client.MqttClientImpl
+import com.mongs.wear.data.client.MqttEventClientImpl
 import com.mongs.wear.domain.client.MqttBattleClient
-import com.mongs.wear.domain.client.MqttClient
+import com.mongs.wear.domain.client.MqttEventClient
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,7 +15,7 @@ import javax.inject.Singleton
 abstract class ClientModule {
     @Binds
     @Singleton
-    abstract fun bindMqttClient(client: MqttClientImpl): MqttClient
+    abstract fun bindMqttClient(client: MqttEventClientImpl): MqttEventClient
     @Binds
     @Singleton
     abstract fun bindMqttBattleClient(client: MqttBattleClientImpl): MqttBattleClient

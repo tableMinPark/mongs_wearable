@@ -1,6 +1,6 @@
 package com.mongs.wear.domain.usecase.auth
 
-import com.mongs.wear.domain.client.MqttClient
+import com.mongs.wear.domain.client.MqttEventClient
 import com.mongs.wear.domain.code.FeedbackCode
 import com.mongs.wear.domain.error.UseCaseErrorCode
 import com.mongs.wear.domain.exception.RepositoryException
@@ -14,7 +14,7 @@ import com.mongs.wear.domain.repositroy.SlotRepository
 import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(
-    private val mqttClient: MqttClient,
+    private val mqttEventClient: MqttEventClient,
     private val authRepository: AuthRepository,
     private val codeRepository: CodeRepository,
     private val deviceRepository: DeviceRepository,
@@ -43,8 +43,8 @@ class LoginUseCase @Inject constructor(
                 codeRepository.setCodes(codeIntegrity = codeIntegrity, buildVersion = buildVersion)
             }
 
-            mqttClient.setConnection(accountId = accountId)
-            mqttClient.subScribeMember(accountId = accountId)
+            mqttEventClient.setConnection(accountId = accountId)
+            mqttEventClient.subScribeMember(accountId = accountId)
 
             memberRepository.setMember()
             slotRepository.setSlots()
