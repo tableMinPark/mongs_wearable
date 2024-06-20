@@ -2,6 +2,8 @@ package com.mongs.wear.data.client
 
 import com.mongs.wear.data.api.client.MqttEventApi
 import com.mongs.wear.data.callback.MessageEventCallback
+import com.mongs.wear.data.code.Shift
+import com.mongs.wear.data.code.State
 import com.mongs.wear.data.dataStore.MemberDataStore
 import com.mongs.wear.data.room.client.RoomDB
 import com.mongs.wear.domain.client.MqttEventClient
@@ -9,8 +11,8 @@ import javax.inject.Inject
 
 class MqttEventClientImpl @Inject constructor(
     private val memberDataStore: MemberDataStore,
-    private val roomDB: RoomDB,
     private val mqttEventApi: MqttEventApi,
+    private val roomDB: RoomDB,
 ): MqttEventClient {
 
     companion object {
@@ -27,17 +29,97 @@ class MqttEventClientImpl @Inject constructor(
     }
 
     override suspend fun setConnection(accountId: Long) {
-        mqttEventApi.connect(messageCallback = MessageEventCallback(
-                memberDataStore = memberDataStore,
-                roomDB = roomDB
+        mqttEventApi.connect(
+            messageCallback = MessageEventCallback(
+                setStarPoint = { starPoint ->
+                    memberDataStore.setStarPoint(starPoint = starPoint)
+                },
+                updateMongCode = { mongId, mongCode ->
+                    roomDB.slotDao().updateMongCodeByMqtt(mongId = mongId, mongCode = mongCode)
+                },
+                updateExp = { mongId, expPercent ->
+                    roomDB.slotDao().updateExpByMqtt(mongId = mongId, exp = expPercent)
+                },
+                updateIsSleeping = { mongId, isSleeping ->
+                    roomDB.slotDao()
+                        .updateIsSleepingByMqtt(mongId = mongId, isSleeping = isSleeping)
+                },
+                updatePayPoint = { mongId, payPoint ->
+                    roomDB.slotDao().updatePayPointByMqtt(mongId = mongId, payPoint = payPoint)
+                },
+                updatePoopCount = { mongId, poopCount ->
+                    roomDB.slotDao().updatePoopCountByMqtt(mongId = mongId, poopCount = poopCount)
+                },
+                updateShiftCode = { mongId, shiftCode ->
+                    roomDB.slotDao().updateShiftCodeByMqtt(
+                        mongId = mongId,
+                        shiftCode = Shift.valueOf(shiftCode).code
+                    )
+                },
+                updateStateCode = { mongId, stateCode ->
+                    roomDB.slotDao().updateStateCodeByMqtt(
+                        mongId = mongId,
+                        stateCode = State.valueOf(stateCode).code
+                    )
+                },
+                updateStatus = { mongId, weight, strengthPercent, satietyPercent, healthyPercent, sleepPercent ->
+                    roomDB.slotDao().updateStatusByMqtt(
+                        mongId = mongId,
+                        weight = weight,
+                        strength = strengthPercent,
+                        satiety = satietyPercent,
+                        healthy = healthyPercent,
+                        sleep = sleepPercent
+                    )
+                },
             )
         )
     }
 
     override suspend fun reconnect(resetMember: () -> Unit, resetSlot: () -> Unit) {
-        mqttEventApi.connect(messageCallback = MessageEventCallback(
-                memberDataStore = memberDataStore,
-                roomDB = roomDB
+        mqttEventApi.connect(
+            messageCallback = MessageEventCallback(
+                setStarPoint = { starPoint ->
+                    memberDataStore.setStarPoint(starPoint = starPoint)
+                },
+                updateMongCode = { mongId, mongCode ->
+                    roomDB.slotDao().updateMongCodeByMqtt(mongId = mongId, mongCode = mongCode)
+                },
+                updateExp = { mongId, expPercent ->
+                    roomDB.slotDao().updateExpByMqtt(mongId = mongId, exp = expPercent)
+                },
+                updateIsSleeping = { mongId, isSleeping ->
+                    roomDB.slotDao()
+                        .updateIsSleepingByMqtt(mongId = mongId, isSleeping = isSleeping)
+                },
+                updatePayPoint = { mongId, payPoint ->
+                    roomDB.slotDao().updatePayPointByMqtt(mongId = mongId, payPoint = payPoint)
+                },
+                updatePoopCount = { mongId, poopCount ->
+                    roomDB.slotDao().updatePoopCountByMqtt(mongId = mongId, poopCount = poopCount)
+                },
+                updateShiftCode = { mongId, shiftCode ->
+                    roomDB.slotDao().updateShiftCodeByMqtt(
+                        mongId = mongId,
+                        shiftCode = Shift.valueOf(shiftCode).code
+                    )
+                },
+                updateStateCode = { mongId, stateCode ->
+                    roomDB.slotDao().updateStateCodeByMqtt(
+                        mongId = mongId,
+                        stateCode = State.valueOf(stateCode).code
+                    )
+                },
+                updateStatus = { mongId, weight, strengthPercent, satietyPercent, healthyPercent, sleepPercent ->
+                    roomDB.slotDao().updateStatusByMqtt(
+                        mongId = mongId,
+                        weight = weight,
+                        strength = strengthPercent,
+                        satiety = satietyPercent,
+                        healthy = healthyPercent,
+                        sleep = sleepPercent
+                    )
+                },
             )
         )
         if (memberTopic.isNotBlank()) {

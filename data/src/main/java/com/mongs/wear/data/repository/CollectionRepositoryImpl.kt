@@ -9,8 +9,8 @@ import com.mongs.wear.domain.repositroy.CollectionRepository
 import javax.inject.Inject
 
 class CollectionRepositoryImpl @Inject constructor(
-    private val roomDB: RoomDB,
     private val collectionApi: CollectionApi,
+    private val roomDB: RoomDB,
 ): CollectionRepository {
     override suspend fun getMapCollections(): List<CollectionModel> {
         val res = collectionApi.findMapCollection()

@@ -8,5 +8,6 @@ enum class MatchState(
     NONE(MatchStateCode.NONE),
     ENTER(MatchStateCode.ENTER),
     MATCH(MatchStateCode.MATCH),
+    PICK(MatchStateCode.PICK),
     OVER(MatchStateCode.OVER),
 }

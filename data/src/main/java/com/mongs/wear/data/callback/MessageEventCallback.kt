@@ -28,12 +28,21 @@ import com.mongs.wear.data.dto.mqttEvent.res.MongShiftVo
 import com.mongs.wear.data.dto.mqttEvent.res.MongStateVo
 import com.mongs.wear.data.dto.mqttEvent.res.MongStatusVo
 import com.mongs.wear.data.room.client.RoomDB
+import com.mongs.wear.domain.code.ShiftCode
+import com.mongs.wear.domain.code.StateCode
 import java.lang.reflect.Type
 
 
 class MessageEventCallback (
-    private val memberDataStore: MemberDataStore,
-    private val roomDB: RoomDB,
+    private val setStarPoint: suspend (Int) -> Unit,
+    private val updateMongCode: suspend (Long, String) -> Unit,
+    private val updateExp: suspend (Long, Double) -> Unit,
+    private val updateIsSleeping: suspend (Long, Boolean) -> Unit,
+    private val updatePayPoint: suspend (Long, Int) -> Unit,
+    private val updatePoopCount: suspend (Long, Int) -> Unit,
+    private val updateShiftCode: suspend (Long, String) -> Unit,
+    private val updateStateCode: suspend (Long, String) -> Unit,
+    private val updateStatus: suspend (Long, Double, Double, Double, Double, Double) -> Unit,
 ) : MqttCallback {
 
     private val gson: Gson = GsonBuilder()
@@ -56,71 +65,56 @@ class MessageEventCallback (
                                 PublishEventCode.MEMBER_STAR_POINT -> {
                                     val data: MemberStarPointVo = gson.fromJson(dataJson, MemberStarPointVo::class.java)
                                     Log.i("EventMessageCallback", "$data")
-                                    memberDataStore.setStarPoint(starPoint = data.starPoint)
+                                    setStarPoint(data.starPoint)
                                 }
 
                                 PublishEventCode.MONG_CODE -> {
                                     val data: MongCodeVo = gson.fromJson(dataJson, MongCodeVo::class.java)
                                     Log.i("EventMessageCallback", "$data")
-                                    roomDB.slotDao().updateMongCodeByMqtt(mongId = data.mongId, mongCode = data.mongCode)
+                                    updateMongCode(data.mongId, data.mongCode)
                                 }
 
                                 PublishEventCode.MONG_EXP -> {
                                     val data: MongExpVo = gson.fromJson(dataJson, MongExpVo::class.java)
                                     Log.i("EventMessageCallback", "$data")
-                                    roomDB.slotDao().updateExpByMqtt(mongId = data.mongId, exp = data.expPercent)
+                                    updateExp(data.mongId, data.expPercent)
                                 }
 
                                 PublishEventCode.MONG_IS_SLEEPING -> {
                                     val data: MongIsSleepingVo = gson.fromJson(dataJson, MongIsSleepingVo::class.java)
                                     Log.i("EventMessageCallback", "$data")
-                                    roomDB.slotDao().updateIsSleepingByMqtt(mongId = data.mongId, isSleeping = data.isSleeping)
+                                    updateIsSleeping(data.mongId, data.isSleeping)
                                 }
 
                                 PublishEventCode.MONG_PAY_POINT -> {
                                     val data: MongPayPointVo = gson.fromJson(dataJson, MongPayPointVo::class.java)
                                     Log.i("EventMessageCallback", "$data")
-                                    roomDB.slotDao().updatePayPointByMqtt(mongId = data.mongId, payPoint = data.payPoint)
+                                    updatePayPoint(data.mongId, data.payPoint)
                                 }
 
                                 PublishEventCode.MONG_POOP_COUNT -> {
                                     val data: MongPoopCountVo = gson.fromJson(dataJson, MongPoopCountVo::class.java)
                                     Log.i("EventMessageCallback", "$data")
-                                    roomDB.slotDao().updatePoopCountByMqtt(mongId = data.mongId, poopCount = data.poopCount)
+                                    updatePoopCount(data.mongId, data.poopCount)
                                 }
 
                                 PublishEventCode.MONG_SHIFT -> {
                                     val data: MongShiftVo = gson.fromJson(dataJson, MongShiftVo::class.java)
                                     Log.i("EventMessageCallback", "$data")
-                                    roomDB.slotDao().updateShiftCodeByMqtt(
-                                        mongId = data.mongId,
-                                        shiftCode = Shift.valueOf(data.shiftCode).code
-                                    )
+                                    updateShiftCode(data.mongId, data.shiftCode)
                                 }
 
                                 PublishEventCode.MONG_STATE -> {
                                     val data: MongStateVo = gson.fromJson(dataJson, MongStateVo::class.java)
                                     Log.i("EventMessageCallback", "$data")
-                                    roomDB.slotDao().updateStateCodeByMqtt(
-                                        mongId = data.mongId,
-                                        stateCode = State.valueOf(data.stateCode).code
-                                    )
+                                    updateStateCode(data.mongId, data.stateCode)
                                 }
 
                                 PublishEventCode.MONG_STATUS -> {
                                     val data: MongStatusVo = gson.fromJson(dataJson, MongStatusVo::class.java)
                                     Log.i("EventMessageCallback", "$data")
-                                    roomDB.slotDao().updateStatusByMqtt(
-                                        mongId = data.mongId,
-                                        weight = data.weight,
-                                        strength = data.strengthPercent,
-                                        satiety = data.satietyPercent,
-                                        healthy = data.healthyPercent,
-                                        sleep = data.sleepPercent
-                                    )
+                                    updateStatus(data.mongId, data.weight, data.strengthPercent, data.satietyPercent, data.healthyPercent, data.sleepPercent)
                                 }
-
-                                else -> {}
                             }
                         }
                 } catch (e: Exception) {

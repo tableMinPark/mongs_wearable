@@ -16,9 +16,8 @@ import com.mongs.wear.domain.vo.SlotVo
 import javax.inject.Inject
 
 class SlotRepositoryImpl @Inject constructor(
-    private val mqttEventClient: MqttEventClient,
-    private val roomDB: RoomDB,
     private val managementApi: ManagementApi,
+    private val roomDB: RoomDB,
 ): SlotRepository {
     override suspend fun syncNowSlot() {
         roomDB.slotDao().selectByIsSelectedTrue()?.let { slot ->
@@ -52,7 +51,7 @@ class SlotRepositoryImpl @Inject constructor(
             }
         }
     }
-    override suspend fun setSlots() {
+    override suspend fun setSlots(subScribeMong: suspend (Long) -> Unit) {
         val res = managementApi.findMong()
 
         if (res.isSuccessful) {
@@ -110,7 +109,7 @@ class SlotRepositoryImpl @Inject constructor(
                         roomDB.slotDao().update(slot = roomSlot)
 
                         if (roomSlot.isSelected) {
-                            mqttEventClient.subScribeMong(mongId = roomSlot.mongId)
+                            subScribeMong(roomSlot.mongId)
                         }
                     }
                 }
@@ -121,9 +120,9 @@ class SlotRepositoryImpl @Inject constructor(
             throw RepositoryException(RepositoryErrorCode.SET_SLOTS_FAIL)
         }
     }
-    override suspend fun getSlots(): LiveData<List<SlotVo>> {
+    override suspend fun getSlots(subScribeMong: suspend (Long) -> Unit): LiveData<List<SlotVo>> {
         try {
-            this.setSlots()
+            this.setSlots(subScribeMong = subScribeMong)
             return roomDB.slotDao().selectAllLive().map { slotList ->
                 slotList.map { slot ->
                     SlotVo(
@@ -153,13 +152,13 @@ class SlotRepositoryImpl @Inject constructor(
             throw RepositoryException(RepositoryErrorCode.GET_SLOTS_LIVE_FAIL)
         }
     }
-    override suspend fun setNowSlot(mongId: Long) {
+    override suspend fun setNowSlot(subScribeMong: suspend (Long) -> Unit, mongId: Long) {
         try {
             roomDB.slotDao().selectByIsSelectedTrue()?.let { slot ->
                 roomDB.slotDao().updateIsSelectedBySetNowSlot(slot.mongId, false)
             }
             roomDB.slotDao().updateIsSelectedBySetNowSlot(mongId, true)
-            mqttEventClient.subScribeMong(mongId = mongId)
+            subScribeMong(mongId)
 
         } catch (e: RuntimeException) {
             throw RepositoryException(RepositoryErrorCode.SET_NOW_SLOT_FAIL)

@@ -15,7 +15,6 @@ class GetNowSlotUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(): LiveData<SlotVo> {
         try {
-            Log.d("Render Test", "GetNowSlotUseCase")
             val slotModel = slotRepository.getNowSlotLive()
             return slotModel.map {
                 SlotVo(

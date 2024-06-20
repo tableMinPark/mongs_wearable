@@ -3,6 +3,7 @@ package com.mongs.wear.data.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.mongs.wear.data.api.client.BattleApi
+import com.mongs.wear.data.code.BattleState
 import com.mongs.wear.data.code.MatchState
 import com.mongs.wear.data.room.client.RoomDB
 import com.mongs.wear.domain.error.RepositoryErrorCode
@@ -13,8 +14,8 @@ import com.mongs.wear.domain.vo.MatchVo
 import javax.inject.Inject
 
 class BattleRepositoryImpl @Inject constructor(
-    private val roomDB: RoomDB,
     private val battleApi: BattleApi,
+    private val roomDB: RoomDB,
 ): BattleRepository {
     override suspend fun getMatch(): MatchVo {
         try {
@@ -22,6 +23,8 @@ class BattleRepositoryImpl @Inject constructor(
                 return MatchVo(
                     roomId = match.roomId,
                     round = match.round,
+                    isMatchOver = match.isMatchOver,
+                    matchStateCode = match.matchState.code,
                 )
             }
             throw RepositoryException(RepositoryErrorCode.GET_MATCH_FAIL)
@@ -37,11 +40,30 @@ class BattleRepositoryImpl @Inject constructor(
                 MatchVo(
                     roomId = match.roomId,
                     round = match.round,
+                    isMatchOver = match.isMatchOver,
+                    matchStateCode = match.matchState.code,
                 )
             }
         } catch (e: RuntimeException) {
             e.printStackTrace()
             throw RepositoryException(RepositoryErrorCode.GET_MATCH_FAIL)
+        }
+    }
+
+    override suspend fun getMyMatchPlayer(): MatchPlayerVo {
+        try {
+            roomDB.matchPlayerDao().selectMyMatchPlayer()?.let { matchPlayer ->
+                return MatchPlayerVo(
+                    playerId = matchPlayer.playerId,
+                    mongCode = matchPlayer.mongCode,
+                    hp = matchPlayer.hp,
+                    state = matchPlayer.state.code,
+                    isWinner = matchPlayer.isWinner,
+                )
+            }
+            throw RepositoryException(RepositoryErrorCode.GET_MATCH_PLAYER_FAIL)
+        } catch (e: RuntimeException) {
+            throw RepositoryException(RepositoryErrorCode.GET_MATCH_PLAYER_FAIL)
         }
     }
 
@@ -52,9 +74,28 @@ class BattleRepositoryImpl @Inject constructor(
                     playerId = matchPlayer.playerId,
                     mongCode = matchPlayer.mongCode,
                     hp = matchPlayer.hp,
-                    state = matchPlayer.state.code
+                    state = matchPlayer.state.code,
+                    isWinner = matchPlayer.isWinner,
                 )
             }
+        } catch (e: RuntimeException) {
+            e.printStackTrace()
+            throw RepositoryException(RepositoryErrorCode.GET_MATCH_PLAYER_FAIL)
+        }
+    }
+
+    override suspend fun getOtherMatchPlayer(): MatchPlayerVo {
+        try {
+            roomDB.matchPlayerDao().selectOtherMatchPlayer()?.let { matchPlayer ->
+                return MatchPlayerVo(
+                    playerId = matchPlayer.playerId,
+                    mongCode = matchPlayer.mongCode,
+                    hp = matchPlayer.hp,
+                    state = matchPlayer.state.code,
+                    isWinner = matchPlayer.isWinner,
+                )
+            }
+            throw RepositoryException(RepositoryErrorCode.GET_MATCH_PLAYER_FAIL)
         } catch (e: RuntimeException) {
             e.printStackTrace()
             throw RepositoryException(RepositoryErrorCode.GET_MATCH_PLAYER_FAIL)
@@ -68,7 +109,8 @@ class BattleRepositoryImpl @Inject constructor(
                     playerId = matchPlayer.playerId,
                     mongCode = matchPlayer.mongCode,
                     hp = matchPlayer.hp,
-                    state = matchPlayer.state.code
+                    state = matchPlayer.state.code,
+                    isWinner = matchPlayer.isWinner,
                 )
             }
         } catch (e: RuntimeException) {
@@ -96,9 +138,24 @@ class BattleRepositoryImpl @Inject constructor(
     override suspend fun matchStart(roomId: String) {
         try {
             roomDB.matchDao().updateMatchState(MatchState.MATCH, roomId)
-            throw RepositoryException(RepositoryErrorCode.MATCH_START_FAIL)
         } catch (e: RuntimeException) {
-            e.printStackTrace()
+            throw RepositoryException(RepositoryErrorCode.MATCH_START_FAIL)
+        }
+    }
+
+    override suspend fun matchPick(roomId: String) {
+        try {
+            roomDB.matchDao().updateMatchState(MatchState.PICK, roomId)
+            roomDB.matchPlayerDao().updateAllMatchPlayerBattleState(roomId = roomId, state = BattleState.NONE)
+        } catch (e: RuntimeException) {
+            throw RepositoryException(RepositoryErrorCode.MATCH_START_FAIL)
+        }
+    }
+
+    override suspend fun matchOver(roomId: String) {
+        try {
+            roomDB.matchDao().updateMatchState(MatchState.OVER, roomId)
+        } catch (e: RuntimeException) {
             throw RepositoryException(RepositoryErrorCode.MATCH_START_FAIL)
         }
     }

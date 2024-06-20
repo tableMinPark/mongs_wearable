@@ -67,17 +67,6 @@ class MqttEventApi @Inject constructor(
         }
     }
 
-    suspend fun produce(topic: String, payload: String) {
-        withContext(Dispatchers.IO) {
-            if (mqttAndroidClient.isConnected) {
-                mqttAndroidClient.publish(topic = topic, payload = payload.toByteArray(), qos = 2, retained = true).await()
-                Log.i("MqttEventApi", "[$topic] produce.")
-            } else {
-                Log.e("MqttEventApi", "[$topic] produce fail.")
-            }
-        }
-    }
-
     private suspend fun IMqttToken.await() = suspendCancellableCoroutine { cont ->
         actionCallback = object : IMqttActionListener {
             override fun onSuccess(asyncActionToken: IMqttToken?) {

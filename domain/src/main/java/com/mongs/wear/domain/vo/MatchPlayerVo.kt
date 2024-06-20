@@ -7,4 +7,5 @@ data class MatchPlayerVo(
     val mongCode: String = "CH444",
     val hp: Double = 500.0,
     val state: BattleStateCode = BattleStateCode.NONE,
+    val isWinner: Boolean = false,
 )

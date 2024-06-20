@@ -12,8 +12,8 @@ import com.mongs.wear.domain.repositroy.FeedbackRepository
 import javax.inject.Inject
 
 class FeedbackRepositoryImpl @Inject constructor(
+    private val feedbackApi: FeedbackApi,
     private val roomDB: RoomDB,
-    private val feedbackApi: FeedbackApi
 ): FeedbackRepository {
     override suspend fun addFeedbackLog(groupCode: String, location: String, message: String) {
         try {

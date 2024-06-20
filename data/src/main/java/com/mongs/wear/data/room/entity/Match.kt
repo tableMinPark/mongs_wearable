@@ -12,6 +12,7 @@ data class Match(
     val roomId: String = "",
     val round: Int = 0,
     val myPlayerId: String = "",
+    val isMatchOver: Boolean = false,
     val matchState: MatchState,
     val createdAt: LocalDateTime = LocalDateTime.now(),
 )

@@ -14,12 +14,18 @@ class MatchWaitUseCase @Inject constructor(
     private val slotRepository: SlotRepository,
     private val battleRepository: BattleRepository,
 ) {
-    suspend operator fun invoke() {
+    suspend operator fun invoke(
+        matchFindCallback: suspend () -> Unit,
+        matchEnterCallback: suspend () -> Unit,
+    ) {
         try {
             val slotModel = slotRepository.getNowSlot()
             val deviceId = deviceRepository.getDeviceId()
 
-            mqttBattleClient.setConnection()
+            mqttBattleClient.setConnection(
+                matchFindCallback = matchFindCallback,
+                matchEnterCallback = matchEnterCallback,
+            )
             mqttBattleClient.subScribeBattleSearch(deviceId = deviceId)
             battleRepository.matchWait(mongId = slotModel.mongId)
         } catch (e: RepositoryException) {

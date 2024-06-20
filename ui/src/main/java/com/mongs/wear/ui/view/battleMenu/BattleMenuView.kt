@@ -15,11 +15,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -29,9 +31,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.wear.compose.material.Text
-import com.mongs.wear.domain.vo.MatchVo
 import com.mongs.wear.ui.R
 import com.mongs.wear.ui.global.component.background.BattleMenuBackground
 import com.mongs.wear.ui.global.component.button.BlueButton
@@ -46,20 +51,29 @@ import com.mongs.wear.ui.viewModel.battleMenu.BattleMenuViewModel
 fun BattleMenuView(
     navController: NavController,
     battleMenuViewModel: BattleMenuViewModel = hiltViewModel(),
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
-    val matchVo = battleMenuViewModel.matchVo.observeAsState(MatchVo())
-    Log.d("BattleMenuView", "$matchVo")
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    DisposableEffect(currentBackStackEntry) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                battleMenuViewModel.matchWaitCancel()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     Box {
         if (battleMenuViewModel.uiState.loadingBar) {
             BattleMenuBackground()
             BattleMenuLoadingBar(
-                matchWaitCancel = {
-                    battleMenuViewModel.matchWaitCancel()
-                },
+                isMatchWait = battleMenuViewModel.uiState.isMatchWait,
+                matchWaitCancel = { battleMenuViewModel.matchWaitCancel() },
                 modifier = Modifier.zIndex(1f)
             )
-
         } else {
             BattleMenuBackground()
             BattleMenuContent(
@@ -74,11 +88,15 @@ fun BattleMenuView(
 
     if (battleMenuViewModel.uiState.navBattleMatchView) {
         navController.navigate(NavItem.BattleMatch.route)
+        battleMenuViewModel.uiState.loadingBar = false
+        battleMenuViewModel.uiState.navBattleMatchView = false
+        battleMenuViewModel.uiState.isMatchWait  = true
     }
 }
 
 @Composable
 private fun BattleMenuLoadingBar(
+    isMatchWait: Boolean,
     matchWaitCancel: () -> Unit,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
@@ -104,11 +122,23 @@ private fun BattleMenuLoadingBar(
                     .fillMaxWidth()
                     .weight(0.3f)
             ) {
-                BlueButton(
-                    text = "매칭 취소",
-                    width = 100,
-                    onClick = matchWaitCancel,
-                )
+                if (isMatchWait) {
+                    BlueButton(
+                        text = "매칭 취소",
+                        width = 100,
+                        onClick = matchWaitCancel,
+                    )
+                } else {
+                    Text(
+                        text = "입장 대기중..",
+                        textAlign = TextAlign.Center,
+                        fontFamily = DAL_MU_RI,
+                        fontWeight = FontWeight.Light,
+                        fontSize = 16.sp,
+                        color = PaymongWhite,
+                        maxLines = 1,
+                    )
+                }
             }
         }
     }
@@ -205,7 +235,7 @@ private fun BattleMenuContent(
                 Spacer(modifier = Modifier.width(10.dp))
 
                 Text(
-                    text = "- 20",
+                    text = "+ 100",
                     textAlign = TextAlign.Center,
                     fontFamily = DAL_MU_RI,
                     fontWeight = FontWeight.Light,
@@ -226,6 +256,7 @@ private fun FeedMenuViewPreview() {
     Box {
         BattleMenuBackground()
         BattleMenuLoadingBar(
+            isMatchWait = false,
             matchWaitCancel = {}
         )
 //        BattleMenuContent(

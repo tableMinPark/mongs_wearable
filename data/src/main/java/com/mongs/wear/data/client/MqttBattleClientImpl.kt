@@ -6,16 +6,20 @@ import com.google.gson.GsonBuilder
 import com.mongs.wear.data.api.client.MqttBattleApi
 import com.mongs.wear.data.api.code.PublishBattleCode
 import com.mongs.wear.data.callback.MessageBattleCallback
+import com.mongs.wear.data.code.BattlePick
 import com.mongs.wear.data.code.BattleState
 import com.mongs.wear.data.code.MatchState
 import com.mongs.wear.data.dto.mqttBattle.BasicBattlePublish
 import com.mongs.wear.data.dto.mqttBattle.req.MatchEnterVo
 import com.mongs.wear.data.dto.mqttBattle.req.MatchExitVo
+import com.mongs.wear.data.dto.mqttBattle.req.MatchPickVo
 import com.mongs.wear.data.room.client.RoomDB
 import com.mongs.wear.data.room.entity.Match
 import com.mongs.wear.data.room.entity.MatchPlayer
 import com.mongs.wear.data.utils.GsonDateFormatAdapter
 import com.mongs.wear.domain.client.MqttBattleClient
+import com.mongs.wear.domain.code.BattlePickCode
+import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -37,7 +41,8 @@ class MqttBattleClientImpl @Inject constructor(
     private var battleMatchTopic = ""
 
     override suspend fun setConnection(
-
+        matchFindCallback: suspend () -> Unit,
+        matchEnterCallback: suspend () -> Unit,
     ) {
         mqttApi.connect(messageCallback =
             MessageBattleCallback(
@@ -54,7 +59,9 @@ class MqttBattleClientImpl @Inject constructor(
                         )
                     )
                     this.subScribeBattleMatch(roomId = roomId)
+                    this.disSubScribeBattleSearch()
                     this.produceBattleMatchEnter(playerId = playerId, roomId = roomId)
+                    matchFindCallback()
                 },
                 matchEnter = { matchVo ->
                     // TODO("배틀 상태 초기화 및 등록")
@@ -75,10 +82,15 @@ class MqttBattleClientImpl @Inject constructor(
                             matchState = MatchState.ENTER,
                             roomId = matchVo.roomId,
                         )
+                        matchEnterCallback()
                     }
                 },
                 match = { matchVo ->
                     // TODO("배틀 상태 업데이트")
+                    roomDB.matchDao().updateMatchState(
+                        matchState = MatchState.MATCH,
+                        roomId = matchVo.roomId,
+                    )
                     roomDB.matchDao().updateMatch(
                         roomId = matchVo.roomId,
                         round = matchVo.round
@@ -95,8 +107,8 @@ class MqttBattleClientImpl @Inject constructor(
                     roomDB.matchPlayerDao().updateMatchWinnerPlayer(
                         playerId = matchOverVo.winPlayer.playerId,
                     )
-                    roomDB.matchDao().updateMatchState(
-                        matchState = MatchState.OVER,
+                    roomDB.matchDao().updateIsMatchOver(
+                        isMatchOver = true,
                         roomId = matchOverVo.roomId,
                     )
                 }
@@ -159,22 +171,44 @@ class MqttBattleClientImpl @Inject constructor(
                     )
                 )
             )
-            mqttApi.produce(topic = battleMatchTopic, payload = payload)
+            mqttApi.produce(topic = BATTLE_MATCH_TOPIC, payload = payload)
         }
     }
 
-    override suspend fun produceBattleMatchExit(mongId: Long, roomId: String) {
+    override suspend fun produceBattleMatchPick(
+        roomId: String,
+        playerId: String,
+        targetPlayerId: String,
+        pickCode: BattlePickCode
+    ) {
+        if (battleMatchTopic.isNotBlank()) {
+            val payload = gson.toJson(
+                BasicBattlePublish(
+                    code = PublishBattleCode.MATCH_PICK,
+                    data = MatchPickVo(
+                        roomId = roomId,
+                        playerId = playerId,
+                        targetPlayerId = targetPlayerId,
+                        pick = BattlePick.valueOf(pickCode.name)
+                    )
+                )
+            )
+            mqttApi.produce(topic = BATTLE_MATCH_TOPIC, payload = payload)
+        }
+    }
+
+    override suspend fun produceBattleMatchExit(roomId: String, playerId: String) {
         if (battleMatchTopic.isNotBlank()) {
             val payload = gson.toJson(
                 BasicBattlePublish(
                     code = PublishBattleCode.MATCH_EXIT,
                     data = MatchExitVo(
-                        mongId = mongId,
                         roomId = roomId,
+                        playerId = playerId,
                     )
                 )
             )
-            mqttApi.produce(topic = battleMatchTopic, payload = payload)
+            mqttApi.produce(topic = BATTLE_MATCH_TOPIC, payload = payload)
         }
     }
 }

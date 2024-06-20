@@ -15,8 +15,8 @@ import javax.inject.Inject
 import kotlin.RuntimeException
 
 class ManagementRepositoryImpl @Inject constructor(
-    private val roomDB: RoomDB,
     private val managementApi: ManagementApi,
+    private val roomDB: RoomDB,
 ): ManagementRepository {
     override suspend fun addMong(name: String, sleepStart: String, sleepEnd: String) {
         val res = managementApi.registerMong(

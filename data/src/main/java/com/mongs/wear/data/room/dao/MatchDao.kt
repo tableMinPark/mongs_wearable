@@ -19,6 +19,8 @@ interface MatchDao {
     fun selectLive(): LiveData<Match>
     @Query("UPDATE `match` SET matchState = :matchState WHERE roomId = :roomId")
     fun updateMatchState(matchState: MatchState, roomId: String)
+    @Query("UPDATE `match` SET isMatchOver = :isMatchOver WHERE roomId = :roomId")
+    fun updateIsMatchOver(isMatchOver: Boolean, roomId: String)
     @Query("UPDATE `match` SET round = :round WHERE roomId = :roomId")
     fun updateMatch(round: Int, roomId: String)
 }

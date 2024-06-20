@@ -47,7 +47,7 @@ class LoginUseCase @Inject constructor(
             mqttEventClient.subScribeMember(accountId = accountId)
 
             memberRepository.setMember()
-            slotRepository.setSlots()
+            slotRepository.setSlots(subScribeMong = { mqttEventClient.subScribeMong(mongId = it) })
 
         } catch (e: RepositoryException) {
             feedbackRepository.addFeedbackLog(

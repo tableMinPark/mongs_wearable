@@ -12,8 +12,8 @@ import com.mongs.wear.domain.repositroy.MemberRepository
 import javax.inject.Inject
 
 class MemberRepositoryImpl @Inject constructor(
-    private val memberApi: MemberApi,
     private val memberDataStore: MemberDataStore,
+    private val memberApi: MemberApi,
     private val roomDB: RoomDB,
 ): MemberRepository {
 

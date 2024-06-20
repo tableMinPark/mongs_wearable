@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,24 +32,44 @@ import com.mongs.wear.ui.global.component.background.BattleMenuBackground
 import com.mongs.wear.ui.global.component.common.ProgressIndicator
 import com.mongs.wear.ui.global.theme.DAL_MU_RI
 import com.mongs.wear.ui.global.theme.PaymongWhite
-
+import kotlinx.coroutines.delay
+import kotlin.random.Random
 
 @Composable
-fun BattlePickDialog(
-    progress: Float,
+fun MatchPickDialog(
     attack: () -> Unit,
     defence: () -> Unit,
     heal: () -> Unit,
+    maxSeconds: Int = 30,
     modifier: Modifier = Modifier,
 ) {
+    val progress = remember { mutableFloatStateOf(0f) }
+    val timer = remember { mutableFloatStateOf(0f) }
+
+    LaunchedEffect(Unit) {
+        while (progress.floatValue < 100f) {
+            delay(200)
+            timer.floatValue += 0.2f
+            progress.floatValue = timer.floatValue / maxSeconds.toFloat() * 100f
+
+            if (progress.floatValue >= 100f) {
+                when (Random.nextInt(3)) {
+                    0 -> { attack() }
+                    1 -> { defence() }
+                    else -> { heal() }
+                }
+            }
+        }
+    }
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .background(color = Color.Black.copy(alpha = 0.9f))
+            .background(color = Color.Black.copy(alpha = 0.3f))
             .fillMaxSize()
     ) {
         ProgressIndicator(
-            progress = progress,
+            progress = progress.floatValue,
             modifier = Modifier.zIndex(1f)
         )
 
@@ -168,8 +190,7 @@ fun BattlePickDialog(
 private fun BattlePickDialogPreview() {
     Box{
         BattleMenuBackground()
-        BattlePickDialog(
-            progress = 50f,
+        MatchPickDialog(
             attack = {},
             defence = {},
             heal = {}

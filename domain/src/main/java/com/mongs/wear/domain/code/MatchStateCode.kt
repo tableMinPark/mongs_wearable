@@ -7,5 +7,6 @@ enum class MatchStateCode(
     NONE("MS000", "없음"),
     ENTER("MS001", "입장"),
     MATCH("MS002", "메치"),
-    OVER("MS003", "종료"),
+    PICK("MS003", "선택"),
+    OVER("MS004", "종료"),
 }

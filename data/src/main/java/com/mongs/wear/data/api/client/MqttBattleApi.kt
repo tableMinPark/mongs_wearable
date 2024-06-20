@@ -70,7 +70,7 @@ class MqttBattleApi @Inject constructor(
     suspend fun produce(topic: String, payload: String) {
         withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
-                mqttAndroidClient.publish(topic = topic, payload = payload.toByteArray(), qos = 2, retained = true).await()
+                mqttAndroidClient.publish(topic = topic, payload = payload.toByteArray(), qos = 1, retained = true).await()
                 Log.i("MqttBattleApi", "[$topic] : $payload")
             } else {
                 Log.e("MqttBattleApi", "[$topic] produce fail.")

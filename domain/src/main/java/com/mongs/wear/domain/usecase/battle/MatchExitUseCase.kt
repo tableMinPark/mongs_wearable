@@ -9,17 +9,16 @@ import javax.inject.Inject
 
 class MatchExitUseCase @Inject constructor(
     private val mqttBattleClient: MqttBattleClient,
-    private val slotRepository: SlotRepository,
     private val battleRepository: BattleRepository,
 ) {
     suspend operator fun invoke() {
         try {
-            val slotModel = slotRepository.getNowSlot()
             val matchVo = battleRepository.getMatch()
+            val myMatchPlayerVo = battleRepository.getMyMatchPlayer()
 
             mqttBattleClient.produceBattleMatchExit(
-                mongId = slotModel.mongId,
                 roomId = matchVo.roomId,
+                playerId = myMatchPlayerVo.playerId,
             )
             mqttBattleClient.disSubScribeBattleMatch()
             mqttBattleClient.disconnect()

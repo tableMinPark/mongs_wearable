@@ -25,6 +25,8 @@ interface MatchPlayerDao {
     fun selectOtherMatchPlayerLive(): LiveData<MatchPlayer>
     @Query("UPDATE match_player SET hp = :hp, state = :state WHERE playerId = :playerId")
     fun updateMatchPlayer(playerId: String, hp: Double, state: BattleState)
+    @Query("UPDATE match_player SET state = :state WHERE roomId = :roomId")
+    fun updateAllMatchPlayerBattleState(roomId: String, state: BattleState)
     @Query("UPDATE match_player SET isWinner = true WHERE playerId = :playerId")
     fun updateMatchWinnerPlayer(playerId: String)
 }

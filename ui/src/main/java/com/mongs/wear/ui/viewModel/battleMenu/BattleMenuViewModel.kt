@@ -3,14 +3,11 @@ package com.mongs.wear.ui.viewModel.battleMenu
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.usecase.battle.MatchWaitCancelUseCase
 import com.mongs.wear.domain.usecase.battle.MatchWaitUseCase
-import com.mongs.wear.domain.vo.MatchVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,42 +21,40 @@ class BattleMenuViewModel @Inject constructor(
 ): ViewModel() {
     val uiState: UiState = UiState()
 
-    var matchVo: LiveData<MatchVo> = MutableLiveData(MatchVo())
-
     fun matchWait() {
         viewModelScope.launch (Dispatchers.IO) {
             try {
-                matchWaitUseCase()
-            } catch (e: UseCaseException) {
-                e.printStackTrace()
+                matchWaitUseCase(
+                    matchFindCallback = {
+                        uiState.isMatchWait = false
+                    },
+                    matchEnterCallback = {
+                        uiState.navBattleMatchView = true
+                    }
+                )
+            } catch (_: UseCaseException) {
                 uiState.loadingBar = false
             }
         }
     }
 
     fun matchWaitCancel() {
-        viewModelScope.launch (Dispatchers.IO) {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
                 matchWaitCancelUseCase()
                 uiState.loadingBar = false
-            } catch (e: UseCaseException) {
-                e.printStackTrace()
+            } catch (_: UseCaseException) {
             }
-        }
-    }
-
-    override fun onCleared() {
-        CoroutineScope(Dispatchers.IO).launch {
-            matchWaitCancelUseCase()
-            super.onCleared()
         }
     }
 
     class UiState (
         navBattleMatchView: Boolean = false,
         loadingBar: Boolean = false,
+        isMatchWait: Boolean = true,
     ) {
         var navBattleMatchView by mutableStateOf(navBattleMatchView)
+        var isMatchWait by mutableStateOf(isMatchWait)
         var loadingBar by mutableStateOf(loadingBar)
     }
 }
