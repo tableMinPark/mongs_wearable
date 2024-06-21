@@ -65,7 +65,7 @@ fun EvolutionEffect(
                 nowStep = step
                 delay(delayList[step])
             }
-            delay(2000)
+            delay(600)
             evolution()
         }
 

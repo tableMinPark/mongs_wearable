@@ -257,9 +257,8 @@ private fun BattleMatchContent(
     otherMatchPlayerVo: MatchPlayerVo,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
-    Log.e("BattleMatchView", "$matchVo")
     if (matchVo.matchStateCode == MatchStateCode.MATCH) {
-        LaunchedEffect(Unit) {
+        LaunchedEffect(matchVo.matchStateCode) {
             delay(3000)
             if (matchVo.isMatchOver) {
                 matchOver()
@@ -268,8 +267,6 @@ private fun BattleMatchContent(
             }
         }
     }
-
-    val nowRound = max(matchVo.round, 1)
 
     Box(
         contentAlignment = Alignment.Center,
@@ -302,7 +299,7 @@ private fun BattleMatchContent(
             ) {
                 HpBar(hp = myMatchPlayerVo.hp.toFloat())
                 Text(
-                    text = "$nowRound/$MAX_ROUND",
+                    text = "${max(matchVo.round, 1)}/$MAX_ROUND",
                     textAlign = TextAlign.Center,
                     fontFamily = DAL_MU_RI,
                     fontWeight = FontWeight.Light,
@@ -353,42 +350,63 @@ private fun BattleMatchOverContent(
             modifier = Modifier.fillMaxHeight()
         ) {
             Row(
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.5f)
+            ) {
+                if (myMatchPlayerVo.isWinner) {
+                    Image(
+                        painter = painterResource(R.drawable.win),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .zIndex(2f)
+                            .height(35.dp)
+                            .width(90.dp),
+                        contentScale = ContentScale.FillBounds
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(R.drawable.lose),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .zIndex(2f)
+                            .height(35.dp)
+                            .width(90.dp),
+                        contentScale = ContentScale.FillBounds
+                    )
+                }
+            }
+
+            Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.8f)
+                    .weight(0.3f)
             ) {
-                Box(
-                    contentAlignment = Alignment.Center
-                ) {
-                    Mong(
-                        mong = MongResourceCode.valueOf(myMatchPlayerVo.mongCode),
-                        ratio = 0.8f,
-                        modifier = Modifier.zIndex(1f)
+                if (myMatchPlayerVo.isWinner) {
+                    Image(
+                        painter = painterResource(R.drawable.pointlogo),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .height(20.dp)
+                            .width(20.dp),
+                        contentScale = ContentScale.FillBounds,
                     )
 
-                    if (myMatchPlayerVo.isWinner) {
-                        Image(
-                            painter = painterResource(R.drawable.win),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .zIndex(2f)
-                                .height(35.dp)
-                                .width(90.dp),
-                            contentScale = ContentScale.FillBounds
-                        )
-                    } else {
-                        Image(
-                            painter = painterResource(R.drawable.lose),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .zIndex(2f)
-                                .height(35.dp)
-                                .width(90.dp),
-                            contentScale = ContentScale.FillBounds
-                        )
-                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    Text(
+                        text = "+ 100",
+                        textAlign = TextAlign.Center,
+                        fontFamily = DAL_MU_RI,
+                        fontWeight = FontWeight.Light,
+                        fontSize = 16.sp,
+                        color = PaymongWhite,
+                        maxLines = 1,
+                    )
                 }
             }
 

@@ -1,6 +1,8 @@
 package com.mongs.wear.data.api.client
 
+import android.content.Context
 import android.util.Log
+import com.mongs.wear.data.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -15,13 +17,14 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 class MqttEventApi @Inject constructor(
+    private val context: Context,
     private val mqttAndroidClient: MqttAndroidClient
 ) {
     suspend fun connect(messageCallback: MqttCallback) {
         withContext(Dispatchers.IO) {
             val options = MqttConnectOptions().apply {
-//                this.userName = username
-//                this.password = password?.toCharArray()
+                this.userName = context.getString(R.string.mqtt_username)
+                this.password = context.getString(R.string.mqtt_password).toCharArray()
             }
 
             try {

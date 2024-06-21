@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.mongs.wear.data.api.code.PublishBattleCode
+import com.mongs.wear.data.client.MqttBattleClientImpl
 import com.mongs.wear.data.dto.mqttBattle.BasicBattlePublish
 import com.mongs.wear.data.dto.mqttBattle.res.MatchFindVo
 import com.mongs.wear.data.dto.mqttBattle.res.MatchOverVo
@@ -36,7 +37,7 @@ class MessageBattleCallback (
                     val json = it.toString()
 
                     topic?.let { topicName ->
-                        if (topicName.startsWith("mongs/battle/search")) {
+                        if (topicName.startsWith(MqttBattleClientImpl.BATTLE_SEARCH_TOPIC)) {
                             val body = gson.fromJson(json, BasicBattlePublish::class.java)
                             val dataJson = gson.toJson(body.data)
                             when (body.code) {
@@ -47,7 +48,7 @@ class MessageBattleCallback (
                                 }
                                 else -> {}
                             }
-                        } else if (topicName.startsWith("mongs/battle/match")) {
+                        } else if (topicName.startsWith(MqttBattleClientImpl.BATTLE_MATCH_TOPIC)) {
                             val body = gson.fromJson(json, BasicBattlePublish::class.java)
                             val dataJson = gson.toJson(body.data)
                             when (body.code) {

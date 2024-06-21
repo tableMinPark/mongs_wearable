@@ -81,10 +81,6 @@ class MqttBattleClientImpl @Inject constructor(
                     }
                 },
                 match = { matchVo ->
-                    roomDB.matchDao().updateMatchState(
-                        matchState = MatchState.MATCH,
-                        roomId = matchVo.roomId,
-                    )
                     roomDB.matchDao().updateMatch(
                         roomId = matchVo.roomId,
                         round = matchVo.round
@@ -96,11 +92,18 @@ class MqttBattleClientImpl @Inject constructor(
                             state = matchPlayerVo.state,
                         )
                     }
-                },
-                matchOver = { matchOverVo ->
                     roomDB.matchDao().updateMatchState(
                         matchState = MatchState.MATCH,
+                        roomId = matchVo.roomId,
+                    )
+                },
+                matchOver = { matchOverVo ->
+                    roomDB.matchDao().updateIsMatchOver(
+                        isMatchOver = true,
                         roomId = matchOverVo.roomId,
+                    )
+                    roomDB.matchPlayerDao().updateMatchWinnerPlayer(
+                        playerId = matchOverVo.winPlayer.playerId,
                     )
                     roomDB.matchDao().updateMatch(
                         roomId = matchOverVo.roomId,
@@ -113,11 +116,8 @@ class MqttBattleClientImpl @Inject constructor(
                             state = matchPlayerVo.state,
                         )
                     }
-                    roomDB.matchPlayerDao().updateMatchWinnerPlayer(
-                        playerId = matchOverVo.winPlayer.playerId,
-                    )
-                    roomDB.matchDao().updateIsMatchOver(
-                        isMatchOver = true,
+                    roomDB.matchDao().updateMatchState(
+                        matchState = MatchState.MATCH,
                         roomId = matchOverVo.roomId,
                     )
                 }

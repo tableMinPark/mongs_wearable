@@ -37,7 +37,6 @@ class MainActivityViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d("MainActivityViewModel", "init")
             networkFlag = deviceRepository.getNetworkFlagLive()
         }
     }

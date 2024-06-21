@@ -1,4 +1,3 @@
 <resources>
     <string name="app_name">Mongs</string>
-    <string translatable="false"  name="google_login_client_id">833754063462-brge4cfvvb6c0iq8rs4i52uk4qngt6m1.apps.googleusercontent.com</string>
 </resources>

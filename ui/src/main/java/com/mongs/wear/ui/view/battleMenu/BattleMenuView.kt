@@ -249,32 +249,3 @@ private fun BattleMenuContent(
         }
     }
 }
-
-@Preview(showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
-@Composable
-private fun FeedMenuViewPreview() {
-    Box {
-        BattleMenuBackground()
-        BattleMenuLoadingBar(
-            isMatchWait = false,
-            matchWaitCancel = {}
-        )
-//        BattleMenuContent(
-//            battle = {},
-//            modifier = Modifier.zIndex(1f),
-//        )
-    }
-}
-
-@Preview(showSystemUi = true, device = Devices.WEAR_OS_LARGE_ROUND)
-@Composable
-private fun LargeFeedMenuViewPreview() {
-    Box {
-        BattleMenuBackground()
-        BattleMenuContent(
-            battle = {},
-            modifier = Modifier.zIndex(1f),
-        )
-    }
-}
-
