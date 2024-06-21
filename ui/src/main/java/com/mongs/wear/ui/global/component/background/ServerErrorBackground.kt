@@ -15,10 +15,10 @@ import com.mongs.wear.ui.R
 import com.mongs.wear.ui.global.resource.MapResourceCode
 
 @Composable
-fun TrainingNestedBackground(
+fun ServerErrorBackground(
     modifier: Modifier = Modifier.zIndex(0f)
 ) {
-    val mapResourceCode = R.drawable.training_bg
+    val mapResourceCode = MapResourceCode.MP000.code
 
     Box(
         contentAlignment = Alignment.Center,
@@ -26,7 +26,7 @@ fun TrainingNestedBackground(
     ) {
         Image(
             painter = painterResource(mapResourceCode),
-            contentDescription = "TrainingNestedBackground",
+            contentDescription = "BattleMatchBackground",
             contentScale = ContentScale.Crop
         )
     }
@@ -34,6 +34,6 @@ fun TrainingNestedBackground(
 
 @Preview(showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
 @Composable
-private fun TrainingNestedBackgroundPreview() {
-    TrainingNestedBackground()
+private fun ServerErrorBackgroundPreview() {
+    ServerErrorBackground()
 }

@@ -39,8 +39,6 @@ class MqttBattleApi @Inject constructor(
             if (mqttAndroidClient.isConnected) {
                 mqttAndroidClient.disconnect().await()
                 Log.i("MqttBattleApi", "disConnect.")
-            } else {
-                Log.e("MqttBattleApi", "disConnect fail.")
             }
         }
     }

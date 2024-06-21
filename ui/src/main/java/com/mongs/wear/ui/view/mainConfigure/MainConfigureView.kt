@@ -127,7 +127,7 @@ private fun MainConfigureContent(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 CircleButton(
-                    icon = R.drawable.charge_startpoint,
+                    icon = R.drawable.point_store,
                     border = R.drawable.interaction_bnt_darkpurple,
                     onClick = payment,
                 )

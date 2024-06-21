@@ -12,7 +12,6 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.zIndex
 import com.mongs.wear.ui.R
-import com.mongs.wear.ui.global.resource.MapResourceCode
 
 @Composable
 fun BattleMatchBackground(

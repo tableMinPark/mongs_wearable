@@ -12,11 +12,7 @@ import com.mongs.wear.ui.global.theme.MongsTheme
 import dagger.hilt.android.AndroidEntryPoint
 import android.Manifest
 import android.content.Context
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.util.Log
 import com.mongs.wear.ui.view.main.MainView
 
 
@@ -41,7 +37,7 @@ class MainActivity : ComponentActivity() {
         }
 
         mainActivityViewModel.initDeviceInfo(buildVersion = applicationContext.packageManager.getPackageInfo(packageName, 0).versionName)
-        mainActivityViewModel.initMqtt()
+        mainActivityViewModel.initMqttEvent()
 
         setContent {
             MongsTheme {
@@ -51,14 +47,19 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onResume() {
-        mainActivityViewModel.initSensor(sensorManager = application.getSystemService(Context.SENSOR_SERVICE) as SensorManager)
-        mainActivityViewModel.reconnectMqtt()
         super.onResume()
+        mainActivityViewModel.initSensor(sensorManager = application.getSystemService(Context.SENSOR_SERVICE) as SensorManager)
+        mainActivityViewModel.reconnectMqttEvent()
     }
 
     override fun onPause() {
-        mainActivityViewModel.resetSensor()
-        mainActivityViewModel.disconnectMqtt()
         super.onPause()
+        mainActivityViewModel.resetSensor()
+        mainActivityViewModel.disconnectMqttEvent()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mainActivityViewModel.disconnectMqttBattle()
     }
 }

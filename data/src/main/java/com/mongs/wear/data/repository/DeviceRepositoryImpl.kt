@@ -10,6 +10,21 @@ import javax.inject.Inject
 class DeviceRepositoryImpl @Inject constructor(
     private val deviceDataStore: DeviceDataStore,
 ): DeviceRepository {
+    override suspend fun setNetworkFlag(networkFlag: Boolean) {
+        try {
+            deviceDataStore.setNetworkFlag(networkFlag = networkFlag)
+        } catch (e: RuntimeException) {
+            throw RepositoryException(RepositoryErrorCode.SET_NETWORK_FLAG_FAIL)
+        }
+    }
+    override suspend fun getNetworkFlagLive(): LiveData<Boolean> {
+        try {
+            return deviceDataStore.getNetworkFlagLive()
+        } catch (e: RuntimeException) {
+            throw RepositoryException(RepositoryErrorCode.GET_NETWORK_FLAG_FAIL)
+        }
+    }
+
     override suspend fun setBuildVersion(buildVersion: String) {
         try {
             deviceDataStore.setBuildVersion(buildVersion = buildVersion)

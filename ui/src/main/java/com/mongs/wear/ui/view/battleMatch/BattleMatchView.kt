@@ -1,5 +1,6 @@
 package com.mongs.wear.ui.view.battleMatch
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -55,8 +56,10 @@ import com.mongs.wear.ui.global.theme.DAL_MU_RI
 import com.mongs.wear.ui.global.theme.PaymongWhite
 import com.mongs.wear.ui.viewModel.battleMatch.BattleMatchViewModel
 import kotlinx.coroutines.delay
+import kotlin.math.max
 import kotlin.math.min
 
+const val MAX_ROUND = 10
 const val MAX_SECONDS = 30
 
 @Composable
@@ -254,9 +257,10 @@ private fun BattleMatchContent(
     otherMatchPlayerVo: MatchPlayerVo,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
+    Log.e("BattleMatchView", "$matchVo")
     if (matchVo.matchStateCode == MatchStateCode.MATCH) {
         LaunchedEffect(Unit) {
-            delay(4000)
+            delay(3000)
             if (matchVo.isMatchOver) {
                 matchOver()
             } else {
@@ -264,6 +268,8 @@ private fun BattleMatchContent(
             }
         }
     }
+
+    val nowRound = max(matchVo.round, 1)
 
     Box(
         contentAlignment = Alignment.Center,
@@ -296,7 +302,7 @@ private fun BattleMatchContent(
             ) {
                 HpBar(hp = myMatchPlayerVo.hp.toFloat())
                 Text(
-                    text = "${min(matchVo.round + 1, 10)}/10",
+                    text = "$nowRound/$MAX_ROUND",
                     textAlign = TextAlign.Center,
                     fontFamily = DAL_MU_RI,
                     fontWeight = FontWeight.Light,

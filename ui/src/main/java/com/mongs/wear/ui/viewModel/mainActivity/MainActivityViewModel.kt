@@ -4,14 +4,18 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mongs.wear.domain.client.MqttBattleClient
 import com.mongs.wear.domain.client.MqttEventClient
 import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.repositroy.DeviceRepository
 import com.mongs.wear.domain.repositroy.MemberRepository
 import com.mongs.wear.domain.repositroy.SlotRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -23,10 +27,20 @@ class MainActivityViewModel @Inject constructor(
     private val memberRepository: MemberRepository,
     private val slotRepository: SlotRepository,
     private val mqttEventClient: MqttEventClient,
+    private val mqttBattleClient: MqttBattleClient,
 ) : ViewModel() {
 
     private lateinit var sensorManager: SensorManager
     private lateinit var stepSensorEventListener: SensorEventListener
+
+    lateinit var networkFlag: LiveData<Boolean>
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.d("MainActivityViewModel", "init")
+            networkFlag = deviceRepository.getNetworkFlagLive()
+        }
+    }
 
     fun initSensor(sensorManager: SensorManager) {
         try {
@@ -45,31 +59,28 @@ class MainActivityViewModel @Inject constructor(
                 sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),      //TYPE_STEP_COUNTER  TYPE_RELATIVE_HUMIDITY
                 SensorManager.SENSOR_DELAY_FASTEST
             )
-        } catch (e: RuntimeException) {
-            e.printStackTrace()
+        } catch (_: RuntimeException) {
         }
     }
     fun resetSensor() {
         runBlocking(Dispatchers.IO) {
             try {
                 sensorManager.unregisterListener(stepSensorEventListener)
-            } catch (e: RuntimeException) {
-                e.printStackTrace()
+            } catch (_: RuntimeException) {
             }
         }
     }
-    fun initMqtt() {
+    fun initMqttEvent() {
         viewModelScope.launch(Dispatchers.IO) {
             runBlocking {
                 try {
                     mqttEventClient.resetConnection()
-                } catch (e: RepositoryException) {
-                    e.printStackTrace()
+                } catch (_: RepositoryException) {
                 }
             }
         }
     }
-    fun reconnectMqtt() {
+    fun reconnectMqttEvent() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 mqttEventClient.reconnect(
@@ -84,18 +95,26 @@ class MainActivityViewModel @Inject constructor(
                         }
                     },
                 )
-            } catch (e: RuntimeException) {
-                e.printStackTrace()
+            } catch (_: RuntimeException) {
             }
         }
     }
-    fun disconnectMqtt() {
+    fun disconnectMqttEvent() {
         viewModelScope.launch(Dispatchers.IO) {
             runBlocking {
                 try {
                     mqttEventClient.disconnect()
-                } catch (e: RuntimeException) {
-                    e.printStackTrace()
+                } catch (_: RuntimeException) {
+                }
+            }
+        }
+    }
+    fun disconnectMqttBattle() {
+        CoroutineScope(Dispatchers.IO).launch {
+            runBlocking {
+                try {
+                    mqttBattleClient.disconnect()
+                } catch (_: RuntimeException) {
                 }
             }
         }
@@ -104,8 +123,7 @@ class MainActivityViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.Main) {
             try {
                 deviceRepository.setBuildVersion(buildVersion)
-            } catch (e: RepositoryException) {
-                e.printStackTrace()
+            } catch (_: RepositoryException) {
             }
         }
     }

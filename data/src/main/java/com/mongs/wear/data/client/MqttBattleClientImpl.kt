@@ -1,13 +1,11 @@
 package com.mongs.wear.data.client
 
-import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.mongs.wear.data.api.client.MqttBattleApi
 import com.mongs.wear.data.api.code.PublishBattleCode
 import com.mongs.wear.data.callback.MessageBattleCallback
 import com.mongs.wear.data.code.BattlePick
-import com.mongs.wear.data.code.BattleState
 import com.mongs.wear.data.code.MatchState
 import com.mongs.wear.data.dto.mqttBattle.BasicBattlePublish
 import com.mongs.wear.data.dto.mqttBattle.req.MatchEnterVo
@@ -19,7 +17,6 @@ import com.mongs.wear.data.room.entity.MatchPlayer
 import com.mongs.wear.data.utils.GsonDateFormatAdapter
 import com.mongs.wear.domain.client.MqttBattleClient
 import com.mongs.wear.domain.code.BattlePickCode
-import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -47,7 +44,6 @@ class MqttBattleClientImpl @Inject constructor(
         mqttApi.connect(messageCallback =
             MessageBattleCallback(
                 matchFind = { roomId, playerId ->
-                    // TODO("매치 구독, 입장 알림")
                     roomDB.matchDao().deleteAll()
                     roomDB.matchPlayerDao().deleteAll()
                     roomDB.matchDao().insert(
@@ -64,7 +60,6 @@ class MqttBattleClientImpl @Inject constructor(
                     matchFindCallback()
                 },
                 matchEnter = { matchVo ->
-                    // TODO("배틀 상태 초기화 및 등록")
                     roomDB.matchDao().select()?.let { match ->
                         matchVo.matchPlayerVoList.map { matchPlayerVo ->
                             roomDB.matchPlayerDao().insert(
@@ -86,7 +81,6 @@ class MqttBattleClientImpl @Inject constructor(
                     }
                 },
                 match = { matchVo ->
-                    // TODO("배틀 상태 업데이트")
                     roomDB.matchDao().updateMatchState(
                         matchState = MatchState.MATCH,
                         roomId = matchVo.roomId,
@@ -104,6 +98,21 @@ class MqttBattleClientImpl @Inject constructor(
                     }
                 },
                 matchOver = { matchOverVo ->
+                    roomDB.matchDao().updateMatchState(
+                        matchState = MatchState.MATCH,
+                        roomId = matchOverVo.roomId,
+                    )
+                    roomDB.matchDao().updateMatch(
+                        roomId = matchOverVo.roomId,
+                        round = matchOverVo.round
+                    )
+                    matchOverVo.matchPlayerVoList.map { matchPlayerVo ->
+                        roomDB.matchPlayerDao().updateMatchPlayer(
+                            playerId = matchPlayerVo.playerId,
+                            hp = matchPlayerVo.hp,
+                            state = matchPlayerVo.state,
+                        )
+                    }
                     roomDB.matchPlayerDao().updateMatchWinnerPlayer(
                         playerId = matchOverVo.winPlayer.playerId,
                     )

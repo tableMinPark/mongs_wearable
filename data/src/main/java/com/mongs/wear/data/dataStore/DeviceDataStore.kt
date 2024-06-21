@@ -1,6 +1,7 @@
 package com.mongs.wear.data.dataStore
 
 import android.content.Context
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -21,6 +22,7 @@ class DeviceDataStore @Inject constructor(
     private val Context.device  by preferencesDataStore(name = "DEVICE")
 
     companion object {
+        private val NETWORK_FLAG = booleanPreferencesKey("NETWORK_FLAG")
         private val BUILD_VERSION = stringPreferencesKey("BUILD_VERSION")
         private val CODE_INTEGRITY = stringPreferencesKey("CODE_INTEGRITY")
         private val DEVICE_ID = stringPreferencesKey("DEVICE_ID")
@@ -30,6 +32,8 @@ class DeviceDataStore @Inject constructor(
     init {
         CoroutineScope(Dispatchers.IO).launch {
             context.device.edit { preferences ->
+                preferences[NETWORK_FLAG] = true
+
                 if (!preferences.contains(BUILD_VERSION)) {
                     preferences[BUILD_VERSION] = "1.0.0"
                 }
@@ -44,6 +48,17 @@ class DeviceDataStore @Inject constructor(
                 }
             }
         }
+    }
+
+    suspend fun setNetworkFlag(networkFlag: Boolean) {
+        context.device.edit { preferences ->
+            preferences[NETWORK_FLAG] = networkFlag
+        }
+    }
+    suspend fun getNetworkFlagLive(): LiveData<Boolean> {
+        return context.device.data.map { preferences ->
+            preferences[NETWORK_FLAG]!!
+        }.asLiveData()
     }
 
     suspend fun setBuildVersion(buildVersion: String) {

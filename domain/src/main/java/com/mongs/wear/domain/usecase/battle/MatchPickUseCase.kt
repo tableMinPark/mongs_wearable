@@ -16,7 +16,7 @@ class MatchPickUseCase @Inject constructor(
             val matchVo = battleRepository.getMatch()
             val myMatchPlayerVo = battleRepository.getMyMatchPlayer()
             val otherMatchPlayerVo = battleRepository.getOtherMatchPlayer()
-
+            battleRepository.matchPick(roomId = matchVo.roomId)
             when (pickCode) {
                 BattlePickCode.ATTACK -> {
                     mqttBattleClient.produceBattleMatchPick(
@@ -35,7 +35,6 @@ class MatchPickUseCase @Inject constructor(
                     )
                 }
             }
-            battleRepository.matchPick(roomId = matchVo.roomId)
         } catch (e: RepositoryException) {
             throw UseCaseException(e.errorCode)
         }

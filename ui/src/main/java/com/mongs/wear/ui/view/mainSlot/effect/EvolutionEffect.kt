@@ -46,7 +46,7 @@ private val delayList = listOf(
     100L,
     300L,
     300L,
-    800L,
+    400L,
 )
 
 @Composable

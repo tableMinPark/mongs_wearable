@@ -6,8 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -34,89 +36,117 @@ import com.mongs.wear.ui.view.paymentMenu.PaymentMenuView
 import com.mongs.wear.ui.view.slotPick.SlotPickView
 import com.mongs.wear.ui.view.trainingJumping.TrainingJumpingView
 import com.mongs.wear.ui.view.trainingMenu.TrainingMenuView
+import com.mongs.wear.ui.viewModel.mainActivity.MainActivityViewModel
 import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MainView () {
+fun MainView (
+    mainActivityViewModel: MainActivityViewModel = hiltViewModel(),
+) {
     val navController = rememberSwipeDismissableNavController()
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(initialPage = 2) { 5 }
     val scrollPage = fun(page: Int) { coroutineScope.launch { pagerState.animateScrollToPage(page) } }
 
-    SwipeDismissableNavHost(
-        navController = navController,
-        startDestination = NavItem.Login.route
-    ) {
-        composable(route = NavItem.Login.route) {
-            LoginView(navController = navController)
-        }
+    val networkFlag = mainActivityViewModel.networkFlag.observeAsState(true)
 
-        composable(route = NavItem.MainPager.route) {
-            MainPagerView(navController = navController, scrollPage = scrollPage, pagerState = pagerState)
-        }
+    if (networkFlag.value) {
+        SwipeDismissableNavHost(
+            navController = navController,
+            startDestination = NavItem.Login.route
+        ) {
+            composable(route = NavItem.Login.route) {
+                LoginView(navController = navController)
+            }
 
-        navigation(startDestination = NavItem.FeedMenu.route, route = NavItem.FeedNested.route) {
-            composable(route = NavItem.FeedMenu.route) {
-                FeedMenuView(navController = navController)
+            composable(route = NavItem.MainPager.route) {
+                MainPagerView(
+                    navController = navController,
+                    scrollPage = scrollPage,
+                    pagerState = pagerState
+                )
             }
-            composable(route = NavItem.FeedFoodPick.route) {
-                FeedFoodPickView(navController = navController, scrollPage = scrollPage)
-            }
-            composable(route = NavItem.FeedSnackPick.route) {
-                FeedSnackPickView(navController = navController, scrollPage = scrollPage)
-            }
-        }
 
-        navigation(startDestination = NavItem.CollectionMenu.route, route = NavItem.CollectionNested.route) {
-            composable(route = NavItem.CollectionMenu.route) {
-                CollectionMenuView(navController = navController)
+            navigation(
+                startDestination = NavItem.FeedMenu.route,
+                route = NavItem.FeedNested.route
+            ) {
+                composable(route = NavItem.FeedMenu.route) {
+                    FeedMenuView(navController = navController)
+                }
+                composable(route = NavItem.FeedFoodPick.route) {
+                    FeedFoodPickView(navController = navController, scrollPage = scrollPage)
+                }
+                composable(route = NavItem.FeedSnackPick.route) {
+                    FeedSnackPickView(navController = navController, scrollPage = scrollPage)
+                }
             }
-            composable(route = NavItem.CollectionMapPick.route) {
-                CollectionMapPickView(navController = navController)
-            }
-            composable(route = NavItem.CollectionMongPick.route) {
-                CollectionMongPickView(navController = navController)
-            }
-        }
 
-        composable(route = NavItem.SlotPick.route) {
-            SlotPickView(navController = navController, scrollPage = scrollPage)
-        }
+            navigation(
+                startDestination = NavItem.CollectionMenu.route,
+                route = NavItem.CollectionNested.route
+            ) {
+                composable(route = NavItem.CollectionMenu.route) {
+                    CollectionMenuView(navController = navController)
+                }
+                composable(route = NavItem.CollectionMapPick.route) {
+                    CollectionMapPickView(navController = navController)
+                }
+                composable(route = NavItem.CollectionMongPick.route) {
+                    CollectionMongPickView(navController = navController)
+                }
+            }
 
-        navigation(startDestination = NavItem.PaymentMenu.route, route = NavItem.PaymentNested.route) {
-            composable(route = NavItem.PaymentMenu.route) {
-                PaymentMenuView(navController = navController)
+            composable(route = NavItem.SlotPick.route) {
+                SlotPickView(navController = navController, scrollPage = scrollPage)
             }
-            composable(route = NavItem.PaymentChargeStarPoint.route) {
-                PaymentChargeStarPointView(navController = navController)
-            }
-            composable(route = NavItem.PaymentExchangePayPoint.route) {
-                PaymentExchangePayPointView(navController = navController)
-            }
-        }
 
-        composable(route = NavItem.Feedback.route) {
-            FeedbackView(navController = navController)
-        }
+            navigation(
+                startDestination = NavItem.PaymentMenu.route,
+                route = NavItem.PaymentNested.route
+            ) {
+                composable(route = NavItem.PaymentMenu.route) {
+                    PaymentMenuView(navController = navController)
+                }
+                composable(route = NavItem.PaymentChargeStarPoint.route) {
+                    PaymentChargeStarPointView(navController = navController)
+                }
+                composable(route = NavItem.PaymentExchangePayPoint.route) {
+                    PaymentExchangePayPointView(navController = navController)
+                }
+            }
 
-        navigation(startDestination = NavItem.TrainingMenu.route, route = NavItem.TrainingNested.route) {
-            composable(route = NavItem.TrainingMenu.route) {
-                TrainingMenuView(navController = navController)
+            composable(route = NavItem.Feedback.route) {
+                FeedbackView(navController = navController)
             }
-            composable(route = NavItem.TrainingJumping.route) {
-                TrainingJumpingView(navController = navController)
-            }
-        }
 
-        navigation(startDestination = NavItem.BattleMenu.route, route = NavItem.BattleNested.route) {
-            composable(route = NavItem.BattleMenu.route) {
-                BattleMenuView(navController = navController)
+            navigation(
+                startDestination = NavItem.TrainingMenu.route,
+                route = NavItem.TrainingNested.route
+            ) {
+                composable(route = NavItem.TrainingMenu.route) {
+                    TrainingMenuView(navController = navController)
+                }
+                composable(route = NavItem.TrainingJumping.route) {
+                    TrainingJumpingView(navController = navController)
+                }
             }
-            composable(route = NavItem.BattleMatch.route) {
-                BattleMatchView(navController = navController)
+
+            navigation(
+                startDestination = NavItem.BattleMenu.route,
+                route = NavItem.BattleNested.route
+            ) {
+                composable(route = NavItem.BattleMenu.route) {
+                    BattleMenuView(navController = navController)
+                }
+                composable(route = NavItem.BattleMatch.route) {
+                    BattleMatchView(navController = navController)
+                }
             }
         }
+    } else {
+        ServerErrorView()
     }
 }
