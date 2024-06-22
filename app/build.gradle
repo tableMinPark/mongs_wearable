@@ -51,17 +51,12 @@ dependencies {
     implementation project(":domain")
     implementation project(":data")
 
-    // dagger-hilt
+    // dagger & hilt
+    implementation group: 'javax.inject', name: 'javax.inject', version: '1'
     implementation "com.google.dagger:hilt-android:2.49"
     kapt 'com.google.dagger:hilt-compiler:2.48.1'
-    // inject
-    implementation group: 'javax.inject', name: 'javax.inject', version: '1'
     // compose
     implementation "androidx.activity:activity-compose:1.9.0"
-    // MQTT
-    implementation 'com.github.hannesa2:paho.mqtt.android:3.3.5@aar'
-    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
-    implementation 'com.jakewharton.timber:timber:5.0.1'
 }
 
 kapt {

@@ -2,7 +2,6 @@ package com.mongs.wear.data.api.client
 
 import android.content.Context
 import android.util.Log
-import androidx.core.content.ContextCompat
 import com.mongs.wear.data.R
 import info.mqtt.android.service.MqttAndroidClient
 import kotlinx.coroutines.Dispatchers

@@ -1,8 +1,6 @@
 plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.android.library'
-    id 'dagger.hilt.android.plugin'
-    id 'kotlin-kapt'
 }
 
 android {
@@ -28,13 +26,8 @@ android {
 }
 
 dependencies {
-    // dagger-hilt
-    implementation "com.google.dagger:hilt-android:2.49"
-    kapt 'com.google.dagger:hilt-compiler:2.48.1'
-    // inject
+    // dagger & hilt
     implementation group: 'javax.inject', name: 'javax.inject', version: '1'
-    // compose
-    implementation "androidx.hilt:hilt-navigation-compose:1.2.0"
     // livedata
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.8.1"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.8.2"
 }

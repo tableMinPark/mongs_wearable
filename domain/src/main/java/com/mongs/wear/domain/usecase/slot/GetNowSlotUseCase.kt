@@ -1,13 +1,12 @@
 package com.mongs.wear.domain.usecase.slot
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
-import com.mongs.wear.domain.code.ShiftCode
 import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.repositroy.SlotRepository
 import com.mongs.wear.domain.vo.SlotVo
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class GetNowSlotUseCase @Inject constructor(

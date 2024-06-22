@@ -17,6 +17,7 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }
     }
 }
+
 rootProject.name = "mongs"
 include ':app'
 include ':ui'

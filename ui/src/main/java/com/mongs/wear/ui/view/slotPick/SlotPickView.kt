@@ -1,6 +1,5 @@
 package com.mongs.wear.ui.view.slotPick
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -154,8 +153,8 @@ fun SlotPickView(
                 buySlotPrice = buySlotPrice.value,
                 isSlotEmpty = slotVo.shiftCode == ShiftCode.EMPTY,
                 isSlotDisable = slotVoIndex.intValue >= maxSlot.value,
-                { slotVoIndex.intValue = max(0, slotVoIndex.intValue - 1) },
-                nextFood = { slotVoIndex.intValue = min(slotVoIndex.intValue + 1, 2) },
+                preSlot = { slotVoIndex.intValue = max(0, slotVoIndex.intValue - 1) },
+                nextSlot = { slotVoIndex.intValue = min(slotVoIndex.intValue + 1, 2) },
                 addDialog = { slotPickViewModel.uiState.addDialog = true },
                 deleteDialog = { slotPickViewModel.uiState.deleteDialog = true },
                 pickDialog = { slotPickViewModel.uiState.pickDialog = true },
@@ -195,8 +194,8 @@ private fun SlotPickContent(
     buySlotPrice: Int,
     isSlotEmpty: Boolean,
     isSlotDisable: Boolean,
-    preFood: () -> Unit,
-    nextFood: () -> Unit,
+    preSlot: () -> Unit,
+    nextSlot: () -> Unit,
     addDialog: () -> Unit,
     deleteDialog: () -> Unit,
     pickDialog: () -> Unit,
@@ -260,7 +259,7 @@ private fun SlotPickContent(
                         .weight(0.2f)
                 ) {
                     LeftButton(
-                        onClick = preFood,
+                        onClick = preSlot,
                     )
                 }
                 Column(
@@ -351,7 +350,7 @@ private fun SlotPickContent(
                         .weight(0.2f)
                 ) {
                     RightButton(
-                        onClick = nextFood,
+                        onClick = nextSlot,
                     )
                 }
                 Spacer(modifier = Modifier.width(10.dp))
@@ -425,8 +424,8 @@ private fun SlotPickViewPreview() {
             buySlotPrice = 1,
             isSlotEmpty = false,
             isSlotDisable = false,
-            preFood = {},
-            nextFood = {},
+            preSlot = {},
+            nextSlot = {},
             addDialog = {},
             deleteDialog = {},
             pickDialog = {},
