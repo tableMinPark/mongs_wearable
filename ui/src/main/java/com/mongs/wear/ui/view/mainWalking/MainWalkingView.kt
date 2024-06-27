@@ -77,10 +77,6 @@ fun MainWalkingView(
             }
         }
     }
-
-    LaunchedEffect(Unit) {
-        mainWalkingViewModel.loadData()
-    }
 }
 
 @Composable

@@ -2,7 +2,7 @@ package com.mongs.wear.data.code
 
 import com.mongs.wear.domain.code.StateCode
 
-enum class State(
+enum class SlotState(
     val code: StateCode
 ) {
     CD000(StateCode.NORMAL),

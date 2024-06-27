@@ -22,16 +22,16 @@ class AuthRepositoryImpl @Inject constructor(
         )
 
         if (res.isSuccessful) {
-            val body = res.body()!!
-
-            return LoginModel(
-                accountId = body.accountId,
-                accessToken = body.accessToken,
-                refreshToken = body.refreshToken,
-            )
-        } else {
-            throw RepositoryException(RepositoryErrorCode.LOGIN_FAIL)
+            res.body()?.let { body ->
+                return LoginModel(
+                    accountId = body.accountId,
+                    accessToken = body.accessToken,
+                    refreshToken = body.refreshToken,
+                )
+            }
         }
+
+        throw RepositoryException(RepositoryErrorCode.LOGIN_FAIL)
     }
     override suspend fun logout(refreshToken: String): Long {
         val res = authApi.logout(
@@ -41,10 +41,11 @@ class AuthRepositoryImpl @Inject constructor(
         )
 
         if (res.isSuccessful) {
-            val body = res.body()!!
-            return body.accountId
-        } else {
-            throw RepositoryException(RepositoryErrorCode.LOGOUT_FAIL)
+            res.body()?.let { body ->
+                return body.accountId
+            }
         }
+
+        throw RepositoryException(RepositoryErrorCode.LOGOUT_FAIL)
     }
 }

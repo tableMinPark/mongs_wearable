@@ -7,7 +7,6 @@ import com.mongs.wear.domain.repositroy.SlotRepository
 import javax.inject.Inject
 
 class RemoveSlotUseCase @Inject constructor(
-    private val slotRepository: SlotRepository,
     private val managementRepository: ManagementRepository,
 ) {
     suspend operator fun invoke(mongId: Long) {

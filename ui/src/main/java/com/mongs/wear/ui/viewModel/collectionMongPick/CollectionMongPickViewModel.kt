@@ -28,7 +28,7 @@ class CollectionMongPickViewModel @Inject constructor(
             try {
                 _mongCollectionVoList.postValue(getMongCollectionsUseCase())
                 uiState.loadingBar = false
-            } catch (e: UseCaseException) {
+            } catch (_: UseCaseException) {
                 uiState.navCollectionMenu = true
             }
         }

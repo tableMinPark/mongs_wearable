@@ -25,7 +25,10 @@ class FeedbackRepositoryImpl @Inject constructor(
                 )
             )
         } catch (e: RuntimeException) {
-            throw RepositoryException(RepositoryErrorCode.ADD_FEEDBACK_LOG_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.ADD_FEEDBACK_LOG_FAIL,
+                throwable = e,
+            )
         }
     }
     override suspend fun addFeedback(groupCode: String, message: String) {
@@ -46,11 +49,15 @@ class FeedbackRepositoryImpl @Inject constructor(
                     }
                 )
             )
+
             if (!res.isSuccessful) {
                 throw RepositoryException(RepositoryErrorCode.ADD_FEEDBACK_FAIL)
             }
         } catch (e: RuntimeException) {
-            throw RepositoryException(RepositoryErrorCode.ADD_FEEDBACK_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.ADD_FEEDBACK_FAIL,
+                throwable = e,
+            )
         }
     }
 }

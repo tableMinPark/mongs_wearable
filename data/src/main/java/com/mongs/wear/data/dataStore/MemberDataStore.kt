@@ -3,7 +3,6 @@ package com.mongs.wear.data.dataStore
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LiveData
@@ -50,6 +49,7 @@ class MemberDataStore @Inject constructor(
             }
         }
     }
+
     suspend fun setAccessToken(accessToken: String) {
         context.member.edit { preferences ->
             preferences[ACCESS_TOKEN] = accessToken

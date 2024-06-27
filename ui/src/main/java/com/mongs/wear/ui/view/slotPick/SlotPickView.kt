@@ -88,7 +88,7 @@ fun SlotPickView(
                 text = "새로운 몽을\n생성하시겠습니까?",
                 confirm = {
                     slotPickViewModel.uiState.loadingBar = true
-                    slotPickViewModel.addMong("테스트", "22:00", "08:00")
+                    slotPickViewModel.addMong("", "22:00", "08:00")
                 },
                 cancel = {
                     slotPickViewModel.uiState.addDialog = false
@@ -169,7 +169,7 @@ fun SlotPickView(
         scrollPage(2)
         navController.popBackStack(route = NavItem.SlotPick.route, inclusive = true)
     }
-
+    
     LaunchedEffect(Unit) {
         slotPickViewModel.loadData()
     }

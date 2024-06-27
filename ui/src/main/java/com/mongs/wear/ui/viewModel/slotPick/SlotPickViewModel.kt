@@ -1,31 +1,27 @@
 package com.mongs.wear.ui.viewModel.slotPick
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.domain.exception.UseCaseException
-import com.mongs.wear.domain.usecase.feed.FeedUseCase
-import com.mongs.wear.domain.usecase.feed.GetFoodCodesUseCase
 import com.mongs.wear.domain.usecase.member.BuySlotUseCase
 import com.mongs.wear.domain.usecase.member.GetMaxSlotUseCase
 import com.mongs.wear.domain.usecase.member.GetStarPointUseCase
 import com.mongs.wear.domain.usecase.slot.AddSlotUseCase
-import com.mongs.wear.domain.usecase.slot.GetNowSlotPayPointUseCase
 import com.mongs.wear.domain.usecase.slot.GetSlotsUseCase
 import com.mongs.wear.domain.usecase.slot.RemoveSlotUseCase
 import com.mongs.wear.domain.usecase.slot.SetNowSlotUseCase
-import com.mongs.wear.domain.vo.FoodVo
 import com.mongs.wear.domain.vo.SlotVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,22 +36,46 @@ class SlotPickViewModel @Inject constructor(
 ): ViewModel() {
     val uiState: UiState = UiState()
 
-    var starPoint: LiveData<Int> = MutableLiveData()
-    var slotVoList: LiveData<List<SlotVo>> = MutableLiveData()
-    var maxSlot: LiveData<Int> = MutableLiveData()
+    val starPoint: LiveData<Int> get() = _starPoint
+    private val _starPoint = MediatorLiveData<Int>()
+    val slotVoList: LiveData<List<SlotVo>> get() = _slotVoList
+    private val _slotVoList = MediatorLiveData<List<SlotVo>>()
+    val maxSlot: LiveData<Int> get() = _maxSlot
+    private val _maxSlot = MediatorLiveData<Int>()
     val buySlotPrice: LiveData<Int> get() = _buySlotPrice
     private val _buySlotPrice = MutableLiveData<Int>()
-    val slotVo: LiveData<SlotVo> get() = _slotVo
-    private val _slotVo = MutableLiveData<SlotVo>()
 
     fun loadData() {
-        viewModelScope.launch (Dispatchers.IO) {
+        viewModelScope.launch (Dispatchers.Main) {
             try {
-                starPoint = getStarPointUseCase()
-                slotVoList = getSlotsUseCase()
-                maxSlot = getMaxSlotUseCase()
+                _starPoint.addSource(
+                    withContext(Dispatchers.IO) {
+                        getStarPointUseCase()
+                    }
+                ) { starPoint ->
+                    _starPoint.value = starPoint
+                }
+
+                _slotVoList.addSource(
+                    withContext(Dispatchers.IO) {
+                        getSlotsUseCase()
+                    }
+                ) { slotVoList ->
+                    _slotVoList.value = slotVoList
+                }
+
+                _maxSlot.addSource(
+                    withContext(Dispatchers.IO) {
+                        getMaxSlotUseCase()
+                    }
+                ) { maxSlot ->
+                    _maxSlot.value = maxSlot
+                }
+
                 _buySlotPrice.postValue(10)
+
                 uiState.loadingBar = false
+
             } catch (e: UseCaseException) {
                 uiState.navMainPager = true
             }

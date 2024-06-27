@@ -29,8 +29,10 @@ class BattleRepositoryImpl @Inject constructor(
             }
             throw RepositoryException(RepositoryErrorCode.GET_MATCH_FAIL)
         } catch (e: RuntimeException) {
-            e.printStackTrace()
-            throw RepositoryException(RepositoryErrorCode.GET_MATCH_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GET_MATCH_FAIL,
+                throwable = e,
+            )
         }
     }
 
@@ -45,8 +47,10 @@ class BattleRepositoryImpl @Inject constructor(
                 )
             }
         } catch (e: RuntimeException) {
-            e.printStackTrace()
-            throw RepositoryException(RepositoryErrorCode.GET_MATCH_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GET_MATCH_FAIL,
+                throwable = e,
+            )
         }
     }
 
@@ -63,7 +67,10 @@ class BattleRepositoryImpl @Inject constructor(
             }
             throw RepositoryException(RepositoryErrorCode.GET_MATCH_PLAYER_FAIL)
         } catch (e: RuntimeException) {
-            throw RepositoryException(RepositoryErrorCode.GET_MATCH_PLAYER_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GET_MATCH_PLAYER_FAIL,
+                throwable = e,
+            )
         }
     }
 
@@ -79,8 +86,10 @@ class BattleRepositoryImpl @Inject constructor(
                 )
             }
         } catch (e: RuntimeException) {
-            e.printStackTrace()
-            throw RepositoryException(RepositoryErrorCode.GET_MATCH_PLAYER_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GET_MATCH_PLAYER_FAIL,
+                throwable = e,
+            )
         }
     }
 
@@ -97,8 +106,10 @@ class BattleRepositoryImpl @Inject constructor(
             }
             throw RepositoryException(RepositoryErrorCode.GET_MATCH_PLAYER_FAIL)
         } catch (e: RuntimeException) {
-            e.printStackTrace()
-            throw RepositoryException(RepositoryErrorCode.GET_MATCH_PLAYER_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GET_MATCH_PLAYER_FAIL,
+                throwable = e,
+            )
         }
     }
 
@@ -114,24 +125,32 @@ class BattleRepositoryImpl @Inject constructor(
                 )
             }
         } catch (e: RuntimeException) {
-            e.printStackTrace()
-            throw RepositoryException(RepositoryErrorCode.GET_MATCH_PLAYER_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GET_MATCH_PLAYER_FAIL,
+                throwable = e,
+            )
         }
     }
 
     override suspend fun matchWait(mongId: Long) {
         try {
-            val res = battleApi.registerMatchWait(mongId = mongId)
+            battleApi.registerMatchWait(mongId = mongId)
         } catch (e: RuntimeException) {
-            throw RepositoryException(RepositoryErrorCode.MATCH_WAIT_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.MATCH_WAIT_FAIL,
+                throwable = e,
+            )
         }
     }
 
     override suspend fun matchWaitCancel(mongId: Long) {
         try {
-            val res = battleApi.removeMatchWait(mongId = mongId)
+            battleApi.removeMatchWait(mongId = mongId)
         } catch (e: RuntimeException) {
-            throw RepositoryException(RepositoryErrorCode.MATCH_WAIT_CANCEL_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.MATCH_WAIT_CANCEL_FAIL,
+                throwable = e,
+            )
         }
     }
 
@@ -139,7 +158,10 @@ class BattleRepositoryImpl @Inject constructor(
         try {
             roomDB.matchDao().updateMatchState(MatchState.MATCH, roomId)
         } catch (e: RuntimeException) {
-            throw RepositoryException(RepositoryErrorCode.MATCH_START_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.MATCH_START_FAIL,
+                throwable = e,
+            )
         }
     }
 
@@ -148,7 +170,10 @@ class BattleRepositoryImpl @Inject constructor(
             roomDB.matchDao().updateMatchState(MatchState.PICK, roomId)
             roomDB.matchPlayerDao().updateAllMatchPlayerBattleState(roomId = roomId, state = BattleState.NONE)
         } catch (e: RuntimeException) {
-            throw RepositoryException(RepositoryErrorCode.MATCH_START_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.MATCH_START_FAIL,
+                throwable = e,
+            )
         }
     }
 
@@ -156,7 +181,10 @@ class BattleRepositoryImpl @Inject constructor(
         try {
             roomDB.matchDao().updateMatchState(MatchState.OVER, roomId)
         } catch (e: RuntimeException) {
-            throw RepositoryException(RepositoryErrorCode.MATCH_START_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.MATCH_START_FAIL,
+                throwable = e,
+            )
         }
     }
 }

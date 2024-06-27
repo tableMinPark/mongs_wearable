@@ -2,7 +2,6 @@ package com.mongs.wear.ui.view.login
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -30,7 +29,9 @@ import com.mongs.wear.ui.global.component.common.Logo
 import com.mongs.wear.ui.global.resource.NavItem
 import com.mongs.wear.ui.viewModel.login.LoginViewModel
 import com.mongs.wear.ui.viewModel.login.LoginViewModel.UiState
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginView(
@@ -57,8 +58,8 @@ fun LoginView(
 
 @Composable
 private fun LoginContent(
-    loginSuccess: (email: String?, name: String?) -> Unit,
-    loginFail: () -> Unit,
+    loginSuccess: suspend (email: String?, name: String?) -> Unit,
+    loginFail: suspend () -> Unit,
     uiState: UiState = UiState(),
     context: Context = LocalContext.current,
     modifier: Modifier = Modifier.zIndex(0f)
@@ -78,11 +79,13 @@ private fun LoginContent(
 
     // 구글 로그인
     val googleLoginLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).result
-            loginSuccess(account.email, account.givenName)
-        } else {
-            loginFail()
+        CoroutineScope(Dispatchers.Main).launch {
+            if (result.resultCode == Activity.RESULT_OK) {
+                val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).result
+                loginSuccess(account.email, account.givenName)
+            } else {
+                loginFail()
+            }
         }
     }
 

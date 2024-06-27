@@ -3,10 +3,12 @@ package com.mongs.wear.domain.usecase.configure
 import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.repositroy.DeviceRepository
+import com.mongs.wear.domain.repositroy.FeedbackRepository
 import javax.inject.Inject
 
 class SetBackgroundMapCodeUseCase @Inject constructor(
-    private val deviceRepository: DeviceRepository
+    private val deviceRepository: DeviceRepository,
+    private val feedbackRepository: FeedbackRepository,
 ) {
     suspend operator fun invoke() {
         try {

@@ -26,7 +26,7 @@ class MainInteractionViewModel @Inject constructor(
             try {
                 sleepingNowSlotUseCase()
                 uiState.navMainSlotView = true
-            } catch (e: UseCaseException) {
+            } catch (_: UseCaseException) {
                 uiState.alertSleepingFail = true
             }
         }
@@ -36,7 +36,7 @@ class MainInteractionViewModel @Inject constructor(
             try {
                 poopCleanNowSlotUseCase()
                 uiState.navMainSlotView = true
-            } catch (e: UseCaseException) {
+            } catch (_: UseCaseException) {
                 uiState.alertPoopCleanFail = true
             }
         }

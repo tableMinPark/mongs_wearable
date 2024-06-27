@@ -35,7 +35,7 @@ class FeedFoodPickViewModel @Inject constructor(
                 payPoint = getNowSlotPayPointUseCase()
                 _foodVoList.postValue(getFoodCodesUseCase())
                 uiState.loadingBar = false
-            } catch (e: UseCaseException) {
+            } catch (_: UseCaseException) {
                 uiState.navFeedMenu = true
             }
         }

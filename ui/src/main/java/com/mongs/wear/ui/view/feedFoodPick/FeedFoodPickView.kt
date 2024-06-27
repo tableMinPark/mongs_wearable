@@ -48,6 +48,7 @@ import com.mongs.wear.ui.global.resource.NavItem
 import com.mongs.wear.ui.global.theme.DAL_MU_RI
 import com.mongs.wear.ui.global.theme.PaymongWhite
 import com.mongs.wear.ui.viewModel.feedFoodPick.FeedFoodPickViewModel
+import kotlinx.coroutines.delay
 import kotlin.math.max
 import kotlin.math.min
 

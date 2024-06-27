@@ -4,4 +4,5 @@ import com.mongs.wear.domain.error.ErrorCode
 
 open class RepositoryException (
     errorCode: ErrorCode,
-): ErrorException(errorCode)
+    throwable: Throwable = Throwable(),
+): ErrorException(errorCode, throwable)

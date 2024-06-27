@@ -7,7 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.mongs.wear.ui.viewModel.mainActivity.MainActivityViewModel
+import com.mongs.wear.ui.viewModel.main.MainViewModel
 import com.mongs.wear.ui.global.theme.MongsTheme
 import dagger.hilt.android.AndroidEntryPoint
 import android.Manifest
@@ -18,7 +18,7 @@ import com.mongs.wear.ui.view.main.MainView
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val mainActivityViewModel: MainActivityViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,30 +36,32 @@ class MainActivity : ComponentActivity() {
             ActivityCompat.requestPermissions(this, permissions, 100)
         }
 
-        mainActivityViewModel.initDeviceInfo(buildVersion = applicationContext.packageManager.getPackageInfo(packageName, 0).versionName)
-        mainActivityViewModel.initMqttEvent()
+        mainViewModel.initDeviceInfo(buildVersion = BuildConfig.VERSION_NAME)
 
         setContent {
             MongsTheme {
-                MainView()
+                MainView(
+                    closeApp = { this.finish() }
+                )
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        mainActivityViewModel.initSensor(sensorManager = application.getSystemService(Context.SENSOR_SERVICE) as SensorManager)
-        mainActivityViewModel.reconnectMqttEvent()
+        mainViewModel.connectSensor(sensorManager = application.getSystemService(Context.SENSOR_SERVICE) as SensorManager)
+        mainViewModel.reconnectMqttEvent()
     }
 
     override fun onPause() {
         super.onPause()
-        mainActivityViewModel.resetSensor()
-        mainActivityViewModel.disconnectMqttEvent()
+        mainViewModel.disconnectSensor()
+        mainViewModel.pauseConnectMqttEvent()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mainActivityViewModel.disconnectMqttBattle()
+        mainViewModel.disconnectMqttEvent()
+        mainViewModel.disconnectMqttBattle()
     }
 }

@@ -30,7 +30,7 @@ class CollectionMapPickViewModel @Inject constructor(
             try {
                 _mapCollectionVoList.postValue(getMapCollectionsUseCase())
                 uiState.loadingBar = false
-            } catch (e: UseCaseException) {
+            } catch (_: UseCaseException) {
                 uiState.navCollectionMenu = true
             }
         }

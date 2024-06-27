@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.domain.exception.UseCaseException
@@ -25,16 +25,34 @@ class MainPagerViewModel @Inject constructor(
 ): ViewModel() {
     val uiState = UiState()
 
-    var slotVo: LiveData<SlotVo> = MutableLiveData()
-    var backgroundMapCode: LiveData<String> = MutableLiveData()
+    val slotVo: LiveData<SlotVo> get() = _slotVo
+    private val _slotVo = MediatorLiveData<SlotVo>()
+    val backgroundMapCode: LiveData<String> get() = _backgroundMapCode
+    private val _backgroundMapCode = MediatorLiveData<String>()
 
     fun loadData() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Main) {
             try {
-                slotVo = getNowSlotUseCase()
-                backgroundMapCode = getBackgroundMapCodeUseCase()
-                delay(800)
+                uiState.loadingBar = true
+
+                _slotVo.addSource(
+                    withContext(Dispatchers.IO) {
+                        getNowSlotUseCase()
+                    }
+                ) { slotVo ->
+                    _slotVo.value = slotVo
+                }
+
+                _backgroundMapCode.addSource(
+                    withContext(Dispatchers.IO) {
+                        getBackgroundMapCodeUseCase()
+                    }
+                ) { backgroundMapCode ->
+                    _backgroundMapCode.value = backgroundMapCode
+                }
+
                 uiState.loadingBar = false
+
             } catch (_: UseCaseException) {
             }
         }

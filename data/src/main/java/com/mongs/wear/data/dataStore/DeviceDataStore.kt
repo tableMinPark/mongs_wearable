@@ -1,6 +1,7 @@
 package com.mongs.wear.data.dataStore
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -55,12 +56,11 @@ class DeviceDataStore @Inject constructor(
             preferences[NETWORK_FLAG] = networkFlag
         }
     }
-    suspend fun getNetworkFlagLive(): LiveData<Boolean> {
+    fun getNetworkFlagLive(): LiveData<Boolean> {
         return context.device.data.map { preferences ->
             preferences[NETWORK_FLAG]!!
         }.asLiveData()
     }
-
     suspend fun setBuildVersion(buildVersion: String) {
         context.device.edit { preferences ->
             preferences[BUILD_VERSION] = buildVersion
@@ -73,7 +73,6 @@ class DeviceDataStore @Inject constructor(
             }.first()
         }
     }
-
     suspend fun setCodeIntegrity(codeIntegrity: String) {
         context.device.edit { preferences ->
             preferences[CODE_INTEGRITY] = codeIntegrity
@@ -86,7 +85,6 @@ class DeviceDataStore @Inject constructor(
             }.first()
         }
     }
-
     suspend fun setDeviceId(deviceId: String) {
         context.device.edit { preferences ->
             preferences[DEVICE_ID] = deviceId
@@ -97,13 +95,12 @@ class DeviceDataStore @Inject constructor(
             preferences[DEVICE_ID]!!
         }.first()
     }
-
     suspend fun setBackgroundMapCode(backgroundMapCode: String) {
         context.device.edit { preferences ->
             preferences[BACKGROUND_MAP_CODE] = backgroundMapCode
         }
     }
-    suspend fun getBackgroundMapCodeLive(): LiveData<String> {
+    fun getBackgroundMapCodeLive(): LiveData<String> {
         return context.device.data.map { preferences ->
             preferences[BACKGROUND_MAP_CODE]!!
         }.asLiveData()

@@ -2,7 +2,7 @@ package com.mongs.wear.data.code
 
 import com.mongs.wear.domain.code.ShiftCode
 
-enum class Shift(
+enum class SlotShift(
     val code: ShiftCode
 ) {
     SH000(ShiftCode.NORMAL),

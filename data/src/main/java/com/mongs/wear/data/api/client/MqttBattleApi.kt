@@ -20,24 +20,17 @@ class MqttBattleApi @Inject constructor(
     private val context: Context,
     private val mqttAndroidClient: MqttAndroidClient
 ) {
-
     suspend fun connect(messageCallback: MqttCallback) {
         withContext(Dispatchers.IO) {
             val options = MqttConnectOptions().apply {
                 this.userName = context.getString(R.string.mqtt_username)
                 this.password = context.getString(R.string.mqtt_password).toCharArray()
             }
-
-            try {
-                mqttAndroidClient.setCallback(messageCallback)
-                mqttAndroidClient.connect(options).await()
-                Log.i("MqttBattleApi", "connect.")
-            } catch (e: MqttException) {
-                Log.e("MqttBattleApi", "connect fail.")
-            }
+            mqttAndroidClient.setCallback(messageCallback)
+            mqttAndroidClient.connect(options).await()
+            Log.i("MqttBattleApi", "connect.")
         }
     }
-
     suspend fun disConnect() {
         withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
@@ -46,7 +39,6 @@ class MqttBattleApi @Inject constructor(
             }
         }
     }
-
     suspend fun subscribe(topic: String) {
         withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
@@ -57,7 +49,6 @@ class MqttBattleApi @Inject constructor(
             }
         }
     }
-
     suspend fun disSubscribe(topic: String) {
         withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
@@ -68,7 +59,6 @@ class MqttBattleApi @Inject constructor(
             }
         }
     }
-
     suspend fun produce(topic: String, payload: String) {
         withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
@@ -79,7 +69,6 @@ class MqttBattleApi @Inject constructor(
             }
         }
     }
-
     private suspend fun IMqttToken.await() = suspendCancellableCoroutine { cont ->
         actionCallback = object : IMqttActionListener {
             override fun onSuccess(asyncActionToken: IMqttToken?) {

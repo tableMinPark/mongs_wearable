@@ -1,18 +1,18 @@
 package com.mongs.wear.data.repository
 
 import com.mongs.wear.data.api.client.ManagementApi
-import com.mongs.wear.data.code.Shift
-import com.mongs.wear.data.code.State
+import com.mongs.wear.data.code.SlotShift
+import com.mongs.wear.data.code.SlotState
 import com.mongs.wear.data.dto.management.req.FeedMongReqDto
 import com.mongs.wear.data.dto.management.req.RegisterMongReqDto
 import com.mongs.wear.data.room.client.RoomDB
 import com.mongs.wear.data.room.entity.Slot
+import com.mongs.wear.domain.code.ShiftCode
 import com.mongs.wear.domain.error.RepositoryErrorCode
 import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.model.FeedLogModel
 import com.mongs.wear.domain.repositroy.ManagementRepository
 import javax.inject.Inject
-import kotlin.RuntimeException
 
 class ManagementRepositoryImpl @Inject constructor(
     private val managementApi: ManagementApi,
@@ -28,29 +28,33 @@ class ManagementRepositoryImpl @Inject constructor(
         )
 
         if (res.isSuccessful) {
-            val body = res.body()!!
-            try {
-                roomDB.slotDao().insert(
-                    Slot(
-                        mongId = body.mongId,
-                        name = body.name,
-                        mongCode = body.mongCode,
-                        weight = body.weight,
-                        healthy = body.healthy,
-                        satiety = body.satiety,
-                        strength = body.strength,
-                        sleep = body.sleep,
-                        poopCount = body.poopCount,
-                        isSleeping = body.isSleeping,
-                        exp = body.exp,
-                        stateCode = body.stateCode,
-                        shiftCode = body.shiftCode,
-                        payPoint = body.payPoint,
-                        born = body.born,
+            res.body()?.let { body ->
+                try {
+                    roomDB.slotDao().insert(
+                        Slot(
+                            mongId = body.mongId,
+                            name = body.name,
+                            mongCode = body.mongCode,
+                            weight = body.weight,
+                            healthy = body.healthy,
+                            satiety = body.satiety,
+                            strength = body.strength,
+                            sleep = body.sleep,
+                            poopCount = body.poopCount,
+                            isSleeping = body.isSleeping,
+                            exp = body.exp,
+                            stateCode = body.stateCode,
+                            shiftCode = body.shiftCode,
+                            payPoint = body.payPoint,
+                            born = body.born,
+                        )
                     )
-                )
-            } catch (e: RuntimeException) {
-                throw RepositoryException(RepositoryErrorCode.ADD_MONG_FAIL)
+                } catch (e: RuntimeException) {
+                    throw RepositoryException(
+                        errorCode = RepositoryErrorCode.ADD_MONG_FAIL,
+                        throwable = e,
+                    )
+                }
             }
         } else {
             throw RepositoryException(RepositoryErrorCode.ADD_MONG_FAIL)
@@ -60,11 +64,15 @@ class ManagementRepositoryImpl @Inject constructor(
         val res = managementApi.deleteMong(mongId = mongId)
 
         if (res.isSuccessful) {
-            val body = res.body()!!
-            try {
-                roomDB.slotDao().deleteByMongId(mongId = body.mongId)
-            } catch (e: RuntimeException) {
-                throw RepositoryException(RepositoryErrorCode.DELETE_MONG_FAIL)
+            res.body()?.let { body ->
+                try {
+                    roomDB.slotDao().updateShiftCodeByDelete(mongId = body.mongId, shiftCode = ShiftCode.DELETE)
+                } catch (e: RuntimeException) {
+                    throw RepositoryException(
+                        errorCode = RepositoryErrorCode.DELETE_MONG_FAIL,
+                        throwable = e,
+                    )
+                }
             }
         } else {
             throw RepositoryException(RepositoryErrorCode.DELETE_MONG_FAIL)
@@ -74,20 +82,17 @@ class ManagementRepositoryImpl @Inject constructor(
         val res = managementApi.findFeedLog(mongId = mongId)
 
         if (res.isSuccessful) {
-            val body = res.body()!!
-            try {
+            res.body()?.let { body ->
                 return body.map { feedLog ->
                     FeedLogModel(
                         code = feedLog.code,
                         isCanBuy = feedLog.isCanBuy,
                     )
                 }
-            } catch (e: RuntimeException) {
-                throw RepositoryException(RepositoryErrorCode.GET_FEED_LOG_FAIL)
             }
-        } else {
-            throw RepositoryException(RepositoryErrorCode.GET_FEED_LOG_FAIL)
         }
+
+        throw RepositoryException(RepositoryErrorCode.GET_FEED_LOG_FAIL)
     }
     override suspend fun feedMong(mongId: Long, code: String) {
         val res = managementApi.feedMong(
@@ -96,20 +101,24 @@ class ManagementRepositoryImpl @Inject constructor(
         )
 
         if (res.isSuccessful) {
-            val body = res.body()!!
-            try {
-                roomDB.slotDao().updateByFeedMong(
-                    mongId = body.mongId,
-                    weight = body.weight,
-                    strength = body.strength,
-                    satiety = body.satiety,
-                    healthy = body.healthy,
-                    sleep = body.sleep,
-                    exp = body.exp,
-                    payPoint = body.payPoint,
-                )
-            } catch (e: RuntimeException) {
-                throw RepositoryException(RepositoryErrorCode.FEED_MONG_FAIL)
+            res.body()?.let { body ->
+                try {
+                    roomDB.slotDao().updateByFeedMong(
+                        mongId = body.mongId,
+                        weight = body.weight,
+                        strength = body.strength,
+                        satiety = body.satiety,
+                        healthy = body.healthy,
+                        sleep = body.sleep,
+                        exp = body.exp,
+                        payPoint = body.payPoint,
+                    )
+                } catch (e: RuntimeException) {
+                    throw RepositoryException(
+                        errorCode = RepositoryErrorCode.FEED_MONG_FAIL,
+                        throwable = e,
+                    )
+                }
             }
         } else {
             throw RepositoryException(RepositoryErrorCode.FEED_MONG_FAIL)
@@ -119,11 +128,15 @@ class ManagementRepositoryImpl @Inject constructor(
         val res = managementApi.graduateMong(mongId = mongId)
 
         if (res.isSuccessful) {
-            val body = res.body()!!
-            try {
-                roomDB.slotDao().deleteByMongId(mongId = body.mongId)
-            } catch (e: RuntimeException) {
-                throw RepositoryException(RepositoryErrorCode.GRADUATE_MONG_FAIL)
+            res.body()?.let { body ->
+                try {
+                    roomDB.slotDao().updateShiftCodeByDelete(mongId = body.mongId, shiftCode = ShiftCode.DELETE)
+                } catch (e: RuntimeException) {
+                    throw RepositoryException(
+                        errorCode = RepositoryErrorCode.GRADUATE_MONG_FAIL,
+                        throwable = e,
+                    )
+                }
             }
         } else {
             throw RepositoryException(RepositoryErrorCode.GRADUATE_MONG_FAIL)
@@ -133,47 +146,57 @@ class ManagementRepositoryImpl @Inject constructor(
         try {
             roomDB.slotDao().updateByGraduateReadyMong(mongId = mongId)
         } catch (e: RuntimeException) {
-            throw RepositoryException(RepositoryErrorCode.GRADUATE_MONG_READY_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GRADUATE_MONG_READY_FAIL,
+                throwable = e,
+            )
         }
     }
     override suspend fun evolutionMong(mongId: Long) {
         val res = managementApi.evolutionMong(mongId = mongId)
 
         if (res.isSuccessful) {
-            val body = res.body()!!
-            try {
-                roomDB.slotDao().updateByEvolutionMong(
-                    mongId = body.mongId,
-                    mongCode = body.mongCode,
-                    shiftCode = Shift.valueOf(body.shiftCode).code,
-                    stateCode = State.valueOf(body.stateCode).code,
-                    weight = body.weight,
-                    strength = body.strength,
-                    satiety = body.satiety,
-                    healthy = body.healthy,
-                    sleep = body.sleep,
-                    exp = body.exp,
-                )
-            } catch (e: RuntimeException) {
-                throw RepositoryException(RepositoryErrorCode.EVOLUTION_MONG_FAIL)
+            res.body()?.let { body ->
+                try {
+                    roomDB.slotDao().updateByEvolutionMong(
+                        mongId = body.mongId,
+                        mongCode = body.mongCode,
+                        shiftCode = SlotShift.valueOf(body.shiftCode).code,
+                        stateCode = SlotState.valueOf(body.stateCode).code,
+                        weight = body.weight,
+                        strength = body.strength,
+                        satiety = body.satiety,
+                        healthy = body.healthy,
+                        sleep = body.sleep,
+                        exp = body.exp,
+                    )
+                } catch (e: RuntimeException) {
+                    throw RepositoryException(
+                        errorCode = RepositoryErrorCode.EVOLUTION_MONG_FAIL,
+                        throwable = e,
+                    )
+                }
             }
         } else {
             throw RepositoryException(RepositoryErrorCode.EVOLUTION_MONG_FAIL)
         }
-
     }
     override suspend fun sleepingMong(mongId: Long) {
         val res = managementApi.sleepingMong(mongId = mongId)
 
         if (res.isSuccessful) {
-            val body = res.body()!!
-            try {
-                roomDB.slotDao().updateBySleepingMong(
-                    mongId = body.mongId,
-                    isSleeping = body.isSleeping,
-                )
-            } catch (e: RuntimeException) {
-                throw RepositoryException(RepositoryErrorCode.SLEEPING_MONG_FAIL)
+            res.body()?.let { body ->
+                try {
+                    roomDB.slotDao().updateBySleepingMong(
+                        mongId = body.mongId,
+                        isSleeping = body.isSleeping,
+                    )
+                } catch (e: RuntimeException) {
+                    throw RepositoryException(
+                        errorCode = RepositoryErrorCode.SLEEPING_MONG_FAIL,
+                        throwable = e,
+                    )
+                }
             }
         } else {
             throw RepositoryException(RepositoryErrorCode.SLEEPING_MONG_FAIL)
@@ -183,14 +206,18 @@ class ManagementRepositoryImpl @Inject constructor(
         val res = managementApi.strokeMong(mongId = mongId)
 
         if (res.isSuccessful) {
-            val body = res.body()!!
-            try {
-                roomDB.slotDao().updateByStrokeMong(
-                    mongId = mongId,
-                    exp = body.exp,
-                )
-            } catch (e: RuntimeException) {
-                throw RepositoryException(RepositoryErrorCode.STROKE_MONG_FAIL)
+            res.body()?.let { body ->
+                try {
+                    roomDB.slotDao().updateByStrokeMong(
+                        mongId = mongId,
+                        exp = body.exp,
+                    )
+                } catch (e: RuntimeException) {
+                    throw RepositoryException(
+                        errorCode = RepositoryErrorCode.STROKE_MONG_FAIL,
+                        throwable = e,
+                    )
+                }
             }
         } else {
             throw RepositoryException(RepositoryErrorCode.STROKE_MONG_FAIL)
@@ -200,33 +227,42 @@ class ManagementRepositoryImpl @Inject constructor(
         val res = managementApi.poopCleanMong(mongId = mongId)
 
         if (res.isSuccessful) {
-            val body = res.body()!!
-            try {
-                roomDB.slotDao().updateByPoopCleanMong(
-                    mongId = body.mongId,
-                    poopCount = body.poopCount,
-                    exp = body.exp,
-                )
-            } catch (e: RuntimeException) {
-                throw RepositoryException(RepositoryErrorCode.POOP_CLEAN_MONG_FAIL)
+            res.body()?.let { body ->
+                try {
+                    roomDB.slotDao().updateByPoopCleanMong(
+                        mongId = body.mongId,
+                        poopCount = body.poopCount,
+                        exp = body.exp,
+                    )
+                } catch (e: RuntimeException) {
+                    throw RepositoryException(
+                        errorCode = RepositoryErrorCode.POOP_CLEAN_MONG_FAIL,
+                        throwable = e,
+                    )
+                }
             }
         } else {
             throw RepositoryException(RepositoryErrorCode.POOP_CLEAN_MONG_FAIL)
         }
-
     }
     override suspend fun setIsHappy(mongId: Long, isHappy: Boolean) {
         try {
             roomDB.slotDao().updateIsHappyByStrokeMong(mongId = mongId, isHappy = isHappy)
         } catch (e: RuntimeException) {
-            throw RepositoryException(RepositoryErrorCode.SET_IS_HAPPY_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.SET_IS_HAPPY_FAIL,
+                throwable = e,
+            )
         }
     }
     override suspend fun setIsEating(mongId: Long, isEating: Boolean) {
         try {
             roomDB.slotDao().updateIsEatingByFeedMong(mongId = mongId, isEating = isEating)
         } catch (e: RuntimeException) {
-            throw RepositoryException(RepositoryErrorCode.SET_IS_EATING_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.SET_IS_EATING_FAIL,
+                throwable = e,
+            )
         }
     }
 }

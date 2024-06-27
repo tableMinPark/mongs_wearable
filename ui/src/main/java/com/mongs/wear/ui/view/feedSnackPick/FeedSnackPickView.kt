@@ -120,10 +120,6 @@ fun FeedSnackPickView(
     if (feedSnackPickViewModel.uiState.navFeedMenu) {
         navController.popBackStack()
     }
-
-    LaunchedEffect(Unit) {
-        feedSnackPickViewModel.loadData()
-    }
 }
 
 @Composable

@@ -37,7 +37,7 @@ class MainSlotViewModel @Inject constructor(
         viewModelScope.launch (Dispatchers.IO) {
             try {
                 evoluteNowSlotUseCase()
-            } catch (e: UseCaseException) {
+            } catch (_: UseCaseException) {
                 uiState.isEvolution = false
             }
         }

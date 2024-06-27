@@ -9,7 +9,6 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
-import com.mongs.wear.ui.global.component.background.CollectionNestedBackground
 import com.mongs.wear.ui.global.component.background.FeedbackBackground
 
 @Composable

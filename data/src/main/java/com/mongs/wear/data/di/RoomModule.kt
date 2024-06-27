@@ -13,11 +13,13 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RoomModule {
+    private const val ROOM_NAME = "mongs-database"
+
     @Provides
     @Singleton
     fun provideMongDatabase(@ApplicationContext context: Context) : RoomDB {
         return Room
-            .databaseBuilder(context.applicationContext, RoomDB::class.java, "mongs-database")
+            .databaseBuilder(context.applicationContext, RoomDB::class.java, ROOM_NAME)
             .fallbackToDestructiveMigration().build()
     }
 }

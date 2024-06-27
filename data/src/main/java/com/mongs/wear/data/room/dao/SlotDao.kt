@@ -18,16 +18,16 @@ interface SlotDao {
     /**
      * SELECT 메서드
      */
-    @Query("SELECT * FROM slot WHERE mongId = :mongId")
-    fun selectByMongId(mongId: Long): Slot
-    @Query("SELECT * FROM slot WHERE mongId = :mongId")
-    fun selectByMongIdLive(mongId: Long): LiveData<Slot>
-    @Query("SELECT * FROM slot WHERE isSelected = true")
-    fun selectByIsSelectedTrue(): Slot?
-    @Query("SELECT * FROM slot")
-    fun selectAll(): List<Slot>
-    @Query("SELECT * FROM slot")
-    fun selectAllLive(): LiveData<List<Slot>>
+    @Query("SELECT * FROM slot WHERE mongId = :mongId AND shiftCode != :shiftCode")
+    fun selectByMongId(mongId: Long, shiftCode: ShiftCode = ShiftCode.DELETE): Slot
+    @Query("SELECT * FROM slot WHERE mongId = :mongId AND shiftCode != :shiftCode")
+    fun selectByMongIdLive(mongId: Long, shiftCode: ShiftCode = ShiftCode.DELETE): LiveData<Slot>
+    @Query("SELECT * FROM slot WHERE isSelected = true AND shiftCode != :shiftCode")
+    fun selectByIsSelectedTrue(shiftCode: ShiftCode = ShiftCode.DELETE): Slot?
+    @Query("SELECT * FROM slot WHERE shiftCode != :shiftCode")
+    fun selectAll(shiftCode: ShiftCode = ShiftCode.DELETE): List<Slot>
+    @Query("SELECT * FROM slot WHERE shiftCode != :shiftCode")
+    fun selectAllLive(shiftCode: ShiftCode = ShiftCode.DELETE): LiveData<List<Slot>>
 
     /**
      * INSERT 메서드
@@ -60,6 +60,8 @@ interface SlotDao {
     fun updateIsEatingByFeedMong(mongId: Long, isEating: Boolean)
     @Query("UPDATE slot SET payPoint = :payPoint WHERE mongId = :mongId")
     fun updatePayPointByExchangeWalking(mongId: Long, payPoint: Int)
+    @Query("UPDATE slot SET shiftCode = :shiftCode WHERE mongId = :mongId")
+    fun updateShiftCodeByDelete(mongId: Long, shiftCode: ShiftCode)
 
     @Query("UPDATE slot SET mongCode = :mongCode WHERE mongId = :mongId")
     fun updateMongCodeByMqtt(mongId: Long, mongCode: String)
@@ -83,4 +85,6 @@ interface SlotDao {
      */
     @Query("DELETE FROM slot WHERE mongId = :mongId")
     fun deleteByMongId(mongId: Long)
+    @Query("DELETE FROM slot WHERE shiftCode = :shiftCode")
+    fun deleteByShiftCode(shiftCode: ShiftCode = ShiftCode.DELETE)
 }

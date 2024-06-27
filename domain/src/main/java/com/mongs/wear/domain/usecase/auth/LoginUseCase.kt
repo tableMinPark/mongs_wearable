@@ -3,6 +3,7 @@ package com.mongs.wear.domain.usecase.auth
 import com.mongs.wear.domain.client.MqttEventClient
 import com.mongs.wear.domain.code.FeedbackCode
 import com.mongs.wear.domain.error.UseCaseErrorCode
+import com.mongs.wear.domain.exception.ClientException
 import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.repositroy.AuthRepository
@@ -20,12 +21,17 @@ class LoginUseCase @Inject constructor(
     private val deviceRepository: DeviceRepository,
     private val memberRepository: MemberRepository,
     private val slotRepository: SlotRepository,
-    private val feedbackRepository: FeedbackRepository
+    private val feedbackRepository: FeedbackRepository,
 ) {
     suspend operator fun invoke(email: String?, name: String?) {
         try {
             val deviceId = deviceRepository.getDeviceId()
-            val loginModel = authRepository.login(deviceId = deviceId, email = email!!, name = name!!)
+
+            if (email.isNullOrEmpty() || name.isNullOrEmpty()) {
+                throw UseCaseException(UseCaseErrorCode.INVALID_GOOGLE_LOGIN)
+            }
+            val loginModel =
+                authRepository.login(deviceId = deviceId, email = email, name = name)
 
             val accountId = loginModel.accountId
             val accessToken = loginModel.accessToken
@@ -36,14 +42,18 @@ class LoginUseCase @Inject constructor(
             val codeIntegrity = deviceRepository.getCodeIntegrity()
             val buildVersion = deviceRepository.getBuildVersion()
 
-            val versionModel = codeRepository.validationVersion(codeIntegrity = codeIntegrity, buildVersion = buildVersion)
+            val versionModel = codeRepository.validationVersion(
+                codeIntegrity = codeIntegrity,
+                buildVersion = buildVersion,
+            )
+
             if (versionModel.updateApp) {
                 throw UseCaseException(UseCaseErrorCode.MUST_UPDATE_APP)
-            } else if(versionModel.updateCode) {
+            } else if (versionModel.updateCode) {
                 codeRepository.setCodes(codeIntegrity = codeIntegrity, buildVersion = buildVersion)
             }
 
-            mqttEventClient.setConnection(accountId = accountId)
+            mqttEventClient.setConnection()
             mqttEventClient.subScribeMember(accountId = accountId)
 
             memberRepository.setMember()
@@ -53,10 +63,18 @@ class LoginUseCase @Inject constructor(
             feedbackRepository.addFeedbackLog(
                 groupCode = FeedbackCode.AUTH.groupCode,
                 location = "LoginUseCase",
-                message = e.errorCode.message(),
+                message = e.stackTrace.contentDeepToString(),
             )
 
-            throw UseCaseException(e.errorCode)
+            throw UseCaseException(e.errorCode, e)
+        } catch (e: ClientException) {
+            feedbackRepository.addFeedbackLog(
+                groupCode = FeedbackCode.AUTH.groupCode,
+                location = "LoginUseCase",
+                message = e.stackTrace.contentDeepToString(),
+            )
+
+            throw UseCaseException(e.errorCode, e)
         }
     }
 }

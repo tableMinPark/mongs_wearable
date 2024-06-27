@@ -26,17 +26,11 @@ class MqttEventApi @Inject constructor(
                 this.userName = context.getString(R.string.mqtt_username)
                 this.password = context.getString(R.string.mqtt_password).toCharArray()
             }
-
-            try {
-                mqttAndroidClient.setCallback(messageCallback)
-                mqttAndroidClient.connect(options).await()
-                Log.i("MqttEventApi", "connect.")
-            } catch (e: MqttException) {
-                Log.e("MqttEventApi", "connect fail.")
-            }
+            mqttAndroidClient.setCallback(messageCallback)
+            mqttAndroidClient.connect(options).await()
+            Log.i("MqttEventApi", "connect.")
         }
     }
-
     suspend fun disConnect() {
         withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
@@ -47,7 +41,6 @@ class MqttEventApi @Inject constructor(
             }
         }
     }
-
     suspend fun subscribe(topic: String) {
         withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
@@ -58,7 +51,6 @@ class MqttEventApi @Inject constructor(
             }
         }
     }
-
     suspend fun disSubscribe(topic: String) {
         withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
@@ -69,7 +61,6 @@ class MqttEventApi @Inject constructor(
             }
         }
     }
-
     private suspend fun IMqttToken.await() = suspendCancellableCoroutine { cont ->
         actionCallback = object : IMqttActionListener {
             override fun onSuccess(asyncActionToken: IMqttToken?) {

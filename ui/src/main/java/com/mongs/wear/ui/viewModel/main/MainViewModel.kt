@@ -1,11 +1,11 @@
-package com.mongs.wear.ui.viewModel.mainActivity
+package com.mongs.wear.ui.viewModel.main
 
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.domain.client.MqttBattleClient
@@ -19,10 +19,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class MainActivityViewModel @Inject constructor(
+class MainViewModel @Inject constructor(
     private val deviceRepository: DeviceRepository,
     private val memberRepository: MemberRepository,
     private val slotRepository: SlotRepository,
@@ -33,21 +34,28 @@ class MainActivityViewModel @Inject constructor(
     private lateinit var sensorManager: SensorManager
     private lateinit var stepSensorEventListener: SensorEventListener
 
-    lateinit var networkFlag: LiveData<Boolean>
+    val networkFlag: LiveData<Boolean> get() = _networkFlag
+    private val _networkFlag = MediatorLiveData<Boolean>()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            networkFlag = deviceRepository.getNetworkFlagLive()
+        viewModelScope.launch(Dispatchers.Main)  {
+            _networkFlag.addSource(
+                withContext(Dispatchers.IO) {
+                    deviceRepository.getNetworkFlagLive()
+                }
+            ) { networkFlag ->
+                _networkFlag.value = networkFlag
+            }
         }
     }
 
-    fun initSensor(sensorManager: SensorManager) {
+    fun connectSensor(sensorManager: SensorManager) {
         try {
             this.sensorManager = sensorManager
             stepSensorEventListener = object : SensorEventListener {
                 override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
                 override fun onSensorChanged(event: SensorEvent) {
-                    val nowWalkingStep = event.values[0].toInt()
+//                    val nowWalkingStep = event.values[0].toInt()
                     viewModelScope.launch(Dispatchers.IO) {
                         memberRepository.addWalkingCount(addWalkingCount = 1)
                     }
@@ -61,21 +69,11 @@ class MainActivityViewModel @Inject constructor(
         } catch (_: RuntimeException) {
         }
     }
-    fun resetSensor() {
+    fun disconnectSensor() {
         runBlocking(Dispatchers.IO) {
             try {
                 sensorManager.unregisterListener(stepSensorEventListener)
             } catch (_: RuntimeException) {
-            }
-        }
-    }
-    fun initMqttEvent() {
-        viewModelScope.launch(Dispatchers.IO) {
-            runBlocking {
-                try {
-                    mqttEventClient.resetConnection()
-                } catch (_: RepositoryException) {
-                }
             }
         }
     }
@@ -95,6 +93,16 @@ class MainActivityViewModel @Inject constructor(
                     },
                 )
             } catch (_: RuntimeException) {
+            }
+        }
+    }
+    fun pauseConnectMqttEvent() {
+        viewModelScope.launch(Dispatchers.IO) {
+            runBlocking {
+                try {
+                    mqttEventClient.pauseConnect()
+                } catch (_: RuntimeException) {
+                }
             }
         }
     }

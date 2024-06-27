@@ -1,6 +1,5 @@
 package com.mongs.wear.ui.view.battleMatch
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -57,7 +56,6 @@ import com.mongs.wear.ui.global.theme.PaymongWhite
 import com.mongs.wear.ui.viewModel.battleMatch.BattleMatchViewModel
 import kotlinx.coroutines.delay
 import kotlin.math.max
-import kotlin.math.min
 
 const val MAX_ROUND = 10
 const val MAX_SECONDS = 30
@@ -69,6 +67,7 @@ fun BattleMatchView(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
+
     DisposableEffect(currentBackStackEntry) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_DESTROY) {
@@ -122,10 +121,6 @@ fun BattleMatchView(
                     modifier = Modifier.zIndex(1f),
                 )
             }
-        }
-
-        LaunchedEffect(Unit) {
-            battleMatchViewModel.loadData()
         }
     }
 }

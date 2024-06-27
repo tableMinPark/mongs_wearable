@@ -2,9 +2,7 @@ package com.mongs.wear.data.callback
 
 import android.util.Log
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.mongs.wear.data.api.code.PublishEventCode
-import com.mongs.wear.data.utils.GsonDateFormatAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -12,11 +10,7 @@ import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
 import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.lang.Exception
-import java.time.LocalDateTime
 import com.google.gson.reflect.TypeToken
-import com.mongs.wear.data.code.Shift
-import com.mongs.wear.data.code.State
-import com.mongs.wear.data.dataStore.MemberDataStore
 import com.mongs.wear.data.dto.mqttEvent.BasicEventPublish
 import com.mongs.wear.data.dto.mqttEvent.res.MemberStarPointVo
 import com.mongs.wear.data.dto.mqttEvent.res.MongCodeVo
@@ -27,13 +21,12 @@ import com.mongs.wear.data.dto.mqttEvent.res.MongPoopCountVo
 import com.mongs.wear.data.dto.mqttEvent.res.MongShiftVo
 import com.mongs.wear.data.dto.mqttEvent.res.MongStateVo
 import com.mongs.wear.data.dto.mqttEvent.res.MongStatusVo
-import com.mongs.wear.data.room.client.RoomDB
-import com.mongs.wear.domain.code.ShiftCode
-import com.mongs.wear.domain.code.StateCode
 import java.lang.reflect.Type
 
 
 class MessageEventCallback (
+    private val gson: Gson,
+    private val lostConnectCallback: suspend () -> Unit,
     private val setStarPoint: suspend (Int) -> Unit,
     private val updateMongCode: suspend (Long, String) -> Unit,
     private val updateExp: suspend (Long, Double) -> Unit,
@@ -44,11 +37,6 @@ class MessageEventCallback (
     private val updateStateCode: suspend (Long, String) -> Unit,
     private val updateStatus: suspend (Long, Double, Double, Double, Double, Double) -> Unit,
 ) : MqttCallback {
-
-    private val gson: Gson = GsonBuilder()
-        .registerTypeAdapter(LocalDateTime::class.java, GsonDateFormatAdapter())
-        .create()
-
     private val listType: Type = object : TypeToken<List<BasicEventPublish<Any>>>() {}.type
 
     override fun messageArrived(topic: String?, message: MqttMessage?) {
@@ -118,11 +106,15 @@ class MessageEventCallback (
                             }
                         }
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e("BattleMessageCallback", "mqtt message parsing fail.")
                 }
             }
         }
     }
     override fun deliveryComplete(token: IMqttDeliveryToken?) {}
-    override fun connectionLost(cause: Throwable?) {}
+    override fun connectionLost(cause: Throwable?) {
+        CoroutineScope(Dispatchers.IO).launch {
+            lostConnectCallback()
+        }
+    }
 }

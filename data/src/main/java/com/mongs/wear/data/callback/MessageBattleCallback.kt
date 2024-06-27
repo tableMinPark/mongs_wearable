@@ -20,16 +20,14 @@ import java.time.LocalDateTime
 
 
 class MessageBattleCallback (
+    private val battleSearchBaseTopic: String,
+    private val battleMatchBaseTopic: String,
     private val matchFind: suspend (String, String) -> Unit,
     private val matchEnter: suspend (MatchVo) -> Unit,
     private val match: suspend (MatchVo) -> Unit,
     private val matchOver: suspend (MatchOverVo) -> Unit,
+    private val gson: Gson,
 ) : MqttCallback {
-
-    private val gson: Gson = GsonBuilder()
-        .registerTypeAdapter(LocalDateTime::class.java, GsonDateFormatAdapter())
-        .create()
-
     override fun messageArrived(topic: String?, message: MqttMessage?) {
         message?.let {
             CoroutineScope(Dispatchers.IO).launch {
@@ -37,7 +35,7 @@ class MessageBattleCallback (
                     val json = it.toString()
 
                     topic?.let { topicName ->
-                        if (topicName.startsWith(MqttBattleClientImpl.BATTLE_SEARCH_TOPIC)) {
+                        if (topicName.startsWith(battleSearchBaseTopic)) {
                             val body = gson.fromJson(json, BasicBattlePublish::class.java)
                             val dataJson = gson.toJson(body.data)
                             when (body.code) {
@@ -48,7 +46,7 @@ class MessageBattleCallback (
                                 }
                                 else -> {}
                             }
-                        } else if (topicName.startsWith(MqttBattleClientImpl.BATTLE_MATCH_TOPIC)) {
+                        } else if (topicName.startsWith(battleMatchBaseTopic)) {
                             val body = gson.fromJson(json, BasicBattlePublish::class.java)
                             val dataJson = gson.toJson(body.data)
                             when (body.code) {
@@ -73,7 +71,7 @@ class MessageBattleCallback (
                         } else {}
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e("BattleMessageCallback", "mqtt battle message parsing fail.")
                 }
             }
         }

@@ -40,10 +40,6 @@ fun MainPagerView(
     pagerState: PagerState,
     mainPagerViewModel: MainPagerViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(Unit) {
-        mainPagerViewModel.loadData()
-    }
-
     val backgroundAlpha = remember {
         derivedStateOf {
             val currentPage = pagerState.currentPage
@@ -82,6 +78,10 @@ fun MainPagerView(
                 modifier = Modifier.zIndex(2f),
             )
         }
+    }
+
+    LaunchedEffect(Unit) {
+        mainPagerViewModel.loadData()
     }
 }
 
