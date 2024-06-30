@@ -14,6 +14,7 @@ import com.mongs.wear.domain.vo.MapCollectionVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,13 +26,18 @@ class CollectionMapPickViewModel @Inject constructor(
     val mapCollectionVoList: LiveData<List<MapCollectionVo>> get() = _mapCollectionVoList
     private val _mapCollectionVoList = MutableLiveData<List<MapCollectionVo>>()
 
-    fun loadData() {
-        viewModelScope.launch (Dispatchers.IO) {
+    init {
+        viewModelScope.launch (Dispatchers.Main) {
             try {
-                _mapCollectionVoList.postValue(getMapCollectionsUseCase())
+                uiState.loadingBar = true
+                val mapCollectionVoList = withContext(Dispatchers.IO) {
+                    getMapCollectionsUseCase()
+                }
+                _mapCollectionVoList.postValue(mapCollectionVoList)
                 uiState.loadingBar = false
-            } catch (e: UseCaseException) {
+            } catch (_: UseCaseException) {
                 uiState.navCollectionMenu = true
+                uiState.loadingBar = false
             }
         }
     }
@@ -39,10 +45,13 @@ class CollectionMapPickViewModel @Inject constructor(
     fun setBackground(mapCode: String) {
         viewModelScope.launch (Dispatchers.IO) {
             try {
+                uiState.loadingBar = true
                 setBackgroundMapCodeUseCase(code = mapCode)
-            } catch (_: UseCaseException) {
-            } finally {
                 uiState.detailDialog = false
+                uiState.loadingBar = false
+            } catch (_: UseCaseException) {
+                uiState.detailDialog = false
+                uiState.loadingBar = false
             }
         }
     }

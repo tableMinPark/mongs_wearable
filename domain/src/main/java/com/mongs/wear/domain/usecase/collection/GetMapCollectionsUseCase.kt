@@ -1,13 +1,16 @@
 package com.mongs.wear.domain.usecase.collection
 
+import com.mongs.wear.domain.code.FeedbackCode
 import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.repositroy.CollectionRepository
+import com.mongs.wear.domain.repositroy.FeedbackRepository
 import com.mongs.wear.domain.vo.MapCollectionVo
 import javax.inject.Inject
 
 class GetMapCollectionsUseCase @Inject constructor(
-    private val collectionRepository: CollectionRepository
+    private val collectionRepository: CollectionRepository,
+    private val feedbackRepository: FeedbackRepository,
 ) {
     suspend operator fun invoke(): List<MapCollectionVo> {
         try {
@@ -20,7 +23,13 @@ class GetMapCollectionsUseCase @Inject constructor(
                 )
             }
         } catch (e: RepositoryException) {
-            throw UseCaseException(e.errorCode)
+            feedbackRepository.addFeedbackLog(
+                groupCode = FeedbackCode.COLLECTION.groupCode,
+                location = "GetMapCollectionsUseCase",
+                message = e.stackTrace.contentDeepToString(),
+            )
+
+            throw UseCaseException(e.errorCode, e)
         }
     }
 }

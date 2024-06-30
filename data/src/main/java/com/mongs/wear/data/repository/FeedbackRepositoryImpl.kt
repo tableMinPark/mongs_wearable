@@ -9,11 +9,12 @@ import com.mongs.wear.data.vo.FeedbackVo
 import com.mongs.wear.domain.error.RepositoryErrorCode
 import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.repositroy.FeedbackRepository
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class FeedbackRepositoryImpl @Inject constructor(
+    private val feedbackApi: FeedbackApi,
     private val roomDB: RoomDB,
-    private val feedbackApi: FeedbackApi
 ): FeedbackRepository {
     override suspend fun addFeedbackLog(groupCode: String, location: String, message: String) {
         try {
@@ -25,9 +26,24 @@ class FeedbackRepositoryImpl @Inject constructor(
                 )
             )
         } catch (e: RuntimeException) {
-            throw RepositoryException(RepositoryErrorCode.ADD_FEEDBACK_LOG_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.ADD_FEEDBACK_LOG_FAIL,
+                throwable = e,
+            )
         }
     }
+
+    override suspend fun removeFeedbackLog(createdAt: LocalDateTime) {
+        try {
+            roomDB.feedbackLogDao().deleteByCreatedAt(createdAt = createdAt)
+        } catch (e: RepositoryException) {
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GET_COUNT_FEEDBACK_LOG_FAIL,
+                throwable = e,
+            )
+        }
+    }
+
     override suspend fun addFeedback(groupCode: String, message: String) {
         try {
             val feedbackLogs = roomDB.feedbackLogDao().selectByGroupCode(groupCode = groupCode)
@@ -46,11 +62,15 @@ class FeedbackRepositoryImpl @Inject constructor(
                     }
                 )
             )
+
             if (!res.isSuccessful) {
                 throw RepositoryException(RepositoryErrorCode.ADD_FEEDBACK_FAIL)
             }
         } catch (e: RuntimeException) {
-            throw RepositoryException(RepositoryErrorCode.ADD_FEEDBACK_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.ADD_FEEDBACK_FAIL,
+                throwable = e,
+            )
         }
     }
 }

@@ -14,8 +14,8 @@ class PaymentChargeViewModel @Inject constructor(
 ): ViewModel() {
     val uiState: UiState = UiState()
 
-    fun loadData(context: Context) {
-        viewModelScope.launch(Dispatchers.IO) {
+    init {
+        viewModelScope.launch(Dispatchers.Main) {
         }
     }
 

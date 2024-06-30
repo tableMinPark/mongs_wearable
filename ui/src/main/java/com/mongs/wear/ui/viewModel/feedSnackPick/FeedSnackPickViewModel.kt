@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,6 +16,7 @@ import com.mongs.wear.domain.vo.SnackVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,17 +27,30 @@ class FeedSnackPickViewModel @Inject constructor(
 ): ViewModel() {
     val uiState: UiState = UiState()
 
-    var payPoint: LiveData<Int> = MutableLiveData()
+    val payPoint: LiveData<Int> get() = _payPoint
+    private val _payPoint = MediatorLiveData<Int>()
     val snackVoList: LiveData<List<SnackVo>> get() = _snackVoList
     private val _snackVoList = MutableLiveData<List<SnackVo>>()
 
-    fun loadData() {
-        viewModelScope.launch (Dispatchers.IO) {
+    init {
+        viewModelScope.launch (Dispatchers.Main) {
             try {
-                payPoint = getNowSlotPayPointUseCase()
-                _snackVoList.postValue(getSnackCodesUseCase())
+                _payPoint.addSource(
+                    withContext(Dispatchers.IO) {
+                        getNowSlotPayPointUseCase()
+                    }
+                ) { payPoint ->
+                    _payPoint.value = payPoint
+                }
+
+                val snackVoList = withContext(Dispatchers.IO) {
+                    getSnackCodesUseCase()
+                }
+                _snackVoList.postValue(snackVoList)
+
+
                 uiState.loadingBar = false
-            } catch (e: UseCaseException) {
+            } catch (_: UseCaseException) {
                 uiState.navFeedMenu = true
             }
         }

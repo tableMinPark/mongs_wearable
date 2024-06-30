@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -46,7 +44,7 @@ import com.mongs.wear.ui.viewModel.mainWalking.MainWalkingViewModel.UiState
 
 @Composable
 fun MainWalkingView(
-    slotVo: State<SlotVo>,
+    slotVo: SlotVo,
     mainWalkingViewModel: MainWalkingViewModel = hiltViewModel(),
 ) {
     Box {
@@ -61,13 +59,16 @@ fun MainWalkingView(
                 ConfirmDialog(
                     text = "$$chargePayPoint\n환전하시겠습니까?",
                     confirm = {
-                        mainWalkingViewModel.chargePayPoint(walkingCount = walkingCount.value)
+                        mainWalkingViewModel.chargePayPoint(
+                            mongId = slotVo.mongId,
+                            walkingCount = walkingCount.value
+                        )
                     },
                     cancel = { mainWalkingViewModel.uiState.chargePayPointDialog = false }
                 )
             } else {
                 MainWalkingContent(
-                    slotVo = slotVo.value,
+                    slotVo = slotVo,
                     chargePayPoint = chargePayPoint,
                     payPoint = payPoint.value,
                     walkingCount = walkingCount.value,
@@ -76,10 +77,6 @@ fun MainWalkingView(
                 )
             }
         }
-    }
-
-    LaunchedEffect(Unit) {
-        mainWalkingViewModel.loadData()
     }
 }
 

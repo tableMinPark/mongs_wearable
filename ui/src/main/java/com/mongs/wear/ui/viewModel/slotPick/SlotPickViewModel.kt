@@ -1,61 +1,96 @@
 package com.mongs.wear.ui.viewModel.slotPick
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.domain.exception.UseCaseException
-import com.mongs.wear.domain.usecase.feed.FeedUseCase
-import com.mongs.wear.domain.usecase.feed.GetFoodCodesUseCase
 import com.mongs.wear.domain.usecase.member.BuySlotUseCase
 import com.mongs.wear.domain.usecase.member.GetMaxSlotUseCase
 import com.mongs.wear.domain.usecase.member.GetStarPointUseCase
 import com.mongs.wear.domain.usecase.slot.AddSlotUseCase
-import com.mongs.wear.domain.usecase.slot.GetNowSlotPayPointUseCase
+import com.mongs.wear.domain.usecase.slot.GetNowSlotUseCase
 import com.mongs.wear.domain.usecase.slot.GetSlotsUseCase
+import com.mongs.wear.domain.usecase.slot.GraduateSlotUseCase
 import com.mongs.wear.domain.usecase.slot.RemoveSlotUseCase
 import com.mongs.wear.domain.usecase.slot.SetNowSlotUseCase
-import com.mongs.wear.domain.vo.FoodVo
 import com.mongs.wear.domain.vo.SlotVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class SlotPickViewModel @Inject constructor(
+    private val getNowSlotUseCase: GetNowSlotUseCase,
     private val addSlotUseCase: AddSlotUseCase,
     private val removeSlotUseCase: RemoveSlotUseCase,
     private val setNowSlotUseCase: SetNowSlotUseCase,
     private val buySlotUseCase: BuySlotUseCase,
+    private val graduateSlotUseCase: GraduateSlotUseCase,
     private val getStarPointUseCase: GetStarPointUseCase,
     private val getMaxSlotUseCase: GetMaxSlotUseCase,
     private val getSlotsUseCase: GetSlotsUseCase,
 ): ViewModel() {
     val uiState: UiState = UiState()
 
-    var starPoint: LiveData<Int> = MutableLiveData()
-    var slotVoList: LiveData<List<SlotVo>> = MutableLiveData()
-    var maxSlot: LiveData<Int> = MutableLiveData()
+    val slotVo: LiveData<SlotVo?> get() = _slotVo
+    private val _slotVo = MediatorLiveData<SlotVo?>(null)
+    val starPoint: LiveData<Int> get() = _starPoint
+    private val _starPoint = MediatorLiveData<Int>()
+    val slotVoList: LiveData<List<SlotVo>> get() = _slotVoList
+    private val _slotVoList = MediatorLiveData<List<SlotVo>>()
+    val maxSlot: LiveData<Int> get() = _maxSlot
+    private val _maxSlot = MediatorLiveData<Int>()
     val buySlotPrice: LiveData<Int> get() = _buySlotPrice
     private val _buySlotPrice = MutableLiveData<Int>()
-    val slotVo: LiveData<SlotVo> get() = _slotVo
-    private val _slotVo = MutableLiveData<SlotVo>()
 
-    fun loadData() {
-        viewModelScope.launch (Dispatchers.IO) {
+    init {
+        viewModelScope.launch (Dispatchers.Main) {
             try {
-                starPoint = getStarPointUseCase()
-                slotVoList = getSlotsUseCase()
-                maxSlot = getMaxSlotUseCase()
+                uiState.loadingBar = true
+
+                _slotVo.addSource(
+                    withContext(Dispatchers.IO) {
+                        getNowSlotUseCase()
+                    }
+                ) { slotVo ->
+                    _slotVo.value = slotVo
+                }
+
+                _starPoint.addSource(
+                    withContext(Dispatchers.IO) {
+                        getStarPointUseCase()
+                    }
+                ) { starPoint ->
+                    _starPoint.value = starPoint
+                }
+
+                _slotVoList.addSource(
+                    withContext(Dispatchers.IO) {
+                        getSlotsUseCase()
+                    }
+                ) { slotVoList ->
+                    _slotVoList.value = slotVoList
+                }
+
+                _maxSlot.addSource(
+                    withContext(Dispatchers.IO) {
+                        getMaxSlotUseCase()
+                    }
+                ) { maxSlot ->
+                    _maxSlot.value = maxSlot
+                }
+
                 _buySlotPrice.postValue(10)
+
                 uiState.loadingBar = false
+
             } catch (e: UseCaseException) {
                 uiState.navMainPager = true
             }
@@ -65,10 +100,11 @@ class SlotPickViewModel @Inject constructor(
     fun addMong(name: String, sleepStart: String, sleepEnd: String) {
         viewModelScope.launch (Dispatchers.IO) {
             try {
-                addSlotUseCase(name = name, sleepStart = sleepStart, sleepEnd = sleepEnd)
-            } catch (_: UseCaseException) {
-            } finally {
                 uiState.addDialog = false
+                uiState.loadingBar = true
+                addSlotUseCase(name = name, sleepStart = sleepStart, sleepEnd = sleepEnd)
+                uiState.loadingBar = false
+            } catch (_: UseCaseException) {
                 uiState.loadingBar = false
             }
         }
@@ -77,11 +113,12 @@ class SlotPickViewModel @Inject constructor(
     fun deleteMong(mongId: Long) {
         viewModelScope.launch (Dispatchers.IO) {
             try {
-                removeSlotUseCase(mongId = mongId)
-            } catch (_: UseCaseException) {
-            } finally {
-                uiState.loadingBar = false
                 uiState.deleteDialog = false
+                uiState.loadingBar = true
+                removeSlotUseCase(mongId = mongId)
+                uiState.loadingBar = false
+            } catch (_: UseCaseException) {
+                uiState.loadingBar = false
             }
         }
     }
@@ -89,11 +126,25 @@ class SlotPickViewModel @Inject constructor(
     fun pickMong(mongId: Long) {
         viewModelScope.launch (Dispatchers.IO) {
             try {
+                uiState.pickDialog = false
+                uiState.loadingBar = true
                 setNowSlotUseCase(mongId = mongId)
                 uiState.navMainPager = true
-            } catch (_: UseCaseException) {
+            } catch (e: UseCaseException) {
                 uiState.loadingBar = false
-                uiState.pickDialog = false
+            }
+        }
+    }
+
+    fun graduateMong(mongId: Long) {
+        viewModelScope.launch (Dispatchers.IO) {
+            try {
+                uiState.graduateDialog = false
+                uiState.loadingBar = true
+                graduateSlotUseCase(mongId = mongId)
+                uiState.loadingBar = false
+            } catch (e: UseCaseException) {
+                uiState.loadingBar = false
             }
         }
     }
@@ -101,11 +152,12 @@ class SlotPickViewModel @Inject constructor(
     fun buySlot() {
         viewModelScope.launch (Dispatchers.IO) {
             try {
-                buySlotUseCase()
-            } catch (_: UseCaseException) {
-            } finally {
-                uiState.loadingBar = false
                 uiState.buySlotDialog = false
+                uiState.loadingBar = true
+                buySlotUseCase()
+                uiState.loadingBar = false
+            } catch (_: UseCaseException) {
+                uiState.loadingBar = false
             }
         }
     }
@@ -116,6 +168,7 @@ class SlotPickViewModel @Inject constructor(
         addDialog: Boolean = false,
         deleteDialog: Boolean = false,
         pickDialog: Boolean = false,
+        graduateDialog: Boolean = false,
         buySlotDialog: Boolean = false,
         detailDialog: Boolean = false,
     ) {
@@ -124,6 +177,7 @@ class SlotPickViewModel @Inject constructor(
         var addDialog by mutableStateOf(addDialog)
         var deleteDialog by mutableStateOf(deleteDialog)
         var pickDialog by mutableStateOf(pickDialog)
+        var graduateDialog by mutableStateOf(graduateDialog)
         var buySlotDialog by mutableStateOf(buySlotDialog)
         var detailDialog by mutableStateOf(detailDialog)
     }

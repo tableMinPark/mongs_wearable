@@ -22,6 +22,11 @@ class CodeRepositoryImpl @Inject constructor(
     private val roomDB: RoomDB,
 ): CodeRepository {
 
+    companion object {
+        const val FOOD_GROUP_CODE = "FD"
+        const val SNACK_GROUP_CODE = "SN"
+    }
+
     override suspend fun validationVersion(codeIntegrity: String, buildVersion: String): VersionModel {
         val res = commonApi.findVersion(
             FindVersionReqDto(
@@ -31,16 +36,17 @@ class CodeRepositoryImpl @Inject constructor(
         )
 
         if (res.isSuccessful) {
-            val body = res.body()!!
-            return VersionModel(
-                newestBuildVersion = body.newestBuildVersion,
-                createdAt = body.createdAt,
-                updateApp = body.updateApp,
-                updateCode = body.updateCode,
-            )
-        } else {
-            throw RepositoryException(RepositoryErrorCode.VALIDATION_VERSION_FAIL)
+            res.body()?.let { body ->
+                return VersionModel(
+                    newestBuildVersion = body.newestBuildVersion,
+                    createdAt = body.createdAt,
+                    updateApp = body.updateApp,
+                    updateCode = body.updateCode,
+                )
+            }
         }
+
+        throw RepositoryException(RepositoryErrorCode.VALIDATION_VERSION_FAIL)
     }
     override suspend fun setCodes(codeIntegrity: String, buildVersion: String) {
         val res = commonApi.findCode(
@@ -50,52 +56,56 @@ class CodeRepositoryImpl @Inject constructor(
         )
 
         if (res.isSuccessful) {
-            val body = res.body()!!
-
-            try {
-                roomDB.mapCodeDao().deleteAll()
-                body.mapCodeList.forEach { mapCode ->
-                    roomDB.mapCodeDao().insert(
-                        MapCode(
-                            code = mapCode.code,
-                            name = mapCode.name,
-                            buildVersion = mapCode.buildVersion,
+            res.body()?.let { body ->
+                try {
+                    roomDB.mapCodeDao().deleteAll()
+                    body.mapCodeList.forEach { mapCode ->
+                        roomDB.mapCodeDao().insert(
+                            MapCode(
+                                code = mapCode.code,
+                                name = mapCode.name,
+                                buildVersion = mapCode.buildVersion,
+                            )
                         )
+                    }
+
+                    roomDB.mongCodeDao().deleteAll()
+                    body.mongCodeList.forEach { mongCode ->
+                        roomDB.mongCodeDao().insert(
+                            MongCode(
+                                code = mongCode.code,
+                                name = mongCode.name,
+                                buildVersion = mongCode.buildVersion,
+                            )
+                        )
+                    }
+
+                    roomDB.foodCodeDao().deleteAll()
+                    body.foodCodeList.forEach { foodCode ->
+                        roomDB.foodCodeDao().insert(
+                            FoodCode(
+                                code = foodCode.code,
+                                name = foodCode.name,
+                                groupCode = foodCode.groupCode,
+                                price = foodCode.price,
+                                addWeight = foodCode.addWeight,
+                                addStrength = foodCode.addStrength,
+                                addSatiety = foodCode.addSatiety,
+                                addHealthy = foodCode.addHealthy,
+                                addSleep = foodCode.addSleep,
+                                buildVersion = foodCode.buildVersion,
+                            )
+                        )
+                    }
+
+                    deviceDataStore.setCodeIntegrity(codeIntegrity = body.codeIntegrity)
+
+                } catch (e: RuntimeException) {
+                    throw RepositoryException(
+                        errorCode = RepositoryErrorCode.SET_CODES_FAIL,
+                        throwable = e,
                     )
                 }
-
-                roomDB.mongCodeDao().deleteAll()
-                body.mongCodeList.forEach { mongCode ->
-                    roomDB.mongCodeDao().insert(
-                        MongCode(
-                            code = mongCode.code,
-                            name = mongCode.name,
-                            buildVersion = mongCode.buildVersion,
-                        )
-                    )
-                }
-
-                roomDB.foodCodeDao().deleteAll()
-                body.foodCodeList.forEach { foodCode ->
-                    roomDB.foodCodeDao().insert(
-                        FoodCode(
-                            code = foodCode.code,
-                            name = foodCode.name,
-                            groupCode = foodCode.groupCode,
-                            price = foodCode.price,
-                            addWeight = foodCode.addWeight,
-                            addStrength = foodCode.addStrength,
-                            addSatiety = foodCode.addSatiety,
-                            addHealthy = foodCode.addHealthy,
-                            addSleep = foodCode.addSleep,
-                            buildVersion = foodCode.buildVersion,
-                        )
-                    )
-                }
-
-                deviceDataStore.setCodeIntegrity(codeIntegrity = body.codeIntegrity)
-            } catch (e: RuntimeException) {
-                throw RepositoryException(RepositoryErrorCode.SET_CODES_FAIL)
             }
         } else {
             throw RepositoryException(RepositoryErrorCode.SET_CODES_FAIL)
@@ -110,12 +120,15 @@ class CodeRepositoryImpl @Inject constructor(
                 )
             }
         } catch (e: RuntimeException) {
-            throw RepositoryException(RepositoryErrorCode.GET_MONG_CODE_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GET_MONG_CODE_FAIL,
+                throwable = e,
+            )
         }
     }
     override suspend fun getFoodCodes(): List<FoodCodeModel> {
         try {
-            return roomDB.foodCodeDao().selectByGroupCode("FD").map { foodCode ->
+            return roomDB.foodCodeDao().selectByGroupCode(FOOD_GROUP_CODE).map { foodCode ->
                 FoodCodeModel(
                     code = foodCode.code,
                     name = foodCode.name,
@@ -128,12 +141,15 @@ class CodeRepositoryImpl @Inject constructor(
                 )
             }
         } catch (e: RuntimeException) {
-            throw RepositoryException(RepositoryErrorCode.GET_FOOD_CODES_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GET_FOOD_CODES_FAIL,
+                throwable = e,
+            )
         }
     }
     override suspend fun getSnackCodes(): List<FoodCodeModel> {
         try {
-            return roomDB.foodCodeDao().selectByGroupCode("SN").map { foodCode ->
+            return roomDB.foodCodeDao().selectByGroupCode(SNACK_GROUP_CODE).map { foodCode ->
                 FoodCodeModel(
                     code = foodCode.code,
                     name = foodCode.name,
@@ -146,7 +162,10 @@ class CodeRepositoryImpl @Inject constructor(
                 )
             }
         } catch (e: RuntimeException) {
-            throw RepositoryException(RepositoryErrorCode.GET_SNACK_CODES_FAIL)
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GET_SNACK_CODES_FAIL,
+                throwable = e,
+            )
         }
     }
 }

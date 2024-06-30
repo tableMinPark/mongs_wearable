@@ -9,50 +9,58 @@ import com.mongs.wear.domain.repositroy.CollectionRepository
 import javax.inject.Inject
 
 class CollectionRepositoryImpl @Inject constructor(
-    private val roomDB: RoomDB,
     private val collectionApi: CollectionApi,
+    private val roomDB: RoomDB,
 ): CollectionRepository {
     override suspend fun getMapCollections(): List<CollectionModel> {
         val res = collectionApi.findMapCollection()
 
         if (res.isSuccessful) {
-            val body = res.body()!!
-            try {
-                return body.map { mapCollection ->
-                    val mapCode = roomDB.mapCodeDao().selectByCode(code = mapCollection.code)
-                    CollectionModel(
-                        code = mapCollection.code,
-                        name = mapCode.name,
-                        disable = mapCollection.disable,
+            res.body()?.let { body ->
+                try {
+                    return body.map { mapCollection ->
+                        val mapCode = roomDB.mapCodeDao().selectByCode(code = mapCollection.code)
+                        CollectionModel(
+                            code = mapCollection.code,
+                            name = mapCode.name,
+                            disable = mapCollection.disable,
+                        )
+                    }
+                } catch (e: RuntimeException) {
+                    throw RepositoryException(
+                        errorCode = RepositoryErrorCode.GET_MAP_COLLECTIONS_FAIL,
+                        throwable = e,
                     )
                 }
-            } catch (e: RuntimeException) {
-                throw RepositoryException(RepositoryErrorCode.GET_MAP_COLLECTIONS_FAIL)
             }
-        } else {
-            throw RepositoryException(RepositoryErrorCode.GET_MAP_COLLECTIONS_FAIL)
         }
+
+        throw RepositoryException(RepositoryErrorCode.GET_MAP_COLLECTIONS_FAIL)
     }
     override suspend fun getMongCollections(): List<CollectionModel> {
         val res = collectionApi.findMongCollection()
 
         if (res.isSuccessful) {
-            val body = res.body()!!
-            try {
-                return body.map { mongCollection ->
-                    val mongCode = roomDB.mongCodeDao().selectByCode(code = mongCollection.code)
+            res.body()?.let { body ->
+                try {
+                    return body.map { mongCollection ->
+                        val mongCode = roomDB.mongCodeDao().selectByCode(code = mongCollection.code)
 
-                    CollectionModel(
-                        code = mongCollection.code,
-                        name = mongCode.name,
-                        disable = mongCollection.disable,
+                        CollectionModel(
+                            code = mongCollection.code,
+                            name = mongCode.name,
+                            disable = mongCollection.disable,
+                        )
+                    }
+                } catch (e: RuntimeException) {
+                    throw RepositoryException(
+                        errorCode = RepositoryErrorCode.GET_MONG_COLLECTIONS_FAIL,
+                        throwable = e,
                     )
                 }
-            } catch (e: RuntimeException) {
-                throw RepositoryException(RepositoryErrorCode.GET_MONG_COLLECTIONS_FAIL)
             }
-        } else {
-            throw RepositoryException(RepositoryErrorCode.GET_MONG_COLLECTIONS_FAIL)
         }
+
+        throw RepositoryException(RepositoryErrorCode.GET_MONG_COLLECTIONS_FAIL)
     }
 }

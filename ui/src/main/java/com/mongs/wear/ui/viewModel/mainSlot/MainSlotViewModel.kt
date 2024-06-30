@@ -24,29 +24,29 @@ class MainSlotViewModel @Inject constructor(
 ): ViewModel() {
     val uiState: UiState = UiState()
 
-    fun stroke() {
+    fun stroke(mongId: Long) {
         viewModelScope.launch (Dispatchers.IO) {
             try {
-                strokeNowSlotUseCase()
+                strokeNowSlotUseCase(mongId = mongId)
             } catch (_: UseCaseException) {
             }
         }
     }
 
-    fun evolution() {
+    fun evolution(mongId: Long) {
         viewModelScope.launch (Dispatchers.IO) {
             try {
-                evoluteNowSlotUseCase()
-            } catch (e: UseCaseException) {
+                evoluteNowSlotUseCase(mongId = mongId)
+            } catch (_: UseCaseException) {
                 uiState.isEvolution = false
             }
         }
     }
 
-    fun graduationReady() {
+    fun graduationReady(mongId: Long) {
         viewModelScope.launch (Dispatchers.IO) {
             try {
-                graduateReadySlotUseCase()
+                graduateReadySlotUseCase(mongId = mongId)
             } catch (_: UseCaseException) {
             }
         }

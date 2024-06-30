@@ -88,7 +88,6 @@ fun FeedFoodPickView(
             ConfirmDialog(
                 text = "구매하시겠습니까?",
                 confirm = {
-                    feedFoodPickViewModel.uiState.loadingBar = true
                     feedFoodPickViewModel.buyFood(foodVoList.value[foodVoIndex.intValue].code)
                 },
                 cancel = {
@@ -107,22 +106,26 @@ fun FeedFoodPickView(
                 detailDialog = { feedFoodPickViewModel.uiState.detailDialog = true },
                 buyDialog = { feedFoodPickViewModel.uiState.buyDialog = true },
                 preFood = { foodVoIndex.intValue = max(foodVoIndex.intValue - 1, 0) },
-                nextFood = { foodVoIndex.intValue = min(foodVoIndex.intValue + 1, foodVoList.value.size - 1) },
+                nextFood = {
+                    foodVoIndex.intValue = min(foodVoIndex.intValue + 1, foodVoList.value.size - 1)
+                },
                 modifier = Modifier.zIndex(2f),
             )
         }
-    }
 
-    if (feedFoodPickViewModel.uiState.navMainPager) {
-        scrollPage(2)
-        navController.popBackStack(route = NavItem.FeedNested.route, inclusive = true)
-    }
-    if (feedFoodPickViewModel.uiState.navFeedMenu) {
-        navController.popBackStack()
-    }
-    
-    LaunchedEffect(Unit) {
-        feedFoodPickViewModel.loadData()
+        LaunchedEffect(feedFoodPickViewModel.uiState.navMainPager) {
+            if (feedFoodPickViewModel.uiState.navMainPager) {
+                scrollPage(2)
+                navController.popBackStack(route = NavItem.FeedNested.route, inclusive = true)
+                feedFoodPickViewModel.uiState.navMainPager = false
+            }
+        }
+        LaunchedEffect(feedFoodPickViewModel.uiState.navFeedMenu) {
+            if (feedFoodPickViewModel.uiState.navFeedMenu) {
+                navController.popBackStack()
+                feedFoodPickViewModel.uiState.navFeedMenu = false
+            }
+        }
     }
 }
 

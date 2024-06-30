@@ -4,4 +4,5 @@ import com.mongs.wear.domain.error.ErrorCode
 
 open class UseCaseException (
     errorCode: ErrorCode,
-): ErrorException(errorCode)
+    throwable: Throwable = Throwable(),
+): ErrorException(errorCode, throwable)

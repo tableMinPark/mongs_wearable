@@ -23,7 +23,7 @@ class MainConfigureViewModel @Inject constructor(
             try {
                 logoutUseCase()
                 uiState.navLoginView = true
-            } catch (e: UseCaseException) {
+            } catch (_: UseCaseException) {
                 uiState.loadingBar = false
                 uiState.logoutDialog = false
             }

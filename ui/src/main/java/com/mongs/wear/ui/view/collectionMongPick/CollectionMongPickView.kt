@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.mongs.wear.domain.vo.MapCollectionVo
 import com.mongs.wear.domain.vo.MongCollectionVo
 import com.mongs.wear.ui.R
 import com.mongs.wear.ui.global.component.background.CollectionNestedBackground
@@ -33,7 +31,6 @@ import com.mongs.wear.ui.global.component.button.CircleButton
 import com.mongs.wear.ui.global.component.button.CircleTextButton
 import com.mongs.wear.ui.global.component.common.LoadingBar
 import com.mongs.wear.ui.global.dialog.MongCollectionDetailDialog
-import com.mongs.wear.ui.global.resource.MapResourceCode
 import com.mongs.wear.ui.global.resource.MongResourceCode
 import com.mongs.wear.ui.viewModel.collectionMongPick.CollectionMongPickViewModel
 import kotlin.math.min
@@ -73,12 +70,12 @@ fun CollectionMongPickView(
         }
     }
 
-    if (collectionMongPickViewModel.uiState.navCollectionMenu) {
-        navController.popBackStack()
-    }
 
-    LaunchedEffect(Unit) {
-        collectionMongPickViewModel.loadData()
+    LaunchedEffect(collectionMongPickViewModel.uiState.navCollectionMenu) {
+        if (collectionMongPickViewModel.uiState.navCollectionMenu) {
+            navController.popBackStack()
+            collectionMongPickViewModel.uiState.navCollectionMenu = false
+        }
     }
 }
 

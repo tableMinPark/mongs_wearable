@@ -3,7 +3,6 @@ package com.mongs.wear.data.dataStore
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LiveData
@@ -50,6 +49,7 @@ class MemberDataStore @Inject constructor(
             }
         }
     }
+
     suspend fun setAccessToken(accessToken: String) {
         context.member.edit { preferences ->
             preferences[ACCESS_TOKEN] = accessToken
@@ -89,7 +89,7 @@ class MemberDataStore @Inject constructor(
             preferences[MAX_SLOT] = maxSlot
         }
     }
-    suspend fun getMaxSlotLive(): LiveData<Int> {
+    fun getMaxSlotLive(): LiveData<Int> {
         return runBlocking {
             context.member.data.map { preferences ->
                 preferences[MAX_SLOT]!!
@@ -108,7 +108,7 @@ class MemberDataStore @Inject constructor(
             }.first()
         }
     }
-    suspend fun getWalkingCountLive(): LiveData<Int> {
+    fun getWalkingCountLive(): LiveData<Int> {
         return runBlocking {
             context.member.data.map { preferences ->
                 preferences[WALKING_COUNT]!!

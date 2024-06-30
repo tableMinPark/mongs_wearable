@@ -19,11 +19,11 @@ interface SlotDao {
      * SELECT 메서드
      */
     @Query("SELECT * FROM slot WHERE mongId = :mongId")
-    fun selectByMongId(mongId: Long): Slot
-    @Query("SELECT * FROM slot WHERE mongId = :mongId")
-    fun selectByMongIdLive(mongId: Long): LiveData<Slot>
+    fun selectByMongId(mongId: Long): Slot?
     @Query("SELECT * FROM slot WHERE isSelected = true")
     fun selectByIsSelectedTrue(): Slot?
+    @Query("SELECT * FROM slot WHERE isSelected = true")
+    fun selectByIsSelectedTrueLive(): LiveData<Slot?>
     @Query("SELECT * FROM slot")
     fun selectAll(): List<Slot>
     @Query("SELECT * FROM slot")

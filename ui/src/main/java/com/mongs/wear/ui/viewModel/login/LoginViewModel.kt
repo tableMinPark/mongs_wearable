@@ -28,9 +28,9 @@ class LoginViewModel @Inject constructor(
     fun loginSuccess(email: String?, name: String?) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                loginUseCase(email!!, name!!)
+                loginUseCase(email, name)
                 uiState.navMainPagerView = true
-            } catch (e: UseCaseException) {
+            } catch (_: UseCaseException) {
                 uiState.loadingBar = false
                 uiState.signInButton = true
             }

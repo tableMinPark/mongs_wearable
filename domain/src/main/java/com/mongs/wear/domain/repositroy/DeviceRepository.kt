@@ -3,6 +3,8 @@ package com.mongs.wear.domain.repositroy
 import androidx.lifecycle.LiveData
 
 interface DeviceRepository {
+    suspend fun setNetworkFlag(networkFlag: Boolean)
+    suspend fun getNetworkFlagLive(): LiveData<Boolean>
     suspend fun setBuildVersion(buildVersion: String)
     suspend fun getBuildVersion(): String
     suspend fun setCodeIntegrity(codeIntegrity: String)

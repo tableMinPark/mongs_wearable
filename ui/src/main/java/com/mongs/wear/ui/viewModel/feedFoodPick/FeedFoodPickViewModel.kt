@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,32 +12,53 @@ import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.usecase.feed.FeedUseCase
 import com.mongs.wear.domain.usecase.feed.GetFoodCodesUseCase
 import com.mongs.wear.domain.usecase.slot.GetNowSlotPayPointUseCase
+import com.mongs.wear.domain.usecase.slot.GetNowSlotUseCase
 import com.mongs.wear.domain.vo.FoodVo
+import com.mongs.wear.domain.vo.SlotVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class FeedFoodPickViewModel @Inject constructor(
+    private val getNowSlotUseCase: GetNowSlotUseCase,
     private val getFoodCodesUseCase: GetFoodCodesUseCase,
     private val getNowSlotPayPointUseCase: GetNowSlotPayPointUseCase,
     private val feedUseCase: FeedUseCase,
 ): ViewModel() {
     val uiState: UiState = UiState()
 
-    var payPoint: LiveData<Int> = MutableLiveData()
+    val slotVo: LiveData<SlotVo?> get() = _slotVo
+    private val _slotVo = MediatorLiveData<SlotVo?>(null)
+    val payPoint: LiveData<Int> get() = _payPoint
+    private val _payPoint = MediatorLiveData<Int>()
     val foodVoList: LiveData<List<FoodVo>> get() = _foodVoList
     private val _foodVoList = MutableLiveData<List<FoodVo>>()
 
-    fun loadData() {
-        viewModelScope.launch (Dispatchers.IO) {
+    init {
+        viewModelScope.launch (Dispatchers.Main) {
             try {
-                payPoint = getNowSlotPayPointUseCase()
-                _foodVoList.postValue(getFoodCodesUseCase())
+                uiState.loadingBar = true
+
+                _slotVo.addSource( withContext(Dispatchers.IO) { getNowSlotUseCase() } ) {
+                    slotVo -> _slotVo.value = slotVo
+                }
+
+                _payPoint.addSource( withContext(Dispatchers.IO) { getNowSlotPayPointUseCase() } ) {
+                    payPoint -> _payPoint.value = payPoint
+                }
+
+                val foodVoList = withContext(Dispatchers.IO) {
+                    getFoodCodesUseCase()
+                }
+                _foodVoList.postValue(foodVoList)
+
                 uiState.loadingBar = false
-            } catch (e: UseCaseException) {
+            } catch (_: UseCaseException) {
                 uiState.navFeedMenu = true
+                uiState.loadingBar = false
             }
         }
     }
@@ -44,11 +66,13 @@ class FeedFoodPickViewModel @Inject constructor(
     fun buyFood(foodCode: String) {
         viewModelScope.launch (Dispatchers.IO) {
             try {
+                uiState.loadingBar = true
                 uiState.buyDialog = false
                 feedUseCase(code = foodCode)
             } catch (_: UseCaseException) {
             } finally {
                 uiState.navMainPager = true
+                uiState.loadingBar = false
             }
         }
     }

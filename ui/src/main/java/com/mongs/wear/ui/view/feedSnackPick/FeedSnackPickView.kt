@@ -113,16 +113,18 @@ fun FeedSnackPickView(
         }
     }
 
-    if (feedSnackPickViewModel.uiState.navMainPager) {
-        scrollPage(2)
-        navController.popBackStack(route = NavItem.FeedNested.route, inclusive = true)
+    LaunchedEffect(feedSnackPickViewModel.uiState.navMainPager) {
+        if (feedSnackPickViewModel.uiState.navMainPager) {
+            scrollPage(2)
+            navController.popBackStack(route = NavItem.FeedNested.route, inclusive = true)
+            feedSnackPickViewModel.uiState.navMainPager = false
+        }
     }
-    if (feedSnackPickViewModel.uiState.navFeedMenu) {
-        navController.popBackStack()
-    }
-
-    LaunchedEffect(Unit) {
-        feedSnackPickViewModel.loadData()
+    LaunchedEffect(feedSnackPickViewModel.uiState.navFeedMenu) {
+        if (feedSnackPickViewModel.uiState.navFeedMenu) {
+            navController.popBackStack()
+            feedSnackPickViewModel.uiState.navFeedMenu = false
+        }
     }
 }
 

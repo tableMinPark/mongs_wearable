@@ -2,8 +2,8 @@ package com.mongs.wear.data.room.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.mongs.wear.data.code.Shift
-import com.mongs.wear.data.code.State
+import com.mongs.wear.data.code.SlotShift
+import com.mongs.wear.data.code.SlotState
 import com.mongs.wear.domain.code.ShiftCode
 import com.mongs.wear.domain.code.StateCode
 import java.time.LocalDateTime
@@ -60,8 +60,8 @@ data class Slot(
         this.poopCount = poopCount
         this.isSleeping = isSleeping
         this.exp = exp
-        this.stateCode = State.valueOf(stateCode).code
-        this.shiftCode = Shift.valueOf(shiftCode).code
+        this.stateCode = SlotState.valueOf(stateCode).code
+        this.shiftCode = SlotShift.valueOf(shiftCode).code
         this.payPoint = payPoint
         this.born = born
     }

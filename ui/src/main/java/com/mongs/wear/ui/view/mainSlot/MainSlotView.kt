@@ -23,38 +23,40 @@ import com.mongs.wear.ui.viewModel.mainSlot.MainSlotViewModel.UiState
 @Composable
 fun MainSlotView(
     navController: NavController,
-    scrollPage: (Int) -> Unit,
-    slotVo: State<SlotVo>,
+    slotVo: SlotVo,
     isPageChanging: State<Boolean>,
     mainSlotViewModel: MainSlotViewModel = hiltViewModel(),
 ) {
     Box {
-        val isEgg = MongResourceCode.valueOf(slotVo.value.mongCode).isEgg
+        val isEgg = MongResourceCode.valueOf(slotVo.mongCode).isEgg
 
         MainSlotContent(
-            slotVo = slotVo.value,
+            slotVo = slotVo,
             isPageChanging = isPageChanging.value,
             stroke = {
-                if (!isEgg && !slotVo.value.isSleeping) {
-                    mainSlotViewModel.stroke()
+                if (!isEgg && !slotVo.isSleeping) {
+                    mainSlotViewModel.stroke(mongId = slotVo.mongId)
                 }
             },
             navSlotPick = {
-                scrollPage(3)
                 navController.navigate(NavItem.SlotPick.route)
             },
             uiState = mainSlotViewModel.uiState,
             modifier = Modifier.zIndex(1f)
         )
         MainSlotEffect(
-            slotVo = slotVo.value,
+            slotVo = slotVo,
             isPageChanging = isPageChanging.value,
-            evolution = mainSlotViewModel::evolution,
-            graduationReady = mainSlotViewModel::graduationReady,
+            evolution = { mongId ->
+                mainSlotViewModel.evolution(mongId)
+            },
+            graduationReady = {
+                mainSlotViewModel.graduationReady(mongId = slotVo.mongId)
+            },
             uiState = mainSlotViewModel.uiState,
             modifier = Modifier.zIndex(2f),
         )
-        if (slotVo.value.isSleeping && !isPageChanging.value) {
+        if (slotVo.isSleeping && !isPageChanging.value) {
             Box(
                 modifier = Modifier
                     .background(color = Color.Black.copy(alpha = 0.5f))

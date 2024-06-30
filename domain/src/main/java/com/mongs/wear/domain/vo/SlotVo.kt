@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 data class SlotVo(
     val mongId: Long = 0L,
-    val name: String = "이름 없음",
+    val name: String = "",
     val mongCode: String = "CH444",
     val weight: Double = 0.0,
     val healthy: Double = 0.0,

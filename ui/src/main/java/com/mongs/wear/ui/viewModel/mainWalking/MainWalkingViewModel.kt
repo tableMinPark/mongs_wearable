@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,7 @@ import com.mongs.wear.domain.usecase.slot.GetNowSlotPayPointUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,26 +26,44 @@ class MainWalkingViewModel @Inject constructor(
 ): ViewModel() {
     val uiState: UiState = UiState()
 
-    var payPoint: LiveData<Int> = MutableLiveData()
-    var walkingCount: LiveData<Int> = MutableLiveData()
+    val payPoint: LiveData<Int> get() = _payPoint
+    private val _payPoint = MediatorLiveData<Int>()
+    val walkingCount: LiveData<Int> get() = _walkingCount
+    private val _walkingCount = MediatorLiveData<Int>()
 
-    fun loadData() {
-        viewModelScope.launch (Dispatchers.IO) {
+    init {
+        viewModelScope.launch (Dispatchers.Main) {
             try {
-                payPoint = getNowSlotPayPointUseCase()
-                walkingCount = getWalkingCountUseCase()
-                uiState.loadingBar = false
-            } catch (e: UseCaseException) {
-                e.printStackTrace()
-            }
+                uiState.loadingBar = true
 
+                _payPoint.addSource(
+                    withContext(Dispatchers.IO) {
+                        getNowSlotPayPointUseCase()
+                    }
+                ) { payPoint ->
+                    _payPoint.value = payPoint
+                }
+
+                _walkingCount.addSource(
+                    withContext(Dispatchers.IO) {
+                        getWalkingCountUseCase()
+                    }
+                ) { walkingCount ->
+                    _walkingCount.value = walkingCount
+                }
+
+                uiState.loadingBar = false
+
+            } catch (_: UseCaseException) {
+
+            }
         }
     }
 
-    fun chargePayPoint(walkingCount: Int) {
+    fun chargePayPoint(mongId: Long, walkingCount: Int) {
         viewModelScope.launch (Dispatchers.IO) {
             try {
-                exchangePayPointWalkingUseCase(walkingCount = walkingCount)
+                exchangePayPointWalkingUseCase(mongId = mongId, walkingCount = walkingCount)
                 uiState.chargePayPointDialog = false
             } catch (_: UseCaseException) {
             }
