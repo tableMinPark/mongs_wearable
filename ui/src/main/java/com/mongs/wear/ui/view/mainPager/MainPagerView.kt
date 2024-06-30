@@ -6,10 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -28,34 +25,17 @@ import com.mongs.wear.ui.view.mainInteraction.MainInteractionView
 import com.mongs.wear.ui.view.mainSlot.MainSlotView
 import com.mongs.wear.ui.view.mainWalking.MainWalkingView
 import com.mongs.wear.ui.viewModel.mainPager.MainPagerViewModel
-import kotlin.math.absoluteValue
-
-private val pageBrightness = arrayOf(0.4f, 0.4f, 0.0f, 0.4f, 0.4f)
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainPagerView(
     navController: NavController,
-    scrollPage: (Int) -> Unit,
     pagerState: PagerState,
+    pagerScroll: (Int) -> Unit,
     mainPagerViewModel: MainPagerViewModel = hiltViewModel()
 ) {
-    val backgroundAlpha = remember {
-        derivedStateOf {
-            val currentPage = pagerState.currentPage
-            val ratio = pagerState.currentPageOffsetFraction.coerceIn(-1f, 1f)
-            val nextPage = if (ratio < 0) {
-                currentPage - 1
-            } else if (ratio > 0) {
-                currentPage + 1
-            } else currentPage
-            val current = pageBrightness[currentPage]
-            val next = pageBrightness[nextPage]
-            current + (next - current) * ratio.absoluteValue
-        }
-    }
-    val slotVo = mainPagerViewModel.slotVo.observeAsState(SlotVo())
-    val backgroundMapCode = mainPagerViewModel.backgroundMapCode.observeAsState(MapResourceCode.MP000.name)
+    val slotVoState = mainPagerViewModel.slotVo.observeAsState()
+    val backgroundMapCodeState = mainPagerViewModel.backgroundMapCode.observeAsState(MapResourceCode.MP000.name)
 
     Box {
         if (mainPagerViewModel.uiState.loadingBar) {
@@ -63,25 +43,21 @@ fun MainPagerView(
             MainPagerLoadingBar(modifier = Modifier.zIndex(1f))
         } else {
             MainPagerBackground(
-                mapCode = backgroundMapCode.value,
-                backgroundAlpha = backgroundAlpha.value,
+                mapCode = backgroundMapCodeState.value,
+                pagerState = pagerState,
             )
             PageIndicator(
                 pagerState = pagerState,
                 modifier = Modifier.zIndex(1f),
             )
-            MainPagerContent(
+            NormalMainPagerContent(
                 navController = navController,
-                scrollPage = scrollPage,
-                slotVo = slotVo,
+                slotVo = slotVoState.value ?: SlotVo(),
                 pagerState = pagerState,
+                scrollPage = pagerScroll,
                 modifier = Modifier.zIndex(2f),
             )
         }
-    }
-
-    LaunchedEffect(Unit) {
-        mainPagerViewModel.loadData()
     }
 }
 
@@ -99,11 +75,11 @@ private fun MainPagerLoadingBar(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun MainPagerContent(
+private fun NormalMainPagerContent(
     navController: NavController,
-    scrollPage: (Int) -> Unit,
-    slotVo: State<SlotVo>,
+    slotVo: SlotVo,
     pagerState: PagerState,
+    scrollPage: (Int) -> Unit,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
     val isPageChanging = remember {
@@ -118,7 +94,6 @@ private fun MainPagerContent(
             currentPage != nextPage
         }
     }
-
 
     Box(
         contentAlignment = Alignment.Center,
@@ -137,15 +112,14 @@ private fun MainPagerContent(
 
                 2 -> MainSlotView(
                     navController = navController,
-                    scrollPage = scrollPage,
                     slotVo = slotVo,
                     isPageChanging = isPageChanging,
                 )
 
                 3 -> MainInteractionView(
                     navController = navController,
-                    scrollPage = scrollPage,
                     slotVo = slotVo,
+                    scrollPage = scrollPage,
                 )
 
                 4 -> MainConfigureView(

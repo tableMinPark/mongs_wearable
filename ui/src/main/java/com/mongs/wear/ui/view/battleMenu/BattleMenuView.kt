@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -75,7 +76,6 @@ fun BattleMenuView(
             BattleMenuBackground()
             BattleMenuContent(
                 battle = {
-                    battleMenuViewModel.uiState.loadingBar = true
                     battleMenuViewModel.matchWait()
                 },
                 modifier = Modifier.zIndex(1f),
@@ -83,11 +83,13 @@ fun BattleMenuView(
         }
     }
 
-    if (battleMenuViewModel.uiState.navBattleMatchView) {
-        navController.navigate(NavItem.BattleMatch.route)
-        battleMenuViewModel.uiState.loadingBar = false
-        battleMenuViewModel.uiState.navBattleMatchView = false
-        battleMenuViewModel.uiState.isMatchWait  = true
+    LaunchedEffect(battleMenuViewModel.uiState.navBattleMatchView) {
+        if (battleMenuViewModel.uiState.navBattleMatchView) {
+            navController.navigate(NavItem.BattleMatch.route)
+            battleMenuViewModel.uiState.loadingBar = false
+            battleMenuViewModel.uiState.navBattleMatchView = false
+            battleMenuViewModel.uiState.isMatchWait  = true
+        }
     }
 }
 

@@ -2,6 +2,7 @@ package com.mongs.wear.ui.view.mainInteraction
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -34,19 +34,19 @@ import com.mongs.wear.ui.viewModel.mainInteraction.MainInteractionViewModel
 @Composable
 fun MainInteractionView(
     navController: NavController,
+    slotVo: SlotVo,
     scrollPage: (Int) -> Unit,
-    slotVo: State<SlotVo>,
     mainInteractionViewModel: MainInteractionViewModel = hiltViewModel(),
     context: Context = LocalContext.current,
 ) {
-    val isEgg = MongResourceCode.valueOf(slotVo.value.mongCode).isEgg
-    val isMongEmpty = slotVo.value.shiftCode == ShiftCode.EMPTY || slotVo.value.shiftCode == ShiftCode.DELETE || slotVo.value.shiftCode == ShiftCode.DEAD
-    val isGraduateReady = slotVo.value.shiftCode == ShiftCode.GRADUATE_READY
+    val isEgg = MongResourceCode.valueOf(slotVo.mongCode).isEgg
+    val isMongEmpty = slotVo.shiftCode == ShiftCode.EMPTY || slotVo.shiftCode == ShiftCode.DELETE || slotVo.shiftCode == ShiftCode.DEAD
+    val isGraduateReady = slotVo.shiftCode == ShiftCode.GRADUATE_READY
 
     Box {
         MainInteractionContent(
             feed = {
-                if (isMongEmpty || isEgg || slotVo.value.isSleeping) {
+                if (isMongEmpty || isEgg || slotVo.isSleeping) {
                     Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
                 } else {
                     navController.navigate(NavItem.FeedNested.route)
@@ -59,28 +59,28 @@ fun MainInteractionView(
                 if (isMongEmpty || isGraduateReady || isEgg) {
                     Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
                 } else {
-                    mainInteractionViewModel.sleeping()
+                    mainInteractionViewModel.sleeping(mongId = slotVo.mongId)
                 }
             },
             slotPick = {
                 navController.navigate(NavItem.SlotPick.route)
             },
             poopClean = {
-                if (isMongEmpty || isGraduateReady || isEgg ||  slotVo.value.isSleeping) {
+                if (isMongEmpty || isGraduateReady || isEgg ||  slotVo.isSleeping) {
                     Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
                 } else {
-                    mainInteractionViewModel.poopClean()
+                    mainInteractionViewModel.poopClean(mongId = slotVo.mongId)
                 }
             },
             training = {
-                if (isMongEmpty || isEgg ||  slotVo.value.isSleeping) {
+                if (isMongEmpty || isEgg ||  slotVo.isSleeping) {
                     Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
                 } else {
                     navController.navigate(NavItem.TrainingNested.route)
                 }
             },
             battle = {
-                if (isMongEmpty || isEgg || slotVo.value.isSleeping) {
+                if (isMongEmpty || isEgg || slotVo.isSleeping) {
                     Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
                 } else {
                     navController.navigate(NavItem.BattleNested.route)
@@ -90,19 +90,24 @@ fun MainInteractionView(
         )
     }
 
-    if (mainInteractionViewModel.uiState.navMainSlotView) {
-        mainInteractionViewModel.uiState.navMainSlotView = false
-        scrollPage(2)
+    LaunchedEffect(mainInteractionViewModel.uiState.navMainSlotView) {
+        if (mainInteractionViewModel.uiState.navMainSlotView) {
+            scrollPage(2)
+            mainInteractionViewModel.uiState.navMainSlotView = false
+        }
+    }
+    LaunchedEffect(mainInteractionViewModel.uiState.alertSleepingFail) {
+        if (mainInteractionViewModel.uiState.alertSleepingFail) {
+            Toast.makeText(context, "잠시후 다시 시도", Toast.LENGTH_SHORT).show()
+            mainInteractionViewModel.uiState.alertSleepingFail = false
+        }
     }
 
-    if (mainInteractionViewModel.uiState.alertSleepingFail) {
-        mainInteractionViewModel.uiState.alertSleepingFail = false
-        Toast.makeText(context, "잠시후 다시 시도", Toast.LENGTH_SHORT).show()
-    }
-
-    if (mainInteractionViewModel.uiState.alertPoopCleanFail) {
-        mainInteractionViewModel.uiState.alertPoopCleanFail = false
-        Toast.makeText(context, "잠시후 다시 시도", Toast.LENGTH_SHORT).show()
+    LaunchedEffect(mainInteractionViewModel.uiState.alertPoopCleanFail) {
+        if (mainInteractionViewModel.uiState.alertPoopCleanFail) {
+            Toast.makeText(context, "잠시후 다시 시도", Toast.LENGTH_SHORT).show()
+            mainInteractionViewModel.uiState.alertPoopCleanFail = false
+        }
     }
 }
 
@@ -194,6 +199,7 @@ private fun MainInteractionContent(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Preview(showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
 @Composable
 private fun MainInteractionViewPreView() {
@@ -212,6 +218,7 @@ private fun MainInteractionViewPreView() {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Preview(showSystemUi = true, device = Devices.WEAR_OS_LARGE_ROUND)
 @Composable
 private fun LargeMainInteractionViewPreView() {

@@ -1,6 +1,5 @@
 package com.mongs.wear.data.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.mongs.wear.data.api.client.ManagementApi
@@ -13,8 +12,6 @@ import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.model.SlotModel
 import com.mongs.wear.domain.repositroy.SlotRepository
 import com.mongs.wear.domain.vo.SlotVo
-import kotlinx.coroutines.delay
-import java.lang.NullPointerException
 import javax.inject.Inject
 
 class SlotRepositoryImpl @Inject constructor(
@@ -96,26 +93,27 @@ class SlotRepositoryImpl @Inject constructor(
                                 )
                             )
                         } else {
-                            val roomSlot = roomDB.slotDao().selectByMongId(bodySlot.mongId)
-                            roomSlot.mongId = bodySlot.mongId
-                            roomSlot.name = bodySlot.name
-                            roomSlot.mongCode = bodySlot.mongCode
-                            roomSlot.weight = bodySlot.weight
-                            roomSlot.healthy = bodySlot.healthy
-                            roomSlot.satiety = bodySlot.satiety
-                            roomSlot.strength = bodySlot.strength
-                            roomSlot.sleep = bodySlot.sleep
-                            roomSlot.poopCount = bodySlot.poopCount
-                            roomSlot.isSleeping = bodySlot.isSleeping
-                            roomSlot.exp = bodySlot.exp
-                            roomSlot.stateCode = SlotState.valueOf(bodySlot.stateCode).code
-                            roomSlot.shiftCode = SlotShift.valueOf(bodySlot.shiftCode).code
-                            roomSlot.payPoint = bodySlot.payPoint
-                            roomSlot.born = bodySlot.born
-                            roomDB.slotDao().update(slot = roomSlot)
+                            roomDB.slotDao().selectByMongId(bodySlot.mongId)?.let { roomSlot ->
+                                roomSlot.mongId = bodySlot.mongId
+                                roomSlot.name = bodySlot.name
+                                roomSlot.mongCode = bodySlot.mongCode
+                                roomSlot.weight = bodySlot.weight
+                                roomSlot.healthy = bodySlot.healthy
+                                roomSlot.satiety = bodySlot.satiety
+                                roomSlot.strength = bodySlot.strength
+                                roomSlot.sleep = bodySlot.sleep
+                                roomSlot.poopCount = bodySlot.poopCount
+                                roomSlot.isSleeping = bodySlot.isSleeping
+                                roomSlot.exp = bodySlot.exp
+                                roomSlot.stateCode = SlotState.valueOf(bodySlot.stateCode).code
+                                roomSlot.shiftCode = SlotShift.valueOf(bodySlot.shiftCode).code
+                                roomSlot.payPoint = bodySlot.payPoint
+                                roomSlot.born = bodySlot.born
+                                roomDB.slotDao().update(slot = roomSlot)
 
-                            if (roomSlot.isSelected) {
-                                subScribeMong(roomSlot.mongId)
+                                if (roomSlot.isSelected) {
+                                    subScribeMong(roomSlot.mongId)
+                                }
                             }
                         }
                     }
@@ -166,6 +164,42 @@ class SlotRepositoryImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun getSlot(mongId: Long): SlotModel {
+        try {
+            roomDB.slotDao().selectByMongId(mongId = mongId)?.let { slot ->
+                return SlotModel(
+                    mongId = slot.mongId,
+                    name = slot.name,
+                    mongCode = slot.mongCode,
+                    weight = slot.weight,
+                    healthy = slot.healthy,
+                    satiety = slot.satiety,
+                    strength = slot.strength,
+                    sleep = slot.sleep,
+                    poopCount = slot.poopCount,
+                    isSleeping = slot.isSleeping,
+                    exp = slot.exp,
+                    stateCode = slot.stateCode,
+                    shiftCode = slot.shiftCode,
+                    payPoint = slot.payPoint,
+                    born = slot.born,
+                    isHappy = slot.isHappy,
+                    isEating = slot.isEating,
+                    isSelected = slot.isSelected,
+                    isGraduateCheck = slot.isGraduateCheck,
+                )
+            }
+
+            throw RepositoryException(RepositoryErrorCode.GET_NOT_SLOT_FAIL)
+        } catch (e: RuntimeException) {
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GET_NOT_SLOT_FAIL,
+                throwable = e,
+            )
+        }
+    }
+
     override suspend fun setNowSlot(subScribeMong: suspend (Long) -> Unit, mongId: Long) {
         try {
             roomDB.slotDao().selectByIsSelectedTrue()?.let { slot ->
@@ -180,6 +214,7 @@ class SlotRepositoryImpl @Inject constructor(
             )
         }
     }
+
     override suspend fun getNowSlot(): SlotModel {
         try {
             roomDB.slotDao().selectByIsSelectedTrue()?.let { slot ->
@@ -214,35 +249,36 @@ class SlotRepositoryImpl @Inject constructor(
             )
         }
     }
-    override suspend fun getNowSlotLive(): LiveData<SlotModel> {
+
+    override suspend fun getNowSlotLive(): LiveData<SlotModel?> {
         try {
-            roomDB.slotDao().selectByIsSelectedTrue()?.let { selectedSlot ->
-                return roomDB.slotDao().selectByMongIdLive(selectedSlot.mongId).map {
+            return roomDB.slotDao().selectByIsSelectedTrueLive().map {
+                it?.let { slot ->
                     SlotModel(
-                        mongId = it.mongId,
-                        name = it.name,
-                        mongCode = it.mongCode,
-                        weight = it.weight,
-                        healthy = it.healthy,
-                        satiety = it.satiety,
-                        strength = it.strength,
-                        sleep = it.sleep,
-                        poopCount = it.poopCount,
-                        isSleeping = it.isSleeping,
-                        exp = it.exp,
-                        stateCode = it.stateCode,
-                        shiftCode = it.shiftCode,
-                        payPoint = it.payPoint,
-                        born = it.born,
-                        isHappy = it.isHappy,
-                        isEating = it.isEating,
-                        isSelected = it.isSelected,
-                        isGraduateCheck = it.isGraduateCheck,
+                        mongId = slot.mongId,
+                        name = slot.name,
+                        mongCode = slot.mongCode,
+                        weight = slot.weight,
+                        healthy = slot.healthy,
+                        satiety = slot.satiety,
+                        strength = slot.strength,
+                        sleep = slot.sleep,
+                        poopCount = slot.poopCount,
+                        isSleeping = slot.isSleeping,
+                        exp = slot.exp,
+                        stateCode = slot.stateCode,
+                        shiftCode = slot.shiftCode,
+                        payPoint = slot.payPoint,
+                        born = slot.born,
+                        isHappy = slot.isHappy,
+                        isEating = slot.isEating,
+                        isSelected = slot.isSelected,
+                        isGraduateCheck = slot.isGraduateCheck,
                     )
+                } ?: run {
+                    null
                 }
             }
-
-            throw RepositoryException(RepositoryErrorCode.GET_NOT_SLOT_LIVE_FAIL)
         } catch (e: RuntimeException) {
             throw RepositoryException(
                 errorCode = RepositoryErrorCode.GET_NOT_SLOT_LIVE_FAIL,

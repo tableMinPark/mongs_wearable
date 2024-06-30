@@ -95,7 +95,7 @@ fun Mong(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .size((35 * ratio).dp)
-                        .offset(y = mong.yOffset.dp, x = mong.xOffset.dp)
+                        .offset(y = (mong.yOffset * ratio).dp, x = (mong.xOffset * ratio).dp)
                 )
             }
         }

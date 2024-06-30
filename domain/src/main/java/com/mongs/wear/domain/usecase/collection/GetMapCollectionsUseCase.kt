@@ -24,7 +24,7 @@ class GetMapCollectionsUseCase @Inject constructor(
             }
         } catch (e: RepositoryException) {
             feedbackRepository.addFeedbackLog(
-                groupCode = FeedbackCode.BATTLE.groupCode,
+                groupCode = FeedbackCode.COLLECTION.groupCode,
                 location = "GetMapCollectionsUseCase",
                 message = e.stackTrace.contentDeepToString(),
             )

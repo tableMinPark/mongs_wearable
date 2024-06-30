@@ -66,7 +66,7 @@ class ManagementRepositoryImpl @Inject constructor(
         if (res.isSuccessful) {
             res.body()?.let { body ->
                 try {
-                    roomDB.slotDao().updateShiftCodeByDelete(mongId = body.mongId, shiftCode = ShiftCode.DELETE)
+                    roomDB.slotDao().deleteByMongId(mongId = body.mongId)
                 } catch (e: RuntimeException) {
                     throw RepositoryException(
                         errorCode = RepositoryErrorCode.DELETE_MONG_FAIL,
@@ -130,7 +130,7 @@ class ManagementRepositoryImpl @Inject constructor(
         if (res.isSuccessful) {
             res.body()?.let { body ->
                 try {
-                    roomDB.slotDao().updateShiftCodeByDelete(mongId = body.mongId, shiftCode = ShiftCode.DELETE)
+                    roomDB.slotDao().deleteByMongId(mongId = body.mongId)
                 } catch (e: RuntimeException) {
                     throw RepositoryException(
                         errorCode = RepositoryErrorCode.GRADUATE_MONG_FAIL,

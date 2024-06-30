@@ -32,18 +32,19 @@ import com.mongs.wear.ui.global.theme.PaymongYellow
 
 @Composable
 fun MainConditionView(
-    slotVo: State<SlotVo>,
+    slotVo: SlotVo,
     isPageChanging: State<Boolean>,
 ) {
     Box {
         if (!isPageChanging.value) {
             ProgressIndicator(
-                progress = slotVo.value.exp.toFloat(),
+                progress = slotVo.exp.toFloat(),
                 modifier = Modifier.zIndex(1f)
             )
         }
+
         MainConditionContent(
-            slotVo = slotVo.value,
+            slotVo = slotVo,
             modifier = Modifier.zIndex(1f)
         )
     }
@@ -51,7 +52,7 @@ fun MainConditionView(
 
 @Composable
 private fun MainConditionContent(
-    slotVo: SlotVo = SlotVo(),
+    slotVo: SlotVo,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
     Box(

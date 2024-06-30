@@ -26,7 +26,7 @@ fun ServerErrorBackground(
     ) {
         Image(
             painter = painterResource(mapResourceCode),
-            contentDescription = "BattleMatchBackground",
+            contentDescription = "ServerErrorBackground",
             contentScale = ContentScale.Crop
         )
     }

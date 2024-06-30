@@ -1,6 +1,7 @@
 package com.mongs.wear.domain.usecase.configure
 
 import androidx.lifecycle.LiveData
+import com.mongs.wear.domain.code.FeedbackCode
 import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.repositroy.DeviceRepository
@@ -15,7 +16,13 @@ class GetBackgroundMapCodeUseCase @Inject constructor(
         try {
             return deviceRepository.getBackgroundMapCode()
         } catch (e: RepositoryException) {
-            throw UseCaseException(e.errorCode)
+            feedbackRepository.addFeedbackLog(
+                groupCode = FeedbackCode.CONFIGURE.groupCode,
+                location = "GetBackgroundMapCodeUseCase",
+                message = e.stackTrace.contentDeepToString(),
+            )
+
+            throw UseCaseException(e.errorCode, e)
         }
     }
 }

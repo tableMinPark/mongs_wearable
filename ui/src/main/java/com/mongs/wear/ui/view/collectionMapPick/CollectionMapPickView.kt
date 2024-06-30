@@ -71,12 +71,11 @@ fun CollectionMapPickView(
         }
     }
 
-    if (collectionMapPickViewModel.uiState.navCollectionMenu) {
-        navController.popBackStack()
-    }
-
-    LaunchedEffect(Unit) {
-        collectionMapPickViewModel.loadData()
+    LaunchedEffect(collectionMapPickViewModel.uiState.navCollectionMenu) {
+        if (collectionMapPickViewModel.uiState.navCollectionMenu) {
+            navController.popBackStack()
+            collectionMapPickViewModel.uiState.navCollectionMenu = false
+        }
     }
 }
 

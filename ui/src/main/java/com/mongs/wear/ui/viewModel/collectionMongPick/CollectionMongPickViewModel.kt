@@ -13,6 +13,7 @@ import com.mongs.wear.domain.vo.MongCollectionVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,13 +24,18 @@ class CollectionMongPickViewModel @Inject constructor(
     val mongCollectionVoList: LiveData<List<MongCollectionVo>> get() = _mongCollectionVoList
     private val _mongCollectionVoList = MutableLiveData<List<MongCollectionVo>>()
 
-    fun loadData() {
-        viewModelScope.launch (Dispatchers.IO) {
+    init {
+        viewModelScope.launch (Dispatchers.Main) {
             try {
-                _mongCollectionVoList.postValue(getMongCollectionsUseCase())
+                uiState.loadingBar = true
+                val mongCollectionVoList = withContext(Dispatchers.IO) {
+                    getMongCollectionsUseCase()
+                }
+                _mongCollectionVoList.postValue(mongCollectionVoList)
                 uiState.loadingBar = false
             } catch (_: UseCaseException) {
                 uiState.navCollectionMenu = true
+                uiState.loadingBar = false
             }
         }
     }

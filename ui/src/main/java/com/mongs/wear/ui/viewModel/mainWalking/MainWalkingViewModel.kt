@@ -34,6 +34,8 @@ class MainWalkingViewModel @Inject constructor(
     init {
         viewModelScope.launch (Dispatchers.Main) {
             try {
+                uiState.loadingBar = true
+
                 _payPoint.addSource(
                     withContext(Dispatchers.IO) {
                         getNowSlotPayPointUseCase()
@@ -58,10 +60,10 @@ class MainWalkingViewModel @Inject constructor(
         }
     }
 
-    fun chargePayPoint(walkingCount: Int) {
+    fun chargePayPoint(mongId: Long, walkingCount: Int) {
         viewModelScope.launch (Dispatchers.IO) {
             try {
-                exchangePayPointWalkingUseCase(walkingCount = walkingCount)
+                exchangePayPointWalkingUseCase(mongId = mongId, walkingCount = walkingCount)
                 uiState.chargePayPointDialog = false
             } catch (_: UseCaseException) {
             }

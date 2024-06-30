@@ -70,12 +70,12 @@ fun CollectionMongPickView(
         }
     }
 
-    if (collectionMongPickViewModel.uiState.navCollectionMenu) {
-        navController.popBackStack()
-    }
 
-    LaunchedEffect(Unit) {
-        collectionMongPickViewModel.loadData()
+    LaunchedEffect(collectionMongPickViewModel.uiState.navCollectionMenu) {
+        if (collectionMongPickViewModel.uiState.navCollectionMenu) {
+            navController.popBackStack()
+            collectionMongPickViewModel.uiState.navCollectionMenu = false
+        }
     }
 }
 

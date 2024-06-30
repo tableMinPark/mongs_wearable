@@ -16,7 +16,7 @@ import com.mongs.wear.ui.viewModel.mainSlot.MainSlotViewModel.UiState
 fun MainSlotEffect(
     slotVo: SlotVo,
     isPageChanging: Boolean,
-    evolution: () -> Unit,
+    evolution: (Long) -> Unit,
     graduationReady: () -> Unit,
     uiState: UiState,
     modifier: Modifier = Modifier.zIndex(0f),
@@ -50,7 +50,7 @@ fun MainSlotEffect(
                     slotVo = slotVo,
                     isEvolution = uiState.isEvolution,
                     runEvolution = { uiState.isEvolution = true },
-                    evolution = evolution,
+                    evolution = { mongId -> evolution(mongId) },
                     modifier = modifier,
                 )
             }

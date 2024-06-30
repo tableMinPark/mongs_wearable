@@ -31,10 +31,15 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NavContent() {
-    val navController = rememberSwipeDismissableNavController()
     val coroutineScope = rememberCoroutineScope()
+    val navController = rememberSwipeDismissableNavController()
     val pagerState = rememberPagerState(initialPage = 2) { 5 }
-    val scrollPage = fun(page: Int) { coroutineScope.launch { pagerState.scrollToPage(page) } }
+
+    val pagerScroll = fun (page: Int) {
+        coroutineScope.launch {
+            pagerState.scrollToPage(page)
+        }
+    }
 
     SwipeDismissableNavHost(
         navController = navController,
@@ -47,8 +52,8 @@ fun NavContent() {
         composable(route = NavItem.MainPager.route) {
             MainPagerView(
                 navController = navController,
-                scrollPage = scrollPage,
-                pagerState = pagerState
+                pagerState = pagerState,
+                pagerScroll = pagerScroll,
             )
         }
 
@@ -60,10 +65,10 @@ fun NavContent() {
                 FeedMenuView(navController = navController)
             }
             composable(route = NavItem.FeedFoodPick.route) {
-                FeedFoodPickView(navController = navController, scrollPage = scrollPage)
+                FeedFoodPickView(navController = navController, scrollPage = pagerScroll)
             }
             composable(route = NavItem.FeedSnackPick.route) {
-                FeedSnackPickView(navController = navController, scrollPage = scrollPage)
+                FeedSnackPickView(navController = navController, scrollPage = pagerScroll)
             }
         }
 
@@ -83,7 +88,7 @@ fun NavContent() {
         }
 
         composable(route = NavItem.SlotPick.route) {
-            SlotPickView(navController = navController, scrollPage = scrollPage)
+            SlotPickView(navController = navController, scrollPage = pagerScroll)
         }
 
         navigation(
@@ -102,7 +107,7 @@ fun NavContent() {
         }
 
         composable(route = NavItem.Feedback.route) {
-            FeedbackView(navController = navController)
+            FeedbackView()
         }
 
         navigation(

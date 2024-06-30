@@ -13,8 +13,8 @@ import javax.inject.Inject
 
 class MatchWaitUseCase @Inject constructor(
     private val mqttBattleClient: MqttBattleClient,
-    private val deviceRepository: DeviceRepository,
     private val slotRepository: SlotRepository,
+    private val deviceRepository: DeviceRepository,
     private val battleRepository: BattleRepository,
     private val feedbackRepository: FeedbackRepository,
 ) {
@@ -23,7 +23,7 @@ class MatchWaitUseCase @Inject constructor(
         matchEnterCallback: suspend () -> Unit,
     ) {
         try {
-            val slotModel = slotRepository.getNowSlot()
+            val slowModel = slotRepository.getNowSlot()
             val deviceId = deviceRepository.getDeviceId()
 
             mqttBattleClient.setConnection(
@@ -31,7 +31,7 @@ class MatchWaitUseCase @Inject constructor(
                 matchEnterCallback = matchEnterCallback,
             )
             mqttBattleClient.subScribeBattleSearch(deviceId = deviceId)
-            battleRepository.matchWait(mongId = slotModel.mongId)
+            battleRepository.matchWait(mongId = slowModel.mongId)
         } catch (e: RepositoryException) {
             feedbackRepository.addFeedbackLog(
                 groupCode = FeedbackCode.BATTLE.groupCode,

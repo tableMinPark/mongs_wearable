@@ -23,7 +23,7 @@
         <uses-library android:name="com.google.android.wearable" android:required="true" />
         <meta-data android:name="com.google.android.wearable.standalone" android:value="true" />
 
-        <service android:name="info.mqtt.android.service.MqttService" />
+<!--        <service android:name="info.mqtt.android.service.MqttService" />-->
         <activity
             android:name="com.mongs.wear.MainActivity"
             android:exported="true"

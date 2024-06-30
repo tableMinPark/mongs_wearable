@@ -13,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import android.Manifest
 import android.content.Context
 import android.hardware.SensorManager
+import android.util.Log
 import com.mongs.wear.ui.view.main.MainView
 
 
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity() {
             ActivityCompat.requestPermissions(this, permissions, 100)
         }
 
-        mainViewModel.initDeviceInfo(buildVersion = BuildConfig.VERSION_NAME)
+        mainViewModel.init(buildVersion = BuildConfig.VERSION_NAME)
 
         setContent {
             MongsTheme {

@@ -48,9 +48,12 @@ fun LoginView(
         )
     }
 
-    if (loginViewModel.uiState.navMainPagerView) {
-        navController.navigate(NavItem.MainPager.route) {
-            popUpTo(navController.graph.id)
+    LaunchedEffect(loginViewModel.uiState.navMainPagerView) {
+        if (loginViewModel.uiState.navMainPagerView) {
+            navController.navigate(NavItem.MainPager.route) {
+                popUpTo(navController.graph.id)
+            }
+            loginViewModel.uiState.navMainPagerView = false
         }
     }
 }

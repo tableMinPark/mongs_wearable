@@ -9,6 +9,7 @@ import com.mongs.wear.data.vo.FeedbackVo
 import com.mongs.wear.domain.error.RepositoryErrorCode
 import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.repositroy.FeedbackRepository
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class FeedbackRepositoryImpl @Inject constructor(
@@ -31,6 +32,18 @@ class FeedbackRepositoryImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun removeFeedbackLog(createdAt: LocalDateTime) {
+        try {
+            roomDB.feedbackLogDao().deleteByCreatedAt(createdAt = createdAt)
+        } catch (e: RepositoryException) {
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GET_COUNT_FEEDBACK_LOG_FAIL,
+                throwable = e,
+            )
+        }
+    }
+
     override suspend fun addFeedback(groupCode: String, message: String) {
         try {
             val feedbackLogs = roomDB.feedbackLogDao().selectByGroupCode(groupCode = groupCode)

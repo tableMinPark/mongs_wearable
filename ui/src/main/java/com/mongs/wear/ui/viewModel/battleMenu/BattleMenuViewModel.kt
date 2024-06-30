@@ -25,6 +25,8 @@ class BattleMenuViewModel @Inject constructor(
     fun matchWait() {
         viewModelScope.launch (Dispatchers.IO) {
             try {
+                uiState.loadingBar = true
+
                 matchWaitUseCase(
                     matchFindCallback = {
                         uiState.isMatchWait = false
@@ -46,6 +48,7 @@ class BattleMenuViewModel @Inject constructor(
                 matchWaitCancelUseCase()
                 uiState.loadingBar = false
             } catch (_: UseCaseException) {
+                uiState.loadingBar = false
             }
         }
     }

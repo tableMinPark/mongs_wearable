@@ -13,7 +13,6 @@ import com.mongs.wear.domain.usecase.slot.GetNowSlotUseCase
 import com.mongs.wear.domain.vo.SlotVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -25,12 +24,12 @@ class MainPagerViewModel @Inject constructor(
 ): ViewModel() {
     val uiState = UiState()
 
-    val slotVo: LiveData<SlotVo> get() = _slotVo
-    private val _slotVo = MediatorLiveData<SlotVo>()
+    val slotVo: LiveData<SlotVo?> get() = _slotVo
+    private val _slotVo = MediatorLiveData<SlotVo?>(null)
     val backgroundMapCode: LiveData<String> get() = _backgroundMapCode
     private val _backgroundMapCode = MediatorLiveData<String>()
 
-    fun loadData() {
+    init {
         viewModelScope.launch(Dispatchers.Main) {
             try {
                 uiState.loadingBar = true

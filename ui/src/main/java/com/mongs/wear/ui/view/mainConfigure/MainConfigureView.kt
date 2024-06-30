@@ -2,6 +2,7 @@ package com.mongs.wear.ui.view.mainConfigure
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -71,24 +73,25 @@ fun MainConfigureView(
                     Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()
                 },
                 feedback = {
-                    Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()
-//                    navController.navigate(NavItem.Feedback.route)
+                    navController.navigate(NavItem.Feedback.route)
                 },
                 logout = {
                     mainConfigureViewModel.uiState.logoutDialog = true
                 },
-                uiState = mainConfigureViewModel.uiState,
                 modifier = Modifier.zIndex(1f)
             )
         }
     }
 
-    if (mainConfigureViewModel.uiState.navLoginView) {
-        scrollPage(2)
-        navController.navigate(NavItem.Login.route) {
-            popUpTo(
-                navController.graph.id
-            )
+    LaunchedEffect(mainConfigureViewModel.uiState.navLoginView) {
+        if (mainConfigureViewModel.uiState.navLoginView) {
+            scrollPage(2)
+            navController.navigate(NavItem.Login.route) {
+                popUpTo(
+                    navController.graph.id
+                )
+            }
+            mainConfigureViewModel.uiState.navLoginView = false
         }
     }
 }
@@ -111,7 +114,6 @@ private fun MainConfigureContent(
     mapSearch: () -> Unit,
     feedback: () -> Unit,
     logout: () -> Unit,
-    uiState: UiState,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
     Box(
@@ -165,7 +167,6 @@ private fun MainConfigureContent(
     }
 }
 
-
 @Preview(showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
 @Composable
 private fun MainConfigureViewPreView() {
@@ -176,7 +177,6 @@ private fun MainConfigureViewPreView() {
             mapSearch = {},
             feedback = {},
             logout = {},
-            uiState = UiState(),
             modifier = Modifier.zIndex(1f)
         )
     }
@@ -192,7 +192,6 @@ private fun LargeMainConfigureViewPreView() {
             mapSearch = {},
             feedback = {},
             logout = {},
-            uiState = UiState(),
             modifier = Modifier.zIndex(1f)
         )
     }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,12 +27,13 @@ import com.mongs.wear.ui.global.theme.DAL_MU_RI
 import com.mongs.wear.ui.global.theme.PaymongWhite
 
 @Composable
-fun Chip(
+fun ChipWithSecondLabel(
     icon: Int,
     border: Int,
     fontColor: Color,
     backgroundColor: Color,
     label: String,
+    secondaryLabel: String,
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
@@ -67,18 +69,37 @@ fun Chip(
                     maxLines = 1,
                 )
             }
+        },
+        secondaryLabel = {
+            Row(
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth().padding(top = 5.dp)
+            ) {
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(
+                    text = secondaryLabel,
+                    textAlign = TextAlign.Center,
+                    fontFamily = DAL_MU_RI,
+                    fontWeight = FontWeight.Light,
+                    fontSize = 10.sp,
+                    color = fontColor,
+                    maxLines = 1,
+                )
+            }
         }
     )
 }
 
 @Preview(device = Devices.WEAR_OS_SMALL_ROUND)
 @Composable
-private fun StarPointPreview() {
-    Chip(
+private fun ChipWithSecondLabelPreview() {
+    ChipWithSecondLabel(
         icon = R.drawable.feed,
         border = R.drawable.interaction_bnt_yellow,
         fontColor = PaymongWhite,
         label = "테스트",
+        secondaryLabel = "테스트",
         backgroundColor = Color.Black,
     )
 }

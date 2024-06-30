@@ -54,7 +54,7 @@ fun EvolutionEffect(
     slotVo: SlotVo,
     isEvolution: Boolean,
     runEvolution: () -> Unit,
-    evolution: () -> Unit,
+    evolution: (Long) -> Unit,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
     if (isEvolution) {
@@ -65,8 +65,7 @@ fun EvolutionEffect(
                 nowStep = step
                 delay(delayList[step])
             }
-            delay(600)
-            evolution()
+            evolution(slotVo.mongId)
         }
 
         Box(
@@ -124,7 +123,6 @@ private fun EvolutionEffectPreview() {
         )
     }
 }
-
 
 @Preview(showSystemUi = true, device = Devices.WEAR_OS_LARGE_ROUND)
 @Composable

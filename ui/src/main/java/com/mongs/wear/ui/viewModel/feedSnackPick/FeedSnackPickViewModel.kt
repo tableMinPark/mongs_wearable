@@ -43,7 +43,11 @@ class FeedSnackPickViewModel @Inject constructor(
                     _payPoint.value = payPoint
                 }
 
-                _snackVoList.postValue(getSnackCodesUseCase())
+                val snackVoList = withContext(Dispatchers.IO) {
+                    getSnackCodesUseCase()
+                }
+                _snackVoList.postValue(snackVoList)
+
 
                 uiState.loadingBar = false
             } catch (_: UseCaseException) {

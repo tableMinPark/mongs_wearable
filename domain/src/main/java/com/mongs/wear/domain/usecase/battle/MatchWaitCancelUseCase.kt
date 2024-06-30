@@ -6,7 +6,6 @@ import com.mongs.wear.domain.exception.ClientException
 import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.repositroy.BattleRepository
-import com.mongs.wear.domain.repositroy.DeviceRepository
 import com.mongs.wear.domain.repositroy.FeedbackRepository
 import com.mongs.wear.domain.repositroy.SlotRepository
 import javax.inject.Inject

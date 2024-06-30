@@ -20,8 +20,8 @@ class SetDeviceIdUseCase @Inject constructor(
             }
         } catch (e: RepositoryException) {
             feedbackRepository.addFeedbackLog(
-                groupCode = FeedbackCode.BATTLE.groupCode,
-                location = "GetMapCollectionsUseCase",
+                groupCode = FeedbackCode.COMMON.groupCode,
+                location = "SetDeviceIdUseCase",
                 message = e.stackTrace.contentDeepToString(),
             )
 

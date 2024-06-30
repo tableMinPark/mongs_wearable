@@ -1,5 +1,6 @@
 package com.mongs.wear.domain.usecase.configure
 
+import com.mongs.wear.domain.code.FeedbackCode
 import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.repositroy.DeviceRepository
@@ -14,14 +15,26 @@ class SetBackgroundMapCodeUseCase @Inject constructor(
         try {
             deviceRepository.setBackgroundMapCode(code = "MP000")
         } catch (e: RepositoryException) {
-            throw UseCaseException(e.errorCode)
+            feedbackRepository.addFeedbackLog(
+                groupCode = FeedbackCode.CONFIGURE.groupCode,
+                location = "SetBackgroundMapCodeUseCase",
+                message = e.stackTrace.contentDeepToString(),
+            )
+
+            throw UseCaseException(e.errorCode, e)
         }
     }
     suspend operator fun invoke(code: String) {
         try {
             deviceRepository.setBackgroundMapCode(code = code)
         } catch (e: RepositoryException) {
-            throw UseCaseException(e.errorCode)
+            feedbackRepository.addFeedbackLog(
+                groupCode = FeedbackCode.CONFIGURE.groupCode,
+                location = "SetBackgroundMapCodeUseCase",
+                message = e.stackTrace.contentDeepToString(),
+            )
+
+            throw UseCaseException(e.errorCode, e)
         }
     }
 }

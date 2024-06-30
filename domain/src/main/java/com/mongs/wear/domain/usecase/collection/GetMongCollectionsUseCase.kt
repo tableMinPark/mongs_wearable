@@ -24,7 +24,7 @@ class GetMongCollectionsUseCase @Inject constructor(
             }
         } catch (e: RepositoryException) {
             feedbackRepository.addFeedbackLog(
-                groupCode = FeedbackCode.BATTLE.groupCode,
+                groupCode = FeedbackCode.COLLECTION.groupCode,
                 location = "GetMongCollectionsUseCase",
                 message = e.stackTrace.contentDeepToString(),
             )

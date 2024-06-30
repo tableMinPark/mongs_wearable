@@ -59,7 +59,6 @@ fun MainSlotContent(
         }
         ShiftCode.EMPTY -> {
             EmptyContent(
-                isPageChanging = isPageChanging,
                 onClick = navSlotPick,
                 modifier = modifier,
             )

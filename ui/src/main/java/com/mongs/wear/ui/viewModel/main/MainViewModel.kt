@@ -4,6 +4,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -14,6 +15,9 @@ import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.repositroy.DeviceRepository
 import com.mongs.wear.domain.repositroy.MemberRepository
 import com.mongs.wear.domain.repositroy.SlotRepository
+import com.mongs.wear.domain.usecase.common.SetBuildVersionUseCase
+import com.mongs.wear.domain.usecase.common.SetDeviceIdUseCase
+import com.mongs.wear.domain.usecase.feedback.RemoveFeedbackLogUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,16 +33,31 @@ class MainViewModel @Inject constructor(
     private val slotRepository: SlotRepository,
     private val mqttEventClient: MqttEventClient,
     private val mqttBattleClient: MqttBattleClient,
+
+    private val removeFeedbackLogUseCase: RemoveFeedbackLogUseCase,
+    private val setBuildVersionUseCase: SetBuildVersionUseCase,
+    private val setDeviceIdUseCase: SetDeviceIdUseCase,
 ) : ViewModel() {
 
     private lateinit var sensorManager: SensorManager
-    private lateinit var stepSensorEventListener: SensorEventListener
+    private val stepSensorEventListener: SensorEventListener = object : SensorEventListener {
+        override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
+        override fun onSensorChanged(event: SensorEvent) {
+//            val nowWalkingStep = event.values[0].toInt()
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    memberRepository.addWalkingCount(addWalkingCount = 1)
+                } catch (_: RepositoryException) {
+                }
+            }
+        }
+    }
 
     val networkFlag: LiveData<Boolean> get() = _networkFlag
     private val _networkFlag = MediatorLiveData<Boolean>()
 
     init {
-        viewModelScope.launch(Dispatchers.Main)  {
+        viewModelScope.launch(Dispatchers.Main) {
             _networkFlag.addSource(
                 withContext(Dispatchers.IO) {
                     deviceRepository.getNetworkFlagLive()
@@ -49,21 +68,20 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun init(buildVersion: String) {
+        viewModelScope.launch(Dispatchers.IO)  {
+            setBuildVersionUseCase(buildVersion = buildVersion)
+            setDeviceIdUseCase()
+            removeFeedbackLogUseCase()
+        }
+    }
+
     fun connectSensor(sensorManager: SensorManager) {
         try {
             this.sensorManager = sensorManager
-            stepSensorEventListener = object : SensorEventListener {
-                override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
-                override fun onSensorChanged(event: SensorEvent) {
-//                    val nowWalkingStep = event.values[0].toInt()
-                    viewModelScope.launch(Dispatchers.IO) {
-                        memberRepository.addWalkingCount(addWalkingCount = 1)
-                    }
-                }
-            }
-            sensorManager.registerListener(
+            this.sensorManager.registerListener(
                 stepSensorEventListener,
-                sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),      //TYPE_STEP_COUNTER  TYPE_RELATIVE_HUMIDITY
+                sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),      //TYPE_STEP_COUNTER  TYPE_GRAVITY
                 SensorManager.SENSOR_DELAY_FASTEST
             )
         } catch (_: RuntimeException) {
@@ -123,14 +141,6 @@ class MainViewModel @Inject constructor(
                     mqttBattleClient.disconnect()
                 } catch (_: RuntimeException) {
                 }
-            }
-        }
-    }
-    fun initDeviceInfo(buildVersion: String) {
-        viewModelScope.launch(Dispatchers.Main) {
-            try {
-                deviceRepository.setBuildVersion(buildVersion)
-            } catch (_: RepositoryException) {
             }
         }
     }

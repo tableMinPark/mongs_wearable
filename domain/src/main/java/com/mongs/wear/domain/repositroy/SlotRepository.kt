@@ -8,7 +8,8 @@ interface SlotRepository {
     suspend fun syncNowSlot()
     suspend fun setSlots(subScribeMong: suspend (Long) -> Unit)
     suspend fun getSlots(subScribeMong: suspend (Long) -> Unit): LiveData<List<SlotVo>>
+    suspend fun getSlot(mongId: Long): SlotModel
     suspend fun setNowSlot(subScribeMong: suspend (Long) -> Unit, mongId: Long)
     suspend fun getNowSlot(): SlotModel
-    suspend fun getNowSlotLive(): LiveData<SlotModel>
+    suspend fun getNowSlotLive(): LiveData<SlotModel?>
 }

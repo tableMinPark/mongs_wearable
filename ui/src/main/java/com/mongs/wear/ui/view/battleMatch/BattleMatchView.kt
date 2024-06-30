@@ -173,7 +173,7 @@ private fun BattleMatchEnterContent(
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
     LaunchedEffect(Unit) {
-        delay(4000)
+        delay(3000)
         matchStart()
     }
 
@@ -281,6 +281,7 @@ private fun BattleMatchContent(
                 Spacer(modifier = Modifier.width(15.dp))
                 MatchPlayer(
                     matchPlayerVo = otherMatchPlayerVo,
+                    effectAlignment = Alignment.BottomStart,
                 )
                 Spacer(modifier = Modifier.width(15.dp))
             }
@@ -315,6 +316,7 @@ private fun BattleMatchContent(
                 Spacer(modifier = Modifier.width(15.dp))
                 MatchPlayer(
                     matchPlayerVo = myMatchPlayerVo,
+                    effectAlignment = Alignment.TopEnd,
                 )
                 Spacer(modifier = Modifier.width(15.dp))
                 Image(
@@ -427,6 +429,7 @@ private fun BattleMatchOverContent(
 @Composable
 private fun MatchPlayer(
     matchPlayerVo: MatchPlayerVo,
+    effectAlignment: Alignment,
 ) {
     val imageLoader = ImageLoader.Builder(LocalContext.current)
         .components { add(ImageDecoderDecoder.Factory()) }
@@ -439,75 +442,84 @@ private fun MatchPlayer(
             modifier = Modifier.zIndex(1f)
         )
 
-        when (matchPlayerVo.state) {
-            BattleStateCode.NONE -> {}
-            BattleStateCode.HEAL -> {
-                Image(
-                    painter = rememberAsyncImagePainter(
-                        model = R.drawable.health,
-                        imageLoader = imageLoader
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .zIndex(2f)
-                        .height(40.dp)
-                        .width(40.dp),
-                    contentScale = ContentScale.FillBounds
-                )
-            }
-            BattleStateCode.DAMAGE_AND_HEAL -> {
-                Image(
-                    painter = rememberAsyncImagePainter(
-                        model = R.drawable.health,
-                        imageLoader = imageLoader
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .zIndex(2f)
-                        .height(40.dp)
-                        .width(40.dp),
-                    contentScale = ContentScale.FillBounds
-                )
-                Image(
-                    painter = rememberAsyncImagePainter(
-                        model = R.drawable.attack_motion,
-                        imageLoader = imageLoader
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .zIndex(3f)
-                        .height(40.dp)
-                        .width(40.dp),
-                    contentScale = ContentScale.FillBounds
-                )
-            }
-            BattleStateCode.DAMAGE -> {
-                Image(
-                    painter = rememberAsyncImagePainter(
-                        model = R.drawable.attack_motion,
-                        imageLoader = imageLoader
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .zIndex(2f)
-                        .height(40.dp)
-                        .width(40.dp),
-                    contentScale = ContentScale.FillBounds
-                )
-            }
-            BattleStateCode.DEFENCE -> {
-                Image(
-                    painter = rememberAsyncImagePainter(
-                        model = R.drawable.defence_motion,
-                        imageLoader = imageLoader
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .zIndex(2f)
-                        .height(40.dp)
-                        .width(40.dp),
-                    contentScale = ContentScale.FillBounds
-                )
+        Box(
+            modifier = Modifier
+                .align(effectAlignment)
+                .zIndex(2f)
+        ) {
+            when (matchPlayerVo.state) {
+                BattleStateCode.NONE -> {}
+                BattleStateCode.HEAL -> {
+                    Image(
+                        painter = rememberAsyncImagePainter(
+                            model = R.drawable.health,
+                            imageLoader = imageLoader
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .zIndex(2f)
+                            .height(40.dp)
+                            .width(40.dp),
+                        contentScale = ContentScale.FillBounds
+                    )
+                }
+
+                BattleStateCode.DAMAGE_AND_HEAL -> {
+                    Image(
+                        painter = rememberAsyncImagePainter(
+                            model = R.drawable.health,
+                            imageLoader = imageLoader
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .zIndex(2f)
+                            .height(40.dp)
+                            .width(40.dp),
+                        contentScale = ContentScale.FillBounds
+                    )
+                    Image(
+                        painter = rememberAsyncImagePainter(
+                            model = R.drawable.attack_motion,
+                            imageLoader = imageLoader
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .zIndex(3f)
+                            .height(40.dp)
+                            .width(40.dp),
+                        contentScale = ContentScale.FillBounds
+                    )
+                }
+
+                BattleStateCode.DAMAGE -> {
+                    Image(
+                        painter = rememberAsyncImagePainter(
+                            model = R.drawable.attack_motion,
+                            imageLoader = imageLoader
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .zIndex(2f)
+                            .height(40.dp)
+                            .width(40.dp),
+                        contentScale = ContentScale.FillBounds
+                    )
+                }
+
+                BattleStateCode.DEFENCE -> {
+                    Image(
+                        painter = rememberAsyncImagePainter(
+                            model = R.drawable.defence_motion,
+                            imageLoader = imageLoader
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .zIndex(2f)
+                            .height(40.dp)
+                            .width(40.dp),
+                        contentScale = ContentScale.FillBounds
+                    )
+                }
             }
         }
     }

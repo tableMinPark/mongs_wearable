@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -26,7 +27,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlin.math.max
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -53,6 +53,7 @@ import com.mongs.wear.ui.global.resource.NavItem
 import com.mongs.wear.ui.global.theme.DAL_MU_RI
 import com.mongs.wear.ui.global.theme.PaymongWhite
 import com.mongs.wear.ui.viewModel.slotPick.SlotPickViewModel
+import kotlin.math.max
 import kotlin.math.min
 
 @Composable
@@ -62,6 +63,7 @@ fun SlotPickView(
     slotPickViewModel: SlotPickViewModel = hiltViewModel(),
 ) {
     val slotVoIndex = remember { mutableIntStateOf(0) }
+    val slotVoState = slotPickViewModel.slotVo.observeAsState()
     val starPoint = slotPickViewModel.starPoint.observeAsState(0)
     val buySlotPrice = slotPickViewModel.buySlotPrice.observeAsState(0)
     val maxSlot = slotPickViewModel.maxSlot.observeAsState(1)
@@ -78,8 +80,8 @@ fun SlotPickView(
     }
 
     Box {
-        val slotVo =
-            if (slotVoIndex.intValue < slotVoList.value.size) slotVoList.value[slotVoIndex.intValue] else SlotVo()
+        val showSlotVo = remember { derivedStateOf { if (slotVoIndex.intValue < slotVoList.value.size) slotVoList.value[slotVoIndex.intValue] else SlotVo() } }
+
         if (slotPickViewModel.uiState.loadingBar) {
             FeedNestedBackground()
             SlotPickLoadingBar()
@@ -87,7 +89,6 @@ fun SlotPickView(
             ConfirmDialog(
                 text = "새로운 몽을\n생성하시겠습니까?",
                 confirm = {
-                    slotPickViewModel.uiState.loadingBar = true
                     slotPickViewModel.addMong("", "22:00", "08:00")
                 },
                 cancel = {
@@ -98,8 +99,7 @@ fun SlotPickView(
             ConfirmDialog(
                 text = "현재 몽을\n삭제하시겠습니까?",
                 confirm = {
-                    slotPickViewModel.uiState.loadingBar = true
-                    slotPickViewModel.deleteMong(mongId = slotVo.mongId)
+                    slotPickViewModel.deleteMong(mongId = showSlotVo.value.mongId)
                 },
                 cancel = {
                     slotPickViewModel.uiState.deleteDialog = false
@@ -109,18 +109,26 @@ fun SlotPickView(
             ConfirmDialog(
                 text = "현재 몽을\n선택하시겠습니까?",
                 confirm = {
-                    slotPickViewModel.uiState.loadingBar = true
-                    slotPickViewModel.pickMong(mongId = slotVo.mongId)
+                    slotPickViewModel.pickMong(mongId = showSlotVo.value.mongId)
                 },
                 cancel = {
                     slotPickViewModel.uiState.pickDialog = false
+                }
+            )
+        } else if (slotPickViewModel.uiState.graduateDialog) {
+            ConfirmDialog(
+                text = "현재 몽을\n졸업시키시겠습니까?",
+                confirm = {
+                    slotPickViewModel.graduateMong(mongId = showSlotVo.value.mongId)
+                },
+                cancel = {
+                    slotPickViewModel.uiState.graduateDialog = false
                 }
             )
         } else if (slotPickViewModel.uiState.buySlotDialog) {
             ConfirmDialog(
                 text = "새로운 슬롯을\n구매하시겠습니까?",
                 confirm = {
-                    slotPickViewModel.uiState.loadingBar = true
                     slotPickViewModel.buySlot()
                 },
                 cancel = {
@@ -131,15 +139,15 @@ fun SlotPickView(
             SlotPickBackground()
             SlotDetailDialog(
                 onClick = { slotPickViewModel.uiState.detailDialog = false },
-                mongId = slotVo.mongId,
-                name = slotVo.name,
-                weight = slotVo.weight,
-                healthy = slotVo.healthy,
-                satiety = slotVo.satiety,
-                strength = slotVo.strength,
-                sleep = slotVo.sleep,
-                payPoint = slotVo.payPoint,
-                born = slotVo.born,
+                mongId = showSlotVo.value.mongId,
+                name = showSlotVo.value.name,
+                weight = showSlotVo.value.weight,
+                healthy = showSlotVo.value.healthy,
+                satiety = showSlotVo.value.satiety,
+                strength = showSlotVo.value.strength,
+                sleep = showSlotVo.value.sleep,
+                payPoint = showSlotVo.value.payPoint,
+                born = showSlotVo.value.born,
             )
         } else {
             SlotPickBackground()
@@ -148,30 +156,44 @@ fun SlotPickView(
                 modifier = Modifier.zIndex(1f)
             )
             SlotPickContent(
-                slotVo = slotVo,
+                slotVo = showSlotVo.value,
                 starPoint = starPoint.value,
                 buySlotPrice = buySlotPrice.value,
-                isSlotEmpty = slotVo.shiftCode == ShiftCode.EMPTY,
+                isSlotEmpty = showSlotVo.value.shiftCode == ShiftCode.EMPTY,
                 isSlotDisable = slotVoIndex.intValue >= maxSlot.value,
                 preSlot = { slotVoIndex.intValue = max(0, slotVoIndex.intValue - 1) },
                 nextSlot = { slotVoIndex.intValue = min(slotVoIndex.intValue + 1, 2) },
                 addDialog = { slotPickViewModel.uiState.addDialog = true },
                 deleteDialog = { slotPickViewModel.uiState.deleteDialog = true },
                 pickDialog = { slotPickViewModel.uiState.pickDialog = true },
+                graduateDialog = { slotPickViewModel.uiState.graduateDialog = true },
                 buySlotDialog = { slotPickViewModel.uiState.buySlotDialog = true },
                 detailDialog = { slotPickViewModel.uiState.detailDialog = true },
                 modifier = Modifier.zIndex(2f)
             )
+
+            LaunchedEffect(Unit) {
+                slotVoState.value?.let { slotVo ->
+                    for (index in 0..slotVoList.value.size) {
+                        if (slotVoList.value[index].mongId == slotVo.mongId) {
+                            slotVoIndex.intValue = index
+                            break
+                        }
+                    }
+                }
+            }
         }
     }
 
-    if (slotPickViewModel.uiState.navMainPager) {
-        scrollPage(2)
-        navController.popBackStack(route = NavItem.SlotPick.route, inclusive = true)
-    }
-    
-    LaunchedEffect(Unit) {
-        slotPickViewModel.loadData()
+    LaunchedEffect(slotPickViewModel.uiState.navMainPager) {
+        if (slotPickViewModel.uiState.navMainPager) {
+            scrollPage(2)
+            navController.navigate(NavItem.MainPager.route) {
+                popUpTo(navController.graph.id)
+            }
+            slotPickViewModel.uiState.loadingBar = false
+            slotPickViewModel.uiState.navMainPager = false
+        }
     }
 }
 
@@ -199,6 +221,7 @@ private fun SlotPickContent(
     addDialog: () -> Unit,
     deleteDialog: () -> Unit,
     pickDialog: () -> Unit,
+    graduateDialog: () -> Unit,
     buySlotDialog: () -> Unit,
     detailDialog: () -> Unit,
     modifier: Modifier = Modifier.zIndex(0f),
@@ -233,7 +256,7 @@ private fun SlotPickContent(
                     StarPoint(starPoint = starPoint)
                 } else {
                     Text(
-                        text = "새로운 몽 생성",
+                        text = "몽 생성",
                         textAlign = TextAlign.Center,
                         fontFamily = DAL_MU_RI,
                         fontWeight = FontWeight.Light,
@@ -363,12 +386,21 @@ private fun SlotPickContent(
                     .weight(0.28f)
             ) {
                 if (!isSlotDisable && !isSlotEmpty) {
-                    BlueButton(
-                        text = "삭제",
-                        height = 32,
-                        width = 55,
-                        onClick = deleteDialog,
-                    )
+                    if (slotVo.shiftCode == ShiftCode.GRADUATE_READY) {
+                        BlueButton(
+                            text = "졸업",
+                            height = 32,
+                            width = 55,
+                            onClick = graduateDialog,
+                        )
+                    } else {
+                        BlueButton(
+                            text = "삭제",
+                            height = 32,
+                            width = 55,
+                            onClick = deleteDialog,
+                        )
+                    }
                     Spacer(modifier = Modifier.width(5.dp))
                     BlueButton(
                         text = "선택",
@@ -419,7 +451,7 @@ private fun SlotPickViewPreview() {
             modifier = Modifier.zIndex(1f)
         )
         SlotPickContent(
-            slotVo = SlotVo(mongCode = "CH300"),
+            slotVo = SlotVo(mongCode = "CH300", shiftCode = ShiftCode.GRADUATE),
             starPoint = 0,
             buySlotPrice = 1,
             isSlotEmpty = false,
@@ -431,6 +463,7 @@ private fun SlotPickViewPreview() {
             pickDialog = {},
             buySlotDialog = {},
             detailDialog = {},
+            graduateDialog = {},
             modifier = Modifier.zIndex(1f),
         )
     }
