@@ -1,4 +1,4 @@
-package com.mongs.wear.ui.global.dialog.help.content
+package com.mongs.wear.ui.global.dialog.help.content.point
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -23,9 +23,8 @@ import com.mongs.wear.ui.R
 import com.mongs.wear.ui.global.theme.DAL_MU_RI
 import com.mongs.wear.ui.global.theme.PaymongWhite
 
-
 @Composable
-fun HelpWarningPointContent() {
+fun HelpSubPayPointContent() {
     Column (
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxHeight()
@@ -46,27 +45,11 @@ fun HelpWarningPointContent() {
                     .width(20.dp),
                 contentScale = ContentScale.FillBounds,
             )
+
             Spacer(modifier = Modifier.width(5.dp))
+
             Text(
                 text = "는",
-                textAlign = TextAlign.Center,
-                fontFamily = DAL_MU_RI,
-                fontWeight = FontWeight.Light,
-                fontSize = 14.sp,
-                color = PaymongWhite,
-                maxLines = 1,
-            )
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.25f)
-        ) {
-            Text(
-                text = "몽과 동시에 소멸!",
                 textAlign = TextAlign.Center,
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
@@ -84,7 +67,7 @@ fun HelpWarningPointContent() {
                 .weight(0.25f)
         ) {
             Image(
-                painter = painterResource(R.drawable.starpoint_logo),
+                painter = painterResource(R.drawable.feed),
                 contentDescription = null,
                 modifier = Modifier
                     .height(20.dp)
@@ -93,7 +76,26 @@ fun HelpWarningPointContent() {
             )
             Spacer(modifier = Modifier.width(5.dp))
             Text(
-                text = "는",
+                text = "식사,",
+                textAlign = TextAlign.Center,
+                fontFamily = DAL_MU_RI,
+                fontWeight = FontWeight.Light,
+                fontSize = 14.sp,
+                color = PaymongWhite,
+                maxLines = 1,
+            )
+
+            Image(
+                painter = painterResource(R.drawable.activity),
+                contentDescription = null,
+                modifier = Modifier
+                    .height(20.dp)
+                    .width(20.dp),
+                contentScale = ContentScale.FillBounds,
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(
+                text = "훈련,",
                 textAlign = TextAlign.Center,
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
@@ -111,7 +113,7 @@ fun HelpWarningPointContent() {
                 .weight(0.25f)
         ) {
             Text(
-                text = "회원 탈퇴 시 소멸!",
+                text = "를 통해 소비 가능!",
                 textAlign = TextAlign.Center,
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
@@ -122,4 +124,5 @@ fun HelpWarningPointContent() {
         }
         Spacer(modifier = Modifier.height(35.dp))
     }
+
 }

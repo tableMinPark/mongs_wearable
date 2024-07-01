@@ -1,4 +1,4 @@
-package com.mongs.wear.ui.global.dialog.help.content
+package com.mongs.wear.ui.global.dialog.help.content.mong
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -20,17 +20,43 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.Text
 import com.mongs.wear.ui.R
+import com.mongs.wear.ui.global.component.button.CircleImageButton
 import com.mongs.wear.ui.global.theme.DAL_MU_RI
 import com.mongs.wear.ui.global.theme.PaymongWhite
 
-
 @Composable
-fun HelpSubStarPointContent() {
+fun HelpPoopCleanMongContent() {
+
     Column (
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxHeight()
     ) {
-        Spacer(modifier = Modifier.height(15.dp))
+        Spacer(modifier = Modifier.height(30.dp))
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(0.25f)
+        ) {
+            CircleImageButton(
+                icon = R.drawable.poop,
+                border = R.drawable.interaction_bnt_purple,
+                size = 30,
+                onClick = {}
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(
+                text = "클릭해 배변처리",
+                textAlign = TextAlign.Center,
+                fontFamily = DAL_MU_RI,
+                fontWeight = FontWeight.Light,
+                fontSize = 14.sp,
+                color = PaymongWhite,
+                maxLines = 1,
+            )
+        }
+
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
@@ -39,45 +65,16 @@ fun HelpSubStarPointContent() {
                 .weight(0.25f)
         ) {
             Image(
-                painter = painterResource(R.drawable.starpoint_logo),
+                painter = painterResource(R.drawable.poops),
                 contentDescription = null,
                 modifier = Modifier
                     .height(20.dp)
                     .width(20.dp),
                 contentScale = ContentScale.FillBounds,
             )
-
-            Spacer(modifier = Modifier.width(5.dp))
-
-            Text(
-                text = "는",
-                textAlign = TextAlign.Center,
-                fontFamily = DAL_MU_RI,
-                fontWeight = FontWeight.Light,
-                fontSize = 14.sp,
-                color = PaymongWhite,
-                maxLines = 1,
-            )
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.25f)
-        ) {
-            Image(
-                painter = painterResource(R.drawable.pointlogo),
-                contentDescription = null,
-                modifier = Modifier
-                    .height(18.dp)
-                    .width(18.dp),
-                contentScale = ContentScale.FillBounds,
-            )
             Spacer(modifier = Modifier.width(5.dp))
             Text(
-                text = "페이포인트 환전,",
+                text = "배변 개수에 비례하여",
                 textAlign = TextAlign.Center,
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
@@ -95,16 +92,7 @@ fun HelpSubStarPointContent() {
                 .weight(0.25f)
         ) {
             Text(
-                text = "추가슬롯구매",
-                textAlign = TextAlign.Center,
-                fontFamily = DAL_MU_RI,
-                fontWeight = FontWeight.Light,
-                fontSize = 14.sp,
-                color = PaymongWhite,
-                maxLines = 1,
-            )
-            Text(
-                text = "를 통해",
+                text = "경험치 증가!",
                 textAlign = TextAlign.Center,
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
@@ -113,24 +101,6 @@ fun HelpSubStarPointContent() {
                 maxLines = 1,
             )
         }
-
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.25f)
-        ) {
-            Text(
-                text = "소비 가능!",
-                textAlign = TextAlign.Center,
-                fontFamily = DAL_MU_RI,
-                fontWeight = FontWeight.Light,
-                fontSize = 14.sp,
-                color = PaymongWhite,
-                maxLines = 1,
-            )
-        }
-        Spacer(modifier = Modifier.height(35.dp))
+        Spacer(modifier = Modifier.height(25.dp))
     }
 }

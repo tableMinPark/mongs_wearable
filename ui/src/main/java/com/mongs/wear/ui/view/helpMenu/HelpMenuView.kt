@@ -25,6 +25,7 @@ import com.mongs.wear.ui.global.component.common.Chip
 import com.mongs.wear.ui.global.dialog.help.HelpBattleDialog
 import com.mongs.wear.ui.global.dialog.help.HelpMongDialog
 import com.mongs.wear.ui.global.dialog.help.HelpPointDialog
+import com.mongs.wear.ui.global.dialog.help.HelpSlotDialog
 import com.mongs.wear.ui.global.theme.DAL_MU_RI
 import com.mongs.wear.ui.global.theme.PaymongWhite
 import com.mongs.wear.ui.viewModel.helpMenu.HelpMenuViewModel
@@ -39,6 +40,7 @@ fun HelpMenuView(
         HelpMenuContent(
             helpPointDialog = { helpMenuViewModel.uiState.helpPointDialog = true },
             helpMongDialog = { helpMenuViewModel.uiState.helpMongDialog = true },
+            helpSlotDialog = { helpMenuViewModel.uiState.helpSlotDialog = true },
             helpBattleDialog = { helpMenuViewModel.uiState.helpBattleDialog = true },
             modifier = Modifier.zIndex(1f)
         )
@@ -49,12 +51,17 @@ fun HelpMenuView(
             )
         } else if (helpMenuViewModel.uiState.helpMongDialog) {
             HelpMongDialog(
-                cancel = { helpMenuViewModel.uiState.helpPointDialog = false },
+                cancel = { helpMenuViewModel.uiState.helpMongDialog = false },
+                modifier = Modifier.zIndex(2f),
+            )
+        } else if (helpMenuViewModel.uiState.helpSlotDialog) {
+            HelpSlotDialog(
+                cancel = { helpMenuViewModel.uiState.helpSlotDialog = false },
                 modifier = Modifier.zIndex(2f),
             )
         } else if (helpMenuViewModel.uiState.helpBattleDialog) {
             HelpBattleDialog(
-                cancel = { helpMenuViewModel.uiState.helpPointDialog = false },
+                cancel = { helpMenuViewModel.uiState.helpBattleDialog = false },
                 modifier = Modifier.zIndex(2f),
             )
         }
@@ -65,6 +72,7 @@ fun HelpMenuView(
 private fun HelpMenuContent(
     helpPointDialog: () -> Unit,
     helpMongDialog: () -> Unit,
+    helpSlotDialog: () -> Unit,
     helpBattleDialog: () -> Unit,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
@@ -114,21 +122,31 @@ private fun HelpMenuContent(
                 Chip(
                     fontColor = Color.White,
                     backgroundColor = Color.Black,
-                    label = "캐릭터",
-                    secondaryLabel = "육성/진화방법,사망조건",
+                    label = "캐릭터관리",
+                    secondaryLabel = "쓰다듬기,먹이주기",
                     onClick = helpMongDialog,
                 )
             }
 
-            item {
-                Chip(
-                    fontColor = Color.White,
-                    backgroundColor = Color.Black,
-                    label = "배틀",
-                    secondaryLabel = "매칭,매치,승리보상",
-                    onClick = helpBattleDialog,
-                )
-            }
+//            item {
+//                Chip(
+//                    fontColor = Color.White,
+//                    backgroundColor = Color.Black,
+//                    label = "슬롯관리",
+//                    secondaryLabel = "생성,삭제,진화,추가슬롯",
+//                    onClick = helpSlotDialog,
+//                )
+//            }
+//
+//            item {
+//                Chip(
+//                    fontColor = Color.White,
+//                    backgroundColor = Color.Black,
+//                    label = "배틀",
+//                    secondaryLabel = "매칭,매치,승리보상",
+//                    onClick = helpBattleDialog,
+//                )
+//            }
         }
     }
 }

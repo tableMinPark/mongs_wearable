@@ -16,10 +16,12 @@ class HelpMenuViewModel @Inject constructor(
     class UiState (
         helpPointDialog: Boolean = false,
         helpMongDialog: Boolean = false,
+        helpSlotDialog: Boolean = false,
         helpBattleDialog: Boolean = false,
     ) {
         var helpPointDialog by mutableStateOf(helpPointDialog)
         var helpMongDialog by mutableStateOf(helpMongDialog)
+        var helpSlotDialog by mutableStateOf(helpSlotDialog)
         var helpBattleDialog by mutableStateOf(helpBattleDialog)
     }
 }

@@ -12,12 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.zIndex
 import com.mongs.wear.ui.global.component.common.PageIndicator
-import com.mongs.wear.ui.global.dialog.help.content.HelpAddPayPointContent
-import com.mongs.wear.ui.global.dialog.help.content.HelpAddStarPointContent
+import com.mongs.wear.ui.global.dialog.help.content.point.HelpAddPayPointContent
+import com.mongs.wear.ui.global.dialog.help.content.point.HelpAddStarPointContent
 import com.mongs.wear.ui.global.dialog.help.content.HelpCancelContent
-import com.mongs.wear.ui.global.dialog.help.content.HelpSubPayPointContent
-import com.mongs.wear.ui.global.dialog.help.content.HelpSubStarPointContent
-import com.mongs.wear.ui.global.dialog.help.content.HelpWarningPointContent
+import com.mongs.wear.ui.global.dialog.help.content.point.HelpSubPayPointContent
+import com.mongs.wear.ui.global.dialog.help.content.point.HelpSubStarPointContent
+import com.mongs.wear.ui.global.dialog.help.content.point.HelpWarningPointContent
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

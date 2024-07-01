@@ -1,4 +1,4 @@
-package com.mongs.wear.ui.global.dialog.help.content
+package com.mongs.wear.ui.global.dialog.help.content.point
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

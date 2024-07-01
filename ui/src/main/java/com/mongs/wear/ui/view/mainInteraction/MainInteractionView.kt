@@ -195,11 +195,9 @@ private fun MainInteractionContent(
                 )
             }
         }
-
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Preview(showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
 @Composable
 private fun MainInteractionViewPreView() {
@@ -218,7 +216,6 @@ private fun MainInteractionViewPreView() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Preview(showSystemUi = true, device = Devices.WEAR_OS_LARGE_ROUND)
 @Composable
 private fun LargeMainInteractionViewPreView() {
