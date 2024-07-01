@@ -46,8 +46,8 @@ import com.mongs.wear.ui.global.component.common.LoadingBar
 import com.mongs.wear.ui.global.component.common.Mong
 import com.mongs.wear.ui.global.component.common.PageIndicator
 import com.mongs.wear.ui.global.component.common.StarPoint
-import com.mongs.wear.ui.global.dialog.ConfirmDialog
-import com.mongs.wear.ui.global.dialog.SlotDetailDialog
+import com.mongs.wear.ui.global.dialog.common.ConfirmDialog
+import com.mongs.wear.ui.global.dialog.slotPick.SlotDetailDialog
 import com.mongs.wear.ui.global.resource.MongResourceCode
 import com.mongs.wear.ui.global.resource.NavItem
 import com.mongs.wear.ui.global.theme.DAL_MU_RI
@@ -329,11 +329,21 @@ private fun SlotPickContent(
                                 Image(
                                     painter = painterResource(R.drawable.starpoint_logo),
                                     contentDescription = null,
-                                    modifier = Modifier.size(27.dp)
+                                    modifier = Modifier.size(26.dp)
                                 )
-                                Spacer(modifier = Modifier.width(10.dp))
+                                Spacer(modifier = Modifier.width(5.dp))
                                 Text(
-                                    text = "- $buySlotPrice",
+                                    text = "-",
+                                    textAlign = TextAlign.Center,
+                                    fontFamily = DAL_MU_RI,
+                                    fontWeight = FontWeight.Light,
+                                    fontSize = 22.sp,
+                                    color = PaymongWhite,
+                                    maxLines = 1,
+                                )
+                                Spacer(modifier = Modifier.width(5.dp))
+                                Text(
+                                    text = "$buySlotPrice",
                                     textAlign = TextAlign.Center,
                                     fontFamily = DAL_MU_RI,
                                     fontWeight = FontWeight.Light,
@@ -349,7 +359,7 @@ private fun SlotPickContent(
                             modifier = Modifier.fillMaxSize()
                         ) {
                             Image(
-                                modifier = Modifier.size(81.dp),
+                                modifier = Modifier.size(79.dp),
                                 painter = painterResource(R.drawable.egg_blind),
                                 contentDescription = null
                             )
@@ -451,10 +461,10 @@ private fun SlotPickViewPreview() {
             modifier = Modifier.zIndex(1f)
         )
         SlotPickContent(
-            slotVo = SlotVo(mongCode = "CH300", shiftCode = ShiftCode.GRADUATE),
+            slotVo = SlotVo(),
             starPoint = 0,
-            buySlotPrice = 1,
-            isSlotEmpty = false,
+            buySlotPrice = 10,
+            isSlotEmpty = true,
             isSlotDisable = false,
             preSlot = {},
             nextSlot = {},

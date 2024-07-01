@@ -13,9 +13,7 @@ class SetBuildVersionUseCase @Inject constructor(
 ){
     suspend operator fun invoke(buildVersion: String) {
         try {
-            if (deviceRepository.getBuildVersion() != buildVersion) {
-                deviceRepository.setBuildVersion(buildVersion = buildVersion)
-            }
+            deviceRepository.setBuildVersion(buildVersion = buildVersion)
         } catch (e: RepositoryException) {
             feedbackRepository.addFeedbackLog(
                 groupCode = FeedbackCode.COMMON.groupCode,

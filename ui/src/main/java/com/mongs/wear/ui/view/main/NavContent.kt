@@ -18,6 +18,7 @@ import com.mongs.wear.ui.view.feedFoodPick.FeedFoodPickView
 import com.mongs.wear.ui.view.feedMenu.FeedMenuView
 import com.mongs.wear.ui.view.feedSnackPick.FeedSnackPickView
 import com.mongs.wear.ui.view.feedback.FeedbackView
+import com.mongs.wear.ui.view.helpMenu.HelpMenuView
 import com.mongs.wear.ui.view.login.LoginView
 import com.mongs.wear.ui.view.mainPager.MainPagerView
 import com.mongs.wear.ui.view.paymentChargeStarPoint.PaymentChargeStarPointView
@@ -131,6 +132,15 @@ fun NavContent() {
             }
             composable(route = NavItem.BattleMatch.route) {
                 BattleMatchView(navController = navController)
+            }
+        }
+
+        navigation(
+            startDestination = NavItem.HelpMenu.route,
+            route = NavItem.HelpNested.route
+        ) {
+            composable(route = NavItem.HelpMenu.route) {
+                HelpMenuView()
             }
         }
     }

@@ -5,6 +5,9 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -21,6 +24,7 @@ import com.mongs.wear.domain.usecase.feedback.RemoveFeedbackLogUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -38,6 +42,7 @@ class MainViewModel @Inject constructor(
     private val setBuildVersionUseCase: SetBuildVersionUseCase,
     private val setDeviceIdUseCase: SetDeviceIdUseCase,
 ) : ViewModel() {
+    val uiState = UiState()
 
     private lateinit var sensorManager: SensorManager
     private val stepSensorEventListener: SensorEventListener = object : SensorEventListener {
@@ -56,8 +61,14 @@ class MainViewModel @Inject constructor(
     val networkFlag: LiveData<Boolean> get() = _networkFlag
     private val _networkFlag = MediatorLiveData<Boolean>()
 
-    init {
+    fun init(buildVersion: String) {
         viewModelScope.launch(Dispatchers.Main) {
+            withContext(Dispatchers.IO) {
+                setBuildVersionUseCase(buildVersion = buildVersion)
+                setDeviceIdUseCase()
+                removeFeedbackLogUseCase()
+            }
+
             _networkFlag.addSource(
                 withContext(Dispatchers.IO) {
                     deviceRepository.getNetworkFlagLive()
@@ -65,38 +76,34 @@ class MainViewModel @Inject constructor(
             ) { networkFlag ->
                 _networkFlag.value = networkFlag
             }
-        }
-    }
 
-    fun init(buildVersion: String) {
-        viewModelScope.launch(Dispatchers.IO)  {
-            setBuildVersionUseCase(buildVersion = buildVersion)
-            setDeviceIdUseCase()
-            removeFeedbackLogUseCase()
+            uiState.loadingBar = false
         }
     }
 
     fun connectSensor(sensorManager: SensorManager) {
-        try {
-            this.sensorManager = sensorManager
-            this.sensorManager.registerListener(
-                stepSensorEventListener,
-                sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),      //TYPE_STEP_COUNTER  TYPE_GRAVITY
-                SensorManager.SENSOR_DELAY_FASTEST
-            )
-        } catch (_: RuntimeException) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                this@MainViewModel.sensorManager = sensorManager
+                this@MainViewModel.sensorManager.registerListener(
+                    this@MainViewModel.stepSensorEventListener,
+                    sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),      //TYPE_STEP_COUNTER  TYPE_GRAVITY
+                    SensorManager.SENSOR_DELAY_FASTEST
+                )
+            } catch (_: RuntimeException) {
+            }
         }
     }
     fun disconnectSensor() {
-        runBlocking(Dispatchers.IO) {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
-                sensorManager.unregisterListener(stepSensorEventListener)
+                this@MainViewModel.sensorManager.unregisterListener(this@MainViewModel.stepSensorEventListener)
             } catch (_: RuntimeException) {
             }
         }
     }
     fun reconnectMqttEvent() {
-        viewModelScope.launch(Dispatchers.IO) {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
                 mqttEventClient.reconnect(
                     resetMember = {
@@ -115,7 +122,7 @@ class MainViewModel @Inject constructor(
         }
     }
     fun pauseConnectMqttEvent() {
-        viewModelScope.launch(Dispatchers.IO) {
+        CoroutineScope(Dispatchers.IO).launch {
             runBlocking {
                 try {
                     mqttEventClient.pauseConnect()
@@ -125,7 +132,7 @@ class MainViewModel @Inject constructor(
         }
     }
     fun disconnectMqttEvent() {
-        viewModelScope.launch(Dispatchers.IO) {
+        CoroutineScope(Dispatchers.IO).launch {
             runBlocking {
                 try {
                     mqttEventClient.disconnect()
@@ -143,5 +150,11 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    class UiState (
+        loadingBar: Boolean = true,
+    ) {
+        var loadingBar by mutableStateOf(loadingBar)
     }
 }

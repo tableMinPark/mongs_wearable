@@ -33,4 +33,8 @@ sealed class NavItem(val route: String) {
     object BattleNested: NavItem("BattleNested")
     object BattleMenu: NavItem("BattleMenu")
     object BattleMatch: NavItem("BattleMatch")
+
+    /* Help */
+    object HelpNested: NavItem("HelpNested")
+    object HelpMenu: NavItem("HelpMenu")
 }

@@ -24,7 +24,7 @@ fun GoogleSignInButton(
 ) {
     Image(
         painter = painterResource(R.drawable.google_login),
-        contentDescription = null,
+        contentDescription = "GoogleSignInButton",
         modifier = Modifier
             .height(height.dp)
             .width(width.dp)

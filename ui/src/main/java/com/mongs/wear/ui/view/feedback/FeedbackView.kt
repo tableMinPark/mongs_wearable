@@ -26,11 +26,10 @@ import androidx.wear.compose.material.Text
 import com.mongs.wear.domain.code.FeedbackCode
 import com.mongs.wear.ui.R
 import com.mongs.wear.ui.global.component.background.FeedbackBackground
-import com.mongs.wear.ui.global.component.common.Chip
-import com.mongs.wear.ui.global.component.common.ChipWithSecondLabel
+import com.mongs.wear.ui.global.component.common.IconChip
 import com.mongs.wear.ui.global.component.common.LoadingBar
-import com.mongs.wear.ui.global.dialog.ConfirmDialog
-import com.mongs.wear.ui.global.dialog.OkDialog
+import com.mongs.wear.ui.global.dialog.common.ConfirmDialog
+import com.mongs.wear.ui.global.dialog.common.OkDialog
 import com.mongs.wear.ui.global.theme.DAL_MU_RI
 import com.mongs.wear.ui.global.theme.PaymongWhite
 import com.mongs.wear.ui.viewModel.feedback.FeedbackViewModel
@@ -111,7 +110,7 @@ private fun FeedbackContent(
                         .padding(15.dp)
                 ) {
                     Text(
-                        text = "피드백 종류 선택",
+                        text = "오류신고",
                         textAlign = TextAlign.Center,
                         fontFamily = DAL_MU_RI,
                         fontWeight = FontWeight.Light,
@@ -124,7 +123,7 @@ private fun FeedbackContent(
 
             for (feedbackCode in FeedbackCode.values()) {
                 item {
-                    ChipWithSecondLabel(
+                    IconChip(
                         icon = R.drawable.feedback,
                         border = R.drawable.interaction_bnt_darkpurple,
                         fontColor = Color.White,

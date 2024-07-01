@@ -53,7 +53,7 @@ fun Mong(
             if (isPng) {
                 Image(
                     painter = painterResource(id = mong.pngCode),
-                    contentDescription = null,
+                    contentDescription = "Mong",
                     modifier = Modifier.size((120 * ratio).dp)
                 )
             } else {
@@ -62,7 +62,7 @@ fun Mong(
                         model = mong.gifCode,
                         imageLoader = imageLoader
                     ),
-                    contentDescription = null,
+                    contentDescription = "Mong",
                     modifier = Modifier.size((120 * ratio).dp)
                 )
             }
@@ -91,7 +91,7 @@ fun Mong(
 
                 Image(
                     painter = rememberAsyncImagePainter(model = expression, imageLoader = imageLoader),
-                    contentDescription = null,
+                    contentDescription = "MongExpression",
                     modifier = Modifier
                         .align(Alignment.Center)
                         .size((35 * ratio).dp)

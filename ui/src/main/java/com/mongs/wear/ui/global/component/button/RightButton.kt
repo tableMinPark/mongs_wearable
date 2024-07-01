@@ -26,8 +26,8 @@ import com.mongs.wear.ui.R
 
 @Composable
 fun RightButton(
-    height: Int = 45,
-    width: Int = 20,
+    height: Int = 35,
+    width: Int = 18,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -46,7 +46,7 @@ fun RightButton(
 
         Image(
             painter = painterResource(buttonImage),
-            contentDescription = null,
+            contentDescription = "RightButton",
             modifier = Modifier.zIndex(1.1f),
             contentScale = ContentScale.FillBounds
         )

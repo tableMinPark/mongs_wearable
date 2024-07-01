@@ -2,7 +2,6 @@ package com.mongs.wear.ui.view.mainConfigure
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,12 +27,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.mongs.wear.ui.R
 import com.mongs.wear.ui.global.component.background.MainPagerBackground
-import com.mongs.wear.ui.global.component.button.CircleButton
+import com.mongs.wear.ui.global.component.button.CircleImageButton
+import com.mongs.wear.ui.global.component.button.CircleTextButton
 import com.mongs.wear.ui.global.component.common.LoadingBar
-import com.mongs.wear.ui.global.dialog.ConfirmDialog
+import com.mongs.wear.ui.global.dialog.common.ConfirmDialog
 import com.mongs.wear.ui.global.resource.NavItem
 import com.mongs.wear.ui.viewModel.mainConfigure.MainConfigureViewModel
-import com.mongs.wear.ui.viewModel.mainConfigure.MainConfigureViewModel.UiState
 
 @Composable
 fun MainConfigureView(
@@ -69,8 +68,8 @@ fun MainConfigureView(
                 payment = {
                     navController.navigate(NavItem.PaymentNested.route)
                 },
-                mapSearch = {
-                    Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()
+                help = {
+                    navController.navigate(NavItem.HelpNested.route)
                 },
                 feedback = {
                     navController.navigate(NavItem.Feedback.route)
@@ -111,7 +110,7 @@ private fun MainConfigureLoadingBar(
 @Composable
 private fun MainConfigureContent(
     payment: () -> Unit,
-    mapSearch: () -> Unit,
+    help: () -> Unit,
     feedback: () -> Unit,
     logout: () -> Unit,
     modifier: Modifier = Modifier.zIndex(0f),
@@ -128,7 +127,7 @@ private fun MainConfigureContent(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                CircleButton(
+                CircleImageButton(
                     icon = R.drawable.point_store,
                     border = R.drawable.interaction_bnt_darkpurple,
                     onClick = payment,
@@ -136,10 +135,10 @@ private fun MainConfigureContent(
 
                 Spacer(modifier = Modifier.width(12.dp))
 
-                CircleButton(
-                    icon = R.drawable.map_search,
+                CircleTextButton(
+                    text = "i",
                     border = R.drawable.interaction_bnt_darkpurple,
-                    onClick = mapSearch,
+                    onClick = help,
                 )
             }
 
@@ -149,7 +148,7 @@ private fun MainConfigureContent(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                CircleButton(
+                CircleImageButton(
                     icon = R.drawable.feedback,
                     border = R.drawable.interaction_bnt_darkpurple,
                     onClick = feedback,
@@ -157,7 +156,7 @@ private fun MainConfigureContent(
 
                 Spacer(modifier = Modifier.width(12.dp))
 
-                CircleButton(
+                CircleImageButton(
                     icon = R.drawable.logout,
                     border = R.drawable.interaction_bnt_darkpurple,
                     onClick = logout,
@@ -174,7 +173,7 @@ private fun MainConfigureViewPreView() {
         MainPagerBackground()
         MainConfigureContent(
             payment = {},
-            mapSearch = {},
+            help = {},
             feedback = {},
             logout = {},
             modifier = Modifier.zIndex(1f)
@@ -189,7 +188,7 @@ private fun LargeMainConfigureViewPreView() {
         MainPagerBackground()
         MainConfigureContent(
             payment = {},
-            mapSearch = {},
+            help = {},
             feedback = {},
             logout = {},
             modifier = Modifier.zIndex(1f)

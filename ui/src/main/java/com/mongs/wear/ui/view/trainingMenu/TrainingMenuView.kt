@@ -20,7 +20,7 @@ import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material.PositionIndicator
 import com.mongs.wear.ui.R
 import com.mongs.wear.ui.global.component.background.TrainingNestedBackground
-import com.mongs.wear.ui.global.component.common.Chip
+import com.mongs.wear.ui.global.component.common.IconChip
 
 @Composable
 fun TrainingMenuView(
@@ -61,7 +61,7 @@ private fun TrainingMenuContent(
             autoCentering = null,
         ) {
             item {
-                Chip(
+                IconChip(
                     icon = R.drawable.activity,
                     border = R.drawable.interaction_bnt_green,
                     fontColor = Color.White,
@@ -72,7 +72,7 @@ private fun TrainingMenuContent(
             }
 
             item {
-                Chip(
+                IconChip(
                     icon = R.drawable.activity,
                     border = R.drawable.interaction_bnt_green,
                     fontColor = Color.White,

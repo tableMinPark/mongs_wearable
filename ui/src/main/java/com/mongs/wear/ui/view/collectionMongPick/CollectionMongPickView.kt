@@ -27,10 +27,10 @@ import androidx.navigation.NavController
 import com.mongs.wear.domain.vo.MongCollectionVo
 import com.mongs.wear.ui.R
 import com.mongs.wear.ui.global.component.background.CollectionNestedBackground
-import com.mongs.wear.ui.global.component.button.CircleButton
+import com.mongs.wear.ui.global.component.button.CircleImageButton
 import com.mongs.wear.ui.global.component.button.CircleTextButton
 import com.mongs.wear.ui.global.component.common.LoadingBar
-import com.mongs.wear.ui.global.dialog.MongCollectionDetailDialog
+import com.mongs.wear.ui.global.dialog.collection.MongCollectionDetailDialog
 import com.mongs.wear.ui.global.resource.MongResourceCode
 import com.mongs.wear.ui.viewModel.collectionMongPick.CollectionMongPickViewModel
 import kotlin.math.min
@@ -131,7 +131,7 @@ private fun CollectionMongPickContent(
                                         )
                                 )
                             } else {
-                                CircleButton(
+                                CircleImageButton(
                                     icon = MongResourceCode.valueOf(mongCollectionVo.code).pngCode,
                                     border = R.drawable.interaction_bnt_darkpurple,
                                     onClick = { mongCollectionPick(index - 1) },

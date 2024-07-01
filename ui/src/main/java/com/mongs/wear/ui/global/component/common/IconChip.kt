@@ -3,9 +3,7 @@ package com.mongs.wear.ui.global.component.common
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
@@ -22,18 +20,18 @@ import androidx.wear.compose.material.ChipDefaults
 import androidx.wear.compose.material.Text
 import com.mongs.wear.ui.R
 import androidx.wear.compose.material.Chip
-import com.mongs.wear.ui.global.component.button.CircleButton
+import com.mongs.wear.ui.global.component.button.CircleImageButton
 import com.mongs.wear.ui.global.theme.DAL_MU_RI
 import com.mongs.wear.ui.global.theme.PaymongWhite
 
 @Composable
-fun ChipWithSecondLabel(
+fun IconChip(
     icon: Int,
     border: Int,
     fontColor: Color,
     backgroundColor: Color,
     label: String,
-    secondaryLabel: String,
+    secondaryLabel: String = "",
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
@@ -41,7 +39,7 @@ fun ChipWithSecondLabel(
         modifier = modifier.fillMaxWidth(),
         onClick = onClick,
         icon = {
-            CircleButton(
+            CircleImageButton(
                 icon = icon,
                 border = border,
                 size = 37,
@@ -71,21 +69,23 @@ fun ChipWithSecondLabel(
             }
         },
         secondaryLabel = {
-            Row(
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth().padding(top = 5.dp)
-            ) {
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = secondaryLabel,
-                    textAlign = TextAlign.Center,
-                    fontFamily = DAL_MU_RI,
-                    fontWeight = FontWeight.Light,
-                    fontSize = 10.sp,
-                    color = fontColor,
-                    maxLines = 1,
-                )
+            if (secondaryLabel.isNotBlank()) {
+                Row(
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth().padding(top = 5.dp)
+                ) {
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(
+                        text = secondaryLabel,
+                        textAlign = TextAlign.Center,
+                        fontFamily = DAL_MU_RI,
+                        fontWeight = FontWeight.Light,
+                        fontSize = 10.sp,
+                        color = fontColor,
+                        maxLines = 1,
+                    )
+                }
             }
         }
     )
@@ -93,13 +93,13 @@ fun ChipWithSecondLabel(
 
 @Preview(device = Devices.WEAR_OS_SMALL_ROUND)
 @Composable
-private fun ChipWithSecondLabelPreview() {
-    ChipWithSecondLabel(
+private fun StarPointPreview() {
+    IconChip(
         icon = R.drawable.feed,
         border = R.drawable.interaction_bnt_yellow,
         fontColor = PaymongWhite,
         label = "테스트",
-        secondaryLabel = "테스트",
+        secondaryLabel = "",
         backgroundColor = Color.Black,
     )
 }

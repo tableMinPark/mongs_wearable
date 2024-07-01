@@ -48,7 +48,7 @@ import com.mongs.wear.ui.global.component.button.BlueButton
 import com.mongs.wear.ui.global.component.common.HpBar
 import com.mongs.wear.ui.global.component.common.LoadingBar
 import com.mongs.wear.ui.global.component.common.Mong
-import com.mongs.wear.ui.global.dialog.MatchPickDialog
+import com.mongs.wear.ui.global.dialog.battle.MatchPickDialog
 import com.mongs.wear.ui.global.resource.MongResourceCode
 import com.mongs.wear.ui.global.resource.NavItem
 import com.mongs.wear.ui.global.theme.DAL_MU_RI

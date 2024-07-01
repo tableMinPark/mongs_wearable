@@ -36,7 +36,7 @@ import com.mongs.wear.ui.global.component.background.MainPagerBackground
 import com.mongs.wear.ui.global.component.button.BlueButton
 import com.mongs.wear.ui.global.component.common.LoadingBar
 import com.mongs.wear.ui.global.component.common.PayPoint
-import com.mongs.wear.ui.global.dialog.ConfirmDialog
+import com.mongs.wear.ui.global.dialog.common.ConfirmDialog
 import com.mongs.wear.ui.global.theme.DAL_MU_RI
 import com.mongs.wear.ui.global.theme.PaymongWhite
 import com.mongs.wear.ui.viewModel.mainWalking.MainWalkingViewModel

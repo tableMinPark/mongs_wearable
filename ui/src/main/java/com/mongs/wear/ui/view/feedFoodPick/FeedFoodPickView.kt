@@ -41,8 +41,8 @@ import com.mongs.wear.ui.global.component.button.RightButton
 import com.mongs.wear.ui.global.component.common.LoadingBar
 import com.mongs.wear.ui.global.component.common.PageIndicator
 import com.mongs.wear.ui.global.component.common.PayPoint
-import com.mongs.wear.ui.global.dialog.ConfirmDialog
-import com.mongs.wear.ui.global.dialog.FeedItemDetailDialog
+import com.mongs.wear.ui.global.dialog.common.ConfirmDialog
+import com.mongs.wear.ui.global.dialog.feed.FeedItemDetailDialog
 import com.mongs.wear.ui.global.resource.FeedResourceCode
 import com.mongs.wear.ui.global.resource.NavItem
 import com.mongs.wear.ui.global.theme.DAL_MU_RI
@@ -75,15 +75,6 @@ fun FeedFoodPickView(
         if (feedFoodPickViewModel.uiState.loadingBar) {
             FeedNestedBackground()
             FeedFoodPickLoadingBar()
-        } else if (feedFoodPickViewModel.uiState.detailDialog) {
-            FeedItemDetailDialog(
-                onClick = { feedFoodPickViewModel.uiState.detailDialog = false },
-                addWeight = foodVoList.value[foodVoIndex.intValue].addWeight,
-                addStrength = foodVoList.value[foodVoIndex.intValue].addStrength,
-                addSatiety = foodVoList.value[foodVoIndex.intValue].addSatiety,
-                addHealthy = foodVoList.value[foodVoIndex.intValue].addHealthy,
-                addSleep = foodVoList.value[foodVoIndex.intValue].addSleep
-            )
         } else if (feedFoodPickViewModel.uiState.buyDialog) {
             ConfirmDialog(
                 text = "구매하시겠습니까?",
@@ -111,6 +102,18 @@ fun FeedFoodPickView(
                 },
                 modifier = Modifier.zIndex(2f),
             )
+
+            if (feedFoodPickViewModel.uiState.detailDialog) {
+                FeedItemDetailDialog(
+                    onClick = { feedFoodPickViewModel.uiState.detailDialog = false },
+                    addWeight = foodVoList.value[foodVoIndex.intValue].addWeight,
+                    addStrength = foodVoList.value[foodVoIndex.intValue].addStrength,
+                    addSatiety = foodVoList.value[foodVoIndex.intValue].addSatiety,
+                    addHealthy = foodVoList.value[foodVoIndex.intValue].addHealthy,
+                    addSleep = foodVoList.value[foodVoIndex.intValue].addSleep,
+                    modifier = Modifier.zIndex(3f)
+                )
+            }
         }
 
         LaunchedEffect(feedFoodPickViewModel.uiState.navMainPager) {

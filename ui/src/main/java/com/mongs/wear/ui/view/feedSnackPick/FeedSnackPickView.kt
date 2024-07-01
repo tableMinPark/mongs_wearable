@@ -41,8 +41,8 @@ import com.mongs.wear.ui.global.component.button.RightButton
 import com.mongs.wear.ui.global.component.common.LoadingBar
 import com.mongs.wear.ui.global.component.common.PageIndicator
 import com.mongs.wear.ui.global.component.common.PayPoint
-import com.mongs.wear.ui.global.dialog.ConfirmDialog
-import com.mongs.wear.ui.global.dialog.FeedItemDetailDialog
+import com.mongs.wear.ui.global.dialog.common.ConfirmDialog
+import com.mongs.wear.ui.global.dialog.feed.FeedItemDetailDialog
 import com.mongs.wear.ui.global.resource.FeedResourceCode
 import com.mongs.wear.ui.global.resource.NavItem
 import com.mongs.wear.ui.global.theme.DAL_MU_RI
@@ -75,15 +75,6 @@ fun FeedSnackPickView(
         if (feedSnackPickViewModel.uiState.loadingBar) {
             FeedNestedBackground()
             FeedSnackPickLoadingBar()
-        } else if (feedSnackPickViewModel.uiState.detailDialog) {
-            FeedItemDetailDialog(
-                onClick = { feedSnackPickViewModel.uiState.detailDialog = false },
-                addWeight = snackVoList.value[snackVoIndex.intValue].addWeight,
-                addStrength = snackVoList.value[snackVoIndex.intValue].addStrength,
-                addSatiety = snackVoList.value[snackVoIndex.intValue].addSatiety,
-                addHealthy = snackVoList.value[snackVoIndex.intValue].addHealthy,
-                addSleep = snackVoList.value[snackVoIndex.intValue].addSleep
-            )
         } else if(feedSnackPickViewModel.uiState.buyDialog) {
             ConfirmDialog(
                 text = "구매하시겠습니까?",
@@ -110,6 +101,18 @@ fun FeedSnackPickView(
                 nextSnack = { snackVoIndex.intValue = min(snackVoIndex.intValue + 1, snackVoList.value.size - 1) },
                 modifier = Modifier.zIndex(2f),
             )
+
+            if (feedSnackPickViewModel.uiState.detailDialog) {
+                FeedItemDetailDialog(
+                    onClick = { feedSnackPickViewModel.uiState.detailDialog = false },
+                    addWeight = snackVoList.value[snackVoIndex.intValue].addWeight,
+                    addStrength = snackVoList.value[snackVoIndex.intValue].addStrength,
+                    addSatiety = snackVoList.value[snackVoIndex.intValue].addSatiety,
+                    addHealthy = snackVoList.value[snackVoIndex.intValue].addHealthy,
+                    addSleep = snackVoList.value[snackVoIndex.intValue].addSleep,
+                    modifier = Modifier.zIndex(3f)
+                )
+            }
         }
     }
 

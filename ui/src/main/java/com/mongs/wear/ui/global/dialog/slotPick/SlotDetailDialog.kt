@@ -1,4 +1,4 @@
-package com.mongs.wear.ui.global.dialog
+package com.mongs.wear.ui.global.dialog.slotPick
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -46,9 +46,9 @@ import java.time.temporal.ChronoUnit
 import kotlin.math.round
 
 const val ROUND_SIZE = 10
-const val SLOT_DETAIL_WIDTH = 140
+const val SLOT_DETAIL_WIDTH = 144
 const val SLOT_DETAIL_HEIGHT = 130
-const val SLOT_DETAIL_BAR_HEIGHT = 30
+const val SLOT_DETAIL_BAR_HEIGHT = 32
 
 @Composable
 fun SlotDetailDialog(
@@ -91,7 +91,7 @@ fun SlotDetailDialog(
                 modifier = Modifier
                     .size(width = SLOT_DETAIL_WIDTH.dp, height = SLOT_DETAIL_BAR_HEIGHT.dp)
                     .zIndex(2f)
-                    .align(Alignment.TopStart)
+                    .align(Alignment.TopCenter)
             ) {
                 Row (
                     modifier = Modifier.padding(top = 4.dp)
@@ -308,7 +308,7 @@ private fun SlotDetailCondition(
             modifier = Modifier.size(36.dp),
             trackColor = Color.LightGray,
             progress = progress / 100,
-            strokeWidth = 2.dp,
+            strokeWidth = (3.5).dp,
             indicatorColor = indicatorColor,
         )
     }
@@ -324,7 +324,7 @@ private fun SlotDetailTab(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .clip(RoundedCornerShape(topStart = ROUND_SIZE.dp, topEnd = ROUND_SIZE.dp))
-            .size(width = 42.dp, height = 30.dp)
+            .size(width = 48.dp, height = SLOT_DETAIL_BAR_HEIGHT.dp)
             .background(color = color)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
@@ -337,7 +337,7 @@ private fun SlotDetailTab(
             textAlign = TextAlign.Center,
             fontFamily = DAL_MU_RI,
             fontWeight = FontWeight.Light,
-            fontSize = 11.sp,
+            fontSize = 12.sp,
             color = Color.Black,
         )
     }

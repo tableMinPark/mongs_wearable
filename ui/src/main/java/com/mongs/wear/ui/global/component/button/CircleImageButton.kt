@@ -20,7 +20,7 @@ import androidx.wear.compose.material.MaterialTheme
 import com.mongs.wear.ui.R
 
 @Composable
-fun CircleButton(
+fun CircleImageButton(
     icon: Int,
     border: Int,
     size: Int = 54,
@@ -65,7 +65,7 @@ fun CircleButton(
 @Preview(device = Devices.WEAR_OS_SMALL_ROUND)
 @Composable
 private fun LongBlueButtonPreview() {
-    CircleButton(
+    CircleImageButton(
         icon = R.drawable.feed,
         border = R.drawable.interaction_bnt_yellow,
         onClick = {},

@@ -1,4 +1,4 @@
-package com.mongs.wear.ui.global.dialog
+package com.mongs.wear.ui.global.dialog.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

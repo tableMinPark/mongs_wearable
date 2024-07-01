@@ -26,7 +26,7 @@ import com.mongs.wear.domain.code.ShiftCode
 import com.mongs.wear.domain.vo.SlotVo
 import com.mongs.wear.ui.R
 import com.mongs.wear.ui.global.component.background.MainPagerBackground
-import com.mongs.wear.ui.global.component.button.CircleButton
+import com.mongs.wear.ui.global.component.button.CircleImageButton
 import com.mongs.wear.ui.global.resource.MongResourceCode
 import com.mongs.wear.ui.global.resource.NavItem
 import com.mongs.wear.ui.viewModel.mainInteraction.MainInteractionViewModel
@@ -134,7 +134,7 @@ private fun MainInteractionContent(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                CircleButton(
+                CircleImageButton(
                     icon = R.drawable.feed,
                     border = R.drawable.interaction_bnt_yellow,
                     onClick = feed,
@@ -142,7 +142,7 @@ private fun MainInteractionContent(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                CircleButton(
+                CircleImageButton(
                     icon = R.drawable.collection,
                     border = R.drawable.interaction_bnt_orange,
                     onClick = collection,
@@ -153,7 +153,7 @@ private fun MainInteractionContent(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                CircleButton(
+                CircleImageButton(
                     icon = R.drawable.sleep,
                     border = R.drawable.interaction_bnt_blue,
                     onClick = sleeping,
@@ -161,7 +161,7 @@ private fun MainInteractionContent(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                CircleButton(
+                CircleImageButton(
                     icon = R.drawable.slot,
                     border = R.drawable.interaction_bnt_red,
                     onClick = slotPick,
@@ -169,7 +169,7 @@ private fun MainInteractionContent(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                CircleButton(
+                CircleImageButton(
                     icon = R.drawable.poop,
                     border = R.drawable.interaction_bnt_purple,
                     onClick = poopClean,
@@ -180,7 +180,7 @@ private fun MainInteractionContent(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                CircleButton(
+                CircleImageButton(
                     icon = R.drawable.activity,
                     border = R.drawable.interaction_bnt_green,
                     onClick = training,
@@ -188,7 +188,7 @@ private fun MainInteractionContent(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                CircleButton(
+                CircleImageButton(
                     icon = R.drawable.battle,
                     border = R.drawable.interaction_bnt_pink,
                     onClick = battle,

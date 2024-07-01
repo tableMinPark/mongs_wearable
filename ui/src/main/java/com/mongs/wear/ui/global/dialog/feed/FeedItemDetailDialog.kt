@@ -1,4 +1,4 @@
-package com.mongs.wear.ui.global.dialog
+package com.mongs.wear.ui.global.dialog.feed
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -43,7 +43,7 @@ fun FeedItemDetailDialog(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .background(color = Color.Black.copy(alpha = 0.9f))
+            .background(color = Color.Black.copy(alpha = 0.85f))
             .fillMaxSize()
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
@@ -55,13 +55,39 @@ fun FeedItemDetailDialog(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            Spacer(modifier = Modifier.height(25.dp))
-            ImageDetail(image = R.drawable.health, value = addHealthy, modifier = Modifier.weight(0.2f))
-            ImageDetail(image = R.drawable.satiety, value = addSatiety, modifier = Modifier.weight(0.2f))
-            ImageDetail(image = R.drawable.strength, value = addStrength, modifier = Modifier.weight(0.2f))
-            ImageDetail(image = R.drawable.sleep, value = addSleep, modifier = Modifier.weight(0.2f))
-            TextDetail(text = "Kg", value = addWeight, modifier = Modifier.weight(0.2f))
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(35.dp))
+            if (addHealthy > 0) {
+                ImageDetail(
+                    image = R.drawable.health,
+                    value = addHealthy,
+                    modifier = Modifier.weight(0.2f)
+                )
+            }
+            if (addSatiety > 0) {
+                ImageDetail(
+                    image = R.drawable.satiety,
+                    value = addSatiety,
+                    modifier = Modifier.weight(0.2f)
+                )
+            }
+            if (addStrength > 0) {
+                ImageDetail(
+                    image = R.drawable.strength,
+                    value = addStrength,
+                    modifier = Modifier.weight(0.2f)
+                )
+            }
+            if (addSleep > 0) {
+                ImageDetail(
+                    image = R.drawable.sleep,
+                    value = addSleep,
+                    modifier = Modifier.weight(0.2f)
+                )
+            }
+            if (addWeight > 0) {
+                TextDetail(text = "Kg", value = addWeight, modifier = Modifier.weight(0.2f))
+            }
+            Spacer(modifier = Modifier.height(35.dp))
         }
     }
 }
@@ -150,11 +176,23 @@ private fun TextDetail(
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
 @Composable
 private fun SmallFeedItemDetailPreview() {
-    FeedItemDetailDialog()
+    FeedItemDetailDialog(
+        addHealthy = 10.0,
+        addSatiety = 10.0,
+        addStrength = 10.0,
+        addSleep = 10.0,
+        addWeight = 10.0
+    )
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, showSystemUi = true, device = Devices.WEAR_OS_LARGE_ROUND)
 @Composable
 private fun LargeFeedItemDetailPreview() {
-    FeedItemDetailDialog()
+    FeedItemDetailDialog(
+        addHealthy = 10.0,
+        addSatiety = 10.0,
+        addStrength = 10.0,
+        addSleep = 10.0,
+        addWeight = 10.0
+    )
 }
