@@ -19,10 +19,10 @@ import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Text
-import com.mongs.wear.ui.R
 import com.mongs.wear.ui.global.component.background.HelpNestedBackground
 import com.mongs.wear.ui.global.component.common.Chip
 import com.mongs.wear.ui.global.dialog.help.HelpBattleDialog
+import com.mongs.wear.ui.global.dialog.help.HelpInfoDialog
 import com.mongs.wear.ui.global.dialog.help.HelpMongDialog
 import com.mongs.wear.ui.global.dialog.help.HelpPointDialog
 import com.mongs.wear.ui.global.dialog.help.HelpSlotDialog
@@ -38,13 +38,19 @@ fun HelpMenuView(
     Box {
         HelpNestedBackground()
         HelpMenuContent(
+            helpInfoDialog = { helpMenuViewModel.uiState.helpInfoDialog = true },
             helpPointDialog = { helpMenuViewModel.uiState.helpPointDialog = true },
             helpMongDialog = { helpMenuViewModel.uiState.helpMongDialog = true },
             helpSlotDialog = { helpMenuViewModel.uiState.helpSlotDialog = true },
             helpBattleDialog = { helpMenuViewModel.uiState.helpBattleDialog = true },
             modifier = Modifier.zIndex(1f)
         )
-        if (helpMenuViewModel.uiState.helpPointDialog) {
+        if (helpMenuViewModel.uiState.helpInfoDialog) {
+            HelpInfoDialog(
+                cancel = { helpMenuViewModel.uiState.helpInfoDialog = false },
+                modifier = Modifier.zIndex(2f),
+            )
+        } else if (helpMenuViewModel.uiState.helpPointDialog) {
             HelpPointDialog(
                 cancel = { helpMenuViewModel.uiState.helpPointDialog = false },
                 modifier = Modifier.zIndex(2f),
@@ -70,6 +76,7 @@ fun HelpMenuView(
 
 @Composable
 private fun HelpMenuContent(
+    helpInfoDialog: () -> Unit,
     helpPointDialog: () -> Unit,
     helpMongDialog: () -> Unit,
     helpSlotDialog: () -> Unit,
@@ -112,6 +119,16 @@ private fun HelpMenuContent(
                 Chip(
                     fontColor = Color.White,
                     backgroundColor = Color.Black,
+                    label = "게임소개",
+                    secondaryLabel = "진화조건,졸업시기,걸음보상",
+                    onClick = helpInfoDialog,
+                )
+            }
+
+            item {
+                Chip(
+                    fontColor = Color.White,
+                    backgroundColor = Color.Black,
                     label = "포인트",
                     secondaryLabel = "페이/스타 포인트 획득 방법",
                     onClick = helpPointDialog,
@@ -128,25 +145,25 @@ private fun HelpMenuContent(
                 )
             }
 
-//            item {
-//                Chip(
-//                    fontColor = Color.White,
-//                    backgroundColor = Color.Black,
-//                    label = "슬롯관리",
-//                    secondaryLabel = "생성,삭제,진화,추가슬롯",
-//                    onClick = helpSlotDialog,
-//                )
-//            }
-//
-//            item {
-//                Chip(
-//                    fontColor = Color.White,
-//                    backgroundColor = Color.Black,
-//                    label = "배틀",
-//                    secondaryLabel = "매칭,매치,승리보상",
-//                    onClick = helpBattleDialog,
-//                )
-//            }
+            item {
+                Chip(
+                    fontColor = Color.White,
+                    backgroundColor = Color.Black,
+                    label = "슬롯관리",
+                    secondaryLabel = "생성,삭제,졸업,슬롯추가",
+                    onClick = helpSlotDialog,
+                )
+            }
+
+            item {
+                Chip(
+                    fontColor = Color.White,
+                    backgroundColor = Color.Black,
+                    label = "배틀",
+                    secondaryLabel = "매칭,매치,승리보상",
+                    onClick = helpBattleDialog,
+                )
+            }
         }
     }
 }

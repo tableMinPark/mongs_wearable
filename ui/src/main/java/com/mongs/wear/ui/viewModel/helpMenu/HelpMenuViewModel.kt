@@ -14,11 +14,13 @@ class HelpMenuViewModel @Inject constructor(
     val uiState = UiState()
 
     class UiState (
+        helpInfoDialog: Boolean = false,
         helpPointDialog: Boolean = false,
         helpMongDialog: Boolean = false,
         helpSlotDialog: Boolean = false,
         helpBattleDialog: Boolean = false,
     ) {
+        var helpInfoDialog by mutableStateOf(helpInfoDialog)
         var helpPointDialog by mutableStateOf(helpPointDialog)
         var helpMongDialog by mutableStateOf(helpMongDialog)
         var helpSlotDialog by mutableStateOf(helpSlotDialog)

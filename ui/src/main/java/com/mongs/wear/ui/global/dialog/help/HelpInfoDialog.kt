@@ -15,20 +15,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.zIndex
 import com.mongs.wear.ui.global.component.common.PageIndicator
-import com.mongs.wear.ui.global.dialog.help.content.point.HelpAddPayPointContent
-import com.mongs.wear.ui.global.dialog.help.content.point.HelpAddStarPointContent
 import com.mongs.wear.ui.global.dialog.help.content.HelpCancelContent
-import com.mongs.wear.ui.global.dialog.help.content.point.HelpSubPayPointContent
+import com.mongs.wear.ui.global.dialog.help.content.info.HelpEvolutionInfoContent
+import com.mongs.wear.ui.global.dialog.help.content.info.HelpCharacterInfoContent
+import com.mongs.wear.ui.global.dialog.help.content.info.HelpCollectionInfoContent
+import com.mongs.wear.ui.global.dialog.help.content.info.HelpWalkingRewardInfoContent
 import com.mongs.wear.ui.global.dialog.help.content.point.HelpSubStarPointContent
 import com.mongs.wear.ui.global.dialog.help.content.point.HelpWarningPointContent
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HelpPointDialog(
+fun HelpInfoDialog(
     cancel: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val pagerState = rememberPagerState(initialPage = 0) { 6 }
+    val pagerState = rememberPagerState(initialPage = 0) { 5 }
 
     Box(
         contentAlignment = Alignment.Center,
@@ -50,26 +51,22 @@ fun HelpPointDialog(
             HorizontalPager(state = pagerState) { page ->
                 when (page) {
                     0 -> {
-                        HelpAddPayPointContent()
+                        HelpCharacterInfoContent()
                     }
 
                     1 -> {
-                        HelpSubPayPointContent()
+                        HelpCollectionInfoContent()
                     }
 
                     2 -> {
-                        HelpAddStarPointContent()
+                        HelpEvolutionInfoContent()
                     }
 
                     3 -> {
-                        HelpSubStarPointContent()
+                        HelpWalkingRewardInfoContent()
                     }
 
                     4 -> {
-                        HelpWarningPointContent()
-                    }
-
-                    5 -> {
                         HelpCancelContent(cancel = cancel)
                     }
                 }

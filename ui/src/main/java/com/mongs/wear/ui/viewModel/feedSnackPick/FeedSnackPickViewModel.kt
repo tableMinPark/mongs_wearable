@@ -59,11 +59,12 @@ class FeedSnackPickViewModel @Inject constructor(
     fun buySnack(snackCode: String) {
         viewModelScope.launch (Dispatchers.IO) {
             try {
-                uiState.buyDialog = false
                 feedUseCase(code = snackCode)
-            } catch (_: UseCaseException) {
-            } finally {
                 uiState.navMainPager = true
+                uiState.buyDialog = false
+            } catch (_: UseCaseException) {
+                uiState.navMainPager = true
+                uiState.buyDialog = false
             }
         }
     }

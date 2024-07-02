@@ -1,4 +1,4 @@
-package com.mongs.wear.ui.global.dialog.help.content.slot
+package com.mongs.wear.ui.global.dialog.help.content.battle
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -25,26 +25,12 @@ import com.mongs.wear.ui.global.theme.DAL_MU_RI
 import com.mongs.wear.ui.global.theme.PaymongWhite
 
 @Composable
-fun HelpDeleteSlotContent() {
-
+fun HelpMatchRewardContent() {
     Column (
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxHeight()
     ) {
-        Spacer(modifier = Modifier.height(15.dp))
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(0.25f)
-        ) {
-            BlueButton(
-                text = "삭제",
-                onClick = {}
-            )
-        }
-
+        Spacer(modifier = Modifier.height(25.dp))
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
@@ -53,7 +39,7 @@ fun HelpDeleteSlotContent() {
                 .weight(0.25f)
         ) {
             Text(
-                text = "클릭해 몽 삭제",
+                text = "승리한 플레이어는",
                 textAlign = TextAlign.Center,
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
@@ -68,7 +54,7 @@ fun HelpDeleteSlotContent() {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(0.25f)
+                .weight(0.2f)
         ) {
             Image(
                 painter = painterResource(R.drawable.pointlogo),
@@ -80,7 +66,7 @@ fun HelpDeleteSlotContent() {
             )
             Spacer(modifier = Modifier.width(7.dp))
             Text(
-                text = "도 함께 소멸되니",
+                text = "100개 보상!",
                 textAlign = TextAlign.Center,
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
@@ -95,10 +81,28 @@ fun HelpDeleteSlotContent() {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(0.25f)
+                .weight(0.2f)
         ) {
             Text(
-                text = "주의하세요!",
+                text = "패배한 플레이어는",
+                textAlign = TextAlign.Center,
+                fontFamily = DAL_MU_RI,
+                fontWeight = FontWeight.Light,
+                fontSize = 14.sp,
+                color = PaymongWhite,
+                maxLines = 1,
+            )
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(0.2f)
+        ) {
+            Text(
+                text = "보상이 없음!",
                 textAlign = TextAlign.Center,
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
