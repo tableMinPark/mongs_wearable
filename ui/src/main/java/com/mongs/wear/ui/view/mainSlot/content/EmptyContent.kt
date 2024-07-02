@@ -1,13 +1,15 @@
 package com.mongs.wear.ui.view.mainSlot.content
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,30 +39,15 @@ fun EmptyContent(
         modifier = modifier.fillMaxSize()
     ) {
         Column(
+            verticalArrangement = Arrangement.Bottom,
             modifier = Modifier.fillMaxHeight()
         ) {
+
             Row(
+                horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.3f)
-            ) {
-                Box(
-                    contentAlignment = Alignment.BottomCenter,
-                    modifier = Modifier
-                        .zIndex(2f)
-                        .fillMaxSize()
-                ) {
-                    BlueButton(
-                        text = "슬롯 선택",
-                        width = 90,
-                        onClick = onClick
-                    )
-                }
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.7f)
+                    .weight(0.85f)
             ) {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -84,6 +71,22 @@ fun EmptyContent(
                     )
                 }
             }
+
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.15f)
+            ) {
+                BlueButton(
+                    text = "슬롯 선택",
+                    width = 90,
+                    onClick = onClick
+                )
+            }
+
+            Spacer(modifier = Modifier.height(30.dp))
+
         }
     }
 }
