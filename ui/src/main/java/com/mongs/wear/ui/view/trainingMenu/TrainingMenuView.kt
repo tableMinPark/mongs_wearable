@@ -21,6 +21,7 @@ import androidx.wear.compose.material.PositionIndicator
 import com.mongs.wear.ui.R
 import com.mongs.wear.ui.global.component.background.TrainingNestedBackground
 import com.mongs.wear.ui.global.component.common.IconChip
+import com.mongs.wear.ui.global.resource.NavItem
 
 @Composable
 fun TrainingMenuView(
@@ -31,7 +32,7 @@ fun TrainingMenuView(
         TrainingNestedBackground()
         TrainingMenuContent(
             jumping = {
-                 Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()
+                navController.navigate(route = NavItem.TrainingJumping.route)
             },
             basketball = {
                 Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()
