@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.usecase.auth.LoginUseCase
+import com.mongs.wear.domain.usecase.member.ResetWalkingCountUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
+    private val resetWalkingCountUseCase: ResetWalkingCountUseCase,
     private val loginUseCase: LoginUseCase,
 ): ViewModel() {
     val uiState: UiState = UiState()
@@ -25,9 +27,22 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    fun reLoginSuccess(email: String?, name: String?) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                loginUseCase(email, name)
+                uiState.navMainPagerView = true
+            } catch (_: UseCaseException) {
+                uiState.loadingBar = false
+                uiState.signInButton = true
+            }
+        }
+    }
+
     fun loginSuccess(email: String?, name: String?) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                resetWalkingCountUseCase()
                 loginUseCase(email, name)
                 uiState.navMainPagerView = true
             } catch (_: UseCaseException) {

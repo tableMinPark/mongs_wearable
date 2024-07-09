@@ -23,6 +23,7 @@ data class SlotVo(
 
     val isHappy: Boolean = false,
     val isEating: Boolean = false,
+    val isPoopCleaning: Boolean = false,
     val isSelected: Boolean = false,
 
     val isGraduateCheck: Boolean = false,

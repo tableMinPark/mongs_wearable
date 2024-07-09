@@ -25,6 +25,8 @@ class MemberDataStore @Inject constructor(
         private val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
         private val STAR_POINT = intPreferencesKey("STAR_POINT")
         private val MAX_SLOT = intPreferencesKey("MAX_SLOT")
+        private val START_STEP_COUNT = intPreferencesKey("START_STEP_COUNT")
+        private val END_STEP_COUNT = intPreferencesKey("END_STEP_COUNT")
         private val WALKING_COUNT = intPreferencesKey("WALKING_COUNT")
     }
 
@@ -42,6 +44,12 @@ class MemberDataStore @Inject constructor(
                 }
                 if (!preferences.contains(MAX_SLOT)) {
                     preferences[MAX_SLOT] = 1
+                }
+                if (!preferences.contains(START_STEP_COUNT)) {
+                    preferences[START_STEP_COUNT] = Int.MIN_VALUE
+                }
+                if (!preferences.contains(END_STEP_COUNT)) {
+                    preferences[END_STEP_COUNT] = Int.MIN_VALUE
                 }
                 if (!preferences.contains(WALKING_COUNT)) {
                     preferences[WALKING_COUNT] = 0
@@ -96,9 +104,37 @@ class MemberDataStore @Inject constructor(
             }.asLiveData()
         }
     }
-    suspend fun setWalkingCount(walkingCount: Int) {
+    fun getStartStepCount(): Int {
+        return runBlocking {
+            context.member.data.map {preferences ->
+                preferences[START_STEP_COUNT]!!
+            }.first()
+        }
+    }
+    suspend fun setStartStepCount(startStepCount: Int) {
         context.member.edit { preferences ->
-            preferences[WALKING_COUNT] = walkingCount
+            val endStepCount = preferences[END_STEP_COUNT]!!
+            preferences[WALKING_COUNT] = endStepCount - startStepCount
+            preferences[START_STEP_COUNT] = startStepCount
+        }
+    }
+    fun getEndStepCount(): Int {
+        return runBlocking {
+            context.member.data.map {preferences ->
+                preferences[END_STEP_COUNT]!!
+            }.first()
+        }
+    }
+    suspend fun setEndStepCount(endStepCount: Int) {
+        context.member.edit { preferences ->
+            var startStepCount = preferences[START_STEP_COUNT]!!
+            if (startStepCount == Int.MIN_VALUE) {
+                preferences[START_STEP_COUNT] = endStepCount
+                startStepCount = endStepCount
+            }
+
+            preferences[WALKING_COUNT] = endStepCount - startStepCount
+            preferences[END_STEP_COUNT] = endStepCount
         }
     }
     suspend fun getWalkingCount(): Int {

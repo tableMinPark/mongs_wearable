@@ -46,7 +46,7 @@ fun MainConfigureView(
             MainConfigureLoadingBar(modifier = Modifier.zIndex(1f))
         } else if (mainConfigureViewModel.uiState.logoutDialog) {
             ConfirmDialog(
-                text = "로그아웃\n하시겠습니까?",
+                text = "걸음수가 초기화 됩니다.\n로그아웃하시겠습니까?",
                 confirm = {
                     mainConfigureViewModel.uiState.loadingBar = true
                     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

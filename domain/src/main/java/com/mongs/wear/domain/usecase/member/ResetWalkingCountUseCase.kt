@@ -5,20 +5,20 @@ import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.repositroy.FeedbackRepository
 import com.mongs.wear.domain.repositroy.MemberRepository
-import com.mongs.wear.domain.repositroy.SlotRepository
 import javax.inject.Inject
 
-class ExchangePayPointWalkingUseCase @Inject constructor(
+class ResetWalkingCountUseCase @Inject constructor(
     private val memberRepository: MemberRepository,
     private val feedbackRepository: FeedbackRepository,
 ) {
-    suspend operator fun invoke(mongId: Long, walkingCount: Int) {
+    suspend operator fun invoke() {
         try {
-            return memberRepository.exchangePayPointWalking(mongId = mongId, walkingCount = walkingCount)
+            val endStepCount = memberRepository.getEndStepCount()
+            memberRepository.setStartStepCount(stepCount = endStepCount)
         } catch (e: RepositoryException) {
             feedbackRepository.addFeedbackLog(
                 groupCode = FeedbackCode.MEMBER.groupCode,
-                location = "ExchangePayPointWalkingUseCase",
+                location = "ResetWalkingCountUseCase",
                 message = e.stackTrace.contentDeepToString(),
             )
 

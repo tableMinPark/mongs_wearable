@@ -1,7 +1,6 @@
 package com.mongs.wear.data.dataStore
 
 import android.content.Context
-import android.util.Log
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -33,8 +32,9 @@ class DeviceDataStore @Inject constructor(
     init {
         CoroutineScope(Dispatchers.IO).launch {
             context.device.edit { preferences ->
-                preferences[NETWORK_FLAG] = true
-
+                if (!preferences.contains(NETWORK_FLAG)) {
+                    preferences[NETWORK_FLAG] = true
+                }
                 if (!preferences.contains(BUILD_VERSION)) {
                     preferences[BUILD_VERSION] = "1.0.0"
                 }

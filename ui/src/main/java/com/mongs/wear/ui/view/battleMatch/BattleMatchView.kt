@@ -1,5 +1,8 @@
 package com.mongs.wear.ui.view.battleMatch
 
+import android.content.Context
+import android.view.WindowManager
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -64,7 +67,8 @@ const val MAX_SECONDS = 30
 fun BattleMatchView(
     navController: NavController,
     battleMatchViewModel: BattleMatchViewModel = hiltViewModel(),
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    context: Context = LocalContext.current,
 ) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
@@ -77,6 +81,15 @@ fun BattleMatchView(
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
+    DisposableEffect(Unit) {
+        val window = (context as ComponentActivity).window
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+        onDispose {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
     }
 

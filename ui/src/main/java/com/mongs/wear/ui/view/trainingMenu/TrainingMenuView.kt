@@ -32,7 +32,8 @@ fun TrainingMenuView(
         TrainingNestedBackground()
         TrainingMenuContent(
             jumping = {
-                navController.navigate(route = NavItem.TrainingJumping.route)
+                Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()
+//                navController.navigate(route = NavItem.TrainingJumping.route)
             },
             basketball = {
                 Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()

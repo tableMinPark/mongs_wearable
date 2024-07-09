@@ -58,6 +58,8 @@ interface SlotDao {
     fun updateIsHappyByStrokeMong(mongId: Long, isHappy: Boolean)
     @Query("UPDATE slot SET isEating = :isEating WHERE mongId = :mongId")
     fun updateIsEatingByFeedMong(mongId: Long, isEating: Boolean)
+    @Query("UPDATE slot SET isPoopCleaning = :isPoopCleaning WHERE mongId = :mongId")
+    fun updateIsPoopCleaningByPoopClean(mongId: Long, isPoopCleaning: Boolean)
     @Query("UPDATE slot SET payPoint = :payPoint WHERE mongId = :mongId")
     fun updatePayPointByExchangeWalking(mongId: Long, payPoint: Int)
 

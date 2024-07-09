@@ -153,6 +153,7 @@ class SlotRepositoryImpl @Inject constructor(
                         isHappy = slot.isHappy,
                         isEating = slot.isEating,
                         isSelected = slot.isSelected,
+                        isPoopCleaning = slot.isPoopCleaning,
                         isGraduateCheck = slot.isGraduateCheck,
                     )
                 }
@@ -187,6 +188,7 @@ class SlotRepositoryImpl @Inject constructor(
                     isHappy = slot.isHappy,
                     isEating = slot.isEating,
                     isSelected = slot.isSelected,
+                    isPoopCleaning = slot.isPoopCleaning,
                     isGraduateCheck = slot.isGraduateCheck,
                 )
             }
@@ -237,6 +239,7 @@ class SlotRepositoryImpl @Inject constructor(
                     isHappy = slot.isHappy,
                     isEating = slot.isEating,
                     isSelected = slot.isSelected,
+                    isPoopCleaning = slot.isPoopCleaning,
                     isGraduateCheck = slot.isGraduateCheck,
                 )
             }
@@ -273,6 +276,7 @@ class SlotRepositoryImpl @Inject constructor(
                         isHappy = slot.isHappy,
                         isEating = slot.isEating,
                         isSelected = slot.isSelected,
+                        isPoopCleaning = slot.isPoopCleaning,
                         isGraduateCheck = slot.isGraduateCheck,
                     )
                 } ?: run {

@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.domain.code.BattlePickCode
@@ -15,8 +14,8 @@ import com.mongs.wear.domain.usecase.battle.GetMyMatchPlayerUseCase
 import com.mongs.wear.domain.usecase.battle.GetOtherMatchPlayerUseCase
 import com.mongs.wear.domain.usecase.battle.MatchExitUseCase
 import com.mongs.wear.domain.usecase.battle.MatchOverUseCase
-import com.mongs.wear.domain.usecase.battle.MatchStartUseCase
 import com.mongs.wear.domain.usecase.battle.MatchPickUseCase
+import com.mongs.wear.domain.usecase.battle.MatchStartUseCase
 import com.mongs.wear.domain.vo.MatchPlayerVo
 import com.mongs.wear.domain.vo.MatchVo
 import dagger.hilt.android.lifecycle.HiltViewModel

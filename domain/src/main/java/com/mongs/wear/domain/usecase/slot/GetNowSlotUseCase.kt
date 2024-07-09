@@ -38,6 +38,7 @@ class GetNowSlotUseCase @Inject constructor(
                         isHappy = slotModel.isHappy,
                         isEating = slotModel.isEating,
                         isSelected = slotModel.isSelected,
+                        isPoopCleaning = slotModel.isPoopCleaning,
                         isGraduateCheck = slotModel.isGraduateCheck,
                     )
                 } ?: run {

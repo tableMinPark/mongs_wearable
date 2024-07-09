@@ -49,6 +49,7 @@ enum class RepositoryErrorCode : ErrorCode {
     POOP_CLEAN_MONG_FAIL,
     SET_IS_HAPPY_FAIL,
     SET_IS_EATING_FAIL,
+    SET_IS_POOP_CLEANING_FAIL,
 
 
     SET_MEMBER_FAIL,

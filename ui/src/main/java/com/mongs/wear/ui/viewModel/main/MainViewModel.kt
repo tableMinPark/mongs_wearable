@@ -48,10 +48,11 @@ class MainViewModel @Inject constructor(
     private val stepSensorEventListener: SensorEventListener = object : SensorEventListener {
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
         override fun onSensorChanged(event: SensorEvent) {
-//            val nowWalkingStep = event.values[0].toInt()
+            val nowStepCount = event.values[0].toInt()
+            Log.d("TEST", "nowStepCount: $nowStepCount")
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    memberRepository.addWalkingCount(addWalkingCount = 1)
+                    memberRepository.setEndStepCount(stepCount = nowStepCount)
                 } catch (_: RepositoryException) {
                 }
             }
@@ -61,8 +62,18 @@ class MainViewModel @Inject constructor(
     val networkFlag: LiveData<Boolean> get() = _networkFlag
     private val _networkFlag = MediatorLiveData<Boolean>()
 
-    fun init(buildVersion: String) {
+    fun init(buildVersion: String, isNetworkAvailable: Boolean) {
         viewModelScope.launch(Dispatchers.Main) {
+            if (isNetworkAvailable) {
+                withContext(Dispatchers.IO) {
+                    deviceRepository.setNetworkFlag(networkFlag = true)
+                }
+            } else {
+                withContext(Dispatchers.IO) {
+                    deviceRepository.setNetworkFlag(networkFlag = false)
+                }
+            }
+
             withContext(Dispatchers.IO) {
                 setBuildVersionUseCase(buildVersion = buildVersion)
                 setDeviceIdUseCase()
@@ -87,7 +98,7 @@ class MainViewModel @Inject constructor(
                 this@MainViewModel.sensorManager = sensorManager
                 this@MainViewModel.sensorManager.registerListener(
                     this@MainViewModel.stepSensorEventListener,
-                    sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),      //TYPE_STEP_COUNTER  TYPE_GRAVITY
+                    sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),      //TYPE_STEP_DETECTOR TYPE_STEP_COUNTER TYPE_GRAVITY
                     SensorManager.SENSOR_DELAY_FASTEST
                 )
             } catch (_: RuntimeException) {
@@ -117,7 +128,8 @@ class MainViewModel @Inject constructor(
                         }
                     },
                 )
-            } catch (_: RuntimeException) {
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }

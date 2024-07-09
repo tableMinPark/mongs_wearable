@@ -56,14 +56,6 @@ fun MainSlotView(
             uiState = mainSlotViewModel.uiState,
             modifier = Modifier.zIndex(2f),
         )
-        if (slotVo.isSleeping && !isPageChanging.value) {
-            Box(
-                modifier = Modifier
-                    .background(color = Color.Black.copy(alpha = 0.5f))
-                    .fillMaxSize()
-                    .zIndex(3f)
-            )
-        }
     }
 }
 

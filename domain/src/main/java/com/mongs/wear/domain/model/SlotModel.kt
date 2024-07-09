@@ -23,6 +23,7 @@ data class SlotModel(
 
     val isHappy: Boolean,
     val isEating: Boolean,
+    val isPoopCleaning: Boolean,
     val isSelected: Boolean,
 
     val isGraduateCheck: Boolean,

@@ -26,10 +26,12 @@ import androidx.wear.compose.material.Text
 import com.mongs.wear.domain.code.FeedbackCode
 import com.mongs.wear.ui.R
 import com.mongs.wear.ui.global.component.background.FeedbackBackground
+import com.mongs.wear.ui.global.component.common.Chip
 import com.mongs.wear.ui.global.component.common.IconChip
 import com.mongs.wear.ui.global.component.common.LoadingBar
 import com.mongs.wear.ui.global.dialog.common.ConfirmDialog
 import com.mongs.wear.ui.global.dialog.common.OkDialog
+import com.mongs.wear.ui.global.dialog.help.HelpInfoDialog
 import com.mongs.wear.ui.global.theme.DAL_MU_RI
 import com.mongs.wear.ui.global.theme.PaymongWhite
 import com.mongs.wear.ui.viewModel.feedback.FeedbackViewModel
@@ -123,9 +125,7 @@ private fun FeedbackContent(
 
             for (feedbackCode in FeedbackCode.values()) {
                 item {
-                    IconChip(
-                        icon = R.drawable.feedback,
-                        border = R.drawable.interaction_bnt_darkpurple,
+                    Chip(
                         fontColor = Color.White,
                         backgroundColor = Color.Black,
                         label = feedbackCode.message,

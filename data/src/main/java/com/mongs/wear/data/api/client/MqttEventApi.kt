@@ -3,15 +3,14 @@ package com.mongs.wear.data.api.client
 import android.content.Context
 import android.util.Log
 import com.mongs.wear.data.R
+import info.mqtt.android.service.MqttAndroidClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import info.mqtt.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.IMqttActionListener
 import org.eclipse.paho.client.mqttv3.IMqttToken
 import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
-import org.eclipse.paho.client.mqttv3.MqttException
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -26,8 +25,9 @@ class MqttEventApi @Inject constructor(
                 this.userName = context.getString(R.string.mqtt_username)
                 this.password = context.getString(R.string.mqtt_password).toCharArray()
             }
+
             mqttAndroidClient.setCallback(messageCallback)
-            mqttAndroidClient.connect(options).await()
+            mqttAndroidClient.connect(options = options).await()
             Log.i("MqttEventApi", "connect.")
         }
     }

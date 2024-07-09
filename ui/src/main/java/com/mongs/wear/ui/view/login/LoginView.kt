@@ -2,6 +2,8 @@ package com.mongs.wear.ui.view.login
 
 import android.app.Activity
 import android.content.Context
+import android.view.WindowManager
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,10 +40,21 @@ import kotlinx.coroutines.launch
 fun LoginView(
     navController: NavController,
     loginViewModel: LoginViewModel = hiltViewModel(),
+    context: Context = LocalContext.current,
 ) {
+    DisposableEffect(Unit) {
+        val window = (context as ComponentActivity).window
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
+        onDispose {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+    }
+
     Box {
         LoginBackground()
         LoginContent(
+            reLoginSuccess = loginViewModel::reLoginSuccess,
             loginSuccess = loginViewModel::loginSuccess,
             loginFail = loginViewModel::loginFail,
             uiState = loginViewModel.uiState,
@@ -61,6 +75,7 @@ fun LoginView(
 
 @Composable
 private fun LoginContent(
+    reLoginSuccess: suspend (email: String?, name: String?) -> Unit,
     loginSuccess: suspend (email: String?, name: String?) -> Unit,
     loginFail: suspend () -> Unit,
     uiState: UiState = UiState(),
@@ -74,7 +89,7 @@ private fun LoginContent(
 
         val account = GoogleSignIn.getLastSignedInAccount(context)
         if (account != null) {
-            loginSuccess(account.email, account.givenName)
+            reLoginSuccess(account.email, account.givenName)
         } else {
             loginFail()
         }

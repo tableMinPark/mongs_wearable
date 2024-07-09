@@ -15,4 +15,5 @@ interface ManagementRepository {
     suspend fun poopCleanMong(mongId: Long)
     suspend fun setIsHappy(mongId: Long, isHappy: Boolean)
     suspend fun setIsEating(mongId: Long, isEating: Boolean)
+    suspend fun setIsPoopCleaning(mongId: Long, isPoopCleaning: Boolean)
 }

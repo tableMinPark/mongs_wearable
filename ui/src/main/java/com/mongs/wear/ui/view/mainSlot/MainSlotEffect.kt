@@ -9,7 +9,9 @@ import com.mongs.wear.ui.view.mainSlot.effect.EvolutionEffect
 import com.mongs.wear.ui.view.mainSlot.effect.GraduationEffect
 import com.mongs.wear.ui.view.mainSlot.effect.GraduatedEffect
 import com.mongs.wear.ui.view.mainSlot.effect.HeartEffect
+import com.mongs.wear.ui.view.mainSlot.effect.PoopCleanEffect
 import com.mongs.wear.ui.view.mainSlot.effect.PoopEffect
+import com.mongs.wear.ui.view.mainSlot.effect.SleepEffect
 import com.mongs.wear.ui.viewModel.mainSlot.MainSlotViewModel.UiState
 
 @Composable
@@ -25,7 +27,12 @@ fun MainSlotEffect(
         ShiftCode.NORMAL -> {
             if (slotVo.isHappy) {
                 HeartEffect(modifier = modifier)
+            } else if (slotVo.isSleeping) {
+                SleepEffect(modifier = modifier)
+            } else if (slotVo.isPoopCleaning) {
+                PoopCleanEffect(modifier = modifier)
             }
+
             PoopEffect(
                 poopCount = slotVo.poopCount,
                 modifier = modifier,

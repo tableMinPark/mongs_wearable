@@ -143,9 +143,10 @@ class MemberRepositoryImpl @Inject constructor(
 
         throw RepositoryException(RepositoryErrorCode.GET_MAX_SLOT_FAIL)
     }
-    override suspend fun setWalkingCount(walkingCount: Int) {
+
+    override suspend fun setStartStepCount(stepCount: Int) {
         try {
-            memberDataStore.setWalkingCount(walkingCount = walkingCount)
+            memberDataStore.setStartStepCount(startStepCount = stepCount)
         } catch (e: RuntimeException) {
             throw RepositoryException(
                 errorCode = RepositoryErrorCode.SET_WALKING_COUNT_FAIL,
@@ -153,9 +154,10 @@ class MemberRepositoryImpl @Inject constructor(
             )
         }
     }
-    override suspend fun getWalkingCount(): Int {
+
+    override suspend fun setEndStepCount(stepCount: Int) {
         try {
-            return memberDataStore.getWalkingCount()
+            memberDataStore.setEndStepCount(endStepCount = stepCount)
         } catch (e: RuntimeException) {
             throw RepositoryException(
                 errorCode = RepositoryErrorCode.SET_WALKING_COUNT_FAIL,
@@ -163,6 +165,18 @@ class MemberRepositoryImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun getEndStepCount(): Int {
+        try {
+            return memberDataStore.getEndStepCount()
+        } catch (e: RuntimeException) {
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GET_WALKING_COUNT_FAIL,
+                throwable = e,
+            )
+        }
+    }
+
     override suspend fun getWalkingCountLive(): LiveData<Int> {
         try {
             return memberDataStore.getWalkingCountLive()
@@ -173,18 +187,6 @@ class MemberRepositoryImpl @Inject constructor(
             )
         }
     }
-    override suspend fun addWalkingCount(addWalkingCount: Int) {
-        try {
-            val walkingCount = memberDataStore.getWalkingCount()
-            memberDataStore.setWalkingCount(walkingCount = walkingCount + addWalkingCount)
-        } catch (e: RuntimeException) {
-            throw RepositoryException(
-                errorCode = RepositoryErrorCode.SET_WALKING_COUNT_FAIL,
-                throwable = e,
-            )
-        }
-    }
-
     override suspend fun exchangePayPointWalking(mongId: Long, walkingCount: Int) {
         val res = memberApi.exchangePayPointWalking(exchangePayPointWalkingReqDto =
             ExchangePayPointWalkingReqDto(
@@ -196,7 +198,8 @@ class MemberRepositoryImpl @Inject constructor(
         if (res.isSuccessful) {
             res.body()?.let { body ->
                 try {
-                    memberDataStore.setWalkingCount(walkingCount = walkingCount - body.subWalkingCount)
+                    val startStepCount = memberDataStore.getStartStepCount()
+                    memberDataStore.setStartStepCount(startStepCount = startStepCount + body.subWalkingCount)
                     roomDB.slotDao().updatePayPointByExchangeWalking(
                         mongId = body.mongId,
                         payPoint = body.payPoint

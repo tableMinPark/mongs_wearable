@@ -63,9 +63,12 @@ class MainWalkingViewModel @Inject constructor(
     fun chargePayPoint(mongId: Long, walkingCount: Int) {
         viewModelScope.launch (Dispatchers.IO) {
             try {
-                exchangePayPointWalkingUseCase(mongId = mongId, walkingCount = walkingCount)
                 uiState.chargePayPointDialog = false
+                uiState.loadingBar = true
+                exchangePayPointWalkingUseCase(mongId = mongId, walkingCount = walkingCount)
+                uiState.loadingBar = false
             } catch (_: UseCaseException) {
+                uiState.loadingBar = false
             }
         }
     }

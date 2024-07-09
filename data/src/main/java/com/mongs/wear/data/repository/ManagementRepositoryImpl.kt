@@ -265,4 +265,15 @@ class ManagementRepositoryImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun setIsPoopCleaning(mongId: Long, isPoopCleaning: Boolean) {
+        try {
+            roomDB.slotDao().updateIsPoopCleaningByPoopClean(mongId = mongId, isPoopCleaning = isPoopCleaning)
+        } catch (e: RuntimeException) {
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.SET_IS_POOP_CLEANING_FAIL,
+                throwable = e,
+            )
+        }
+    }
 }
