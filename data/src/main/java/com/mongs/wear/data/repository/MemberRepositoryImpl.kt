@@ -143,7 +143,6 @@ class MemberRepositoryImpl @Inject constructor(
 
         throw RepositoryException(RepositoryErrorCode.GET_MAX_SLOT_FAIL)
     }
-
     override suspend fun setStartStepCount(stepCount: Int) {
         try {
             memberDataStore.setStartStepCount(startStepCount = stepCount)
@@ -154,7 +153,16 @@ class MemberRepositoryImpl @Inject constructor(
             )
         }
     }
-
+    override suspend fun getStartStepCount(): Int {
+        try {
+            return memberDataStore.getStartStepCount()
+        } catch (e: RuntimeException) {
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GET_WALKING_COUNT_FAIL,
+                throwable = e,
+            )
+        }
+    }
     override suspend fun setEndStepCount(stepCount: Int) {
         try {
             memberDataStore.setEndStepCount(endStepCount = stepCount)
@@ -165,7 +173,6 @@ class MemberRepositoryImpl @Inject constructor(
             )
         }
     }
-
     override suspend fun getEndStepCount(): Int {
         try {
             return memberDataStore.getEndStepCount()
@@ -176,7 +183,26 @@ class MemberRepositoryImpl @Inject constructor(
             )
         }
     }
-
+    override suspend fun setWalkingCount(walkingCount: Int) {
+        try {
+            memberDataStore.setWalkingCount(walkingCount = walkingCount)
+        } catch (e: RuntimeException) {
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.SET_WALKING_COUNT_FAIL,
+                throwable = e,
+            )
+        }
+    }
+    override suspend fun getWalkingCount(): Int {
+        try {
+            return memberDataStore.getWalkingCount()
+        } catch (e: RuntimeException) {
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GET_WALKING_COUNT_FAIL,
+                throwable = e,
+            )
+        }
+    }
     override suspend fun getWalkingCountLive(): LiveData<Int> {
         try {
             return memberDataStore.getWalkingCountLive()
@@ -198,8 +224,6 @@ class MemberRepositoryImpl @Inject constructor(
         if (res.isSuccessful) {
             res.body()?.let { body ->
                 try {
-                    val startStepCount = memberDataStore.getStartStepCount()
-                    memberDataStore.setStartStepCount(startStepCount = startStepCount + body.subWalkingCount)
                     roomDB.slotDao().updatePayPointByExchangeWalking(
                         mongId = body.mongId,
                         payPoint = body.payPoint

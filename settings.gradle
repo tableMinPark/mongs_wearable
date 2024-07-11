@@ -20,6 +20,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "mongs"
 include ':app'
-include ':ui'
+include ':presentation'
 include ':domain'
 include ':data'

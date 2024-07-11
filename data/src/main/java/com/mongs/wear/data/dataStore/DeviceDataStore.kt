@@ -1,6 +1,7 @@
 package com.mongs.wear.data.dataStore
 
 import android.content.Context
+import android.icu.text.DateFormat
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -13,6 +14,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.UUID
 import javax.inject.Inject
 
@@ -27,6 +30,10 @@ class DeviceDataStore @Inject constructor(
         private val CODE_INTEGRITY = stringPreferencesKey("CODE_INTEGRITY")
         private val DEVICE_ID = stringPreferencesKey("DEVICE_ID")
         private val BACKGROUND_MAP_CODE = stringPreferencesKey("BACKGROUND_MAP_CODE")
+        private val UP_TIME = stringPreferencesKey("UP_TIME")
+        private val REBOOT_FLAG = booleanPreferencesKey("REBOOT_FLAG")
+
+        private val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
     }
 
     init {
@@ -46,6 +53,12 @@ class DeviceDataStore @Inject constructor(
                 }
                 if (!preferences.contains(BACKGROUND_MAP_CODE)) {
                     preferences[BACKGROUND_MAP_CODE] = "MP000"
+                }
+                if (!preferences.contains(UP_TIME)) {
+                    preferences[UP_TIME] = LocalDateTime.of(1970, 1, 1, 0, 0, 0).format(dateFormatter)
+                }
+                if (!preferences.contains(REBOOT_FLAG)) {
+                    preferences[REBOOT_FLAG] = true
                 }
             }
         }
@@ -104,5 +117,29 @@ class DeviceDataStore @Inject constructor(
         return context.device.data.map { preferences ->
             preferences[BACKGROUND_MAP_CODE]!!
         }.asLiveData()
+    }
+    suspend fun setUpTime(upTime: LocalDateTime) {
+        context.device.edit { preferences ->
+            preferences[UP_TIME] = upTime.format(dateFormatter)
+        }
+    }
+    fun getUpTime(): LocalDateTime {
+        return runBlocking {
+            context.device.data.map { preferences ->
+                LocalDateTime.parse(preferences[UP_TIME]!!, dateFormatter)
+            }.first()
+        }
+    }
+    suspend fun setRebootFlag(rebootFlag: Boolean) {
+        context.device.edit { preferences ->
+            preferences[REBOOT_FLAG] = rebootFlag
+        }
+    }
+    fun getRebootFlag(): Boolean {
+        return runBlocking {
+            context.device.data.map { preferences ->
+                preferences[REBOOT_FLAG]!!
+            }.first()
+        }
     }
 }

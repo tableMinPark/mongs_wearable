@@ -1,6 +1,7 @@
 package com.mongs.wear.data.dataStore
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -45,14 +46,14 @@ class MemberDataStore @Inject constructor(
                 if (!preferences.contains(MAX_SLOT)) {
                     preferences[MAX_SLOT] = 1
                 }
-                if (!preferences.contains(START_STEP_COUNT)) {
-                    preferences[START_STEP_COUNT] = Int.MIN_VALUE
-                }
-                if (!preferences.contains(END_STEP_COUNT)) {
-                    preferences[END_STEP_COUNT] = Int.MIN_VALUE
-                }
                 if (!preferences.contains(WALKING_COUNT)) {
                     preferences[WALKING_COUNT] = 0
+                }
+                if (!preferences.contains(START_STEP_COUNT)) {
+                    preferences[START_STEP_COUNT] = 0
+                }
+                if (!preferences.contains(END_STEP_COUNT)) {
+                    preferences[END_STEP_COUNT] = 0
                 }
             }
         }
@@ -113,8 +114,6 @@ class MemberDataStore @Inject constructor(
     }
     suspend fun setStartStepCount(startStepCount: Int) {
         context.member.edit { preferences ->
-            val endStepCount = preferences[END_STEP_COUNT]!!
-            preferences[WALKING_COUNT] = endStepCount - startStepCount
             preferences[START_STEP_COUNT] = startStepCount
         }
     }
@@ -127,14 +126,12 @@ class MemberDataStore @Inject constructor(
     }
     suspend fun setEndStepCount(endStepCount: Int) {
         context.member.edit { preferences ->
-            var startStepCount = preferences[START_STEP_COUNT]!!
-            if (startStepCount == Int.MIN_VALUE) {
-                preferences[START_STEP_COUNT] = endStepCount
-                startStepCount = endStepCount
-            }
-
-            preferences[WALKING_COUNT] = endStepCount - startStepCount
             preferences[END_STEP_COUNT] = endStepCount
+        }
+    }
+    suspend fun setWalkingCount(walkingCount: Int) {
+        context.member.edit { preferences ->
+            preferences[WALKING_COUNT] = walkingCount
         }
     }
     suspend fun getWalkingCount(): Int {
