@@ -14,7 +14,6 @@ import com.mongs.wear.data.dto.management.res.RegisterMongResDto
 import com.mongs.wear.data.dto.management.res.SleepingMongResDto
 import com.mongs.wear.data.dto.management.res.StrokeMongResDto
 import com.mongs.wear.data.dto.management.res.TrainingMongResDto
-import com.mongs.wear.data.dto.management.res.ValidationTrainingMongResDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -22,7 +21,6 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface ManagementApi {
     @GET("/management/{mongId}")
@@ -39,8 +37,6 @@ interface ManagementApi {
     suspend fun sleepingMong(@Path("mongId") mongId: Long) : Response<SleepingMongResDto>
     @PUT("/management/poopClean/{mongId}")
     suspend fun poopCleanMong(@Path("mongId") mongId: Long) : Response<PoopCleanMongResDto>
-    @GET("/management/validationTraining/{mongId}")
-    suspend fun validationTrainingMong(@Path("mongId") mongId: Long, @Query("trainingCode") trainingCode: String) : Response<ValidationTrainingMongResDto>
     @PUT("/management/training/{mongId}")
     suspend fun trainingMong(@Path("mongId") mongId: Long, @Body trainingMongReqDto: TrainingMongReqDto) : Response<TrainingMongResDto>
     @PUT("/management/graduate/{mongId}")

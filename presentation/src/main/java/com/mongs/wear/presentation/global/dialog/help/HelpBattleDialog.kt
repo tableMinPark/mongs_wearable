@@ -62,7 +62,6 @@ fun HelpBattleDialog(
                         HelpMatchContent()
                     }
 
-
                     3 -> {
                         HelpMatchSecondContent()
                     }

@@ -69,7 +69,24 @@ fun HelpMatchContent() {
                 .weight(0.25f)
         ) {
             Text(
-                text = "상대 HP를 깎으면 승리",
+                text = "상대 HP를",
+                textAlign = TextAlign.Center,
+                fontFamily = DAL_MU_RI,
+                fontWeight = FontWeight.Light,
+                fontSize = 14.sp,
+                color = PaymongWhite,
+                maxLines = 1,
+            )
+        }
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(0.25f)
+        ) {
+            Text(
+                text = "깎으면 승리",
                 textAlign = TextAlign.Center,
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,

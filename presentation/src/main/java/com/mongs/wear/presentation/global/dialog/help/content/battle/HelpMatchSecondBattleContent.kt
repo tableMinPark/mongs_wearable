@@ -69,7 +69,25 @@ fun HelpMatchSecondContent() {
                 .weight(0.25f)
         ) {
             Text(
-                text = "HP가 높은 사람이 승리!",
+                text = "HP가 높은",
+                textAlign = TextAlign.Center,
+                fontFamily = DAL_MU_RI,
+                fontWeight = FontWeight.Light,
+                fontSize = 14.sp,
+                color = PaymongWhite,
+                maxLines = 1,
+            )
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(0.25f)
+        ) {
+            Text(
+                text = "사람이 승리!",
                 textAlign = TextAlign.Center,
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
