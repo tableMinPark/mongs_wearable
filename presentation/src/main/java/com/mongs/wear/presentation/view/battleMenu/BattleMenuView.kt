@@ -45,8 +45,8 @@ import com.mongs.wear.presentation.global.component.button.BlueButton
 import com.mongs.wear.presentation.global.component.common.LoadingBar
 import com.mongs.wear.presentation.global.resource.NavItem
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongPink200
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsPink200
+import com.mongs.wear.presentation.global.theme.MongsWhite
 import com.mongs.wear.presentation.viewModel.battleMenu.BattleMenuViewModel
 
 @Composable
@@ -151,7 +151,7 @@ private fun BattleMenuLoadingBar(
                         fontFamily = DAL_MU_RI,
                         fontWeight = FontWeight.Light,
                         fontSize = 16.sp,
-                        color = PaymongWhite,
+                        color = MongsWhite,
                         maxLines = 1,
                     )
                 }
@@ -193,7 +193,7 @@ private fun BattleMenuContent(
                     fontFamily = DAL_MU_RI,
                     fontWeight = FontWeight.Light,
                     fontSize = 18.sp,
-                    color = PaymongPink200,
+                    color = MongsPink200,
                     maxLines = 1,
                 )
             }
@@ -227,7 +227,7 @@ private fun BattleMenuContent(
                     fontFamily = DAL_MU_RI,
                     fontWeight = FontWeight.Light,
                     fontSize = 13.sp,
-                    color = PaymongPink200,
+                    color = MongsPink200,
                     maxLines = 1,
                 )
             }
@@ -256,7 +256,7 @@ private fun BattleMenuContent(
                     fontFamily = DAL_MU_RI,
                     fontWeight = FontWeight.Light,
                     fontSize = 16.sp,
-                    color = PaymongWhite,
+                    color = MongsWhite,
                     maxLines = 1,
                 )
             }

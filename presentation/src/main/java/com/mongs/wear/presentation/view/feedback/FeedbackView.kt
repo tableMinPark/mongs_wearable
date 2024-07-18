@@ -30,7 +30,7 @@ import com.mongs.wear.presentation.global.component.common.LoadingBar
 import com.mongs.wear.presentation.global.dialog.common.ConfirmDialog
 import com.mongs.wear.presentation.global.dialog.common.OkDialog
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 import com.mongs.wear.presentation.viewModel.feedback.FeedbackViewModel
 
 @Composable
@@ -114,7 +114,7 @@ private fun FeedbackContent(
                         fontFamily = DAL_MU_RI,
                         fontWeight = FontWeight.Light,
                         fontSize = 16.sp,
-                        color = PaymongWhite,
+                        color = MongsWhite,
                         maxLines = 1,
                     )
                 }

@@ -35,7 +35,7 @@ import com.mongs.wear.presentation.global.component.background.CollectionNestedB
 import com.mongs.wear.presentation.global.component.common.Mong
 import com.mongs.wear.presentation.global.resource.MongResourceCode
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 
 
 @Composable
@@ -75,7 +75,7 @@ fun MongCollectionDetailDialog(
                     fontFamily = DAL_MU_RI,
                     fontWeight = FontWeight.Light,
                     fontSize = 15.sp,
-                    color = PaymongWhite,
+                    color = MongsWhite,
                     maxLines = 1,
                 )
             }

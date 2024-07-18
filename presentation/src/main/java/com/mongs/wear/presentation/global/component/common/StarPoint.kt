@@ -22,7 +22,8 @@ import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongYellow
+import com.mongs.wear.presentation.global.theme.MongsDarkYellow
+import com.mongs.wear.presentation.global.theme.MongsYellow
 
 @Composable
 fun StarPoint(
@@ -71,7 +72,7 @@ fun StarPoint(
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
                 fontSize = 14.sp,
-                color = PaymongYellow,
+                color = MongsDarkYellow,
                 maxLines = 1,
                 modifier = Modifier.weight(0.8f)
             )

@@ -27,7 +27,7 @@ import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.global.component.background.MainPagerBackground
 import com.mongs.wear.presentation.global.component.button.BlueButton
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 
 @Composable
 fun EmptyContent(
@@ -67,7 +67,7 @@ fun EmptyContent(
                         fontFamily = DAL_MU_RI,
                         fontWeight = FontWeight.Light,
                         fontSize = 25.sp,
-                        color = PaymongWhite,
+                        color = MongsWhite,
                     )
                 }
             }

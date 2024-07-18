@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 
 @Composable
 fun HelpAddStarPointContent() {
@@ -54,7 +54,7 @@ fun HelpAddStarPointContent() {
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
                 fontSize = 14.sp,
-                color = PaymongWhite,
+                color = MongsWhite,
                 maxLines = 1,
             )
         }
@@ -81,7 +81,7 @@ fun HelpAddStarPointContent() {
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
                 fontSize = 14.sp,
-                color = PaymongWhite,
+                color = MongsWhite,
                 maxLines = 1,
             )
         }
@@ -99,7 +99,7 @@ fun HelpAddStarPointContent() {
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
                 fontSize = 14.sp,
-                color = PaymongWhite,
+                color = MongsWhite,
                 maxLines = 1,
             )
         }

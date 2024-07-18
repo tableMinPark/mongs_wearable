@@ -27,7 +27,7 @@ import com.mongs.wear.presentation.global.dialog.help.HelpMongDialog
 import com.mongs.wear.presentation.global.dialog.help.HelpPointDialog
 import com.mongs.wear.presentation.global.dialog.help.HelpSlotDialog
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 import com.mongs.wear.presentation.viewModel.helpMenu.HelpMenuViewModel
 
 @Composable
@@ -109,7 +109,7 @@ private fun HelpMenuContent(
                         fontFamily = DAL_MU_RI,
                         fontWeight = FontWeight.Light,
                         fontSize = 16.sp,
-                        color = PaymongWhite,
+                        color = MongsWhite,
                         maxLines = 1,
                     )
                 }

@@ -25,10 +25,10 @@ import com.mongs.wear.domain.vo.SlotVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.global.component.background.MainPagerBackground
 import com.mongs.wear.presentation.global.component.common.ProgressIndicator
-import com.mongs.wear.presentation.global.theme.PaymongBlue
-import com.mongs.wear.presentation.global.theme.PaymongGreen
-import com.mongs.wear.presentation.global.theme.PaymongPink
-import com.mongs.wear.presentation.global.theme.PaymongYellow
+import com.mongs.wear.presentation.global.theme.MongsBlue
+import com.mongs.wear.presentation.global.theme.MongsGreen
+import com.mongs.wear.presentation.global.theme.MongsPink
+import com.mongs.wear.presentation.global.theme.MongsYellow
 
 @Composable
 fun MainConditionView(
@@ -70,12 +70,12 @@ private fun MainConditionContent(
                 MainConditionCondition(
                     icon = R.drawable.health,
                     progress = slotVo.healthy.toFloat(),
-                    indicatorColor = PaymongPink
+                    indicatorColor = MongsPink
                 )
                 MainConditionCondition(
                     icon = R.drawable.satiety,
                     progress = slotVo.satiety.toFloat(),
-                    indicatorColor = PaymongYellow
+                    indicatorColor = MongsYellow
                 )
             }
             Row(
@@ -85,12 +85,12 @@ private fun MainConditionContent(
                 MainConditionCondition(
                     icon = R.drawable.strength,
                     progress = slotVo.strength.toFloat(),
-                    indicatorColor = PaymongGreen
+                    indicatorColor = MongsGreen
                 )
                 MainConditionCondition(
                     icon = R.drawable.sleep,
                     progress = slotVo.sleep.toFloat(),
-                    indicatorColor = PaymongBlue
+                    indicatorColor = MongsBlue
                 )
             }
         }

@@ -11,12 +11,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.CircularProgressIndicator
-import com.mongs.wear.presentation.global.theme.PaymongPurple
+import com.mongs.wear.presentation.global.theme.MongsPurple
 
 @Composable
 fun ProgressIndicator(
     progress: Float = 100f,
-    indicatorColor: Color = PaymongPurple,
+    indicatorColor: Color = MongsPurple,
     modifier: Modifier = Modifier.zIndex(0f)
 ) {
     Box(

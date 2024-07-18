@@ -16,8 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.HorizontalPageIndicator
 import androidx.wear.compose.material.PageIndicatorState
-import com.mongs.wear.presentation.global.theme.PaymongNavy
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsNavy
+import com.mongs.wear.presentation.global.theme.MongsWhite
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -42,8 +42,8 @@ fun PageIndicator(
     ) {
         HorizontalPageIndicator(
             pageIndicatorState = pageIndicatorState,
-            selectedColor = PaymongNavy,
-            unselectedColor = PaymongWhite,
+            selectedColor = MongsNavy,
+            unselectedColor = MongsWhite,
             indicatorSize = 6.dp,
             modifier = Modifier.padding(bottom = 5.dp)
         )
@@ -61,8 +61,8 @@ fun PageIndicator(
     ) {
         HorizontalPageIndicator(
             pageIndicatorState = pageIndicatorState,
-            selectedColor = PaymongNavy,
-            unselectedColor = PaymongWhite,
+            selectedColor = MongsNavy,
+            unselectedColor = MongsWhite,
             indicatorSize = 6.dp,
             modifier = Modifier.padding(bottom = 5.dp)
         )

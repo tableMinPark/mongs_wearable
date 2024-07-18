@@ -20,7 +20,7 @@ import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.global.component.common.Mong
 import com.mongs.wear.presentation.global.resource.MongResourceCode
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 
 @Composable
 fun HelpStrokeMongContent() {
@@ -59,7 +59,7 @@ fun HelpStrokeMongContent() {
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
                 fontSize = 14.sp,
-                color = PaymongWhite,
+                color = MongsWhite,
                 maxLines = 1,
             )
         }
@@ -77,7 +77,7 @@ fun HelpStrokeMongContent() {
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
                 fontSize = 14.sp,
-                color = PaymongWhite,
+                color = MongsWhite,
                 maxLines = 1,
             )
         }
@@ -95,7 +95,7 @@ fun HelpStrokeMongContent() {
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
                 fontSize = 14.sp,
-                color = PaymongWhite,
+                color = MongsWhite,
                 maxLines = 1,
             )
         }

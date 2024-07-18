@@ -22,7 +22,7 @@ import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.global.component.button.CircleImageButton
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 
 @Composable
 fun HelpPoopCleanMongContent() {
@@ -52,7 +52,7 @@ fun HelpPoopCleanMongContent() {
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
                 fontSize = 14.sp,
-                color = PaymongWhite,
+                color = MongsWhite,
                 maxLines = 1,
             )
         }
@@ -79,7 +79,7 @@ fun HelpPoopCleanMongContent() {
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
                 fontSize = 14.sp,
-                color = PaymongWhite,
+                color = MongsWhite,
                 maxLines = 1,
             )
         }
@@ -97,7 +97,7 @@ fun HelpPoopCleanMongContent() {
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
                 fontSize = 14.sp,
-                color = PaymongWhite,
+                color = MongsWhite,
                 maxLines = 1,
             )
         }

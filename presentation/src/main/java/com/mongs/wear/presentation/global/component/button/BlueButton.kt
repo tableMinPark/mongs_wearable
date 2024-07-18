@@ -25,7 +25,7 @@ import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongNavy
+import com.mongs.wear.presentation.global.theme.MongsNavy
 
 
 @Composable
@@ -68,7 +68,7 @@ fun BlueButton(
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
                 fontSize = 14.sp,
-                color = PaymongNavy,
+                color = MongsNavy,
                 maxLines = 1,
             )
         }

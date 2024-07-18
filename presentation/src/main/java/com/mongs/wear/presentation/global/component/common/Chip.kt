@@ -20,7 +20,7 @@ import androidx.wear.compose.material.ChipDefaults
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.Chip
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 
 @Composable
 fun Chip(
@@ -81,7 +81,7 @@ fun Chip(
 @Composable
 private fun ChipWithSecondLabelPreview() {
     Chip(
-        fontColor = PaymongWhite,
+        fontColor = MongsWhite,
         label = "테스트",
         secondaryLabel = "테스트",
         backgroundColor = Color.Black,

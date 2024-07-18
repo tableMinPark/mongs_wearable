@@ -22,7 +22,7 @@ import com.mongs.wear.presentation.R
 import androidx.wear.compose.material.Chip
 import com.mongs.wear.presentation.global.component.button.CircleImageButton
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 
 @Composable
 fun IconChip(
@@ -97,7 +97,7 @@ private fun StarPointPreview() {
     IconChip(
         icon = R.drawable.feed,
         border = R.drawable.interaction_bnt_yellow,
-        fontColor = PaymongWhite,
+        fontColor = MongsWhite,
         label = "테스트",
         secondaryLabel = "",
         backgroundColor = Color.Black,

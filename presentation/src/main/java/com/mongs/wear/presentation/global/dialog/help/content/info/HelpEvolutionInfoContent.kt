@@ -22,7 +22,7 @@ import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.global.component.common.ProgressIndicator
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 
@@ -58,7 +58,7 @@ fun HelpEvolutionInfoContent() {
                     fontFamily = DAL_MU_RI,
                     fontWeight = FontWeight.Light,
                     fontSize = 14.sp,
-                    color = PaymongWhite,
+                    color = MongsWhite,
                     maxLines = 1,
                 )
             }
@@ -76,7 +76,7 @@ fun HelpEvolutionInfoContent() {
                     fontFamily = DAL_MU_RI,
                     fontWeight = FontWeight.Light,
                     fontSize = 14.sp,
-                    color = PaymongWhite,
+                    color = MongsWhite,
                     maxLines = 1,
                 )
             }
@@ -94,7 +94,7 @@ fun HelpEvolutionInfoContent() {
                     fontFamily = DAL_MU_RI,
                     fontWeight = FontWeight.Light,
                     fontSize = 14.sp,
-                    color = PaymongWhite,
+                    color = MongsWhite,
                     maxLines = 1,
                 )
             }
@@ -112,7 +112,7 @@ fun HelpEvolutionInfoContent() {
                     fontFamily = DAL_MU_RI,
                     fontWeight = FontWeight.Light,
                     fontSize = 14.sp,
-                    color = PaymongWhite,
+                    color = MongsWhite,
                     maxLines = 1,
                 )
             }

@@ -47,11 +47,12 @@ import com.mongs.wear.presentation.global.component.common.Mong
 import com.mongs.wear.presentation.global.component.common.PageIndicator
 import com.mongs.wear.presentation.global.component.common.StarPoint
 import com.mongs.wear.presentation.global.dialog.common.ConfirmDialog
+import com.mongs.wear.presentation.global.dialog.slotPick.SlotAddDialog
 import com.mongs.wear.presentation.global.dialog.slotPick.SlotDetailDialog
 import com.mongs.wear.presentation.global.resource.MongResourceCode
 import com.mongs.wear.presentation.global.resource.NavItem
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 import com.mongs.wear.presentation.viewModel.slotPick.SlotPickViewModel
 import kotlin.math.max
 import kotlin.math.min
@@ -86,12 +87,10 @@ fun SlotPickView(
             FeedNestedBackground()
             SlotPickLoadingBar()
         } else if (slotPickViewModel.uiState.addDialog) {
-            ConfirmDialog(
-                text = "새로운 몽을\n생성하시겠습니까?",
-                confirm = {
-                    slotPickViewModel.addMong("", "22:00", "08:00")
-                },
-                cancel = {
+            SlotPickBackground()
+            SlotAddDialog(
+                add = { name, sleepStart, sleepEnd ->
+                    slotPickViewModel.addMong(name, sleepStart, sleepEnd)
                     slotPickViewModel.uiState.addDialog = false
                 }
             )
@@ -249,19 +248,19 @@ private fun SlotPickContent(
                         fontFamily = DAL_MU_RI,
                         fontWeight = FontWeight.Light,
                         fontSize = 14.sp,
-                        color = PaymongWhite,
+                        color = MongsWhite,
                         maxLines = 1,
                     )
                 } else if (isSlotDisable) {
                     StarPoint(starPoint = starPoint)
                 } else {
                     Text(
-                        text = "몽 생성",
+                        text = "NEW MONG",
                         textAlign = TextAlign.Center,
                         fontFamily = DAL_MU_RI,
                         fontWeight = FontWeight.Light,
-                        fontSize = 15.sp,
-                        color = PaymongWhite,
+                        fontSize = 18.sp,
+                        color = MongsWhite,
                         maxLines = 1,
                     )
                 }
@@ -331,24 +330,24 @@ private fun SlotPickContent(
                                     contentDescription = null,
                                     modifier = Modifier.size(26.dp)
                                 )
-                                Spacer(modifier = Modifier.width(5.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
                                 Text(
                                     text = "-",
                                     textAlign = TextAlign.Center,
                                     fontFamily = DAL_MU_RI,
                                     fontWeight = FontWeight.Light,
-                                    fontSize = 22.sp,
-                                    color = PaymongWhite,
+                                    fontSize = 18.sp,
+                                    color = MongsWhite,
                                     maxLines = 1,
                                 )
-                                Spacer(modifier = Modifier.width(5.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
                                 Text(
                                     text = "$buySlotPrice",
-                                    textAlign = TextAlign.Center,
+                                    textAlign = TextAlign.Left,
                                     fontFamily = DAL_MU_RI,
                                     fontWeight = FontWeight.Light,
-                                    fontSize = 22.sp,
-                                    color = PaymongWhite,
+                                    fontSize = 18.sp,
+                                    color = MongsWhite,
                                     maxLines = 1,
                                 )
                             }
@@ -369,7 +368,7 @@ private fun SlotPickContent(
                                 fontFamily = DAL_MU_RI,
                                 fontWeight = FontWeight.Light,
                                 fontSize = 25.sp,
-                                color = PaymongWhite,
+                                color = MongsWhite,
                                 maxLines = 1,
                             )
                         }
@@ -464,8 +463,8 @@ private fun SlotPickViewPreview() {
             slotVo = SlotVo(),
             starPoint = 0,
             buySlotPrice = 10,
-            isSlotEmpty = true,
-            isSlotDisable = false,
+            isSlotEmpty = false,
+            isSlotDisable = true,
             preSlot = {},
             nextSlot = {},
             addDialog = {},

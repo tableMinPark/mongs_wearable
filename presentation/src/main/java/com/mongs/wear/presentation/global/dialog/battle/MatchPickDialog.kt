@@ -31,7 +31,7 @@ import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.global.component.background.BattleMenuBackground
 import com.mongs.wear.presentation.global.component.common.ProgressIndicator
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 
@@ -104,7 +104,7 @@ fun MatchPickDialog(
                             fontFamily = DAL_MU_RI,
                             fontWeight = FontWeight.Light,
                             fontSize = 20.sp,
-                            color = PaymongWhite,
+                            color = MongsWhite,
                             maxLines = 1,
                         )
                     }
@@ -140,7 +140,7 @@ fun MatchPickDialog(
                             fontFamily = DAL_MU_RI,
                             fontWeight = FontWeight.Light,
                             fontSize = 20.sp,
-                            color = PaymongWhite,
+                            color = MongsWhite,
                             maxLines = 1,
                         )
                     }
@@ -176,7 +176,7 @@ fun MatchPickDialog(
                         fontFamily = DAL_MU_RI,
                         fontWeight = FontWeight.Light,
                         fontSize = 20.sp,
-                        color = PaymongWhite,
+                        color = MongsWhite,
                         maxLines = 1,
                     )
                 }

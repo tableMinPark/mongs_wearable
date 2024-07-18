@@ -28,7 +28,7 @@ import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.global.component.background.FeedNestedBackground
 import com.mongs.wear.presentation.global.resource.NavItem
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 
 @Composable
 fun FeedMenuView(
@@ -82,7 +82,7 @@ private fun FeedMenuContent(
                         fontFamily = DAL_MU_RI,
                         fontWeight = FontWeight.Light,
                         fontSize = 20.sp,
-                        color = PaymongWhite,
+                        color = MongsWhite,
                         maxLines = 1,
                     )
                 }
@@ -117,7 +117,7 @@ private fun FeedMenuContent(
                         fontFamily = DAL_MU_RI,
                         fontWeight = FontWeight.Light,
                         fontSize = 20.sp,
-                        color = PaymongWhite,
+                        color = MongsWhite,
                         maxLines = 1,
                     )
                 }

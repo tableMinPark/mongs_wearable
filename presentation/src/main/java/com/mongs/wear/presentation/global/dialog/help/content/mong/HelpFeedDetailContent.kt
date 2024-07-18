@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.global.resource.FeedResourceCode
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 
 @Composable
 fun HelpFeedDetailContent() {
@@ -58,7 +58,7 @@ fun HelpFeedDetailContent() {
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
                 fontSize = 14.sp,
-                color = PaymongWhite,
+                color = MongsWhite,
                 maxLines = 1,
             )
         }
@@ -76,7 +76,7 @@ fun HelpFeedDetailContent() {
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
                 fontSize = 14.sp,
-                color = PaymongWhite,
+                color = MongsWhite,
                 maxLines = 1,
             )
         }
@@ -94,7 +94,7 @@ fun HelpFeedDetailContent() {
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
                 fontSize = 14.sp,
-                color = PaymongWhite,
+                color = MongsWhite,
                 maxLines = 1,
             )
         }

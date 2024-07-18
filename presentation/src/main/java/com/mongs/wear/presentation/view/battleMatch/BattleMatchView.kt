@@ -55,7 +55,7 @@ import com.mongs.wear.presentation.global.dialog.battle.MatchPickDialog
 import com.mongs.wear.presentation.global.resource.MongResourceCode
 import com.mongs.wear.presentation.global.resource.NavItem
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 import com.mongs.wear.presentation.viewModel.battleMatch.BattleMatchViewModel
 import kotlinx.coroutines.delay
 import kotlin.math.max
@@ -170,7 +170,7 @@ private fun BattleMatchLoadingBar(
                     fontFamily = DAL_MU_RI,
                     fontWeight = FontWeight.Light,
                     fontSize = 18.sp,
-                    color = PaymongWhite,
+                    color = MongsWhite,
                     maxLines = 1,
                 )
             }
@@ -313,7 +313,7 @@ private fun BattleMatchContent(
                     fontFamily = DAL_MU_RI,
                     fontWeight = FontWeight.Light,
                     fontSize = 20.sp,
-                    color = PaymongWhite,
+                    color = MongsWhite,
                     maxLines = 1,
                 )
                 HpBar(hp = otherMatchPlayerVo.hp.toFloat())
@@ -414,7 +414,7 @@ private fun BattleMatchOverContent(
                         fontFamily = DAL_MU_RI,
                         fontWeight = FontWeight.Light,
                         fontSize = 16.sp,
-                        color = PaymongWhite,
+                        color = MongsWhite,
                         maxLines = 1,
                     )
                 }

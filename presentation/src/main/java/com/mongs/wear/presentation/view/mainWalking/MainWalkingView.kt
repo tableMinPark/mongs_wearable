@@ -38,7 +38,7 @@ import com.mongs.wear.presentation.global.component.common.LoadingBar
 import com.mongs.wear.presentation.global.component.common.PayPoint
 import com.mongs.wear.presentation.global.dialog.common.ConfirmDialog
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 import com.mongs.wear.presentation.viewModel.mainWalking.MainWalkingViewModel
 import com.mongs.wear.presentation.viewModel.mainWalking.MainWalkingViewModel.UiState
 
@@ -152,7 +152,7 @@ private fun MainWalkingContent(
                             fontFamily = DAL_MU_RI,
                             fontWeight = FontWeight.Light,
                             fontSize = 18.sp,
-                            color = PaymongWhite,
+                            color = MongsWhite,
                             maxLines = 1,
                         )
                     }
@@ -181,7 +181,7 @@ private fun MainWalkingContent(
                             fontFamily = DAL_MU_RI,
                             fontWeight = FontWeight.Light,
                             fontSize = 18.sp,
-                            color = PaymongWhite,
+                            color = MongsWhite,
                             maxLines = 1,
                         )
                     }

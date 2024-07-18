@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 
 @Composable
 fun FeedItemDetailDialog(
@@ -123,7 +123,7 @@ private fun ImageDetail(
             fontFamily = DAL_MU_RI,
             fontWeight = FontWeight.Light,
             fontSize = 20.sp,
-            color = PaymongWhite,
+            color = MongsWhite,
             maxLines = 1,
             modifier = Modifier.weight(0.8f)
         )
@@ -152,7 +152,7 @@ private fun TextDetail(
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
                 fontSize = 18.sp,
-                color = PaymongWhite,
+                color = MongsWhite,
                 maxLines = 1,
                 modifier = Modifier
                     .width(20.dp)
@@ -166,7 +166,7 @@ private fun TextDetail(
             fontFamily = DAL_MU_RI,
             fontWeight = FontWeight.Light,
             fontSize = 20.sp,
-            color = PaymongWhite,
+            color = MongsWhite,
             maxLines = 1,
             modifier = Modifier.weight(0.8f),
         )

@@ -46,7 +46,7 @@ import com.mongs.wear.presentation.global.dialog.feed.FeedItemDetailDialog
 import com.mongs.wear.presentation.global.resource.FeedResourceCode
 import com.mongs.wear.presentation.global.resource.NavItem
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongWhite
+import com.mongs.wear.presentation.global.theme.MongsWhite
 import com.mongs.wear.presentation.viewModel.feedFoodPick.FeedFoodPickViewModel
 import kotlin.math.max
 import kotlin.math.min
@@ -219,7 +219,7 @@ private fun FeedFoodPickContent(
                             fontFamily = DAL_MU_RI,
                             fontWeight = FontWeight.Light,
                             fontSize = 14.sp,
-                            color = PaymongWhite,
+                            color = MongsWhite,
                             maxLines = 1,
                         )
                     }

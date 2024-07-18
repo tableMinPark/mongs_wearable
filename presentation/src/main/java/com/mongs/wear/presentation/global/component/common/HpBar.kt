@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.mongs.wear.presentation.global.theme.PaymongRed
+import com.mongs.wear.presentation.global.theme.MongsRed
 
 @Composable
 fun HpBar(
@@ -38,7 +38,7 @@ fun HpBar(
                 .height(height.dp)
                 .fillMaxWidth(fraction = hp / maxHp)
                 .clip(CircleShape)
-                .background(color = PaymongRed)
+                .background(color = MongsRed)
         ) {}
     }
 }

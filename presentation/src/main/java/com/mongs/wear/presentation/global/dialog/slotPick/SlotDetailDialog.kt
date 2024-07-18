@@ -35,17 +35,16 @@ import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.global.component.common.PayPoint
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
-import com.mongs.wear.presentation.global.theme.PaymongBlue
-import com.mongs.wear.presentation.global.theme.PaymongGreen
-import com.mongs.wear.presentation.global.theme.PaymongLightGray
-import com.mongs.wear.presentation.global.theme.PaymongPink
-import com.mongs.wear.presentation.global.theme.PaymongYellow
+import com.mongs.wear.presentation.global.theme.MongsBlue
+import com.mongs.wear.presentation.global.theme.MongsGreen
+import com.mongs.wear.presentation.global.theme.MongsLightGray
+import com.mongs.wear.presentation.global.theme.MongsPink
+import com.mongs.wear.presentation.global.theme.MongsYellow
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
-import kotlin.math.round
 
-const val ROUND_SIZE = 10
+const val SLOT_DETAIL_ROUND_SIZE = 10
 const val SLOT_DETAIL_WIDTH = 144
 const val SLOT_DETAIL_HEIGHT = 130
 const val SLOT_DETAIL_BAR_HEIGHT = 32
@@ -82,7 +81,7 @@ fun SlotDetailDialog(
                 modifier = Modifier
                     .size(width = SLOT_DETAIL_WIDTH.dp, height = SLOT_DETAIL_HEIGHT.dp)
                     .zIndex(1f)
-                    .clip(RoundedCornerShape(ROUND_SIZE.dp))
+                    .clip(RoundedCornerShape(SLOT_DETAIL_ROUND_SIZE.dp))
                     .background(color = Color.LightGray)
                     .align(Alignment.BottomCenter)
             )
@@ -98,17 +97,17 @@ fun SlotDetailDialog(
                 ) {
                     SlotDetailTab(
                         text = "정보",
-                        color = if (tabIndex.intValue == 0) PaymongLightGray else Color.LightGray,
+                        color = if (tabIndex.intValue == 0) MongsLightGray else Color.LightGray,
                         onClick = { tabIndex.intValue = 0 },
                     )
                     SlotDetailTab(
                         text = "지수",
-                        color = if (tabIndex.intValue == 1) PaymongLightGray else Color.LightGray,
+                        color = if (tabIndex.intValue == 1) MongsLightGray else Color.LightGray,
                         onClick = { tabIndex.intValue = 1 },
                     )
                     SlotDetailTab(
                         text = "포인트",
-                        color = if (tabIndex.intValue == 2) PaymongLightGray else Color.LightGray,
+                        color = if (tabIndex.intValue == 2) MongsLightGray else Color.LightGray,
                         onClick = { tabIndex.intValue = 2 },
                     )
                 }
@@ -119,11 +118,11 @@ fun SlotDetailDialog(
                 modifier = Modifier
                     .clip(
                         RoundedCornerShape(
-                            bottomStart = ROUND_SIZE.dp,
-                            bottomEnd = ROUND_SIZE.dp
+                            bottomStart = SLOT_DETAIL_ROUND_SIZE.dp,
+                            bottomEnd = SLOT_DETAIL_ROUND_SIZE.dp
                         )
                     )
-                    .background(color = PaymongLightGray)
+                    .background(color = MongsLightGray)
                     .size(width = SLOT_DETAIL_WIDTH.dp, height = (SLOT_DETAIL_HEIGHT - SLOT_DETAIL_BAR_HEIGHT).dp)
                     .zIndex(2f)
                     .align(Alignment.BottomCenter)
@@ -161,14 +160,14 @@ private fun InfoTab(
     born: LocalDateTime,
     weight: Double,
 ) {
-    val age = remember { mutableStateOf("0시간 0분 0초") }
+    val age = remember { mutableStateOf("00시간 00분 00초") }
     LaunchedEffect(mongId) {
         while(true) {
             val now = LocalDateTime.now()
             val hours = ChronoUnit.HOURS.between(born, now)
             val minutes = ChronoUnit.MINUTES.between(born.plusHours(hours), now)
             val seconds = ChronoUnit.SECONDS.between(born.plusHours(hours).plusMinutes(minutes), now)
-            age.value = "${hours}시간 ${minutes}분 ${seconds}초"
+            age.value = "%02d시간 %02d분 %02d초".format(hours, minutes, seconds)
             delay(1000)
         }
     }
@@ -190,7 +189,7 @@ private fun InfoTab(
                 textAlign = TextAlign.Center,
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
-                fontSize = 13.sp,
+                fontSize = 14.sp,
                 maxLines = 1,
                 color = Color.Black,
             )
@@ -207,7 +206,7 @@ private fun InfoTab(
                 textAlign = TextAlign.Center,
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
-                fontSize = 13.sp,
+                fontSize = 14.sp,
                 maxLines = 1,
                 color = Color.Black,
             )
@@ -220,11 +219,11 @@ private fun InfoTab(
                 .weight(0.2f)
         ) {
             Text(
-                text = "${round(weight * 10) / 10} g",
+                text = "%.2f g".format(weight),
                 textAlign = TextAlign.Center,
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
-                fontSize = 13.sp,
+                fontSize = 14.sp,
                 maxLines = 1,
                 color = Color.Black,
             )
@@ -249,24 +248,24 @@ private fun StatusTab(
             SlotDetailCondition(
                 icon = R.drawable.health,
                 progress = healthy.toFloat(),
-                indicatorColor = PaymongPink
+                indicatorColor = MongsPink
             )
             SlotDetailCondition(
                 icon = R.drawable.satiety,
                 progress = satiety.toFloat(),
-                indicatorColor = PaymongYellow
+                indicatorColor = MongsYellow
             )
         }
         Row{
             SlotDetailCondition(
                 icon = R.drawable.strength,
                 progress = strength.toFloat(),
-                indicatorColor = PaymongGreen
+                indicatorColor = MongsGreen
             )
             SlotDetailCondition(
                 icon = R.drawable.sleep,
                 progress = sleep.toFloat(),
-                indicatorColor = PaymongBlue
+                indicatorColor = MongsBlue
             )
         }
     }
@@ -323,7 +322,7 @@ private fun SlotDetailTab(
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .clip(RoundedCornerShape(topStart = ROUND_SIZE.dp, topEnd = ROUND_SIZE.dp))
+            .clip(RoundedCornerShape(topStart = SLOT_DETAIL_ROUND_SIZE.dp, topEnd = SLOT_DETAIL_ROUND_SIZE.dp))
             .size(width = 48.dp, height = SLOT_DETAIL_BAR_HEIGHT.dp)
             .background(color = color)
             .clickable(
