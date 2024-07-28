@@ -30,10 +30,6 @@ fun CircleImageButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val imageLoader = ImageLoader.Builder(LocalContext.current)
-        .components { add(ImageDecoderDecoder.Factory()) }
-        .build()
-
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
@@ -73,7 +69,7 @@ fun CircleImageButton(
 @Composable
 private fun LongBlueButtonPreview() {
     CircleImageButton(
-        icon = R.drawable.feed,
+        icon = R.drawable.basketball,
         border = R.drawable.interaction_bnt_yellow,
         onClick = {},
     )

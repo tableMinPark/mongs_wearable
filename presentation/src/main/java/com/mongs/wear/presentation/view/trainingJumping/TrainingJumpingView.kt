@@ -25,6 +25,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -34,12 +35,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.mongs.wear.domain.vo.SlotVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.global.component.background.TrainingNestedBackground
 import com.mongs.wear.presentation.global.component.button.BlueButton
 import com.mongs.wear.presentation.global.component.common.ScoreBox
 import com.mongs.wear.presentation.global.dialog.training.TrainingEndDialog
 import com.mongs.wear.presentation.global.dialog.training.TrainingStartDialog
+import com.mongs.wear.presentation.global.resource.MongResourceCode
 import com.mongs.wear.presentation.global.resource.NavItem
 import com.mongs.wear.presentation.viewModel.trainingJumping.TrainingJumpingViewModel
 import com.mongs.wear.presentation.viewModel.trainingJumping.TrainingJumpingViewModel.HurdleEngine
@@ -52,6 +55,7 @@ fun TrainingJumpingView(
     trainingJumpingViewModel: TrainingJumpingViewModel = hiltViewModel(),
     context: Context = LocalContext.current,
 ) {
+    val slotVoState = trainingJumpingViewModel.slotVo.observeAsState()
     val frame = trainingJumpingViewModel.frame.observeAsState(0)
     val playerEngine = trainingJumpingViewModel.playerEngine
     val hurdleEngines = trainingJumpingViewModel.hurdleEngines
@@ -70,6 +74,7 @@ fun TrainingJumpingView(
             isMoving = !trainingJumpingViewModel.uiState.isTrainingOver
         )
         TrainingJumpingContent(
+            mongCode =  slotVoState.value?.mongCode ?: SlotVo().mongCode,
             jump = trainingJumpingViewModel::jump,
             playerEngine = playerEngine.value,
             hurdleEngines = hurdleEngines,
@@ -95,11 +100,17 @@ fun TrainingJumpingView(
             TrainingEndDialog(
                 trainingEnd = {
                     trainingJumpingViewModel.trainingEnd()
-                    navController.popBackStack(route = NavItem.TrainingNested.route, inclusive = true)
                 },
                 rewardPayPoint = trainingJumpingViewModel.score.intValue * 2,
                 modifier = Modifier.zIndex(3f),
             )
+        }
+    }
+
+    LaunchedEffect(trainingJumpingViewModel.uiState.navMainPager) {
+        if (trainingJumpingViewModel.uiState.navMainPager) {
+            navController.popBackStack(route = NavItem.TrainingJumping.route, inclusive = true)
+            trainingJumpingViewModel.uiState.navMainPager = false
         }
     }
 
@@ -108,6 +119,7 @@ fun TrainingJumpingView(
 
 @Composable
 private fun TrainingJumpingContent(
+    mongCode: String,
     jump: () -> Unit,
     playerEngine: PlayerEngine,
     hurdleEngines: List<HurdleEngine>,
@@ -157,6 +169,7 @@ private fun TrainingJumpingContent(
                         modifier = Modifier.zIndex(2f)
                     ) {
                         Player(
+                            mongCode = mongCode,
                             height = playerEngine.height,
                             width = playerEngine.width,
                             modifier = Modifier
@@ -199,6 +212,7 @@ private fun TrainingJumpingInfoContent(
 
 @Composable
 private fun Player(
+    mongCode: String,
     height: Int,
     width: Int,
     modifier: Modifier = Modifier,
@@ -209,10 +223,13 @@ private fun Player(
             .width(width.dp),
     ) {
         Image(
-            painter = painterResource(R.drawable.ch100),
+            painter = painterResource(MongResourceCode.valueOf(mongCode).pngCode),
             contentDescription = null,
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .graphicsLayer(
+                    scaleX = -1f  // 좌우 반전을 위해 X축 스케일을 -1로 설정
+                ),
             contentScale = ContentScale.FillBounds,
         )
     }
@@ -248,6 +265,7 @@ private fun FeedMenuViewPreview() {
     Box {
         TrainingNestedBackground()
         TrainingJumpingContent(
+            mongCode = "CH200",
             jump = {},
             playerEngine = PlayerEngine(),
             hurdleEngines = mutableListOf(),
@@ -262,6 +280,7 @@ private fun LargeFeedMenuViewPreview() {
     Box {
         TrainingNestedBackground()
         TrainingJumpingContent(
+            mongCode = "CH201",
             jump = {},
             playerEngine = PlayerEngine(),
             hurdleEngines = mutableListOf(),

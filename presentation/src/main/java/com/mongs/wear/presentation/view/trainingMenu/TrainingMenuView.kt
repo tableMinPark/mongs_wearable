@@ -63,22 +63,22 @@ private fun TrainingMenuContent(
         ) {
             item {
                 IconChip(
-                    icon = R.drawable.activity,
+                    icon = R.drawable.runner,
                     border = R.drawable.interaction_bnt_green,
                     fontColor = Color.White,
                     backgroundColor = Color.Black,
-                    label = "Mongs Runner",
+                    label = "Runner",
                     onClick = jumping,
                 )
             }
 
             item {
                 IconChip(
-                    icon = R.drawable.activity,
-                    border = R.drawable.interaction_bnt_green,
+                    icon = R.drawable.basketball,
+                    border = R.drawable.interaction_bnt_orange,
                     fontColor = Color.White,
                     backgroundColor = Color.Black,
-                    label = "Mongs Ball",
+                    label = "Basketball",
                     onClick = basketball,
                 )
             }

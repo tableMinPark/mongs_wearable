@@ -5,20 +5,26 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mongs.wear.domain.exception.UseCaseException
+import com.mongs.wear.domain.usecase.slot.GetNowSlotUseCase
 import com.mongs.wear.domain.usecase.slot.TrainingSlotUseCase
+import com.mongs.wear.domain.vo.SlotVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.math.max
 import kotlin.math.min
 
 @HiltViewModel
 class TrainingJumpingViewModel @Inject constructor(
+    private val getNowSlotUseCase: GetNowSlotUseCase,
     private val trainingSlotUseCase: TrainingSlotUseCase,
 ) : ViewModel() {
     val uiState = UiState()
@@ -44,9 +50,30 @@ class TrainingJumpingViewModel @Inject constructor(
     private val collisionPadding = 12
     // Player
     private val initPlayerSpeed = -40f
+    private val initPlayerPy = PlayerEngine().py
     // Hurdle
     private val initHurdleSpeed = -3f       // 3f ~ 6f 까지
     private var hurdleSpeed = 0f
+
+
+    val slotVo: LiveData<SlotVo?> get() = _slotVo
+    private val _slotVo = MediatorLiveData<SlotVo?>(null)
+
+    init {
+        viewModelScope.launch (Dispatchers.Main) {
+            try {
+                _slotVo.addSource(
+                    withContext(Dispatchers.IO) {
+                        getNowSlotUseCase()
+                    }
+                ) { slotVo ->
+                    _slotVo.value = slotVo
+                }
+            } catch (e: UseCaseException) {
+                uiState.navMainPager = true
+            }
+        }
+    }
 
     fun trainingEnd() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -54,6 +81,7 @@ class TrainingJumpingViewModel @Inject constructor(
                 trainingCode = "JUMPING",
                 score = score.intValue,
             )
+            uiState.navMainPager = true
         }
     }
 
@@ -88,10 +116,10 @@ class TrainingJumpingViewModel @Inject constructor(
         if (playerEngine.value.isJump) {
             // 속도 업데이트 (중력 가속도 적용)
             playerEngine.value.speed += gravity * playerEngine.value.jumpTime
-            playerEngine.value.py = min(playerEngine.value.py + playerEngine.value.speed * playerEngine.value.jumpTime, 0f)
+            playerEngine.value.py = min(playerEngine.value.py + playerEngine.value.speed * playerEngine.value.jumpTime, initPlayerPy)
 
             // 지면에 도달했는지 확인
-            if (playerEngine.value.py == 0f) {
+            if (playerEngine.value.py == initPlayerPy) {
                 playerEngine.value.isJump = false
                 playerEngine.value.speed = 0f
                 playerEngine.value.jumpTime = 0f
@@ -116,7 +144,7 @@ class TrainingJumpingViewModel @Inject constructor(
                 hurdleEngine.isRewarded = true
                 score.intValue += 1
 
-                if (score.intValue % 10 == 0) {
+                if (score.intValue % 5 == 0) {
                     hurdleSpeed -= 0.4f
                 }
             }
@@ -182,7 +210,7 @@ class TrainingJumpingViewModel @Inject constructor(
         var speed: Float = 0f,
         val height: Int = 50,
         val width: Int = 50,
-        var py: Float = 0f,
+        var py: Float = 5f,
         var px: Float = 25f,
     )
 
@@ -197,10 +225,12 @@ class TrainingJumpingViewModel @Inject constructor(
 
 
     class UiState (
+        navMainPager: Boolean = false,
         trainingStartDialog: Boolean = true,
         isTrainingOver: Boolean = true,
         trainingOverDialog: Boolean = false,
     ) {
+        var navMainPager by mutableStateOf(navMainPager)
         var trainingStartDialog by mutableStateOf(trainingStartDialog)
         var isTrainingOver by mutableStateOf(isTrainingOver)
         var trainingOverDialog by mutableStateOf(trainingOverDialog)

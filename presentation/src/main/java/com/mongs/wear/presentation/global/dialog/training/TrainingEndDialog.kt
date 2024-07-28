@@ -52,10 +52,10 @@ fun TrainingEndDialog(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxHeight()
         ) {
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(15.dp))
             Row(
                 horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.Bottom,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(0.4f)
@@ -79,11 +79,11 @@ fun TrainingEndDialog(
                     .weight(0.2f)
             ) {
                 Text(
-                    text = "장애물을 뛰어넘기!",
+                    text = "Runner",
                     textAlign = TextAlign.Center,
                     fontFamily = DAL_MU_RI,
                     fontWeight = FontWeight.Light,
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     color = MongsWhite,
                     maxLines = 1,
                 )
@@ -94,7 +94,7 @@ fun TrainingEndDialog(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.22f)
+                    .weight(0.2f)
             ) {
                 Image(
                     painter = painterResource(R.drawable.pointlogo),

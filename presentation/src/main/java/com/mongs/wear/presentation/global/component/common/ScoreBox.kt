@@ -23,6 +23,8 @@ import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.global.theme.DAL_MU_RI
+import com.mongs.wear.presentation.global.theme.MongsDarkPurple
+import com.mongs.wear.presentation.global.theme.MongsPurple
 
 @Composable
 fun ScoreBox(
@@ -53,16 +55,15 @@ fun ScoreBox(
         ) {
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.weight(0.3f),
+                modifier = Modifier.weight(0.4f),
             ) {
-                Text(
-                    text = "HI",
-                    textAlign = TextAlign.Center,
-                    fontFamily = DAL_MU_RI,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 14.sp,
-                    color = Color.Black,
-                    maxLines = 1,
+                Image(
+                    painter = painterResource(R.drawable.logo_not_open),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .height(36.dp)
+                        .width(24.dp),
+                    contentScale = ContentScale.FillBounds,
                 )
             }
 
@@ -72,9 +73,9 @@ fun ScoreBox(
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
                 fontSize = 14.sp,
-                color = Color.Black,
+                color = MongsDarkPurple,
                 maxLines = 1,
-                modifier = Modifier.weight(0.7f)
+                modifier = Modifier.weight(0.6f)
             )
         }
     }
