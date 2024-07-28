@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mongs.wear.domain.usecase.slot.TrainingSlotUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -18,7 +19,7 @@ import kotlin.math.min
 
 @HiltViewModel
 class TrainingJumpingViewModel @Inject constructor(
-
+    private val trainingSlotUseCase: TrainingSlotUseCase,
 ) : ViewModel() {
     val uiState = UiState()
 
@@ -46,6 +47,15 @@ class TrainingJumpingViewModel @Inject constructor(
     // Hurdle
     private val initHurdleSpeed = -3f       // 3f ~ 6f 까지
     private var hurdleSpeed = 0f
+
+    fun trainingEnd() {
+        viewModelScope.launch(Dispatchers.IO) {
+            trainingSlotUseCase(
+                trainingCode = "JUMPING",
+                score = score.intValue,
+            )
+        }
+    }
 
     fun trainingStart() {
         viewModelScope.launch(Dispatchers.Main) {
@@ -98,14 +108,15 @@ class TrainingJumpingViewModel @Inject constructor(
             // 충돌 확인 -> 충돌인 경우 게임 종료
             if (isCollision(playerEngine.value, hurdleEngine)) {
                 uiState.isTrainingOver = true
+                uiState.trainingOverDialog = true
                 break
             }
 
             if (!hurdleEngine.isRewarded && isUnder(playerEngine.value, hurdleEngine)) {
                 hurdleEngine.isRewarded = true
-                score.intValue += 5
+                score.intValue += 1
 
-                if (score.intValue % 50 == 0) {
+                if (score.intValue % 10 == 0) {
                     hurdleSpeed -= 0.4f
                 }
             }
@@ -186,11 +197,11 @@ class TrainingJumpingViewModel @Inject constructor(
 
 
     class UiState (
-        trainingMenuDialog: Boolean = true,
+        trainingStartDialog: Boolean = true,
         isTrainingOver: Boolean = true,
         trainingOverDialog: Boolean = false,
     ) {
-        var trainingMenuDialog by mutableStateOf(trainingMenuDialog)
+        var trainingStartDialog by mutableStateOf(trainingStartDialog)
         var isTrainingOver by mutableStateOf(isTrainingOver)
         var trainingOverDialog by mutableStateOf(trainingOverDialog)
     }

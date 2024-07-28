@@ -12,6 +12,7 @@ interface ManagementRepository {
     suspend fun evolutionMong(mongId: Long)
     suspend fun sleepingMong(mongId: Long)
     suspend fun strokeMong(mongId: Long)
+    suspend fun trainingMong(mongId: Long, trainingCode: String, score: Int)
     suspend fun poopCleanMong(mongId: Long)
     suspend fun setIsHappy(mongId: Long, isHappy: Boolean)
     suspend fun setIsEating(mongId: Long, isEating: Boolean)

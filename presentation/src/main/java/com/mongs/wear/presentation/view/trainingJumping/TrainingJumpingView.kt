@@ -38,9 +38,13 @@ import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.global.component.background.TrainingNestedBackground
 import com.mongs.wear.presentation.global.component.button.BlueButton
 import com.mongs.wear.presentation.global.component.common.ScoreBox
+import com.mongs.wear.presentation.global.dialog.training.TrainingEndDialog
+import com.mongs.wear.presentation.global.dialog.training.TrainingStartDialog
+import com.mongs.wear.presentation.global.resource.NavItem
 import com.mongs.wear.presentation.viewModel.trainingJumping.TrainingJumpingViewModel
 import com.mongs.wear.presentation.viewModel.trainingJumping.TrainingJumpingViewModel.HurdleEngine
 import com.mongs.wear.presentation.viewModel.trainingJumping.TrainingJumpingViewModel.PlayerEngine
+import kotlinx.coroutines.delay
 
 @Composable
 fun TrainingJumpingView(
@@ -72,11 +76,31 @@ fun TrainingJumpingView(
             modifier = Modifier.zIndex(1f),
         )
         TrainingJumpingInfoContent(
-            trainingStart = trainingJumpingViewModel::trainingStart,
             score = trainingJumpingViewModel.score.intValue,
-            isTrainingOver = trainingJumpingViewModel.uiState.isTrainingOver,
             modifier = Modifier.zIndex(2f),
         )
+
+        if (trainingJumpingViewModel.uiState.trainingStartDialog) {
+            TrainingStartDialog(
+                firstText = "화면을 클릭하여",
+                secondText = "장애물을 뛰어넘기!",
+                rewardPayPoint = 2,
+                trainingStart = {
+                    trainingJumpingViewModel.trainingStart()
+                    trainingJumpingViewModel.uiState.trainingStartDialog = false
+                },
+                modifier = Modifier.zIndex(3f),
+            )
+        } else if (trainingJumpingViewModel.uiState.trainingOverDialog) {
+            TrainingEndDialog(
+                trainingEnd = {
+                    trainingJumpingViewModel.trainingEnd()
+                    navController.popBackStack(route = NavItem.TrainingNested.route, inclusive = true)
+                },
+                rewardPayPoint = trainingJumpingViewModel.score.intValue * 2,
+                modifier = Modifier.zIndex(3f),
+            )
+        }
     }
 
     LaunchedEffect(frame.value) {}
@@ -156,9 +180,7 @@ private fun TrainingJumpingContent(
 
 @Composable
 private fun TrainingJumpingInfoContent(
-    trainingStart: () -> Unit,
     score: Int,
-    isTrainingOver: Boolean,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
     Box(
@@ -172,15 +194,6 @@ private fun TrainingJumpingInfoContent(
             modifier = Modifier
                 .align(Alignment.TopCenter)
         )
-
-        if (isTrainingOver) {
-            BlueButton(
-                text = "시작",
-                onClick = trainingStart,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-            )
-        }
     }
 }
 

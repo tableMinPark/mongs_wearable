@@ -52,6 +52,8 @@ interface SlotDao {
     fun updateBySleepingMong(mongId: Long, isSleeping: Boolean)
     @Query("UPDATE slot SET exp = :exp WHERE mongId = :mongId")
     fun updateByStrokeMong(mongId: Long, exp: Double)
+    @Query("UPDATE slot SET payPoint = :payPoint, weight = :weight, strength = :strength, satiety = :satiety, healthy = :healthy, sleep = :sleep, exp = :exp WHERE mongId = :mongId")
+    fun updateByTrainingMong(mongId: Long, weight: Double, strength: Double, satiety: Double, healthy: Double, sleep: Double, exp: Double, payPoint: Int)
     @Query("UPDATE slot SET poopCount = :poopCount, exp = :exp WHERE mongId = :mongId")
     fun updateByPoopCleanMong(mongId: Long, poopCount: Int, exp: Double)
     @Query("UPDATE slot SET isHappy = :isHappy WHERE mongId = :mongId")

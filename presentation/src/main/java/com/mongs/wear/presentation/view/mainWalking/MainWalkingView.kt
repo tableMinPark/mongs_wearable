@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +36,8 @@ import com.mongs.wear.domain.vo.SlotVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.global.component.background.MainPagerBackground
 import com.mongs.wear.presentation.global.component.button.BlueButton
+import com.mongs.wear.presentation.global.component.button.LeftButton
+import com.mongs.wear.presentation.global.component.button.RightButton
 import com.mongs.wear.presentation.global.component.common.LoadingBar
 import com.mongs.wear.presentation.global.component.common.PayPoint
 import com.mongs.wear.presentation.global.dialog.common.ConfirmDialog
@@ -41,6 +45,8 @@ import com.mongs.wear.presentation.global.theme.DAL_MU_RI
 import com.mongs.wear.presentation.global.theme.MongsWhite
 import com.mongs.wear.presentation.viewModel.mainWalking.MainWalkingViewModel
 import com.mongs.wear.presentation.viewModel.mainWalking.MainWalkingViewModel.UiState
+import kotlin.math.max
+import kotlin.math.min
 
 @Composable
 fun MainWalkingView(
@@ -52,16 +58,28 @@ fun MainWalkingView(
             MainWalkingLoadingBar()
         } else {
             val payPoint = mainWalkingViewModel.payPoint.observeAsState(0)
-            val walkingCount = mainWalkingViewModel.walkingCount.observeAsState(0)
-            val chargePayPoint = 10 * (walkingCount.value / 100)
+            val walkingCountAll = mainWalkingViewModel.walkingCount.observeAsState(0)
+            val ratio = remember {
+                mutableIntStateOf(0)
+            }
+            val walkingCount = remember {
+                derivedStateOf {
+                    walkingCountAll.value - 100 * ratio.intValue
+                }
+            }
+            val chargePayPoint = remember {
+                derivedStateOf {
+                    10 * ratio.intValue
+                }
+            }
 
             if(mainWalkingViewModel.uiState.chargePayPointDialog) {
                 ConfirmDialog(
-                    text = "$$chargePayPoint\n환전하시겠습니까?",
+                    text = "$${chargePayPoint.value}\n환전하시겠습니까?",
                     confirm = {
                         mainWalkingViewModel.chargePayPoint(
                             mongId = slotVo.mongId,
-                            walkingCount = 100 * (walkingCount.value / 100)
+                            walkingCount = 100 * ratio.intValue,
                         )
                     },
                     cancel = { mainWalkingViewModel.uiState.chargePayPointDialog = false }
@@ -69,10 +87,12 @@ fun MainWalkingView(
             } else {
                 MainWalkingContent(
                     slotVo = slotVo,
-                    chargePayPoint = chargePayPoint,
+                    chargePayPoint = chargePayPoint.value,
                     payPoint = payPoint.value,
                     walkingCount = walkingCount.value,
                     uiState = mainWalkingViewModel.uiState,
+                    increaseRatio = { ratio.intValue = min(ratio.intValue + 1, walkingCountAll.value / 100) },
+                    decreaseRatio = { ratio.intValue = max(ratio.intValue - 1, 0) },
                     modifier = Modifier.zIndex(1f)
                 )
             }
@@ -99,6 +119,8 @@ private fun MainWalkingContent(
     payPoint: Int,
     walkingCount: Int,
     uiState: UiState,
+    increaseRatio: () -> Unit,
+    decreaseRatio: () -> Unit,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
     Box(
@@ -164,6 +186,10 @@ private fun MainWalkingContent(
                             .fillMaxWidth()
                             .weight(0.7f)
                     ) {
+                        LeftButton(onClick = decreaseRatio)
+
+                        Spacer(modifier = Modifier.width(30.dp))
+
                         Image(
                             painter = painterResource(R.drawable.pointlogo),
                             contentDescription = null,
@@ -184,6 +210,10 @@ private fun MainWalkingContent(
                             color = MongsWhite,
                             maxLines = 1,
                         )
+
+                        Spacer(modifier = Modifier.width(30.dp))
+
+                        RightButton(onClick = increaseRatio)
                     }
 
                     Spacer(modifier = Modifier.height(10.dp))
@@ -220,6 +250,8 @@ private fun MainWalkingViewPreview() {
             payPoint = 0,
             walkingCount = 200,
             uiState = UiState(),
+            increaseRatio = {},
+            decreaseRatio = {},
             modifier = Modifier.zIndex(1f),
         )
     }
@@ -236,6 +268,8 @@ private fun LargeMainWalkingViewPreview() {
             payPoint = 0,
             walkingCount = 100,
             uiState = UiState(),
+            increaseRatio = {},
+            decreaseRatio = {},
             modifier = Modifier.zIndex(1f)
         )
     }

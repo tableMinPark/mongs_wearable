@@ -1,6 +1,8 @@
 package com.mongs.wear.presentation.global.dialog.common
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -61,6 +63,11 @@ fun TimePickerDialog(
         modifier = modifier
             .background(color = Color.Black)
             .fillMaxSize(fraction = 1f)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = {},
+            )
     ) {
         Column {
             Row(
