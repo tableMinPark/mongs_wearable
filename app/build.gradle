@@ -6,15 +6,15 @@ plugins {
 }
 
 android {
-    namespace 'com.paymong.wear'
+    namespace 'com.mongs.wear'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.paymong.wear"
+        applicationId "com.mongs.wear"
         minSdk 30
         targetSdk 34
-        versionCode 30
-        versionName "2.5"
+        versionCode 17
+        versionName "1.2.1"
         vectorDrawables {
             useSupportLibrary true
         }
@@ -35,6 +35,7 @@ android {
     }
     buildFeatures {
         compose true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion '1.4.3'
@@ -47,20 +48,16 @@ android {
 }
 
 dependencies {
-    implementation project(":ui")
+    implementation project(':presentation')
     implementation project(":domain")
     implementation project(":data")
 
-    // dagger-hilt
-    implementation "com.google.dagger:hilt-android:2.48.1"
-    kapt 'com.google.dagger:hilt-compiler:2.48.1'
-    // inject
+    // dagger & hilt
     implementation group: 'javax.inject', name: 'javax.inject', version: '1'
+    implementation "com.google.dagger:hilt-android:2.49"
+    kapt 'com.google.dagger:hilt-compiler:2.48.1'
     // compose
-    implementation "androidx.activity:activity-compose:1.8.1"
-    // MQTT
-    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
-    implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
+    implementation "androidx.activity:activity-compose:1.9.0"
 }
 
 kapt {
