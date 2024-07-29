@@ -39,10 +39,10 @@ class MqttEventClientImpl @Inject constructor(
         lostConnectCallback = {
             if (mqttFlag == MqttCode.CONNECT) {
                 // 갑자기 다운
-                eventMemberTopic = ""
-                eventMongTopic = ""
+//                eventMemberTopic = ""
+//                eventMongTopic = ""
                 deviceDataStore.setNetworkFlag(networkFlag = false)
-                mqttFlag = MqttCode.STOP
+//                mqttFlag = MqttCode.STOP
 
 //                var isReconnectSuccess = false
 //

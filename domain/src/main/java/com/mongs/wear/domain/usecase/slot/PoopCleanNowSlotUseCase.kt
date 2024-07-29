@@ -5,6 +5,10 @@ import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.exception.UseCaseException
 import com.mongs.wear.domain.repositroy.FeedbackRepository
 import com.mongs.wear.domain.repositroy.ManagementRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PoopCleanNowSlotUseCase @Inject constructor(
@@ -13,7 +17,12 @@ class PoopCleanNowSlotUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(mongId: Long) {
         try {
-            managementRepository.poopCleanMong(mongId = mongId)
+            CoroutineScope(Dispatchers.IO).launch {
+                managementRepository.setIsPoopCleaning(mongId = mongId, isPoopCleaning = true)
+                managementRepository.poopCleanMong(mongId = mongId)
+                delay(2000)
+                managementRepository.setIsPoopCleaning(mongId = mongId, isPoopCleaning = false)
+            }
         } catch (e: RepositoryException) {
             feedbackRepository.addFeedbackLog(
                 groupCode = FeedbackCode.MANAGEMENT.groupCode,

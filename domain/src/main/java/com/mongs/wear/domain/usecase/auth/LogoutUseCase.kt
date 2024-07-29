@@ -16,7 +16,7 @@ class LogoutUseCase @Inject constructor(
     private val mqttEventClient: MqttEventClient,
     private val authRepository: AuthRepository,
     private val memberRepository: MemberRepository,
-    private val feedbackRepository: FeedbackRepository
+    private val feedbackRepository: FeedbackRepository,
 ) {
     suspend operator fun invoke() {
         try {

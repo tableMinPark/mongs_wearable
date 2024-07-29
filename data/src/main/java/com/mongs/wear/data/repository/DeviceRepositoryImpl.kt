@@ -5,6 +5,7 @@ import com.mongs.wear.data.dataStore.DeviceDataStore
 import com.mongs.wear.domain.error.RepositoryErrorCode
 import com.mongs.wear.domain.exception.RepositoryException
 import com.mongs.wear.domain.repositroy.DeviceRepository
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class DeviceRepositoryImpl @Inject constructor(
@@ -106,6 +107,50 @@ class DeviceRepositoryImpl @Inject constructor(
         } catch (e: RuntimeException) {
             throw RepositoryException(
                 errorCode = RepositoryErrorCode.GET_BACKGROUND_MAP_CODE_FAIL,
+                throwable = e,
+            )
+        }
+    }
+
+    override suspend fun setUpTime(upTime: LocalDateTime) {
+        try {
+            deviceDataStore.setUpTime(upTime = upTime)
+        } catch (e: RuntimeException) {
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.SET_UP_TIME_FAIL,
+                throwable = e,
+            )
+        }
+    }
+
+    override suspend fun getUpTime(): LocalDateTime {
+        try {
+            return deviceDataStore.getUpTime()
+        } catch (e: RuntimeException) {
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GET_UP_TIME_FAIL,
+                throwable = e,
+            )
+        }
+    }
+
+    override suspend fun setRebootFlag(rebootFlag: Boolean) {
+        try {
+            deviceDataStore.setRebootFlag(rebootFlag = rebootFlag)
+        } catch (e: RuntimeException) {
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.SET_REBOOT_FLAG_FAIL,
+                throwable = e,
+            )
+        }
+    }
+
+    override suspend fun getRebootFlag(): Boolean {
+        try {
+            return deviceDataStore.getRebootFlag()
+        } catch (e: RuntimeException) {
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.GET_REBOOT_FLAG_FAIL,
                 throwable = e,
             )
         }

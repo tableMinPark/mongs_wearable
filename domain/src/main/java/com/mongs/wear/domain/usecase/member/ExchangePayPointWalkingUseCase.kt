@@ -9,13 +9,19 @@ import com.mongs.wear.domain.repositroy.SlotRepository
 import javax.inject.Inject
 
 class ExchangePayPointWalkingUseCase @Inject constructor(
-    private val slotRepository: SlotRepository,
     private val memberRepository: MemberRepository,
     private val feedbackRepository: FeedbackRepository,
 ) {
     suspend operator fun invoke(mongId: Long, walkingCount: Int) {
         try {
-            return memberRepository.exchangePayPointWalking(mongId = mongId, walkingCount = walkingCount)
+            memberRepository.exchangePayPointWalking(mongId = mongId, walkingCount = walkingCount)
+
+            val startStepCount = memberRepository.getStartStepCount()
+            memberRepository.setStartStepCount(stepCount = startStepCount + walkingCount)
+
+            val nowWalkingCount = memberRepository.getWalkingCount()
+            memberRepository.setWalkingCount(walkingCount = nowWalkingCount - walkingCount)
+
         } catch (e: RepositoryException) {
             feedbackRepository.addFeedbackLog(
                 groupCode = FeedbackCode.MEMBER.groupCode,

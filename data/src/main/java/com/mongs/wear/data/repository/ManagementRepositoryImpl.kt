@@ -5,6 +5,7 @@ import com.mongs.wear.data.code.SlotShift
 import com.mongs.wear.data.code.SlotState
 import com.mongs.wear.data.dto.management.req.FeedMongReqDto
 import com.mongs.wear.data.dto.management.req.RegisterMongReqDto
+import com.mongs.wear.data.dto.management.req.TrainingMongReqDto
 import com.mongs.wear.data.room.client.RoomDB
 import com.mongs.wear.data.room.entity.Slot
 import com.mongs.wear.domain.code.ShiftCode
@@ -223,6 +224,41 @@ class ManagementRepositoryImpl @Inject constructor(
             throw RepositoryException(RepositoryErrorCode.STROKE_MONG_FAIL)
         }
     }
+
+    override suspend fun trainingMong(mongId: Long, trainingCode: String, score: Int) {
+        val res = managementApi.trainingMong(
+            mongId = mongId,
+            trainingMongReqDto = TrainingMongReqDto(
+                trainingCode = trainingCode,
+                score = score,
+            )
+        )
+
+        if (res.isSuccessful) {
+            res.body()?.let { body ->
+                try {
+                    roomDB.slotDao().updateByTrainingMong(
+                        mongId = mongId,
+                        weight = body.weight,
+                        strength = body.strength,
+                        satiety = body.satiety,
+                        healthy = body.healthy,
+                        sleep = body.sleep,
+                        exp = body.exp,
+                        payPoint = body.payPoint,
+                    )
+                } catch (e: RuntimeException) {
+                    throw RepositoryException(
+                        errorCode = RepositoryErrorCode.TRAINING_MONG_FAIL,
+                        throwable = e,
+                    )
+                }
+            }
+        } else {
+            throw RepositoryException(RepositoryErrorCode.TRAINING_MONG_FAIL)
+        }
+    }
+
     override suspend fun poopCleanMong(mongId: Long) {
         val res = managementApi.poopCleanMong(mongId = mongId)
 
@@ -261,6 +297,17 @@ class ManagementRepositoryImpl @Inject constructor(
         } catch (e: RuntimeException) {
             throw RepositoryException(
                 errorCode = RepositoryErrorCode.SET_IS_EATING_FAIL,
+                throwable = e,
+            )
+        }
+    }
+
+    override suspend fun setIsPoopCleaning(mongId: Long, isPoopCleaning: Boolean) {
+        try {
+            roomDB.slotDao().updateIsPoopCleaningByPoopClean(mongId = mongId, isPoopCleaning = isPoopCleaning)
+        } catch (e: RuntimeException) {
+            throw RepositoryException(
+                errorCode = RepositoryErrorCode.SET_IS_POOP_CLEANING_FAIL,
                 throwable = e,
             )
         }

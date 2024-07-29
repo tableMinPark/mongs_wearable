@@ -26,7 +26,7 @@ import com.mongs.wear.data.room.entity.MatchPlayer
     Slot::class,
     Match::class,
     MatchPlayer::class,
-], version = 82)
+], version = 83)
 @TypeConverters(Converters::class)
 abstract class RoomDB : RoomDatabase() {
     abstract fun feedbackLogDao(): FeedbackLogDao

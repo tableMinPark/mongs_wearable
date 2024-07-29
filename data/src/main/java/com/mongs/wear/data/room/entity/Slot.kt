@@ -30,6 +30,7 @@ data class Slot(
     var isHappy: Boolean = false,
     var isEating: Boolean = false,
     var isSelected: Boolean = false,
+    var isPoopCleaning: Boolean = false,
     var isGraduateCheck: Boolean = false,
 ) {
     constructor(
