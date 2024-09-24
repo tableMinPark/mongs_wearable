@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.wear.compose.material.PositionIndicator
 import com.mongs.wear.domain.vo.MapCollectionVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.global.component.background.CollectionNestedBackground
@@ -103,6 +104,7 @@ private fun CollectionMapPickContent(
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize()
     ) {
+        PositionIndicator(lazyListState = listState)
         LazyColumn(
             verticalArrangement = Arrangement.Center,
             contentPadding = PaddingValues(vertical = 40.dp),
