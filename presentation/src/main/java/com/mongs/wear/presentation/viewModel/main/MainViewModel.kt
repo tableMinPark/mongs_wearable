@@ -112,7 +112,6 @@ class MainViewModel @Inject constructor(
             val upTimeInt = upTime.format(dateTimeFormatter).toLong()
             val nowUpTimeInt = nowUpTime.format(dateTimeFormatter).toLong()
 
-            Log.d("TEST", "$upTimeInt <-> $nowUpTimeInt")
             if (upTimeInt < nowUpTimeInt - 5 || nowUpTimeInt + 5 < upTimeInt) {
                 deviceRepository.setRebootFlag(rebootFlag = true)
                 deviceRepository.setUpTime(upTime = nowUpTime)

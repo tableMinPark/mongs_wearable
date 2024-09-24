@@ -109,6 +109,9 @@ class SlotRepositoryImpl @Inject constructor(
                                 roomSlot.shiftCode = SlotShift.valueOf(bodySlot.shiftCode).code
                                 roomSlot.payPoint = bodySlot.payPoint
                                 roomSlot.born = bodySlot.born
+                                roomSlot.isHappy = false
+                                roomSlot.isEating = false
+                                roomSlot.isPoopCleaning = false
                                 roomDB.slotDao().update(slot = roomSlot)
 
                                 if (roomSlot.isSelected) {
