@@ -48,7 +48,7 @@ fun ServerErrorContent (
             Spacer(modifier = Modifier.height(15.dp))
 
             Text(
-                text = "서버연결실패\n재실행 해주세요",
+                text = "서버 점검중 또는\n서버 연결실패\n잠시후 재실행 해주세요",
                 textAlign = TextAlign.Center,
                 fontFamily = DAL_MU_RI,
                 fontWeight = FontWeight.Light,
