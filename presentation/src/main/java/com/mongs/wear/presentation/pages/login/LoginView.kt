@@ -25,11 +25,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.mongs.wear.presentation.global.component.background.LoginBackground
-import com.mongs.wear.presentation.global.component.button.GoogleSignInButton
-import com.mongs.wear.presentation.global.component.common.LoadingBar
-import com.mongs.wear.presentation.global.component.common.Logo
 import com.mongs.wear.presentation.assets.NavItem
+import com.mongs.wear.presentation.component.background.LoginBackground
+import com.mongs.wear.presentation.component.button.GoogleSignInButton
+import com.mongs.wear.presentation.component.common.LoadingBar
+import com.mongs.wear.presentation.component.common.Logo
 import com.mongs.wear.presentation.pages.login.LoginViewModel.UiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

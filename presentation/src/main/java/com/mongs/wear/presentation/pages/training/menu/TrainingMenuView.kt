@@ -19,9 +19,9 @@ import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material.PositionIndicator
 import com.mongs.wear.presentation.R
-import com.mongs.wear.presentation.global.component.background.TrainingNestedBackground
-import com.mongs.wear.presentation.global.component.common.IconChip
 import com.mongs.wear.presentation.assets.NavItem
+import com.mongs.wear.presentation.component.background.TrainingNestedBackground
+import com.mongs.wear.presentation.component.common.IconChip
 
 @Composable
 fun TrainingMenuView(

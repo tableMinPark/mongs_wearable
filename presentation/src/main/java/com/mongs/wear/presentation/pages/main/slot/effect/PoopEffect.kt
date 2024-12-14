@@ -15,8 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.mongs.wear.presentation.R
-import com.mongs.wear.presentation.global.component.background.MainPagerBackground
-
+import com.mongs.wear.presentation.component.background.MainPagerBackground
 
 val poopPadding = arrayOf(
     PaddingValues(end = 80.dp,bottom = 26.dp),

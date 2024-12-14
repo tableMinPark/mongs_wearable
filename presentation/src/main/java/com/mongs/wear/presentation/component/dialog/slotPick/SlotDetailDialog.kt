@@ -33,13 +33,13 @@ import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.CircularProgressIndicator
 import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.R
-import com.mongs.wear.presentation.global.component.common.PayPoint
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsBlue
 import com.mongs.wear.presentation.assets.MongsGreen
 import com.mongs.wear.presentation.assets.MongsLightGray
 import com.mongs.wear.presentation.assets.MongsPink
 import com.mongs.wear.presentation.assets.MongsYellow
+import com.mongs.wear.presentation.component.common.PayPoint
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit

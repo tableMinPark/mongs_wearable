@@ -19,15 +19,15 @@ import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Text
-import com.mongs.wear.presentation.global.component.background.HelpNestedBackground
-import com.mongs.wear.presentation.global.component.common.Chip
-import com.mongs.wear.presentation.global.dialog.help.HelpBattleDialog
-import com.mongs.wear.presentation.global.dialog.help.HelpInfoDialog
-import com.mongs.wear.presentation.global.dialog.help.HelpMongDialog
-import com.mongs.wear.presentation.global.dialog.help.HelpPointDialog
-import com.mongs.wear.presentation.global.dialog.help.HelpSlotDialog
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
+import com.mongs.wear.presentation.component.background.HelpNestedBackground
+import com.mongs.wear.presentation.component.common.Chip
+import com.mongs.wear.presentation.component.dialog.help.HelpBattleDialog
+import com.mongs.wear.presentation.component.dialog.help.HelpInfoDialog
+import com.mongs.wear.presentation.component.dialog.help.HelpMongDialog
+import com.mongs.wear.presentation.component.dialog.help.HelpPointDialog
+import com.mongs.wear.presentation.component.dialog.help.HelpSlotDialog
 
 @Composable
 fun HelpMenuView(

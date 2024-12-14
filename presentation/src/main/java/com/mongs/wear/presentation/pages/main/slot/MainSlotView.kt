@@ -11,9 +11,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mongs.wear.domain.code.ShiftCode
 import com.mongs.wear.domain.vo.SlotVo
-import com.mongs.wear.presentation.global.component.background.MainPagerBackground
 import com.mongs.wear.presentation.assets.MongResourceCode
 import com.mongs.wear.presentation.assets.NavItem
+import com.mongs.wear.presentation.component.background.MainPagerBackground
 import com.mongs.wear.presentation.pages.main.slot.MainSlotViewModel.UiState
 
 @Composable

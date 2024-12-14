@@ -26,12 +26,12 @@ import androidx.navigation.NavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.mongs.wear.presentation.R
-import com.mongs.wear.presentation.global.component.background.MainPagerBackground
-import com.mongs.wear.presentation.global.component.button.CircleImageButton
-import com.mongs.wear.presentation.global.component.button.CircleTextButton
-import com.mongs.wear.presentation.global.component.common.LoadingBar
-import com.mongs.wear.presentation.global.dialog.common.ConfirmDialog
 import com.mongs.wear.presentation.assets.NavItem
+import com.mongs.wear.presentation.component.background.MainPagerBackground
+import com.mongs.wear.presentation.component.button.CircleImageButton
+import com.mongs.wear.presentation.component.button.CircleTextButton
+import com.mongs.wear.presentation.component.common.LoadingBar
+import com.mongs.wear.presentation.component.dialog.common.ConfirmDialog
 
 @Composable
 fun MainConfigureView(

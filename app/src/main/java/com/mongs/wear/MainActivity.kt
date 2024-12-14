@@ -7,18 +7,15 @@ import android.hardware.SensorManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
-import android.os.SystemClock
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.mongs.wear.presentation.global.theme.MongsTheme
-import com.mongs.wear.presentation.view.main.MainView
-import com.mongs.wear.presentation.viewModel.main.MainViewModel
+import com.mongs.wear.presentation.assets.MongsTheme
+import com.mongs.wear.presentation.layout.MainView
+import com.mongs.wear.presentation.layout.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.LocalDateTime
-import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
@@ -40,13 +37,6 @@ class MainActivity : ComponentActivity() {
             )
             ActivityCompat.requestPermissions(this, permissions, 100)
         }
-
-        val nowUpTime = LocalDateTime.now().minusSeconds(TimeUnit.MILLISECONDS.toSeconds(SystemClock.uptimeMillis()))
-        mainViewModel.init(
-            buildVersion = BuildConfig.VERSION_NAME,
-            isNetworkAvailable = isNetworkAvailable(this.applicationContext),
-            nowUpTime = nowUpTime
-        )
 
         setContent {
             MongsTheme {

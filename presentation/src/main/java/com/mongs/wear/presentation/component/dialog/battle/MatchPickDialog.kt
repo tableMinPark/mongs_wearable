@@ -28,10 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.Text
-import com.mongs.wear.presentation.global.component.background.BattleMenuBackground
-import com.mongs.wear.presentation.global.component.common.ProgressIndicator
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
+import com.mongs.wear.presentation.component.background.BattleMenuBackground
+import com.mongs.wear.presentation.component.common.ProgressIndicator
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 

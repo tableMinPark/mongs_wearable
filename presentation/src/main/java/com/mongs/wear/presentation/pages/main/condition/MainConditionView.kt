@@ -23,12 +23,12 @@ import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.CircularProgressIndicator
 import com.mongs.wear.domain.vo.SlotVo
 import com.mongs.wear.presentation.R
-import com.mongs.wear.presentation.global.component.background.MainPagerBackground
-import com.mongs.wear.presentation.global.component.common.ProgressIndicator
 import com.mongs.wear.presentation.assets.MongsBlue
 import com.mongs.wear.presentation.assets.MongsGreen
 import com.mongs.wear.presentation.assets.MongsPink
 import com.mongs.wear.presentation.assets.MongsYellow
+import com.mongs.wear.presentation.component.background.MainPagerBackground
+import com.mongs.wear.presentation.component.common.ProgressIndicator
 
 @Composable
 fun MainConditionView(

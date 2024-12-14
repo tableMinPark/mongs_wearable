@@ -1,6 +1,5 @@
 package com.mongs.wear.presentation.layout
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -29,7 +28,6 @@ import com.mongs.wear.presentation.pages.training.jumping.TrainingJumpingView
 import com.mongs.wear.presentation.pages.training.menu.TrainingMenuView
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NavContent() {
     val coroutineScope = rememberCoroutineScope()

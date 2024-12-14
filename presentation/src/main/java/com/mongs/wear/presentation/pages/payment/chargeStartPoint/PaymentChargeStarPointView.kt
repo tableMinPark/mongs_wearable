@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.mongs.wear.presentation.global.component.background.PaymentNestedBackground
+import com.mongs.wear.presentation.component.background.PaymentNestedBackground
 
 @Composable
 fun PaymentChargeStarPointView(

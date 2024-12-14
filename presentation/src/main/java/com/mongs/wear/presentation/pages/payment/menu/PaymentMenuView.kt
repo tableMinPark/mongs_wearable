@@ -35,9 +35,9 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.R
-import com.mongs.wear.presentation.global.component.background.PaymentNestedBackground
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
+import com.mongs.wear.presentation.component.background.PaymentNestedBackground
 
 @Composable
 fun PaymentMenuView(

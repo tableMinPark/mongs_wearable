@@ -1,6 +1,5 @@
 package com.mongs.wear.presentation.pages.main.layout
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
@@ -15,17 +14,16 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mongs.wear.domain.vo.SlotVo
-import com.mongs.wear.presentation.global.component.background.MainPagerBackground
-import com.mongs.wear.presentation.global.component.common.LoadingBar
-import com.mongs.wear.presentation.global.component.common.PageIndicator
 import com.mongs.wear.presentation.assets.MapResourceCode
+import com.mongs.wear.presentation.component.background.MainPagerBackground
+import com.mongs.wear.presentation.component.common.LoadingBar
+import com.mongs.wear.presentation.component.common.PageIndicator
 import com.mongs.wear.presentation.pages.main.condition.MainConditionView
 import com.mongs.wear.presentation.pages.main.configure.MainConfigureView
 import com.mongs.wear.presentation.pages.main.interaction.MainInteractionView
 import com.mongs.wear.presentation.pages.main.slot.MainSlotView
 import com.mongs.wear.presentation.pages.main.walking.MainWalkingView
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainPagerView(
     navController: NavController,
@@ -72,7 +70,6 @@ private fun MainPagerLoadingBar(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun NormalMainPagerContent(
     navController: NavController,

@@ -20,9 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.R
-import com.mongs.wear.presentation.global.component.button.CircleImageButton
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
+import com.mongs.wear.presentation.component.button.CircleImageButton
 
 @Composable
 fun HelpFeedMongContent() {

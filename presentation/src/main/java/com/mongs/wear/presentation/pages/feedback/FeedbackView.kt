@@ -24,13 +24,13 @@ import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Text
 import com.mongs.wear.domain.code.FeedbackCode
-import com.mongs.wear.presentation.global.component.background.FeedbackBackground
-import com.mongs.wear.presentation.global.component.common.Chip
-import com.mongs.wear.presentation.global.component.common.LoadingBar
-import com.mongs.wear.presentation.global.dialog.common.ConfirmDialog
-import com.mongs.wear.presentation.global.dialog.common.OkDialog
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
+import com.mongs.wear.presentation.component.background.FeedbackBackground
+import com.mongs.wear.presentation.component.common.Chip
+import com.mongs.wear.presentation.component.common.LoadingBar
+import com.mongs.wear.presentation.component.dialog.common.ConfirmDialog
+import com.mongs.wear.presentation.component.dialog.common.OkDialog
 
 @Composable
 fun FeedbackView(
@@ -119,7 +119,7 @@ private fun FeedbackContent(
                 }
             }
 
-            for (feedbackCode in FeedbackCode.values()) {
+            for (feedbackCode in FeedbackCode.entries) {
                 item {
                     Chip(
                         fontColor = Color.White,

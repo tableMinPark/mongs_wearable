@@ -20,11 +20,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.Text
 import com.mongs.wear.domain.vo.SlotVo
-import com.mongs.wear.presentation.global.component.background.MainPagerBackground
-import com.mongs.wear.presentation.global.component.common.Mong
-import com.mongs.wear.presentation.assets.MongResourceCode
 import com.mongs.wear.presentation.assets.DAL_MU_RI
+import com.mongs.wear.presentation.assets.MongResourceCode
 import com.mongs.wear.presentation.assets.MongsWhite
+import com.mongs.wear.presentation.component.background.MainPagerBackground
+import com.mongs.wear.presentation.component.common.Mong
 
 @Composable
 fun GraduatedContent(

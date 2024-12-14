@@ -1,6 +1,5 @@
 package com.mongs.wear.presentation.component.dialog.help
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -14,16 +13,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.zIndex
-import com.mongs.wear.presentation.global.component.common.PageIndicator
-import com.mongs.wear.presentation.global.dialog.help.content.HelpCancelContent
-import com.mongs.wear.presentation.global.dialog.help.content.slot.HelpAddSlotContent
-import com.mongs.wear.presentation.global.dialog.help.content.slot.HelpBuySlotContent
-import com.mongs.wear.presentation.global.dialog.help.content.slot.HelpDeleteSlotContent
-import com.mongs.wear.presentation.global.dialog.help.content.slot.HelpDetailSlotContent
-import com.mongs.wear.presentation.global.dialog.help.content.slot.HelpGraduateSlotContent
-import com.mongs.wear.presentation.global.dialog.help.content.slot.HelpPickSlotContent
+import com.mongs.wear.presentation.component.common.PageIndicator
+import com.mongs.wear.presentation.component.dialog.help.content.HelpCancelContent
+import com.mongs.wear.presentation.component.dialog.help.content.slot.HelpAddSlotContent
+import com.mongs.wear.presentation.component.dialog.help.content.slot.HelpBuySlotContent
+import com.mongs.wear.presentation.component.dialog.help.content.slot.HelpDeleteSlotContent
+import com.mongs.wear.presentation.component.dialog.help.content.slot.HelpDetailSlotContent
+import com.mongs.wear.presentation.component.dialog.help.content.slot.HelpGraduateSlotContent
+import com.mongs.wear.presentation.component.dialog.help.content.slot.HelpPickSlotContent
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HelpSlotDialog(
     cancel: () -> Unit,

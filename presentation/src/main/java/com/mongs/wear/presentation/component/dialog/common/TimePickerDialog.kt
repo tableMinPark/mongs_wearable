@@ -34,11 +34,10 @@ import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material.Text
-import com.mongs.wear.presentation.global.component.button.BlueButton
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsLightGray
+import com.mongs.wear.presentation.component.button.BlueButton
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun TimePickerDialog(
@@ -47,7 +46,6 @@ fun TimePickerDialog(
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberScalingLazyListState(initialCenterItemIndex = 0)
-
 
     val isScrollInProgress = remember { derivedStateOf { listState.isScrollInProgress } }
     val coroutineScope = rememberCoroutineScope()

@@ -26,10 +26,10 @@ import androidx.navigation.NavController
 import com.mongs.wear.domain.code.ShiftCode
 import com.mongs.wear.domain.vo.SlotVo
 import com.mongs.wear.presentation.R
-import com.mongs.wear.presentation.global.component.background.MainPagerBackground
-import com.mongs.wear.presentation.global.component.button.CircleImageButton
 import com.mongs.wear.presentation.assets.MongResourceCode
 import com.mongs.wear.presentation.assets.NavItem
+import com.mongs.wear.presentation.component.background.MainPagerBackground
+import com.mongs.wear.presentation.component.button.CircleImageButton
 
 @Composable
 fun MainInteractionView(

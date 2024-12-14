@@ -34,19 +34,19 @@ import androidx.navigation.NavController
 import androidx.wear.compose.material.PageIndicatorState
 import androidx.wear.compose.material.Text
 import com.mongs.wear.domain.vo.FoodVo
-import com.mongs.wear.presentation.global.component.background.FeedNestedBackground
-import com.mongs.wear.presentation.global.component.button.BlueButton
-import com.mongs.wear.presentation.global.component.button.LeftButton
-import com.mongs.wear.presentation.global.component.button.RightButton
-import com.mongs.wear.presentation.global.component.common.LoadingBar
-import com.mongs.wear.presentation.global.component.common.PageIndicator
-import com.mongs.wear.presentation.global.component.common.PayPoint
-import com.mongs.wear.presentation.global.dialog.common.ConfirmDialog
-import com.mongs.wear.presentation.global.dialog.feed.FeedItemDetailDialog
-import com.mongs.wear.presentation.assets.FeedResourceCode
-import com.mongs.wear.presentation.assets.NavItem
 import com.mongs.wear.presentation.assets.DAL_MU_RI
+import com.mongs.wear.presentation.assets.FeedResourceCode
 import com.mongs.wear.presentation.assets.MongsWhite
+import com.mongs.wear.presentation.assets.NavItem
+import com.mongs.wear.presentation.component.background.FeedNestedBackground
+import com.mongs.wear.presentation.component.button.BlueButton
+import com.mongs.wear.presentation.component.button.LeftButton
+import com.mongs.wear.presentation.component.button.RightButton
+import com.mongs.wear.presentation.component.common.LoadingBar
+import com.mongs.wear.presentation.component.common.PageIndicator
+import com.mongs.wear.presentation.component.common.PayPoint
+import com.mongs.wear.presentation.component.dialog.common.ConfirmDialog
+import com.mongs.wear.presentation.component.dialog.feed.FeedItemDetailDialog
 import kotlin.math.max
 import kotlin.math.min
 
@@ -188,10 +188,7 @@ private fun FeedFoodPickContent(
                         .fillMaxHeight()
                         .weight(0.2f)
                 ) {
-                    LeftButton(
-                        onClick = preFood,
-                    )
-
+                    LeftButton(onClick = preFood)
                 }
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -243,9 +240,7 @@ private fun FeedFoodPickContent(
                         .fillMaxHeight()
                         .weight(0.2f)
                 ) {
-                    RightButton(
-                        onClick = nextFood,
-                    )
+                    RightButton(onClick = nextFood)
                 }
                 Spacer(modifier = Modifier.width(10.dp))
             }

@@ -38,11 +38,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.Text
-import com.mongs.wear.presentation.global.component.button.BlueButton
-import com.mongs.wear.presentation.global.dialog.common.ConfirmDialog
-import com.mongs.wear.presentation.global.dialog.common.TimePickerDialog
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsLightGray
+import com.mongs.wear.presentation.component.button.BlueButton
+import com.mongs.wear.presentation.component.dialog.common.ConfirmDialog
+import com.mongs.wear.presentation.component.dialog.common.TimePickerDialog
 
 const val SLOT_ADD_ROUND_SIZE = 10
 const val SLOT_ADD_WIDTH = 144

@@ -24,10 +24,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material.Text
-import com.mongs.wear.presentation.global.component.button.BlueButton
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
-
+import com.mongs.wear.presentation.component.button.BlueButton
 
 @Composable
 fun ConfirmDialog(

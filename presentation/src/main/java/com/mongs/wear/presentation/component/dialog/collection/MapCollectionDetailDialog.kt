@@ -17,9 +17,9 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.mongs.wear.presentation.global.component.button.BlueButton
-import com.mongs.wear.presentation.global.dialog.common.ConfirmDialog
 import com.mongs.wear.presentation.assets.MapResourceCode
+import com.mongs.wear.presentation.component.button.BlueButton
+import com.mongs.wear.presentation.component.dialog.common.ConfirmDialog
 
 
 @Composable

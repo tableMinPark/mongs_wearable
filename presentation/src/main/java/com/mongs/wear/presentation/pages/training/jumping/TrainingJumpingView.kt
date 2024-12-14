@@ -37,12 +37,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mongs.wear.domain.vo.SlotVo
 import com.mongs.wear.presentation.R
-import com.mongs.wear.presentation.global.component.background.TrainingNestedBackground
-import com.mongs.wear.presentation.global.component.common.ScoreBox
-import com.mongs.wear.presentation.global.dialog.training.TrainingEndDialog
-import com.mongs.wear.presentation.global.dialog.training.TrainingStartDialog
 import com.mongs.wear.presentation.assets.MongResourceCode
 import com.mongs.wear.presentation.assets.NavItem
+import com.mongs.wear.presentation.component.background.TrainingNestedBackground
+import com.mongs.wear.presentation.component.common.ScoreBox
+import com.mongs.wear.presentation.component.dialog.training.TrainingEndDialog
+import com.mongs.wear.presentation.component.dialog.training.TrainingStartDialog
 import com.mongs.wear.presentation.pages.training.jumping.TrainingJumpingViewModel.HurdleEngine
 import com.mongs.wear.presentation.pages.training.jumping.TrainingJumpingViewModel.PlayerEngine
 

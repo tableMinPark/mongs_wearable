@@ -1,6 +1,5 @@
 package com.mongs.wear.presentation.component.dialog.help
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -14,15 +13,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.zIndex
-import com.mongs.wear.presentation.global.component.common.PageIndicator
-import com.mongs.wear.presentation.global.dialog.help.content.point.HelpAddPayPointContent
-import com.mongs.wear.presentation.global.dialog.help.content.point.HelpAddStarPointContent
-import com.mongs.wear.presentation.global.dialog.help.content.HelpCancelContent
-import com.mongs.wear.presentation.global.dialog.help.content.point.HelpSubPayPointContent
-import com.mongs.wear.presentation.global.dialog.help.content.point.HelpSubStarPointContent
-import com.mongs.wear.presentation.global.dialog.help.content.point.HelpWarningPointContent
+import com.mongs.wear.presentation.component.common.PageIndicator
+import com.mongs.wear.presentation.component.dialog.help.content.HelpCancelContent
+import com.mongs.wear.presentation.component.dialog.help.content.point.HelpAddPayPointContent
+import com.mongs.wear.presentation.component.dialog.help.content.point.HelpAddStarPointContent
+import com.mongs.wear.presentation.component.dialog.help.content.point.HelpSubPayPointContent
+import com.mongs.wear.presentation.component.dialog.help.content.point.HelpSubStarPointContent
+import com.mongs.wear.presentation.component.dialog.help.content.point.HelpWarningPointContent
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HelpPointDialog(
     cancel: () -> Unit,

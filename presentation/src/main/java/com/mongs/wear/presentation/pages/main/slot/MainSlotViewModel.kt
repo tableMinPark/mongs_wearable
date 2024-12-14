@@ -20,6 +20,7 @@ class MainSlotViewModel @Inject constructor(
     private val evoluteNowSlotUseCase: EvoluteNowSlotUseCase,
     private val graduateReadySlotUseCase: GraduateReadySlotUseCase,
 ): ViewModel() {
+
     val uiState: UiState = UiState()
 
     fun stroke(mongId: Long) {
