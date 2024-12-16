@@ -1,8 +1,6 @@
 package com.mongs.wear.presentation.layout
 
 import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,11 +9,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.client.MqttBattleClient
-import com.mongs.wear.domain.client.MqttEventClient
-import com.mongs.wear.domain.exception.RepositoryException
+import com.mongs.wear.domain.client.BattleMqttClient
+import com.mongs.wear.domain.client.ManagementMqttClient
+import com.mongs.wear.domain.client.MqttClient
+import com.mongs.wear.domain.repositroy.AppRepository
 import com.mongs.wear.domain.repositroy.DeviceRepository
-import com.mongs.wear.domain.repositroy.MemberRepository
+import com.mongs.wear.domain.repositroy.PlayerRepository
 import com.mongs.wear.domain.repositroy.SlotRepository
 import com.mongs.wear.domain.usecase.common.SetBuildVersionUseCase
 import com.mongs.wear.domain.usecase.common.SetDeviceIdUseCase
@@ -31,19 +30,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val deviceRepository: DeviceRepository,
-    private val memberRepository: MemberRepository,
+    private val playerRepository: PlayerRepository,
     private val slotRepository: SlotRepository,
-    private val mqttEventClient: MqttEventClient,
-    private val mqttBattleClient: MqttBattleClient,
-    private val setBuildVersionUseCase: SetBuildVersionUseCase,
-    private val setDeviceIdUseCase: SetDeviceIdUseCase,
+    private val managementMqttClient: ManagementMqttClient,
+    private val battleMqttClient: BattleMqttClient,
+
+    private val mqttClient: MqttClient,
+    private val appRepository: AppRepository,
     private val stepSensorEventListener: StepSensorEventListener,
+
 ) : ViewModel() {
 
-    companion object {
-        private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
-    }
+//    companion object {
+//        private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+//    }
 
     val uiState = UiState()
 
@@ -52,35 +52,32 @@ class MainViewModel @Inject constructor(
     val networkFlag: LiveData<Boolean> get() = _networkFlag
     private val _networkFlag = MediatorLiveData<Boolean>()
 
-    fun init(buildVersion: String, isNetworkAvailable: Boolean, nowUpTime: LocalDateTime) {
+    fun init(buildVersion: String, isNetworkAvailable: Boolean) {
+
         viewModelScope.launch(Dispatchers.Main) {
+
             if (isNetworkAvailable) {
-                withContext(Dispatchers.IO) {
-                    deviceRepository.setNetworkFlag(networkFlag = true)
-                }
-            } else {
-                withContext(Dispatchers.IO) {
-                    deviceRepository.setNetworkFlag(networkFlag = false)
-                }
+
+                mqttClient.setConnection()
             }
 
             withContext(Dispatchers.IO) {
-                setBuildVersionUseCase(buildVersion = buildVersion)
-                setDeviceIdUseCase()
+                appRepository.setNetwork(network = isNetworkAvailable)
+                appRepository.set
             }
 
-            _networkFlag.addSource(withContext(Dispatchers.IO) { deviceRepository.getNetworkFlagLive() }) { networkFlag ->
-                _networkFlag.value = networkFlag
+            _networkFlag.addSource(withContext(Dispatchers.IO) { appRepository.getNetworkLive() }) {
+                _networkFlag.value = it
             }
 
-            val upTime = deviceRepository.getUpTime()
-            val upTimeInt = upTime.format(dateTimeFormatter).toLong()
-            val nowUpTimeInt = nowUpTime.format(dateTimeFormatter).toLong()
-
-            if (upTimeInt < nowUpTimeInt - 5 || nowUpTimeInt + 5 < upTimeInt) {
-                deviceRepository.setRebootFlag(rebootFlag = true)
-                deviceRepository.setUpTime(upTime = nowUpTime)
-            }
+//            val upTime = deviceRepository.getUpTime()
+//            val upTimeInt = upTime.format(dateTimeFormatter).toLong()
+//            val nowUpTimeInt = nowUpTime.format(dateTimeFormatter).toLong()
+//
+//            if (upTimeInt < nowUpTimeInt - 5 || nowUpTimeInt + 5 < upTimeInt) {
+//                deviceRepository.setRebootFlag(rebootFlag = true)
+//                deviceRepository.setUpTime(upTime = nowUpTime)
+//            }
 
             uiState.loadingBar = false
         }
@@ -97,10 +94,10 @@ class MainViewModel @Inject constructor(
     }
 
     fun reconnectMqttEvent() = CoroutineScope(Dispatchers.IO).launch {
-        mqttEventClient.reconnect(
+        managementMqttClient.reconnect(
             resetMember = {
                 viewModelScope.launch(Dispatchers.IO) {
-                    memberRepository.setMember()
+                    playerRepository.setMember()
                 }
             },
             resetSlot = {
@@ -112,15 +109,15 @@ class MainViewModel @Inject constructor(
     }
 
     fun pauseConnectMqttEvent() = CoroutineScope(Dispatchers.IO).launch {
-        runBlocking { mqttEventClient.pauseConnect() }
+        runBlocking { managementMqttClient.pauseConnect() }
     }
 
     fun disconnectMqttEvent() = CoroutineScope(Dispatchers.IO).launch {
-        runBlocking { mqttEventClient.disconnect() }
+        runBlocking { managementMqttClient.disconnect() }
     }
 
     fun disconnectMqttBattle() = CoroutineScope(Dispatchers.IO).launch {
-        runBlocking { mqttBattleClient.disconnect() }
+        runBlocking { battleMqttClient.disconnect() }
     }
 
     class UiState (

@@ -16,6 +16,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
 ): ViewModel() {
+
     val uiState: UiState = UiState()
 
     fun loginFail() {
@@ -26,26 +27,29 @@ class LoginViewModel @Inject constructor(
     }
 
     fun reLoginSuccess(email: String?, name: String?) {
+
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                loginUseCase(email, name)
-                uiState.navMainPagerView = true
-            } catch (_: UseCaseException) {
+
+            if (email.isNullOrEmpty() || name.isNullOrEmpty()) {
                 uiState.loadingBar = false
                 uiState.signInButton = true
+            } else {
+                loginUseCase(email, name)
+                uiState.navMainPagerView = true
             }
         }
     }
 
     fun loginSuccess(email: String?, name: String?) {
+
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                loginUseCase(email, name)
-//                resetWalkingCountUseCase()
-                uiState.navMainPagerView = true
-            } catch (_: UseCaseException) {
+
+            if (email.isNullOrEmpty() || name.isNullOrEmpty()) {
                 uiState.loadingBar = false
                 uiState.signInButton = true
+            } else {
+                loginUseCase(email, name)
+                uiState.navMainPagerView = true
             }
         }
     }
