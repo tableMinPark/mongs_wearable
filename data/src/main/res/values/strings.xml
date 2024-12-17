@@ -1,8 +1,0 @@
-<resources>
-    <string name="mqtt_username">mongs</string>
-    <string name="mqtt_password">mongscorp.!</string>
-    <string name="mqtt_event_member_base_topic">mongs/member</string>
-    <string name="mqtt_event_mong_base_topic">mongs/mong</string>
-    <string name="mqtt_battle_search_base_topic">mongs/battle/search</string>
-    <string name="mqtt_battle_match_base_topic">mongs/battle/match</string>
-</resources>

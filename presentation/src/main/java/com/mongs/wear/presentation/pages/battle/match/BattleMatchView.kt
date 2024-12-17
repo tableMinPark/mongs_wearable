@@ -40,8 +40,7 @@ import androidx.wear.compose.material.Text
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.ImageDecoderDecoder
-import com.mongs.wear.domain.code.BattlePickCode
-import com.mongs.wear.domain.code.BattleStateCode
+import com.mongs.wear.core.enums.MatchRoundCode
 import com.mongs.wear.domain.code.MatchStateCode
 import com.mongs.wear.domain.vo.MatchPlayerVo
 import com.mongs.wear.domain.vo.MatchVo
@@ -104,9 +103,9 @@ fun BattleMatchView(
             if (battleMatchViewModel.uiState.matchPickDialog) {
                 MatchPickDialog(
                     maxSeconds = BattleConst.MAX_SECONDS,
-                    attack = { battleMatchViewModel.matchPick(BattlePickCode.ATTACK) },
-                    defence = { battleMatchViewModel.matchPick(BattlePickCode.DEFENCE) },
-                    heal = { battleMatchViewModel.matchPick(BattlePickCode.HEAL) },
+                    attack = { battleMatchViewModel.matchPick(MatchRoundCode.MATCH_PICK_ATTACK) },
+                    defence = { battleMatchViewModel.matchPick(MatchRoundCode.MATCH_PICK_DEFENCE) },
+                    heal = { battleMatchViewModel.matchPick(MatchRoundCode.MATCH_PICK_HEAL) },
                     modifier = Modifier.zIndex(1f),
                 )
             } else if (matchVo.value.matchStateCode == MatchStateCode.ENTER) {
@@ -459,8 +458,8 @@ private fun MatchPlayer(
                 .zIndex(2f)
         ) {
             when (matchPlayerVo.state) {
-                BattleStateCode.NONE -> {}
-                BattleStateCode.HEAL -> {
+                MatchRoundCode.NONE -> {}
+                MatchRoundCode.MATCH_HEAL -> {
                     Image(
                         painter = rememberAsyncImagePainter(
                             model = R.drawable.health,
@@ -475,7 +474,7 @@ private fun MatchPlayer(
                     )
                 }
 
-                BattleStateCode.DAMAGE_AND_HEAL -> {
+                MatchRoundCode.MATCH_ATTACKED_HEAL -> {
                     Image(
                         painter = rememberAsyncImagePainter(
                             model = R.drawable.health,
@@ -502,7 +501,7 @@ private fun MatchPlayer(
                     )
                 }
 
-                BattleStateCode.DAMAGE -> {
+                MatchRoundCode.MATCH_ATTACKED -> {
                     Image(
                         painter = rememberAsyncImagePainter(
                             model = R.drawable.attack_motion,
@@ -517,7 +516,7 @@ private fun MatchPlayer(
                     )
                 }
 
-                BattleStateCode.DEFENCE -> {
+                MatchRoundCode.MATCH_DEFENCE -> {
                     Image(
                         painter = rememberAsyncImagePainter(
                             model = R.drawable.defence_motion,
@@ -531,6 +530,8 @@ private fun MatchPlayer(
                         contentScale = ContentScale.FillBounds
                     )
                 }
+
+                else -> {}
             }
         }
     }

@@ -14,13 +14,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.mongs.wear.presentation.assets.MongsTheme
 import com.mongs.wear.presentation.layout.MainView
-import com.mongs.wear.presentation.layout.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val mainViewModel: MainViewModel by viewModels()
+
+    private val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +38,8 @@ class MainActivity : ComponentActivity() {
             ActivityCompat.requestPermissions(this, permissions, 100)
         }
 
+        mainActivityViewModel.init(network = this.isNetworkAvailable(this))
+
         setContent {
             MongsTheme {
                 MainView(
@@ -49,20 +51,19 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        mainViewModel.connectSensor(sensorManager = application.getSystemService(Context.SENSOR_SERVICE) as SensorManager)
-        mainViewModel.reconnectMqttEvent()
+        mainActivityViewModel.connectSensor(sensorManager = application.getSystemService(Context.SENSOR_SERVICE) as SensorManager)
+        mainActivityViewModel.resumeConnectMqtt()
     }
 
     override fun onPause() {
         super.onPause()
-        mainViewModel.disconnectSensor()
-        mainViewModel.pauseConnectMqttEvent()
+        mainActivityViewModel.disconnectSensor()
+        mainActivityViewModel.pauseConnectMqtt()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mainViewModel.disconnectMqttEvent()
-        mainViewModel.disconnectMqttBattle()
+        mainActivityViewModel.disconnectMqtt()
     }
 
     private fun isNetworkAvailable(context: Context): Boolean {

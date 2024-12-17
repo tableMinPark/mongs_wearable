@@ -120,7 +120,7 @@ private fun CollectionMongPickContent(
                         for (index: Int in startIndex..min(mongCollectionVoList.size, startIndex + 2)) {
                             val mongCollectionVo = mongCollectionVoList[index - 1]
 
-                            if (mongCollectionVo.disable) {
+                            if (mongCollectionVo.isIncluded) {
                                 CircleTextButton(
                                     text = "?",
                                     border = R.drawable.interaction_bnt_darkpurple,

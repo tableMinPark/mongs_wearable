@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.exception.UseCaseException
+import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.usecase.auth.LogoutUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +24,7 @@ class MainConfigureViewModel @Inject constructor(
                 logoutUseCase()
 //                resetWalkingCountUseCase()
                 uiState.navLoginView = true
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
                 uiState.loadingBar = false
                 uiState.logoutDialog = false
             }

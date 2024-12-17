@@ -1,14 +1,14 @@
 package com.mongs.wear.domain.repositroy
 
-import com.mongs.wear.domain.model.FeedLogModel
+import com.mongs.wear.domain.model.FeedItemModel
 
 interface ManagementRepository {
 
-    suspend fun addMong(name: String, sleepStart: String, sleepEnd: String)
+    suspend fun createMong(name: String, sleepStart: String, sleepEnd: String)
 
     suspend fun deleteMong(mongId: Long)
 
-    suspend fun getFeedLog(mongId: Long): List<FeedLogModel>
+    suspend fun getFeedLog(mongId: Long): List<FeedItemModel>
 
     suspend fun feedMong(mongId: Long, code: String)
 
@@ -31,4 +31,6 @@ interface ManagementRepository {
     suspend fun setIsEating(mongId: Long, isEating: Boolean)
 
     suspend fun setIsPoopCleaning(mongId: Long, isPoopCleaning: Boolean)
+
+
 }

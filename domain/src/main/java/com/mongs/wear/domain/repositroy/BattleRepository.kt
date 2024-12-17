@@ -22,9 +22,9 @@ interface BattleRepository {
 
     suspend fun matchWaitCancel(mongId: Long)
 
-    suspend fun matchStart(roomId: String)
+    suspend fun matchStart(roomId: Long)
 
-    suspend fun matchPick(roomId: String)
+    suspend fun matchPick(roomId: Long)
 
-    suspend fun matchOver(roomId: String)
+    suspend fun matchOver(roomId: Long)
 }

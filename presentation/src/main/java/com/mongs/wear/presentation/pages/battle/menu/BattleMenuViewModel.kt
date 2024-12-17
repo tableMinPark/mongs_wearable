@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.exception.UseCaseException
+import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.usecase.battle.MatchWaitCancelUseCase
 import com.mongs.wear.domain.usecase.battle.MatchWaitUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,7 +36,7 @@ class BattleMenuViewModel @Inject constructor(
                         uiState.navBattleMatchView = true
                     }
                 )
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
                 uiState.loadingBar = false
             }
         }
@@ -47,7 +47,7 @@ class BattleMenuViewModel @Inject constructor(
             try {
                 matchWaitCancelUseCase()
                 uiState.loadingBar = false
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
                 uiState.loadingBar = false
             }
         }

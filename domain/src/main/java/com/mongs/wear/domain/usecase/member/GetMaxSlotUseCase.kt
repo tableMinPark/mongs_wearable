@@ -8,6 +8,6 @@ class GetMaxSlotUseCase @Inject constructor(
     private val playerRepository: PlayerRepository,
 ) {
     suspend operator fun invoke(): LiveData<Int> {
-        return playerRepository.getMaxSlotLive()
+        return playerRepository.getSlotCountLive()
     }
 }

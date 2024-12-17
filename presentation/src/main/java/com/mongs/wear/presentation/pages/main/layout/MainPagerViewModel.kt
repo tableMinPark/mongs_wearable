@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.exception.UseCaseException
+import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.usecase.configure.GetBackgroundMapCodeUseCase
 import com.mongs.wear.domain.usecase.slot.GetNowSlotUseCase
 import com.mongs.wear.domain.vo.SlotVo
@@ -22,6 +22,7 @@ class MainPagerViewModel @Inject constructor(
     private val getNowSlotUseCase: GetNowSlotUseCase,
     private val getBackgroundMapCodeUseCase: GetBackgroundMapCodeUseCase,
 ): ViewModel() {
+
     val uiState = UiState()
 
     val slotVo: LiveData<SlotVo?> get() = _slotVo
@@ -52,7 +53,7 @@ class MainPagerViewModel @Inject constructor(
 
                 uiState.loadingBar = false
 
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
             }
         }
     }

@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.exception.UseCaseException
+import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.usecase.slot.PoopCleanNowSlotUseCase
 import com.mongs.wear.domain.usecase.slot.SleepingNowSlotUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +18,7 @@ class MainInteractionViewModel @Inject constructor(
     private val sleepingNowSlotUseCase: SleepingNowSlotUseCase,
     private val poopCleanNowSlotUseCase: PoopCleanNowSlotUseCase,
 ): ViewModel() {
+
     val uiState: UiState = UiState()
 
     fun sleeping(mongId: Long) {
@@ -25,17 +26,18 @@ class MainInteractionViewModel @Inject constructor(
             try {
                 sleepingNowSlotUseCase(mongId = mongId)
                 uiState.navMainSlotView = true
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
                 uiState.alertSleepingFail = true
             }
         }
     }
+
     fun poopClean(mongId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 poopCleanNowSlotUseCase(mongId = mongId)
                 uiState.navMainSlotView = true
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
                 uiState.alertPoopCleanFail = true
             }
         }

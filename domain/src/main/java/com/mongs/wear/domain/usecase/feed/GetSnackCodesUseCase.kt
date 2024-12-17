@@ -12,7 +12,7 @@ class GetSnackCodesUseCase @Inject constructor(
     suspend operator fun invoke(): List<SnackVo> {
         val slotModel = slotRepository.getNowSlot()
         val snackVos = ArrayList<SnackVo>()
-        val feedLogModelMap = managementRepository.getFeedLog(mongId = slotModel.mongId).associateBy { it.code }
+        val feedLogModelMap = managementRepository.getFeedLog(mongId = slotModel.mongId).associateBy { it.foodTypeCode }
 
         return snackVos
     }

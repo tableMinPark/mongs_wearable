@@ -1,7 +1,10 @@
 package com.mongs.wear.domain.vo
 
 data class MongCollectionVo(
-    val code: String = "CH000",
+
+    val code: String = "",
+
     val name: String = "",
-    val disable: Boolean = false,
+
+    val isIncluded: Boolean = false,
 )

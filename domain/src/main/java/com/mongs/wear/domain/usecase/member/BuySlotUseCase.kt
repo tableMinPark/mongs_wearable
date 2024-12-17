@@ -7,7 +7,6 @@ class BuySlotUseCase @Inject constructor(
     private val playerRepository: PlayerRepository,
 ) {
     suspend operator fun invoke() {
-        val maxSlot = playerRepository.buySlot()
-        playerRepository.setMaxSlot(maxSlot = maxSlot)
+        playerRepository.buySlot()
     }
 }

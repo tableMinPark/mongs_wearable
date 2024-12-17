@@ -8,7 +8,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.exception.UseCaseException
+import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.usecase.feed.FeedUseCase
 import com.mongs.wear.domain.usecase.feed.GetFoodCodesUseCase
 import com.mongs.wear.domain.usecase.slot.GetNowSlotPayPointUseCase
@@ -56,7 +56,7 @@ class FeedFoodPickViewModel @Inject constructor(
                 _foodVoList.postValue(foodVoList)
 
                 uiState.loadingBar = false
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
                 uiState.navFeedMenu = true
                 uiState.loadingBar = false
             }
@@ -69,7 +69,7 @@ class FeedFoodPickViewModel @Inject constructor(
                 feedUseCase(code = foodCode)
                 uiState.navMainPager = true
                 uiState.buyDialog = false
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
                 uiState.navMainPager = true
                 uiState.buyDialog = false
             }

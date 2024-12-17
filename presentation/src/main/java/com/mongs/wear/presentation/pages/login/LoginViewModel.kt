@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.exception.UseCaseException
+import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.usecase.auth.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -30,12 +30,14 @@ class LoginViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            if (email.isNullOrEmpty() || name.isNullOrEmpty()) {
-                uiState.loadingBar = false
-                uiState.signInButton = true
-            } else {
+            try {
                 loginUseCase(email, name)
                 uiState.navMainPagerView = true
+
+            } catch (e: ErrorException) {
+
+                uiState.loadingBar = false
+                uiState.signInButton = true
             }
         }
     }
@@ -44,12 +46,14 @@ class LoginViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            if (email.isNullOrEmpty() || name.isNullOrEmpty()) {
-                uiState.loadingBar = false
-                uiState.signInButton = true
-            } else {
+            try {
                 loginUseCase(email, name)
                 uiState.navMainPagerView = true
+
+            } catch (e: ErrorException) {
+
+                uiState.loadingBar = false
+                uiState.signInButton = true
             }
         }
     }

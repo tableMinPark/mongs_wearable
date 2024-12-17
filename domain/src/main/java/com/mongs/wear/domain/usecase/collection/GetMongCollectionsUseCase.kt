@@ -7,14 +7,12 @@ import javax.inject.Inject
 class GetMongCollectionsUseCase @Inject constructor(
     private val collectionRepository: CollectionRepository,
 ) {
-    suspend operator fun invoke(): List<MongCollectionVo> {
-        val mapCollectionModels = collectionRepository.getMongCollections()
-        return mapCollectionModels.map {
+    suspend operator fun invoke(): List<MongCollectionVo> =
+        collectionRepository.getMongCollections().map {
             MongCollectionVo(
                 code = it.code,
                 name = it.name,
-                disable = it.disable
+                isIncluded = it.isIncluded
             )
         }
-    }
 }

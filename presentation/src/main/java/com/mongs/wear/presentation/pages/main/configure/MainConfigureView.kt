@@ -85,9 +85,7 @@ fun MainConfigureView(
         if (mainConfigureViewModel.uiState.navLoginView) {
             scrollPage(2)
             navController.navigate(NavItem.Login.route) {
-                popUpTo(
-                    navController.graph.id
-                )
+                popUpTo(navController.graph.id)
             }
             mainConfigureViewModel.uiState.navLoginView = false
         }

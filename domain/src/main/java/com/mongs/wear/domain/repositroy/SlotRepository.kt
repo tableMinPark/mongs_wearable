@@ -14,7 +14,7 @@ interface SlotRepository {
 
     suspend fun getSlot(mongId: Long): SlotModel
 
-    suspend fun setNowSlot(subScribeMong: suspend (Long) -> Unit, mongId: Long)
+    suspend fun setNowSlot(mongId: Long)
 
     suspend fun getNowSlot(): SlotModel
 

@@ -8,7 +8,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.exception.UseCaseException
+import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.usecase.member.BuySlotUseCase
 import com.mongs.wear.domain.usecase.member.GetMaxSlotUseCase
 import com.mongs.wear.domain.usecase.member.GetStarPointUseCase
@@ -91,7 +91,7 @@ class SlotPickViewModel @Inject constructor(
 
                 uiState.loadingBar = false
 
-            } catch (e: UseCaseException) {
+            } catch (e: ErrorException) {
                 uiState.navMainPager = true
             }
         }
@@ -104,7 +104,7 @@ class SlotPickViewModel @Inject constructor(
                 uiState.loadingBar = true
                 addSlotUseCase(name = name, sleepStart = sleepStart, sleepEnd = sleepEnd)
                 uiState.loadingBar = false
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
                 uiState.loadingBar = false
             }
         }
@@ -117,7 +117,7 @@ class SlotPickViewModel @Inject constructor(
                 uiState.loadingBar = true
                 removeSlotUseCase(mongId = mongId)
                 uiState.loadingBar = false
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
                 uiState.loadingBar = false
             }
         }
@@ -130,7 +130,7 @@ class SlotPickViewModel @Inject constructor(
                 uiState.loadingBar = true
                 setNowSlotUseCase(mongId = mongId)
                 uiState.navMainPager = true
-            } catch (e: UseCaseException) {
+            } catch (e: ErrorException) {
                 uiState.loadingBar = false
             }
         }
@@ -143,7 +143,7 @@ class SlotPickViewModel @Inject constructor(
                 uiState.loadingBar = true
                 graduateSlotUseCase(mongId = mongId)
                 uiState.loadingBar = false
-            } catch (e: UseCaseException) {
+            } catch (e: ErrorException) {
                 uiState.loadingBar = false
             }
         }
@@ -156,7 +156,7 @@ class SlotPickViewModel @Inject constructor(
                 uiState.loadingBar = true
                 buySlotUseCase()
                 uiState.loadingBar = false
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
                 uiState.loadingBar = false
             }
         }

@@ -7,8 +7,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.code.BattlePickCode
-import com.mongs.wear.domain.exception.UseCaseException
+import com.mongs.wear.core.enums.MatchRoundCode
+import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.usecase.battle.GetMatchUseCase
 import com.mongs.wear.domain.usecase.battle.GetMyMatchPlayerUseCase
 import com.mongs.wear.domain.usecase.battle.GetOtherMatchPlayerUseCase
@@ -73,7 +73,7 @@ class BattleMatchViewModel @Inject constructor(
 
                 uiState.isLoading = false
 
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
             }
         }
     }
@@ -82,17 +82,17 @@ class BattleMatchViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 matchStartUseCase()
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
             }
         }
     }
 
-    fun matchPick(pickCode: BattlePickCode) {
+    fun matchPick(pickCode: MatchRoundCode) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 matchPickUseCase(pickCode)
                 uiState.matchPickDialog = false
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
             }
         }
     }
@@ -102,7 +102,7 @@ class BattleMatchViewModel @Inject constructor(
             try {
                 matchOverUseCase()
                 uiState.matchPickDialog = false
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
             }
         }
     }
@@ -111,7 +111,7 @@ class BattleMatchViewModel @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 matchExitUseCase()
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
             }
         }
     }

@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.exception.UseCaseException
+import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.usecase.collection.GetMongCollectionsUseCase
 import com.mongs.wear.domain.vo.MongCollectionVo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +20,7 @@ import javax.inject.Inject
 class CollectionMongPickViewModel @Inject constructor(
     private val getMongCollectionsUseCase: GetMongCollectionsUseCase,
 ): ViewModel() {
+
     val uiState: UiState = UiState()
     val mongCollectionVoList: LiveData<List<MongCollectionVo>> get() = _mongCollectionVoList
     private val _mongCollectionVoList = MutableLiveData<List<MongCollectionVo>>()
@@ -33,7 +34,7 @@ class CollectionMongPickViewModel @Inject constructor(
                 }
                 _mongCollectionVoList.postValue(mongCollectionVoList)
                 uiState.loadingBar = false
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
                 uiState.navCollectionMenu = true
                 uiState.loadingBar = false
             }

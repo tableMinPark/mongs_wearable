@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.exception.UseCaseException
+import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.usecase.collection.GetMapCollectionsUseCase
 import com.mongs.wear.domain.usecase.configure.SetBackgroundMapCodeUseCase
 import com.mongs.wear.domain.vo.MapCollectionVo
@@ -22,6 +22,7 @@ class CollectionMapPickViewModel @Inject constructor(
     private val getMapCollectionsUseCase: GetMapCollectionsUseCase,
     private val setBackgroundMapCodeUseCase: SetBackgroundMapCodeUseCase,
 ): ViewModel() {
+
     val uiState: UiState = UiState()
     val mapCollectionVoList: LiveData<List<MapCollectionVo>> get() = _mapCollectionVoList
     private val _mapCollectionVoList = MutableLiveData<List<MapCollectionVo>>()
@@ -35,7 +36,7 @@ class CollectionMapPickViewModel @Inject constructor(
                 }
                 _mapCollectionVoList.postValue(mapCollectionVoList)
                 uiState.loadingBar = false
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
                 uiState.navCollectionMenu = true
                 uiState.loadingBar = false
             }
@@ -49,7 +50,7 @@ class CollectionMapPickViewModel @Inject constructor(
                 setBackgroundMapCodeUseCase(code = mapCode)
                 uiState.detailDialog = false
                 uiState.loadingBar = false
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
                 uiState.detailDialog = false
                 uiState.loadingBar = false
             }

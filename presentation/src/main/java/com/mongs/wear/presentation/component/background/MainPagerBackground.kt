@@ -1,6 +1,5 @@
 package com.mongs.wear.presentation.component.background
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -25,7 +24,6 @@ import kotlin.math.absoluteValue
 
 private val pageBrightness = arrayOf(0.4f, 0.4f, 0.0f, 0.4f, 0.4f)
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainPagerBackground(
     mapCode: String = MapResourceCode.MP000.name,

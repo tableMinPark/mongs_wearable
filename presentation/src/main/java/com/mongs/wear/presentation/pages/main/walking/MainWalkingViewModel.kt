@@ -7,8 +7,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.exception.UseCaseException
-import com.mongs.wear.domain.usecase.member.ExchangePayPointWalkingUseCase
+import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.domain.usecase.member.ExchangeWalkingCountUseCase
 import com.mongs.wear.domain.usecase.member.GetWalkingCountUseCase
 import com.mongs.wear.domain.usecase.slot.GetNowSlotPayPointUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,8 +21,9 @@ import javax.inject.Inject
 class MainWalkingViewModel @Inject constructor(
     private val getNowSlotPayPointUseCase: GetNowSlotPayPointUseCase,
     private val getWalkingCountUseCase: GetWalkingCountUseCase,
-    private val exchangePayPointWalkingUseCase: ExchangePayPointWalkingUseCase,
+    private val exchangeWalkingCountUseCase: ExchangeWalkingCountUseCase,
 ): ViewModel() {
+
     val uiState: UiState = UiState()
 
     val payPoint: LiveData<Int> get() = _payPoint
@@ -35,25 +36,17 @@ class MainWalkingViewModel @Inject constructor(
             try {
                 uiState.loadingBar = true
 
-                _payPoint.addSource(
-                    withContext(Dispatchers.IO) {
-                        getNowSlotPayPointUseCase()
-                    }
-                ) { payPoint ->
-                    _payPoint.value = payPoint
+                _payPoint.addSource(withContext(Dispatchers.IO) { getNowSlotPayPointUseCase() }) {
+                    _payPoint.value = it
                 }
 
-                _walkingCount.addSource(
-                    withContext(Dispatchers.IO) {
-                        getWalkingCountUseCase()
-                    }
-                ) { walkingCount ->
-                    _walkingCount.value = walkingCount
+                _walkingCount.addSource(withContext(Dispatchers.IO) { getWalkingCountUseCase() }) {
+                    _walkingCount.value = it
                 }
 
                 uiState.loadingBar = false
 
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
 
             }
         }
@@ -64,9 +57,9 @@ class MainWalkingViewModel @Inject constructor(
             try {
                 uiState.chargePayPointDialog = false
                 uiState.loadingBar = true
-                exchangePayPointWalkingUseCase(mongId = mongId, walkingCount = walkingCount)
+                exchangeWalkingCountUseCase(mongId = mongId, walkingCount = walkingCount)
                 uiState.loadingBar = false
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
                 uiState.loadingBar = false
             }
         }

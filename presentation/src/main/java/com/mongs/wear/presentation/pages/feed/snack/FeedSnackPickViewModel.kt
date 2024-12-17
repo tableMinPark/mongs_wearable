@@ -8,7 +8,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.exception.UseCaseException
+import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.usecase.feed.FeedUseCase
 import com.mongs.wear.domain.usecase.feed.GetSnackCodesUseCase
 import com.mongs.wear.domain.usecase.slot.GetNowSlotPayPointUseCase
@@ -50,7 +50,7 @@ class FeedSnackPickViewModel @Inject constructor(
 
 
                 uiState.loadingBar = false
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
                 uiState.navFeedMenu = true
             }
         }
@@ -62,7 +62,7 @@ class FeedSnackPickViewModel @Inject constructor(
                 feedUseCase(code = snackCode)
                 uiState.navMainPager = true
                 uiState.buyDialog = false
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
                 uiState.navMainPager = true
                 uiState.buyDialog = false
             }

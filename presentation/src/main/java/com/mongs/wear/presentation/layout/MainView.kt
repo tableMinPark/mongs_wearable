@@ -3,6 +3,7 @@ package com.mongs.wear.presentation.layout
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -12,27 +13,26 @@ import com.mongs.wear.presentation.component.background.MainBackground
 import com.mongs.wear.presentation.component.background.ServerErrorBackground
 import com.mongs.wear.presentation.component.common.LoadingBar
 
-
 @Composable
 fun MainView (
     closeApp: () -> Unit,
     mainViewModel: MainViewModel = hiltViewModel(),
 ) {
-    val networkFlag = mainViewModel.networkFlag.observeAsState(true)
+
+    val networkFlag = mainViewModel.network.observeAsState(true)
 
     if (mainViewModel.uiState.loadingBar) {
         MainBackground()
         MainLoadingBar()
+    } else if (!networkFlag.value) {
+        ServerErrorBackground()
+        ServerErrorContent(closeApp = closeApp, modifier = Modifier.zIndex(1f))
     } else {
-        if (networkFlag.value) {
-            NavContent()
-        } else {
-            ServerErrorBackground()
-            ServerErrorContent(
-                closeApp = closeApp,
-                modifier = Modifier.zIndex(1f)
-            )
-        }
+        NavContent()
+    }
+
+    LaunchedEffect(Unit) {
+        mainViewModel.init()
     }
 }
 

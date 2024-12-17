@@ -1,15 +1,15 @@
 package com.mongs.wear.domain.usecase.configure
 
-import com.mongs.wear.domain.repositroy.DeviceRepository
+import com.mongs.wear.domain.repositroy.AppRepository
 import javax.inject.Inject
 
 class SetBackgroundMapCodeUseCase @Inject constructor(
-    private val deviceRepository: DeviceRepository,
+    private val appRepository: AppRepository,
 ) {
     suspend operator fun invoke() {
-        deviceRepository.setBackgroundMapCode(code = "MP000")
+        appRepository.setBgMapTypeCode(mapTypeCode = "MP000")
     }
     suspend operator fun invoke(code: String) {
-        deviceRepository.setBackgroundMapCode(code = code)
+        appRepository.setBgMapTypeCode(mapTypeCode = code)
     }
 }

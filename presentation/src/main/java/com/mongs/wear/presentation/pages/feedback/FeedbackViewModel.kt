@@ -5,15 +5,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.code.FeedbackCode
-import com.mongs.wear.domain.exception.UseCaseException
+import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.core.enums.FeedbackCode
+import com.mongs.wear.domain.repositroy.FeedbackRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FeedbackViewModel @Inject constructor() : ViewModel() {
+class FeedbackViewModel @Inject constructor(
+    private val feedbackRepository: FeedbackRepository,
+) : ViewModel() {
     val uiState = UiState()
 
     init {
@@ -25,9 +28,10 @@ class FeedbackViewModel @Inject constructor() : ViewModel() {
     fun addFeedback(feedbackCode: FeedbackCode) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                feedbackRepository.createFeedback(title = feedbackCode.message, content = feedbackCode.secondaryMessage)
                 uiState.okDialog = true
                 uiState.addDialog = false
-            } catch (_: UseCaseException) {
+            } catch (_: ErrorException) {
                 uiState.okDialog = true
                 uiState.addDialog = false
             }

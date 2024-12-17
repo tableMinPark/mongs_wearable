@@ -9,7 +9,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.exception.UseCaseException
+import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.usecase.slot.GetNowSlotUseCase
 import com.mongs.wear.domain.usecase.slot.TrainingSlotUseCase
 import com.mongs.wear.domain.vo.SlotVo
@@ -69,7 +69,7 @@ class TrainingJumpingViewModel @Inject constructor(
                 ) { slotVo ->
                     _slotVo.value = slotVo
                 }
-            } catch (e: UseCaseException) {
+            } catch (e: ErrorException) {
                 uiState.navMainPager = true
             }
         }

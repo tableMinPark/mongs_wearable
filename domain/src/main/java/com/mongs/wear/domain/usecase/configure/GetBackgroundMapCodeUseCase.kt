@@ -1,13 +1,11 @@
 package com.mongs.wear.domain.usecase.configure
 
 import androidx.lifecycle.LiveData
-import com.mongs.wear.domain.repositroy.DeviceRepository
+import com.mongs.wear.domain.repositroy.AppRepository
 import javax.inject.Inject
 
 class GetBackgroundMapCodeUseCase @Inject constructor(
-    private val deviceRepository: DeviceRepository,
+    private val appRepository: AppRepository,
 ) {
-    suspend operator fun invoke(): LiveData<String> {
-        return deviceRepository.getBackgroundMapCode()
-    }
+    suspend operator fun invoke(): LiveData<String> = appRepository.getBgMapTypeCodeLive()
 }
