@@ -9,12 +9,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.core.exception.ErrorException
-import com.mongs.wear.domain.usecase.feed.FeedUseCase
-import com.mongs.wear.domain.usecase.feed.GetFoodCodesUseCase
-import com.mongs.wear.domain.usecase.slot.GetNowSlotPayPointUseCase
-import com.mongs.wear.domain.usecase.slot.GetNowSlotUseCase
+import com.mongs.wear.domain.management.usecase.FeedUseCase
+import com.mongs.wear.domain.management.usecase.GetFoodCodesUseCase
+import com.mongs.wear.domain.slot.usecase.GetNowSlotPayPointUseCase
+import com.mongs.wear.domain.slot.usecase.GetNowSlotUseCase
 import com.mongs.wear.domain.vo.FoodVo
-import com.mongs.wear.domain.vo.SlotVo
+import com.mongs.wear.domain.slot.vo.SlotVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

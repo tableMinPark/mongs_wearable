@@ -10,7 +10,7 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mongs.wear.domain.code.ShiftCode
-import com.mongs.wear.domain.vo.SlotVo
+import com.mongs.wear.domain.slot.vo.SlotVo
 import com.mongs.wear.presentation.assets.MongResourceCode
 import com.mongs.wear.presentation.assets.NavItem
 import com.mongs.wear.presentation.component.background.MainPagerBackground
@@ -24,7 +24,7 @@ fun MainSlotView(
     mainSlotViewModel: MainSlotViewModel = hiltViewModel(),
 ) {
     Box {
-        val isEgg = MongResourceCode.valueOf(slotVo.mongCode).isEgg
+        val isEgg = MongResourceCode.valueOf(slotVo.mongTypeCode).isEgg
 
         MainSlotContent(
             slotVo = slotVo,

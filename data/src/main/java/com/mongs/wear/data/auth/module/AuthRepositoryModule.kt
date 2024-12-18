@@ -1,7 +1,7 @@
 package com.mongs.wear.data.auth.module
 
 import com.mongs.wear.data.auth.repository.AuthRepositoryImpl
-import com.mongs.wear.domain.repositroy.AuthRepository
+import com.mongs.wear.domain.auth.repository.AuthRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

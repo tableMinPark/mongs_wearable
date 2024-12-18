@@ -4,7 +4,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.util.Log
-import com.mongs.wear.domain.repositroy.PlayerRepository
+import com.mongs.wear.domain.player.repository.PlayerRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

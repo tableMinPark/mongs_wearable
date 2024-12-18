@@ -46,7 +46,7 @@ fun FeedbackView(
             ConfirmDialog(
                 text = "\"${feedbackCode.value.message}\" 오류를\n전송 하시겠습니까?",
                 confirm = {
-                    feedbackViewModel.addFeedback(feedbackCode = feedbackCode.value)
+                    feedbackViewModel.createFeedback(feedbackCode = feedbackCode.value)
                 },
                 cancel = {
                     feedbackViewModel.uiState.addDialog = false

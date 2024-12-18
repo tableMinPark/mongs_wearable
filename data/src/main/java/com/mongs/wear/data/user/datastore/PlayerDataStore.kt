@@ -55,9 +55,9 @@ class PlayerDataStore @Inject constructor(
     }
 
 
-    suspend fun setSlotCount(maxSlot: Int) {
+    suspend fun setSlotCount(slotCount: Int) {
         context.store.edit { preferences ->
-            preferences[SLOT_COUNT] = maxSlot
+            preferences[SLOT_COUNT] = slotCount
         }
     }
 

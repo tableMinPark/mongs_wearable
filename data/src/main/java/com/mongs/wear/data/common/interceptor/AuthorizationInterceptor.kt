@@ -4,7 +4,6 @@ import com.mongs.wear.data.auth.api.AuthApi
 import com.mongs.wear.data.auth.dataStore.TokenDataStore
 import com.mongs.wear.data.auth.dto.request.ReissueRequestDto
 import com.mongs.wear.data.auth.exception.InvalidReissueException
-import com.mongs.wear.domain.repositroy.AuthRepository
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Interceptor.Chain

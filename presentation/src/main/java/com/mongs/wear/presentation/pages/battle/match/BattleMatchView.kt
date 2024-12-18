@@ -42,8 +42,8 @@ import coil.compose.rememberAsyncImagePainter
 import coil.decode.ImageDecoderDecoder
 import com.mongs.wear.core.enums.MatchRoundCode
 import com.mongs.wear.domain.code.MatchStateCode
-import com.mongs.wear.domain.vo.MatchPlayerVo
-import com.mongs.wear.domain.vo.MatchVo
+import com.mongs.wear.domain.battle.vo.MatchPlayerVo
+import com.mongs.wear.domain.battle.vo.MatchVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongResourceCode

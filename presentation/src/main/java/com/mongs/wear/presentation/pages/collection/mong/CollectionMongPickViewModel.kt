@@ -8,8 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.core.exception.ErrorException
-import com.mongs.wear.domain.usecase.collection.GetMongCollectionsUseCase
-import com.mongs.wear.domain.vo.MongCollectionVo
+import com.mongs.wear.domain.collection.usecase.GetMongCollectionsUseCase
+import com.mongs.wear.domain.collection.vo.MongCollectionVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

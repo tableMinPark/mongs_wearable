@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.Text
-import com.mongs.wear.domain.vo.SlotVo
+import com.mongs.wear.domain.slot.vo.SlotVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongResourceCode
@@ -73,7 +73,7 @@ fun EvolutionEffect(
             modifier = modifier.fillMaxSize(),
         ) {
             Mong(
-                mong = MongResourceCode.valueOf(slotVo.mongCode),
+                mong = MongResourceCode.valueOf(slotVo.mongTypeCode),
                 modifier = Modifier.padding(bottom = 25.dp),
                 isPng = true,
             )
@@ -116,7 +116,7 @@ private fun EvolutionEffectPreview() {
     Box {
         MainPagerBackground()
         EvolutionEffect(
-            slotVo = SlotVo(mongCode = "CH102"),
+            slotVo = SlotVo(mongTypeCode = "CH102"),
             isEvolution = false,
             evolution = {} ,
             runEvolution = {}
@@ -130,7 +130,7 @@ private fun LargeEvolutionEffectPreview() {
     Box {
         MainPagerBackground()
         EvolutionEffect(
-            slotVo = SlotVo(mongCode = "CH102"),
+            slotVo = SlotVo(mongTypeCode = "CH102"),
             isEvolution = false,
             evolution = {} ,
             runEvolution = {}

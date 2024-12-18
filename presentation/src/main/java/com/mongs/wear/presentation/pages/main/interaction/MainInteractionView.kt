@@ -24,7 +24,7 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mongs.wear.domain.code.ShiftCode
-import com.mongs.wear.domain.vo.SlotVo
+import com.mongs.wear.domain.slot.vo.SlotVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.MongResourceCode
 import com.mongs.wear.presentation.assets.NavItem
@@ -39,7 +39,7 @@ fun MainInteractionView(
     mainInteractionViewModel: MainInteractionViewModel = hiltViewModel(),
     context: Context = LocalContext.current,
 ) {
-    val isEgg = remember { derivedStateOf { MongResourceCode.valueOf(slotVo.mongCode).isEgg } }
+    val isEgg = remember { derivedStateOf { MongResourceCode.valueOf(slotVo.mongTypeCode).isEgg } }
     val isMongEmpty =  remember { derivedStateOf { slotVo.shiftCode == ShiftCode.EMPTY || slotVo.shiftCode == ShiftCode.DELETE || slotVo.shiftCode == ShiftCode.DEAD } }
     val isGraduateReady = remember { derivedStateOf {  slotVo.shiftCode == ShiftCode.GRADUATE_READY } }
 

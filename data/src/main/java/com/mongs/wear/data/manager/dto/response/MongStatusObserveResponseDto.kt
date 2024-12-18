@@ -4,6 +4,8 @@ import com.mongs.wear.core.enums.MongStatusCode
 
 data class MongStatusObserveResponseDto(
 
+    val mongId: Long,
+
     val statusCode: MongStatusCode,
 
     val expRatio: Double,

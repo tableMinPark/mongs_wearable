@@ -7,12 +7,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.client.MqttClient
-import com.mongs.wear.domain.repositroy.AppRepository
+import com.mongs.wear.domain.common.client.MqttClient
+import com.mongs.wear.domain.common.repository.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 

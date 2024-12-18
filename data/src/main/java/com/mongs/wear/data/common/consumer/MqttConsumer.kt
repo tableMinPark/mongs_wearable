@@ -29,15 +29,12 @@ class MqttConsumer (
     companion object {
 
         private const val ACTIVITY_BATTLE_FIND_MATCHING = "ACTIVITY-BATTLE-002"
-
         private const val ACTIVITY_BATTLE_ENTER_ALL_BATTLE_PLAYER = "ACTIVITY-BATTLE-003"
         private const val ACTIVITY_BATTLE_OVER_BATTLE = "ACTIVITY-BATTLE-004"
         private const val ACTIVITY_BATTLE_FIGHT_BATTLE = "ACTIVITY-BATTLE-005"
-
         private const val MANAGER_MANAGEMENT_OBSERVE_MONG = "MANAGER-MANAGEMENT-010"
         private const val MANAGER_MANAGEMENT_OBSERVE_MONG_STATE = "MANAGER-MANAGEMENT-011"
         private const val MANAGER_MANAGEMENT_OBSERVE_MONG_STATUS = "MANAGER-MANAGEMENT-012"
-
         private const val USER_PLAYER_OBSERVE_MEMBER = "USER-PLAYER-000"
     }
 

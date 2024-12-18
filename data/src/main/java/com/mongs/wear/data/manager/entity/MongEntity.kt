@@ -14,38 +14,97 @@ data class MongEntity(
 
     val mongName: String,
 
-    val payPoint: Int,
+    var payPoint: Int,
 
-    val mongTypeCode: String,
+    var mongTypeCode: String,
 
     val createdAt: LocalDateTime,
 
-    val expRatio: Double,
+    var weight: Double,
 
-    val weightRatio: Double,
+    var expRatio: Double,
 
-    val healthyRatio: Double,
+    var healthyRatio: Double,
 
-    val satietyRatio: Double,
+    var satietyRatio: Double,
 
-    val strengthRatio: Double,
+    var strengthRatio: Double,
 
-    val fatigueRatio: Double,
+    var fatigueRatio: Double,
 
-    val poopCount: Int,
+    var poopCount: Int,
 
-    val stateCode: MongStateCode,
+    var stateCode: MongStateCode,
 
-    val statusCode: MongStatusCode,
+    var statusCode: MongStatusCode,
 
-    val isSleeping: Boolean,
+    var isSleeping: Boolean,
 
     /* 로컬 필드 */
-    val isHappy: Boolean,
+    var isCurrent: Boolean,
 
-    val isEating: Boolean,
+    var graduateCheck: Boolean,
 
-    val isPoopCleaning: Boolean,
+    var isHappy: Boolean,
 
-    val isSelected: Boolean,
-)
+    var isEating: Boolean,
+
+    var isPoopCleaning: Boolean,
+
+) {
+
+    fun update(
+        payPoint: Int = this.payPoint,
+        mongTypeCode: String = this.mongTypeCode,
+        weight: Double = this.weight,
+        expRatio: Double = this.expRatio,
+        healthyRatio: Double = this.healthyRatio,
+        satietyRatio: Double = this.satietyRatio,
+        strengthRatio: Double = this.strengthRatio,
+        fatigueRatio: Double = this.fatigueRatio,
+        poopCount: Int = this.poopCount,
+        stateCode: MongStateCode = this.stateCode,
+        statusCode: MongStatusCode = this.statusCode,
+        isSleeping: Boolean = this.isSleeping,
+        isCurrent: Boolean = this.isCurrent,
+    ) : MongEntity {
+
+        this.payPoint = payPoint
+        this.mongTypeCode = mongTypeCode
+        this.expRatio = expRatio
+        this.weight = weight
+        this.healthyRatio = healthyRatio
+        this.satietyRatio = satietyRatio
+        this.strengthRatio = strengthRatio
+        this.fatigueRatio = fatigueRatio
+        this.poopCount = poopCount
+        this.stateCode = stateCode
+        this.statusCode = statusCode
+        this.isSleeping = isSleeping
+
+        return this
+    }
+
+
+    fun graduateCheck() {
+        this.graduateCheck = true
+    }
+
+    fun happy() {
+        this.isHappy = true
+    }
+
+    fun eat() {
+        this.isEating = true
+    }
+
+    fun poopClean() {
+        this.isPoopCleaning = true
+    }
+
+    fun resetFlag() {
+        this.isHappy = false
+        this.isEating = false
+        this.isPoopCleaning = false
+    }
+}

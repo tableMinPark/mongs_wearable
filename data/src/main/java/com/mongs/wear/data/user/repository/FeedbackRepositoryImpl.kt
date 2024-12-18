@@ -3,7 +3,7 @@ package com.mongs.wear.data.user.repository
 import com.mongs.wear.data.user.api.FeedbackApi
 import com.mongs.wear.data.user.dto.request.CreateFeedbackRequestDto
 import com.mongs.wear.data.user.exception.InvalidCreateFeedbackException
-import com.mongs.wear.domain.repositroy.FeedbackRepository
+import com.mongs.wear.domain.feedback.repository.FeedbackRepository
 import javax.inject.Inject
 
 class FeedbackRepositoryImpl @Inject constructor(

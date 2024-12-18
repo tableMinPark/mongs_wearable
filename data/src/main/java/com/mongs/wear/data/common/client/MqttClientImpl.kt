@@ -13,7 +13,7 @@ import com.mongs.wear.data.common.exception.InvalidPauseMqttException
 import com.mongs.wear.data.common.exception.InvalidPubMqttException
 import com.mongs.wear.data.common.exception.InvalidResumeMqttException
 import com.mongs.wear.data.common.exception.InvalidSubMqttException
-import com.mongs.wear.domain.client.MqttClient
+import com.mongs.wear.domain.common.client.MqttClient
 import dagger.hilt.android.qualifiers.ApplicationContext
 import org.eclipse.paho.client.mqttv3.MqttException
 import javax.inject.Inject

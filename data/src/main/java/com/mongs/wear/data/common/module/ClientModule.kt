@@ -1,7 +1,7 @@
 package com.mongs.wear.data.common.module
 
 import com.mongs.wear.data.common.client.MqttClientImpl
-import com.mongs.wear.domain.client.MqttClient
+import com.mongs.wear.domain.common.client.MqttClient
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

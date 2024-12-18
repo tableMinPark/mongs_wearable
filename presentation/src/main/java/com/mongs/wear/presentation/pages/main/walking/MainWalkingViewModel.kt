@@ -8,9 +8,9 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.core.exception.ErrorException
-import com.mongs.wear.domain.usecase.member.ExchangeWalkingCountUseCase
-import com.mongs.wear.domain.usecase.member.GetWalkingCountUseCase
-import com.mongs.wear.domain.usecase.slot.GetNowSlotPayPointUseCase
+import com.mongs.wear.domain.player.usecase.ExchangeWalkingCountUseCase
+import com.mongs.wear.domain.player.usecase.GetWalkingCountUseCase
+import com.mongs.wear.domain.slot.usecase.GetNowSlotPayPointUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -7,7 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.core.enums.FeedbackCode
-import com.mongs.wear.domain.repositroy.FeedbackRepository
+import com.mongs.wear.domain.feedback.repository.FeedbackRepository
+import com.mongs.wear.domain.feedback.usecase.CreateFeedbackUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FeedbackViewModel @Inject constructor(
-    private val feedbackRepository: FeedbackRepository,
+    private val createFeedbackUseCase: CreateFeedbackUseCase
 ) : ViewModel() {
     val uiState = UiState()
 
@@ -25,10 +26,12 @@ class FeedbackViewModel @Inject constructor(
         }
     }
 
-    fun addFeedback(feedbackCode: FeedbackCode) {
+    fun createFeedback(feedbackCode: FeedbackCode, content: String = "") {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                feedbackRepository.createFeedback(title = feedbackCode.message, content = feedbackCode.secondaryMessage)
+
+                createFeedbackUseCase(title = feedbackCode.message, content = content)
+
                 uiState.okDialog = true
                 uiState.addDialog = false
             } catch (_: ErrorException) {

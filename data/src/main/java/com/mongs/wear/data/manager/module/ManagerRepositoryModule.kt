@@ -2,8 +2,8 @@ package com.mongs.wear.data.manager.module
 
 import com.mongs.wear.data.manager.repository.ManagementRepositoryImpl
 import com.mongs.wear.data.manager.repository.SlotRepositoryImpl
-import com.mongs.wear.domain.repositroy.ManagementRepository
-import com.mongs.wear.domain.repositroy.SlotRepository
+import com.mongs.wear.domain.management.repository.ManagementRepository
+import com.mongs.wear.domain.slot.repository.SlotRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -16,9 +16,26 @@ data class MatchPlayerEntity(
 
     val mongTypeCode: String,
 
-    val hp: Double,
+    var hp: Double,
 
-    val roundCode: MatchRoundCode,
+    var roundCode: MatchRoundCode,
 
     val isMe: Boolean,
-)
+
+    var isWin: Boolean,
+
+) {
+
+    fun update(
+        hp: Double = this.hp,
+        roundCode: MatchRoundCode = this.roundCode,
+        isWin: Boolean = this.isWin
+    ) : MatchPlayerEntity {
+
+        this.hp = hp
+        this.roundCode = roundCode
+        this.isWin = isWin
+
+        return this
+    }
+}

@@ -1,11 +1,10 @@
 package com.mongs.wear.data.user.repository
 
-import android.util.Log
 import com.mongs.wear.data.user.api.CollectionApi
 import com.mongs.wear.data.user.exception.InvalidGetMapCollectionsException
 import com.mongs.wear.data.user.exception.InvalidGetMongCollectionsException
-import com.mongs.wear.domain.model.CollectionModel
-import com.mongs.wear.domain.repositroy.CollectionRepository
+import com.mongs.wear.domain.collection.model.CollectionModel
+import com.mongs.wear.domain.collection.repository.CollectionRepository
 import javax.inject.Inject
 
 class CollectionRepositoryImpl @Inject constructor(

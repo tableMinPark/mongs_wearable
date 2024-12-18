@@ -1,90 +1,160 @@
 package com.mongs.wear.data.manager.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.mongs.wear.domain.code.ShiftCode
-import com.mongs.wear.domain.code.StateCode
-import com.mongs.wear.domain.model.SlotModel
-import com.mongs.wear.domain.repositroy.SlotRepository
-import com.mongs.wear.domain.vo.SlotVo
-import java.time.LocalDateTime
+import androidx.lifecycle.map
+import com.mongs.wear.data.common.room.RoomDB
+import com.mongs.wear.data.manager.api.ManagementApi
+import com.mongs.wear.data.manager.exception.InvalidGetMongException
+import com.mongs.wear.domain.slot.model.SlotModel
+import com.mongs.wear.domain.slot.repository.SlotRepository
 import javax.inject.Inject
 
 class SlotRepositoryImpl @Inject constructor(
+    private val roomDB: RoomDB,
+    private val managementApi: ManagementApi,
 ): SlotRepository {
 
-    override suspend fun syncNowSlot() {
-        Log.d("SlotRepositoryImpl", "syncNowSlot")
+    override suspend fun updateCurrentSlot() {
+
+        roomDB.mongDao().findByIsCurrentTrue()?.let { mongEntity ->
+
+            val response = managementApi.getMong(mongId = mongEntity.mongId)
+
+            if (!response.isSuccessful) {
+
+                response.body()?.let { body ->
+
+                    roomDB.mongDao().save(
+                        mongEntity.update(
+                            mongTypeCode = body.result.mongTypeCode,
+                            payPoint = body.result.payPoint,
+                            weight = body.result.weight,
+                            expRatio = body.result.expRatio,
+                            healthyRatio = body.result.healthyRatio,
+                            satietyRatio = body.result.satietyRatio,
+                            strengthRatio = body.result.strengthRatio,
+                            fatigueRatio = body.result.fatigueRatio,
+                            poopCount = body.result.poopCount,
+                            stateCode = body.result.stateCode,
+                            statusCode = body.result.statusCode,
+                            isSleeping = body.result.isSleep,
+                        )
+                    )
+                }
+            } else {
+                throw InvalidGetMongException(mongId = mongEntity.mongId)
+            }
+        }
     }
 
-    override suspend fun setSlots(subScribeMong: suspend (Long) -> Unit) {
-        Log.d("SlotRepositoryImpl", "setSlots")
+    override suspend fun getSlotLive(mongId: Long): LiveData<SlotModel?> {
+
+        this.updateCurrentSlot()
+
+        return roomDB.mongDao().findLiveByIsCurrentTrue().map { mongEntity ->
+            mongEntity?.let {
+                SlotModel(
+                    mongId = mongEntity.mongId,
+                    mongName = mongEntity.mongName,
+                    payPoint = mongEntity.payPoint,
+                    mongTypeCode = mongEntity.mongTypeCode,
+                    createdAt = mongEntity.createdAt,
+                    weight = mongEntity.weight,
+                    expRatio = mongEntity.expRatio,
+                    healthyRatio = mongEntity.healthyRatio,
+                    satietyRatio = mongEntity.satietyRatio,
+                    strengthRatio = mongEntity.strengthRatio,
+                    fatigueRatio = mongEntity.fatigueRatio,
+                    poopCount = mongEntity.poopCount,
+                    stateCode = mongEntity.stateCode,
+                    statusCode = mongEntity.statusCode,
+                    isSleeping = mongEntity.isSleeping,
+                    isCurrent = mongEntity.isCurrent,
+                    graduateCheck = mongEntity.graduateCheck,
+                    isHappy = mongEntity.isHappy,
+                    isEating = mongEntity.isEating,
+                    isPoopCleaning = mongEntity.isPoopCleaning,
+                )
+            } ?: run { null }
+        }
     }
 
-    override suspend fun getSlots(subScribeMong: suspend (Long) -> Unit): LiveData<List<SlotVo>> {
-        Log.d("SlotRepositoryImpl", "getSlots")
-        return MutableLiveData(ArrayList())
+    override suspend fun getSlotsLive(): LiveData<List<SlotModel>> {
+
+        val response = managementApi.getMongs()
+
+        if (response.isSuccessful) {
+
+            response.body()?.let { body ->
+
+                body.result.forEach({ getMongResponseDto ->
+
+                    roomDB.mongDao().let { dao ->
+
+                        dao.findByMongId(getMongResponseDto.mongId)?.let { mongEntity ->
+
+                            dao.save(
+                                mongEntity.update(
+                                    mongTypeCode = getMongResponseDto.mongTypeCode,
+                                    payPoint = getMongResponseDto.payPoint,
+                                    weight = getMongResponseDto.weight,
+                                    expRatio = getMongResponseDto.expRatio,
+                                    healthyRatio = getMongResponseDto.healthyRatio,
+                                    satietyRatio = getMongResponseDto.satietyRatio,
+                                    strengthRatio = getMongResponseDto.strengthRatio,
+                                    fatigueRatio = getMongResponseDto.fatigueRatio,
+                                    poopCount = getMongResponseDto.poopCount,
+                                    stateCode = getMongResponseDto.stateCode,
+                                    statusCode = getMongResponseDto.statusCode,
+                                    isSleeping = getMongResponseDto.isSleep,
+                                )
+                            )
+                        }
+                    }
+                })
+            }
+        }
+
+        return roomDB.mongDao().findLiveAll().map { mongEntities ->
+            mongEntities.map { mongEntity ->
+                SlotModel(
+                    mongId = mongEntity.mongId,
+                    mongName = mongEntity.mongName,
+                    payPoint = mongEntity.payPoint,
+                    mongTypeCode = mongEntity.mongTypeCode,
+                    createdAt = mongEntity.createdAt,
+                    weight = mongEntity.weight,
+                    expRatio = mongEntity.expRatio,
+                    healthyRatio = mongEntity.healthyRatio,
+                    satietyRatio = mongEntity.satietyRatio,
+                    strengthRatio = mongEntity.strengthRatio,
+                    fatigueRatio = mongEntity.fatigueRatio,
+                    poopCount = mongEntity.poopCount,
+                    stateCode = mongEntity.stateCode,
+                    statusCode = mongEntity.statusCode,
+                    isSleeping = mongEntity.isSleeping,
+                    isCurrent = mongEntity.isCurrent,
+                    graduateCheck = mongEntity.graduateCheck,
+                    isHappy = mongEntity.isHappy,
+                    isEating = mongEntity.isEating,
+                    isPoopCleaning = mongEntity.isPoopCleaning,
+                )
+            }
+        }
     }
 
-    override suspend fun getSlot(mongId: Long): SlotModel {
-        Log.d("SlotRepositoryImpl", "getSlot")
-        return SlotModel(
-            0L,
-            "",
-            "",
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0,
-            false,
-            0.0,
-            StateCode.EMPTY,
-            ShiftCode.EMPTY,
-            0,
-            LocalDateTime.now(),
-            false,
-            false,
-            false,
-            false,
-            false,
-        )
-    }
+    override suspend fun setSlot(mongId: Long) {
 
-    override suspend fun setNowSlot(mongId: Long) {
-        Log.d("SlotRepositoryImpl", "setNowSlot")
-    }
+        roomDB.mongDao().let { dao ->
 
-    override suspend fun getNowSlot(): SlotModel {
-        Log.d("SlotRepositoryImpl", "getNowSlot")
-        return SlotModel(
-            0L,
-            "",
-            "",
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0,
-            false,
-            0.0,
-            StateCode.EMPTY,
-            ShiftCode.EMPTY,
-            0,
-            LocalDateTime.now(),
-            false,
-            false,
-            false,
-            false,
-            false,
-        )
-    }
+            // 전체 선택 해제 (오류 값 보정)
+            dao.findAllByIsCurrentTrue().map { mongEntity ->
+                dao.save(mongEntity.update(isCurrent = false))
+            }
 
-    override suspend fun getNowSlotLive(): LiveData<SlotModel?> {
-        Log.d("SlotRepositoryImpl", "getNowSlotLive")
-        return MutableLiveData(null)
+            dao.findByMongId(mongId = mongId)?.let { mongEntity ->
+                dao.save(mongEntity.update(isCurrent = true))
+            }
+        }
     }
 }

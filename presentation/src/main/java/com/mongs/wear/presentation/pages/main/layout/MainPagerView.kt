@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.mongs.wear.domain.vo.SlotVo
+import com.mongs.wear.domain.slot.vo.SlotVo
 import com.mongs.wear.presentation.assets.MapResourceCode
 import com.mongs.wear.presentation.component.background.MainPagerBackground
 import com.mongs.wear.presentation.component.common.LoadingBar

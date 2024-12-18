@@ -1,7 +1,7 @@
 package com.mongs.wear.data.activity.module
 
 import com.mongs.wear.data.activity.repository.BattleRepositoryImpl
-import com.mongs.wear.domain.repositroy.BattleRepository
+import com.mongs.wear.domain.battle.repository.BattleRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

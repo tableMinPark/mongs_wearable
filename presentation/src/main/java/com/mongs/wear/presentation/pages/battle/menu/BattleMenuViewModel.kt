@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.core.exception.ErrorException
-import com.mongs.wear.domain.usecase.battle.MatchWaitCancelUseCase
-import com.mongs.wear.domain.usecase.battle.MatchWaitUseCase
+import com.mongs.wear.domain.battle.usecase.MatchWaitCancelUseCase
+import com.mongs.wear.domain.battle.usecase.MatchWaitUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -8,7 +8,7 @@ import com.mongs.wear.data.auth.dto.request.LoginRequestDto
 import com.mongs.wear.data.auth.dto.request.LogoutRequestDto
 import com.mongs.wear.data.auth.exception.InvalidLoginException
 import com.mongs.wear.data.auth.exception.InvalidLogoutException
-import com.mongs.wear.domain.repositroy.AuthRepository
+import com.mongs.wear.domain.auth.repository.AuthRepository
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(

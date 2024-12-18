@@ -6,9 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.core.exception.ErrorException
-import com.mongs.wear.domain.usecase.slot.EvoluteNowSlotUseCase
-import com.mongs.wear.domain.usecase.slot.GraduateReadySlotUseCase
-import com.mongs.wear.domain.usecase.slot.StrokeNowSlotUseCase
+import com.mongs.wear.domain.slot.usecase.EvoluteNowSlotUseCase
+import com.mongs.wear.domain.slot.usecase.GraduateReadySlotUseCase
+import com.mongs.wear.domain.slot.usecase.StrokeNowSlotUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

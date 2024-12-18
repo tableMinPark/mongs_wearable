@@ -4,8 +4,8 @@ import android.hardware.Sensor
 import android.hardware.SensorManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.domain.client.MqttClient
-import com.mongs.wear.domain.repositroy.AppRepository
+import com.mongs.wear.domain.common.client.MqttClient
+import com.mongs.wear.domain.common.repository.AppRepository
 import com.mongs.wear.presentation.layout.StepSensorEventListener
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope

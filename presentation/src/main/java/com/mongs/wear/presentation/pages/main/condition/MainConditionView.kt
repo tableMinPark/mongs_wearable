@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.CircularProgressIndicator
-import com.mongs.wear.domain.vo.SlotVo
+import com.mongs.wear.domain.slot.vo.SlotVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.MongsBlue
 import com.mongs.wear.presentation.assets.MongsGreen

@@ -34,7 +34,7 @@ import androidx.navigation.NavController
 import androidx.wear.compose.material.PageIndicatorState
 import androidx.wear.compose.material.Text
 import com.mongs.wear.domain.code.ShiftCode
-import com.mongs.wear.domain.vo.SlotVo
+import com.mongs.wear.domain.slot.vo.SlotVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongResourceCode
@@ -138,7 +138,7 @@ fun SlotPickView(
             SlotDetailDialog(
                 onClick = { slotPickViewModel.uiState.detailDialog = false },
                 mongId = showSlotVo.value.mongId,
-                name = showSlotVo.value.name,
+                name = showSlotVo.value.mongName,
                 weight = showSlotVo.value.weight,
                 healthy = showSlotVo.value.healthy,
                 satiety = showSlotVo.value.satiety,
@@ -242,7 +242,7 @@ private fun SlotPickContent(
             ) {
                 if (!isSlotEmpty && !isSlotDisable) {
                     Text(
-                        text = slotVo.name,
+                        text = slotVo.mongName,
                         textAlign = TextAlign.Center,
                         fontFamily = DAL_MU_RI,
                         fontWeight = FontWeight.Light,
@@ -297,7 +297,7 @@ private fun SlotPickContent(
                         ) {
                             Mong(
                                 isPng = true,
-                                mong = MongResourceCode.valueOf(slotVo.mongCode),
+                                mong = MongResourceCode.valueOf(slotVo.mongTypeCode),
                                 onClick = detailDialog,
                                 ratio = 0.65f,
                             )

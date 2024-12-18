@@ -10,7 +10,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.mongs.wear.domain.vo.SlotVo
+import com.mongs.wear.domain.slot.vo.SlotVo
 import com.mongs.wear.presentation.assets.MongResourceCode
 import com.mongs.wear.presentation.component.background.MainPagerBackground
 import com.mongs.wear.presentation.component.common.Mong
@@ -30,7 +30,7 @@ fun NormalContent(
             isHappy = slotVo.isHappy,
             isEating = slotVo.isEating,
             isSleeping = slotVo.isSleeping,
-            mong = MongResourceCode.valueOf(slotVo.mongCode),
+            mong = MongResourceCode.valueOf(slotVo.mongTypeCode),
             onClick = stroke,
             modifier = Modifier
                 .padding(bottom = 20.dp)

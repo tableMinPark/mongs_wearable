@@ -2,7 +2,7 @@ package com.mongs.wear.data.common.repository
 
 import androidx.lifecycle.LiveData
 import com.mongs.wear.data.common.datastore.AppDataStore
-import com.mongs.wear.domain.repositroy.AppRepository
+import com.mongs.wear.domain.common.repository.AppRepository
 import javax.inject.Inject
 
 class AppRepositoryImpl @Inject constructor(

@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.mongs.wear.domain.vo.SlotVo
+import com.mongs.wear.domain.slot.vo.SlotVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.MongResourceCode
 import com.mongs.wear.presentation.assets.NavItem
@@ -71,7 +71,7 @@ fun TrainingJumpingView(
             isMoving = !trainingJumpingViewModel.uiState.isTrainingOver
         )
         TrainingJumpingContent(
-            mongCode =  slotVoState.value?.mongCode ?: SlotVo().mongCode,
+            mongCode =  slotVoState.value?.mongTypeCode ?: SlotVo().mongTypeCode,
             jump = trainingJumpingViewModel::jump,
             playerEngine = playerEngine.value,
             hurdleEngines = hurdleEngines,

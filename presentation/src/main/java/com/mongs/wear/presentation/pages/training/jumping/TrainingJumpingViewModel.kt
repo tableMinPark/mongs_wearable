@@ -10,9 +10,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.core.exception.ErrorException
-import com.mongs.wear.domain.usecase.slot.GetNowSlotUseCase
-import com.mongs.wear.domain.usecase.slot.TrainingSlotUseCase
-import com.mongs.wear.domain.vo.SlotVo
+import com.mongs.wear.domain.slot.usecase.GetNowSlotUseCase
+import com.mongs.wear.domain.slot.usecase.TrainingSlotUseCase
+import com.mongs.wear.domain.slot.vo.SlotVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

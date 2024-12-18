@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.core.exception.ErrorException
-import com.mongs.wear.domain.usecase.slot.PoopCleanNowSlotUseCase
-import com.mongs.wear.domain.usecase.slot.SleepingNowSlotUseCase
+import com.mongs.wear.domain.slot.usecase.PoopCleanNowSlotUseCase
+import com.mongs.wear.domain.slot.usecase.SleepingNowSlotUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

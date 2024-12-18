@@ -3,9 +3,9 @@ package com.mongs.wear.data.user.module
 import com.mongs.wear.data.user.repository.CollectionRepositoryImpl
 import com.mongs.wear.data.user.repository.FeedbackRepositoryImpl
 import com.mongs.wear.data.user.repository.PlayerRepositoryImpl
-import com.mongs.wear.domain.repositroy.CollectionRepository
-import com.mongs.wear.domain.repositroy.FeedbackRepository
-import com.mongs.wear.domain.repositroy.PlayerRepository
+import com.mongs.wear.domain.collection.repository.CollectionRepository
+import com.mongs.wear.domain.feedback.repository.FeedbackRepository
+import com.mongs.wear.domain.player.repository.PlayerRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

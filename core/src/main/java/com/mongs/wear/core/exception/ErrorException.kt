@@ -4,6 +4,6 @@ open class ErrorException(
 
     override val message: String,
 
-    open val result: Map<String, String>
+    open val result: Map<String, Any>
 
 ) : RuntimeException()

@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
 import com.mongs.wear.domain.code.ShiftCode
-import com.mongs.wear.domain.vo.SlotVo
+import com.mongs.wear.domain.slot.vo.SlotVo
 import com.mongs.wear.presentation.pages.main.slot.effect.EvolutionEffect
 import com.mongs.wear.presentation.pages.main.slot.effect.GraduationEffect
 import com.mongs.wear.presentation.pages.main.slot.effect.GraduatedEffect
