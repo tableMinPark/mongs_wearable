@@ -1,5 +1,7 @@
 package com.mongs.wear.domain.auth.usecase
 
+import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.domain.auth.exception.InvalidLogoutException
 import com.mongs.wear.domain.common.client.MqttClient
 import com.mongs.wear.domain.auth.repository.AuthRepository
 import javax.inject.Inject
@@ -10,11 +12,21 @@ class LogoutUseCase @Inject constructor(
 ) {
     suspend operator fun invoke() {
 
-        authRepository.logout()
+        try {
 
-        mqttClient.disSubManager()
-        mqttClient.disSubPlayer()
-        mqttClient.disSubBattleMatch()
-        mqttClient.disSubSearchMatch()
+            authRepository.logout()
+
+            mqttClient.disSubManager()
+
+            mqttClient.disSubPlayer()
+
+            mqttClient.disSubBattleMatch()
+
+            mqttClient.disSubSearchMatch()
+
+        } catch (_: ErrorException) {
+
+            throw InvalidLogoutException()
+        }
     }
 }

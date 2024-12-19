@@ -1,7 +1,7 @@
 package com.mongs.wear.domain.slot.vo
 
-import com.mongs.wear.domain.code.ShiftCode
-import com.mongs.wear.domain.code.StateCode
+import com.mongs.wear.core.enums.MongStateCode
+import com.mongs.wear.core.enums.MongStatusCode
 import java.time.LocalDateTime
 
 data class SlotVo(
@@ -11,6 +11,8 @@ data class SlotVo(
     val mongName: String = "",
 
     val mongTypeCode: String = "CH444",
+
+    val exp: Double = 0.0,
 
     val weight: Double = 0.0,
 
@@ -26,23 +28,19 @@ data class SlotVo(
 
     val isSleeping: Boolean = false,
 
-    val exp: Double = 0.0,
+    val stateCode: MongStateCode = MongStateCode.EMPTY,
 
-    val stateCode: StateCode = StateCode.EMPTY,
-
-    val shiftCode: ShiftCode = ShiftCode.EMPTY,
+    val statusCode: MongStatusCode = MongStatusCode.EMPTY,
 
     val payPoint: Int = 0,
 
     val born: LocalDateTime = LocalDateTime.now(),
+
+    val graduateCheck: Boolean = false,
 
     val isHappy: Boolean = false,
 
     val isEating: Boolean = false,
 
     val isPoopCleaning: Boolean = false,
-
-    val isSelected: Boolean = false,
-
-    val isGraduateCheck: Boolean = false,
 )

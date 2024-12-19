@@ -24,19 +24,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.wear.compose.material.Text
-import com.mongs.wear.domain.code.ShiftCode
+import com.mongs.wear.core.enums.MongStateCode
 import com.mongs.wear.domain.slot.vo.SlotVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
-import com.mongs.wear.presentation.component.background.MainPagerBackground
 import com.mongs.wear.presentation.component.button.BlueButton
 import com.mongs.wear.presentation.component.button.LeftButton
 import com.mongs.wear.presentation.component.button.RightButton
@@ -228,48 +225,12 @@ private fun MainWalkingContent(
                 BlueButton(
                     text = "환전",
                     width = 70,
-                    disable = chargePayPoint == 0 || slotVo.shiftCode == ShiftCode.EMPTY,
+                    disable = chargePayPoint == 0 || slotVo.stateCode == MongStateCode.EMPTY,
                     onClick = { uiState.chargePayPointDialog = true },
                 )
             }
 
             Spacer(modifier = Modifier.height(15.dp))
         }
-    }
-}
-
-@Preview(showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
-@Composable
-private fun MainWalkingViewPreview() {
-    Box {
-        MainPagerBackground()
-        MainWalkingContent(
-            slotVo = SlotVo(),
-            chargePayPoint = 200,
-            payPoint = 0,
-            walkingCount = 200,
-            uiState = UiState(),
-            increaseRatio = {},
-            decreaseRatio = {},
-            modifier = Modifier.zIndex(1f),
-        )
-    }
-}
-
-@Preview(showSystemUi = true, device = Devices.WEAR_OS_LARGE_ROUND)
-@Composable
-private fun LargeMainWalkingViewPreview() {
-    Box {
-        MainPagerBackground()
-        MainWalkingContent(
-            slotVo = SlotVo(),
-            chargePayPoint = 100,
-            payPoint = 0,
-            walkingCount = 100,
-            uiState = UiState(),
-            increaseRatio = {},
-            decreaseRatio = {},
-            modifier = Modifier.zIndex(1f)
-        )
     }
 }

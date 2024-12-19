@@ -3,6 +3,7 @@ package com.mongs.wear.data.activity.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.mongs.wear.core.enums.MatchRoundCode
+import com.mongs.wear.core.enums.MatchStateCode
 import com.mongs.wear.data.activity.api.BattleApi
 import com.mongs.wear.data.activity.exception.InvalidCreateMatchException
 import com.mongs.wear.data.activity.exception.InvalidDeleteMatchException
@@ -102,16 +103,40 @@ class BattleRepositoryImpl @Inject constructor(
 
     override suspend fun updateOverMatch(roomId: Long) {
 
+        mqttClient.disSubBattleMatch()
+
         val response = battleApi.overBattle(roomId = roomId)
 
         if (response.isSuccessful) {
 
-            response.body()?.let {
+            response.body()?.let { body ->
 
+                roomDB.matchRoomDao().let { dao ->
+                    dao.findByRoomId(roomId = roomId)?.let { matchRoomEntity ->
+                        dao.save(
+                            matchRoomEntity.update(
+                                isLastRound = true,
+                                stateCode = MatchStateCode.MATCH_OVER,
+                            )
+                        )
+                    }
+                }
+
+                roomDB.matchPlayerDao().let { dao ->
+
+                    dao.findByPlayerId(playerId = body.result.winPlayerId)?.let { matchPlayerEntity ->
+                        dao.save(
+                            matchPlayerEntity.update(
+                                isWin = true,
+                            )
+                        )
+                    }
+                }
             }
-        }
 
-        throw InvalidUpdateOverMatchException(roomId = roomId)
+        } else {
+            throw InvalidUpdateOverMatchException(roomId = roomId)
+        }
     }
 
     override suspend fun enterMatch(roomId: Long) {
@@ -157,6 +182,8 @@ class BattleRepositoryImpl @Inject constructor(
 
             try {
                 mqttClient.pubBattleMatchExit(roomId = roomId, playerId = playerId)
+
+                mqttClient.disSubBattleMatch()
 
             } catch (e: InvalidPubMqttException) {
 

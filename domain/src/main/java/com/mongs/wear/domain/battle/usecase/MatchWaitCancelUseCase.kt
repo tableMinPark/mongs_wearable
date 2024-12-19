@@ -11,9 +11,9 @@ class MatchWaitCancelUseCase @Inject constructor(
     private val battleRepository: BattleRepository,
 ) {
     suspend operator fun invoke() {
-        val slotModel = slotRepository.getNowSlot()
-
-        battleRepository.matchWaitCancel(mongId = slotModel.mongId)
-        mqttClient.disSubSearchMatch()
+//        val slotModel = slotRepository.getNowSlot()
+//
+//        battleRepository.matchWaitCancel(mongId = slotModel.mongId)
+//        mqttClient.disSubSearchMatch()
     }
 }

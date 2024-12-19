@@ -12,6 +12,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ManagementApi {
 
@@ -22,7 +23,7 @@ interface ManagementApi {
     suspend fun getMong(@Path("mongId") mongId: Long) : Response<ResponseDto<GetMongResponseDto>>
 
     @GET("/manager/management/feed/{mongId}")
-    suspend fun getFeedItems(@Path("mongId") mongId: Long) : Response<ResponseDto<GetFeedItemResponseDto>>
+    suspend fun getFeedItems(@Path("mongId") mongId: Long, @Query("foodTypeGroupCode") foodTypeGroupCode: String) : Response<ResponseDto<GetFeedItemResponseDto>>
 
     @POST("/manager/management/{mongId}")
     suspend fun createMong(@Body createMongRequestDto: CreateMongRequestDto) : Response<ResponseDto<Void>>

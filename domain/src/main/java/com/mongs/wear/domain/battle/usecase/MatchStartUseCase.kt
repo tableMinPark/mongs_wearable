@@ -7,7 +7,7 @@ class MatchStartUseCase @Inject constructor(
     private val battleRepository: BattleRepository,
 ) {
     suspend operator fun invoke() {
-        val match = battleRepository.getMatch()
-        battleRepository.matchStart(match.roomId)
+//        val match = battleRepository.getMatch()
+//        battleRepository.matchStart(match.roomId)
     }
 }

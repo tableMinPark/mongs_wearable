@@ -59,7 +59,7 @@ fun MainSlotView(
 @Composable
 private fun MainSlotViewPreview() {
     val slotVo = SlotVo(
-        shiftCode = ShiftCode.NORMAL,
+        stateCode = ShiftCode.NORMAL,
         isHappy = true,
         isGraduateCheck = true,
     )
@@ -88,7 +88,7 @@ private fun MainSlotViewPreview() {
 @Composable
 private fun MainSlotViewLargePreview() {
     val slotVo = SlotVo(
-        shiftCode = ShiftCode.NORMAL,
+        stateCode = ShiftCode.NORMAL,
         isHappy = true,
         isGraduateCheck = true,
     )

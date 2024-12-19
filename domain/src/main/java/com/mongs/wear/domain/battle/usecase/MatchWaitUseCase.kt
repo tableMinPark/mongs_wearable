@@ -17,10 +17,10 @@ class MatchWaitUseCase @Inject constructor(
         matchEnterCallback: suspend () -> Unit,
     ) {
 
-        val slowModel = slotRepository.getNowSlot()
-        val deviceId = appRepository.getDeviceId()
-
-        mqttClient.subSearchMatch(deviceId = deviceId)
-        battleRepository.matchWait(mongId = slowModel.mongId)
+//        val slowModel = slotRepository.getNowSlot()
+//        val deviceId = appRepository.getDeviceId()
+//
+//        mqttClient.subSearchMatch(deviceId = deviceId)
+//        battleRepository.matchWait(mongId = slowModel.mongId)
     }
 }

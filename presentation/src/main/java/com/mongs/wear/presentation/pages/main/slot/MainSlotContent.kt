@@ -21,7 +21,7 @@ fun MainSlotContent(
     uiState: UiState,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
-    when (slotVo.shiftCode) {
+    when (slotVo.stateCode) {
         ShiftCode.NORMAL -> {
             NormalContent(
                 slotVo = slotVo,

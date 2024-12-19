@@ -62,6 +62,9 @@ class ObserveResolver @Inject constructor(
         }
     }
 
+    /**
+     * 모든 플레이어 입장 완료
+     */
     suspend fun updateBattleMatchEnter(fightBattleResponseDto: FightBattleResponseDto) {
 
         // 배틀 룸 정보 업데이트

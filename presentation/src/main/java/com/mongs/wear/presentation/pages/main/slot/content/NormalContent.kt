@@ -26,7 +26,7 @@ fun NormalContent(
         modifier = modifier.fillMaxSize(),
     ) {
         Mong(
-            state = slotVo.stateCode,
+            state = slotVo.statusCode,
             isHappy = slotVo.isHappy,
             isEating = slotVo.isEating,
             isSleeping = slotVo.isSleeping,

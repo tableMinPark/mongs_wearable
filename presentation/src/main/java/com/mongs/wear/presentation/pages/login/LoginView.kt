@@ -53,9 +53,7 @@ fun LoginView(
     Box {
         LoginBackground()
         LoginContent(
-            reLoginSuccess = loginViewModel::reLoginSuccess,
-            loginSuccess = loginViewModel::loginSuccess,
-            loginFail = loginViewModel::loginFail,
+            login = loginViewModel::loginSuccess,
             uiState = loginViewModel.uiState,
             modifier = Modifier.zIndex(1f)
         )
@@ -74,23 +72,20 @@ fun LoginView(
 
 @Composable
 private fun LoginContent(
-    reLoginSuccess: suspend (email: String?, name: String?) -> Unit,
-    loginSuccess: suspend (email: String?, name: String?) -> Unit,
-    loginFail: suspend () -> Unit,
     uiState: UiState = UiState(),
     context: Context = LocalContext.current,
-    modifier: Modifier = Modifier.zIndex(0f)
+    modifier: Modifier = Modifier.zIndex(0f),
+    login: suspend (email: String?, name: String?) -> Unit,
 ) {
     // 구글 로그인 확인
     LaunchedEffect(Unit) {
         uiState.loadingBar = true
         uiState.signInButton = false
 
-        val account = GoogleSignIn.getLastSignedInAccount(context)
-        if (account != null) {
-            reLoginSuccess(account.email, account.givenName)
-        } else {
-            loginFail()
+        GoogleSignIn.getLastSignedInAccount(context)?.let { account ->
+            login(account.email, account.givenName)
+        } ?: run {
+            login("", "")
         }
     }
 
@@ -98,10 +93,12 @@ private fun LoginContent(
     val googleLoginLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         CoroutineScope(Dispatchers.Main).launch {
             if (result.resultCode == Activity.RESULT_OK) {
-                val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).result
-                loginSuccess(account.email, account.givenName)
-            } else {
-                loginFail()
+
+                GoogleSignIn.getSignedInAccountFromIntent(result.data).result?.let { account ->
+                    login(account.email, account.givenName)
+                } ?: run {
+                    login("", "")
+                }
             }
         }
     }

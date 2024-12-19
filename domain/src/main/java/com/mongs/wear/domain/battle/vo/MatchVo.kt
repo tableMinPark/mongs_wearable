@@ -1,6 +1,6 @@
 package com.mongs.wear.domain.battle.vo
 
-import com.mongs.wear.domain.code.MatchStateCode
+import com.mongs.wear.core.enums.MatchStateCode
 
 data class MatchVo(
 
@@ -8,7 +8,7 @@ data class MatchVo(
 
     val round: Int = 0,
 
-    val isMatchOver: Boolean = false,
+    val isLastRound: Boolean = false,
 
-    val matchStateCode: MatchStateCode = MatchStateCode.NONE,
+    val stateCode: MatchStateCode = MatchStateCode.NONE,
 )

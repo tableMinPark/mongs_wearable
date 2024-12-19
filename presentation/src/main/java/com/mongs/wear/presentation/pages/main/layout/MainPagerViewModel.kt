@@ -1,16 +1,13 @@
 package com.mongs.wear.presentation.pages.main.layout
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.common.usecase.GetBackgroundMapCodeUseCase
-import com.mongs.wear.domain.slot.usecase.GetNowSlotUseCase
+import com.mongs.wear.domain.slot.exception.InvalidGetCurrentSlotException
+import com.mongs.wear.domain.slot.usecase.GetCurrentSlotUseCase
 import com.mongs.wear.domain.slot.vo.SlotVo
+import com.mongs.wear.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,48 +16,48 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainPagerViewModel @Inject constructor(
-    private val getNowSlotUseCase: GetNowSlotUseCase,
+    private val getCurrentSlotUseCase: GetCurrentSlotUseCase,
     private val getBackgroundMapCodeUseCase: GetBackgroundMapCodeUseCase,
-): ViewModel() {
+): BaseViewModel() {
 
-    val uiState = UiState()
 
-    val slotVo: LiveData<SlotVo?> get() = _slotVo
     private val _slotVo = MediatorLiveData<SlotVo?>(null)
-    val backgroundMapCode: LiveData<String> get() = _backgroundMapCode
+    val slotVo: LiveData<SlotVo?> get() = _slotVo
+
     private val _backgroundMapCode = MediatorLiveData<String>()
+    val backgroundMapCode: LiveData<String> get() = _backgroundMapCode
 
     init {
-        viewModelScope.launch(Dispatchers.Main) {
-            try {
-                uiState.loadingBar = true
+        viewModelScopeWithHandler.launch(Dispatchers.Main) {
 
-                _slotVo.addSource(
-                    withContext(Dispatchers.IO) {
-                        getNowSlotUseCase()
-                    }
-                ) { slotVo ->
+            uiState.loadingBar = true
+
+            _slotVo.addSource(withContext(Dispatchers.IO) { getCurrentSlotUseCase() }) {
+                it?.let { slotVo ->
                     _slotVo.value = slotVo
                 }
-
-                _backgroundMapCode.addSource(
-                    withContext(Dispatchers.IO) {
-                        getBackgroundMapCodeUseCase()
-                    }
-                ) { backgroundMapCode ->
-                    _backgroundMapCode.value = backgroundMapCode
-                }
-
-                uiState.loadingBar = false
-
-            } catch (_: ErrorException) {
             }
+
+            _backgroundMapCode.addSource(withContext(Dispatchers.IO) { getBackgroundMapCodeUseCase() }) { backgroundMapCode ->
+                _backgroundMapCode.value = backgroundMapCode
+            }
+
+            uiState.loadingBar = false
         }
     }
 
-    class UiState (
-        loadingBar: Boolean = true,
-    ) {
-        var loadingBar by mutableStateOf(loadingBar)
+    val uiState = UiState()
+
+    class UiState : BaseUiState()
+
+    override fun exceptionHandler(exception: Throwable, loadingBar: Boolean, errorToast: Boolean) {
+
+        uiState.loadingBar = loadingBar
+        uiState.errorToast = errorToast
+
+        when (exception) {
+
+            is InvalidGetCurrentSlotException -> {}
+        }
     }
 }

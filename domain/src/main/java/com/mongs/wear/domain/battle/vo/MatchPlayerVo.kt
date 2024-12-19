@@ -6,11 +6,11 @@ data class MatchPlayerVo(
 
     val playerId: String = "",
 
-    val mongCode: String = "",
+    val mongTypeCode: String = "",
 
     val hp: Double = 0.0,
 
-    val state: MatchRoundCode = MatchRoundCode.NONE,
+    val roundCode: MatchRoundCode = MatchRoundCode.NONE,
 
     val isWinner: Boolean = false,
 )

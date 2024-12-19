@@ -8,7 +8,7 @@ interface ManagementRepository {
 
     suspend fun deleteMong(mongId: Long)
 
-    suspend fun getFeedItems(mongId: Long): List<FeedItemModel>
+    suspend fun getFeedItems(mongId: Long, foodTypeGroupCode: String): List<FeedItemModel>
 
     suspend fun feedMong(mongId: Long, foodTypeCode: String)
 
@@ -31,6 +31,4 @@ interface ManagementRepository {
     suspend fun setIsEating(mongId: Long)
 
     suspend fun setIsPoopCleaning(mongId: Long)
-
-
 }

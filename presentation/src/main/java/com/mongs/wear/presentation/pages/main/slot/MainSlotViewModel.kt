@@ -6,9 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.core.exception.ErrorException
-import com.mongs.wear.domain.slot.usecase.EvoluteNowSlotUseCase
-import com.mongs.wear.domain.slot.usecase.GraduateReadySlotUseCase
-import com.mongs.wear.domain.slot.usecase.StrokeNowSlotUseCase
+import com.mongs.wear.domain.slot.usecase.EvoluteMongUseCase
+import com.mongs.wear.domain.slot.usecase.GraduateCheckMongUseCase
+import com.mongs.wear.domain.slot.usecase.StrokeMongUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,9 +16,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainSlotViewModel @Inject constructor(
-    private val strokeNowSlotUseCase: StrokeNowSlotUseCase,
-    private val evoluteNowSlotUseCase: EvoluteNowSlotUseCase,
-    private val graduateReadySlotUseCase: GraduateReadySlotUseCase,
+    private val strokeMongUseCase: StrokeMongUseCase,
+    private val evoluteMongUseCase: EvoluteMongUseCase,
+    private val graduateCheckMongUseCase: GraduateCheckMongUseCase,
 ): ViewModel() {
 
     val uiState: UiState = UiState()
@@ -26,7 +26,7 @@ class MainSlotViewModel @Inject constructor(
     fun stroke(mongId: Long) {
         viewModelScope.launch (Dispatchers.IO) {
             try {
-                strokeNowSlotUseCase(mongId = mongId)
+                strokeMongUseCase(mongId = mongId)
             } catch (_: ErrorException) {
             }
         }
@@ -35,7 +35,7 @@ class MainSlotViewModel @Inject constructor(
     fun evolution(mongId: Long) {
         viewModelScope.launch (Dispatchers.IO) {
             try {
-                evoluteNowSlotUseCase(mongId = mongId)
+                evoluteMongUseCase(mongId = mongId)
             } catch (_: ErrorException) {
                 uiState.isEvolution = false
             }
@@ -45,7 +45,7 @@ class MainSlotViewModel @Inject constructor(
     fun graduationReady(mongId: Long) {
         viewModelScope.launch (Dispatchers.IO) {
             try {
-                graduateReadySlotUseCase(mongId = mongId)
+                graduateCheckMongUseCase(mongId = mongId)
             } catch (_: ErrorException) {
             }
         }

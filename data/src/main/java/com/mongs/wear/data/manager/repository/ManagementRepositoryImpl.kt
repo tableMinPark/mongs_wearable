@@ -42,7 +42,6 @@ class ManagementRepositoryImpl @Inject constructor(
         if (!response.isSuccessful) {
             throw InvalidCreateMongException(name = name, sleepStart = sleepStart, sleepEnd = sleepEnd)
         }
-
     }
 
     override suspend fun deleteMong(mongId: Long) {
@@ -54,9 +53,9 @@ class ManagementRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getFeedItems(mongId: Long): List<FeedItemModel> {
+    override suspend fun getFeedItems(mongId: Long, foodTypeGroupCode: String): List<FeedItemModel> {
 
-        val response = managementApi.getFeedItems(mongId = mongId)
+        val response = managementApi.getFeedItems(mongId = mongId, foodTypeGroupCode = foodTypeGroupCode)
 
         if (response.isSuccessful) {
             response.body()?.let { body ->

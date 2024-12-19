@@ -17,18 +17,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.mongs.wear.domain.code.ShiftCode
+import com.mongs.wear.core.enums.MongStateCode
 import com.mongs.wear.domain.slot.vo.SlotVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.MongResourceCode
 import com.mongs.wear.presentation.assets.NavItem
-import com.mongs.wear.presentation.component.background.MainPagerBackground
 import com.mongs.wear.presentation.component.button.CircleImageButton
 
 @Composable
@@ -40,12 +37,15 @@ fun MainInteractionView(
     context: Context = LocalContext.current,
 ) {
     val isEgg = remember { derivedStateOf { MongResourceCode.valueOf(slotVo.mongTypeCode).isEgg } }
-    val isMongEmpty =  remember { derivedStateOf { slotVo.shiftCode == ShiftCode.EMPTY || slotVo.shiftCode == ShiftCode.DELETE || slotVo.shiftCode == ShiftCode.DEAD } }
-    val isGraduateReady = remember { derivedStateOf {  slotVo.shiftCode == ShiftCode.GRADUATE_READY } }
+    val isMongEmpty =  remember { derivedStateOf { slotVo.stateCode == MongStateCode.EMPTY || slotVo.stateCode == MongStateCode.DELETE || slotVo.stateCode == MongStateCode.DEAD } }
+    val isGraduateReady = remember { derivedStateOf {  slotVo.stateCode == MongStateCode.GRADUATE_READY } }
 
     Box {
         MainInteractionContent(
             feed = {
+                slotVo?.let {
+
+                }
                 if (isMongEmpty.value || isEgg.value || slotVo.isSleeping) {
                     Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
                 } else {
@@ -195,41 +195,5 @@ private fun MainInteractionContent(
                 )
             }
         }
-    }
-}
-
-@Preview(showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
-@Composable
-private fun MainInteractionViewPreView() {
-    Box {
-        MainPagerBackground()
-        MainInteractionContent(
-            training = {},
-            battle = {},
-            feed = {},
-            sleeping = {},
-            poopClean = {},
-            collection = {},
-            slotPick = {},
-            modifier = Modifier.zIndex(1f)
-        )
-    }
-}
-
-@Preview(showSystemUi = true, device = Devices.WEAR_OS_LARGE_ROUND)
-@Composable
-private fun LargeMainInteractionViewPreView() {
-    Box {
-        MainPagerBackground()
-        MainInteractionContent(
-            training = {},
-            battle = {},
-            feed = {},
-            sleeping = {},
-            poopClean = {},
-            collection = {},
-            slotPick = {},
-            modifier = Modifier.zIndex(1f)
-        )
     }
 }

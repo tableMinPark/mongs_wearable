@@ -14,9 +14,9 @@ class SlotRepositoryImpl @Inject constructor(
     private val managementApi: ManagementApi,
 ): SlotRepository {
 
-    override suspend fun updateCurrentSlot() {
+    private suspend fun updateCurrentSlot(mongId: Long) {
 
-        roomDB.mongDao().findByIsCurrentTrue()?.let { mongEntity ->
+        roomDB.mongDao().findByMongId(mongId = mongId)?.let { mongEntity ->
 
             val response = managementApi.getMong(mongId = mongEntity.mongId)
 
@@ -47,36 +47,60 @@ class SlotRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getSlotLive(mongId: Long): LiveData<SlotModel?> {
+    override suspend fun getCurrentSlot(): SlotModel? = roomDB.mongDao().findByIsCurrentTrue()?.let { mongEntity ->
 
-        this.updateCurrentSlot()
+        SlotModel(
+            mongId = mongEntity.mongId,
+            mongName = mongEntity.mongName,
+            payPoint = mongEntity.payPoint,
+            mongTypeCode = mongEntity.mongTypeCode,
+            createdAt = mongEntity.createdAt,
+            weight = mongEntity.weight,
+            expRatio = mongEntity.expRatio,
+            healthyRatio = mongEntity.healthyRatio,
+            satietyRatio = mongEntity.satietyRatio,
+            strengthRatio = mongEntity.strengthRatio,
+            fatigueRatio = mongEntity.fatigueRatio,
+            poopCount = mongEntity.poopCount,
+            stateCode = mongEntity.stateCode,
+            statusCode = mongEntity.statusCode,
+            isSleeping = mongEntity.isSleeping,
+            isCurrent = mongEntity.isCurrent,
+            graduateCheck = mongEntity.graduateCheck,
+            isHappy = mongEntity.isHappy,
+            isEating = mongEntity.isEating,
+            isPoopCleaning = mongEntity.isPoopCleaning,
+        )
+    } ?: run { null }
 
-        return roomDB.mongDao().findLiveByIsCurrentTrue().map { mongEntity ->
-            mongEntity?.let {
-                SlotModel(
-                    mongId = mongEntity.mongId,
-                    mongName = mongEntity.mongName,
-                    payPoint = mongEntity.payPoint,
-                    mongTypeCode = mongEntity.mongTypeCode,
-                    createdAt = mongEntity.createdAt,
-                    weight = mongEntity.weight,
-                    expRatio = mongEntity.expRatio,
-                    healthyRatio = mongEntity.healthyRatio,
-                    satietyRatio = mongEntity.satietyRatio,
-                    strengthRatio = mongEntity.strengthRatio,
-                    fatigueRatio = mongEntity.fatigueRatio,
-                    poopCount = mongEntity.poopCount,
-                    stateCode = mongEntity.stateCode,
-                    statusCode = mongEntity.statusCode,
-                    isSleeping = mongEntity.isSleeping,
-                    isCurrent = mongEntity.isCurrent,
-                    graduateCheck = mongEntity.graduateCheck,
-                    isHappy = mongEntity.isHappy,
-                    isEating = mongEntity.isEating,
-                    isPoopCleaning = mongEntity.isPoopCleaning,
-                )
-            } ?: run { null }
-        }
+
+    override suspend fun getCurrentSlotLive(): LiveData<SlotModel?> = roomDB.mongDao().findLiveByIsCurrentTrue().map { mongEntity ->
+
+        mongEntity?.let {
+
+            SlotModel(
+                mongId = mongEntity.mongId,
+                mongName = mongEntity.mongName,
+                payPoint = mongEntity.payPoint,
+                mongTypeCode = mongEntity.mongTypeCode,
+                createdAt = mongEntity.createdAt,
+                weight = mongEntity.weight,
+                expRatio = mongEntity.expRatio,
+                healthyRatio = mongEntity.healthyRatio,
+                satietyRatio = mongEntity.satietyRatio,
+                strengthRatio = mongEntity.strengthRatio,
+                fatigueRatio = mongEntity.fatigueRatio,
+                poopCount = mongEntity.poopCount,
+                stateCode = mongEntity.stateCode,
+                statusCode = mongEntity.statusCode,
+                isSleeping = mongEntity.isSleeping,
+                isCurrent = mongEntity.isCurrent,
+                graduateCheck = mongEntity.graduateCheck,
+                isHappy = mongEntity.isHappy,
+                isEating = mongEntity.isEating,
+                isPoopCleaning = mongEntity.isPoopCleaning,
+            )
+        } ?: run { null }
     }
 
     override suspend fun getSlotsLive(): LiveData<List<SlotModel>> {
@@ -143,7 +167,9 @@ class SlotRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun setSlot(mongId: Long) {
+    override suspend fun setCurrentSlot(mongId: Long) {
+
+        this.updateCurrentSlot(mongId = mongId)
 
         roomDB.mongDao().let { dao ->
 

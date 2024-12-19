@@ -1,8 +1,9 @@
 package com.mongs.wear.domain.auth.usecase
 
+import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.domain.auth.enums.DomainAuthErrorCode
 import com.mongs.wear.domain.common.client.MqttClient
-import com.mongs.wear.domain.auth.exception.NotExistsEmailException
-import com.mongs.wear.domain.auth.exception.NotExistsNameException
+import com.mongs.wear.domain.auth.exception.InvalidLoginException
 import com.mongs.wear.domain.common.repository.AppRepository
 import com.mongs.wear.domain.auth.repository.AuthRepository
 import javax.inject.Inject
@@ -14,14 +15,20 @@ class LoginUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(email: String?, name: String?) {
 
-        if (email.isNullOrEmpty()) throw NotExistsEmailException()
+        if (email.isNullOrEmpty()) throw InvalidLoginException(code = DomainAuthErrorCode.DOMAIN_NOT_EXISTS_EMAIL)
 
-        if (name.isNullOrEmpty()) throw NotExistsNameException()
+        if (name.isNullOrEmpty()) throw InvalidLoginException(code = DomainAuthErrorCode.DOMAIN_NOT_EXISTS_NAME)
 
-        val deviceId = appRepository.getDeviceId()
+        try {
+            val deviceId = appRepository.getDeviceId()
 
-        val accountId = authRepository.login(deviceId = deviceId, email = email, name = name)
+            val accountId = authRepository.login(deviceId = deviceId, email = email, name = name)
 
-        mqttClient.subPlayer(accountId = accountId)
+            mqttClient.subPlayer(accountId = accountId)
+
+        } catch (_: ErrorException) {
+
+            throw InvalidLoginException()
+        }
     }
 }

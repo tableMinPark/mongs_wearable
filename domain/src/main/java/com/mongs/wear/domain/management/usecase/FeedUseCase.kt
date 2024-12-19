@@ -12,13 +12,22 @@ class FeedUseCase @Inject constructor(
     private val slotRepository: SlotRepository,
     private val managementRepository: ManagementRepository,
 ) {
-    suspend operator fun invoke(code: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val slotModel = slotRepository.getNowSlot()
-            managementRepository.setIsEating(mongId = slotModel.mongId, isEating = true)
-            managementRepository.feedMong(mongId = slotModel.mongId, foodTypeCode = code)
-            delay(2000)
-            managementRepository.setIsEating(mongId = slotModel.mongId, isEating = false)
-        }
+    suspend operator fun invoke(foodTypeCode: String) {
+
+        slotRepository.getCurrentSlot()?.let { slotModel ->
+
+            managementRepository.feedMong(mongId = slotModel.mongId, foodTypeCode = foodTypeCode)
+
+            managementRepository.setIsEating(mongId = slotModel.mongId)
+
+        } ?: run {  }
+
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val slotModel = slotRepository.getNowSlot()
+//            managementRepository.setIsEating(mongId = slotModel.mongId, isEating = true)
+//            managementRepository.feedMong(mongId = slotModel.mongId, foodTypeCode = foodTypeCode)
+//            delay(2000)
+//            managementRepository.setIsEating(mongId = slotModel.mongId, isEating = false)
+//        }
     }
 }

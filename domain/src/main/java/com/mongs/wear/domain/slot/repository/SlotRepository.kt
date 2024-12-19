@@ -5,11 +5,11 @@ import com.mongs.wear.domain.slot.model.SlotModel
 
 interface SlotRepository {
 
-    suspend fun updateCurrentSlot()
+    suspend fun getCurrentSlot(): SlotModel?
 
-    suspend fun getSlotLive(mongId: Long): LiveData<SlotModel?>
+    suspend fun getCurrentSlotLive(): LiveData<SlotModel?>
 
     suspend fun getSlotsLive(): LiveData<List<SlotModel>>
 
-    suspend fun setSlot(mongId: Long)
+    suspend fun setCurrentSlot(mongId: Long)
 }

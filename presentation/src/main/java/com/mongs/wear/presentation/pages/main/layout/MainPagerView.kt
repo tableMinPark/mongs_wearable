@@ -59,18 +59,6 @@ fun MainPagerView(
 }
 
 @Composable
-private fun MainPagerLoadingBar(
-    modifier: Modifier = Modifier.zIndex(0f),
-) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier.fillMaxSize(),
-    ) {
-        LoadingBar()
-    }
-}
-
-@Composable
 private fun NormalMainPagerContent(
     navController: NavController,
     slotVo: SlotVo,
@@ -96,6 +84,7 @@ private fun NormalMainPagerContent(
         modifier = modifier.fillMaxSize(),
     ) {
         HorizontalPager(state = pagerState) { page: Int ->
+
             when (page) {
                 0 -> MainWalkingView(
                     slotVo = slotVo,
@@ -124,5 +113,20 @@ private fun NormalMainPagerContent(
                 )
             }
         }
+    }
+}
+
+/**
+ * LoadingBar Component
+ */
+@Composable
+private fun MainPagerLoadingBar(
+    modifier: Modifier = Modifier.zIndex(0f),
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier.fillMaxSize(),
+    ) {
+        LoadingBar()
     }
 }

@@ -16,8 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.CircularProgressIndicator
@@ -27,7 +25,6 @@ import com.mongs.wear.presentation.assets.MongsBlue
 import com.mongs.wear.presentation.assets.MongsGreen
 import com.mongs.wear.presentation.assets.MongsPink
 import com.mongs.wear.presentation.assets.MongsYellow
-import com.mongs.wear.presentation.component.background.MainPagerBackground
 import com.mongs.wear.presentation.component.common.ProgressIndicator
 
 @Composable
@@ -118,38 +115,6 @@ private fun MainConditionCondition(
             progress = progress / 100,
             strokeWidth = 4.dp,
             indicatorColor = indicatorColor,
-        )
-    }
-}
-
-@Preview(showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
-@Composable
-private fun MainConditionViewPreview() {
-    Box {
-        MainPagerBackground()
-        ProgressIndicator(
-            progress = 50f,
-            modifier = Modifier.zIndex(1f)
-        )
-        MainConditionContent(
-            slotVo = SlotVo(),
-            modifier = Modifier.zIndex(1f)
-        )
-    }
-}
-
-@Preview(showSystemUi = true, device = Devices.WEAR_OS_LARGE_ROUND)
-@Composable
-private fun LargeMainConditionViewPreview() {
-    Box {
-        MainPagerBackground()
-        ProgressIndicator(
-            progress = 50f,
-            modifier = Modifier.zIndex(1f)
-        )
-        MainConditionContent(
-            slotVo = SlotVo(),
-            modifier = Modifier.zIndex(1f)
         )
     }
 }

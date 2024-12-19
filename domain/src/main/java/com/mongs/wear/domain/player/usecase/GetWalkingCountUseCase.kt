@@ -7,7 +7,6 @@ import javax.inject.Inject
 class GetWalkingCountUseCase @Inject constructor(
     private val playerRepository: PlayerRepository,
 ) {
-    suspend operator fun invoke(): LiveData<Int> {
-        return playerRepository.getWalkingCountLive()
-    }
+
+    suspend operator fun invoke(): LiveData<Int> = playerRepository.getWalkingCountLive()
 }

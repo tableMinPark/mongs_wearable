@@ -23,7 +23,7 @@ fun MainSlotEffect(
     uiState: UiState,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
-    when (slotVo.shiftCode) {
+    when (slotVo.stateCode) {
         ShiftCode.NORMAL -> {
             if (slotVo.isHappy) {
                 HeartEffect(modifier = modifier)
