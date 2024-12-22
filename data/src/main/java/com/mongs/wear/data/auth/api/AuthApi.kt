@@ -1,6 +1,7 @@
 package com.mongs.wear.data.auth.api
 
 import com.mongs.wear.core.dto.response.ResponseDto
+import com.mongs.wear.data.auth.dto.request.JoinRequestDto
 import com.mongs.wear.data.auth.dto.request.LoginRequestDto
 import com.mongs.wear.data.auth.dto.request.LogoutRequestDto
 import com.mongs.wear.data.auth.dto.request.ReissueRequestDto
@@ -11,6 +12,9 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface AuthApi {
+
+    @POST("/auth/join")
+    suspend fun join(@Body joinRequestDto: JoinRequestDto) : Response<ResponseDto<Void>>
 
     @POST("/auth/login")
     suspend fun login(@Body loginRequestDto: LoginRequestDto) : Response<ResponseDto<LoginResponseDto>>

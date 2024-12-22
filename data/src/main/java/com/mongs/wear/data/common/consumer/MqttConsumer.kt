@@ -38,6 +38,8 @@ class MqttConsumer (
         private const val USER_PLAYER_OBSERVE_MEMBER = "USER-PLAYER-000"
     }
 
+
+
     override fun messageArrived(topic: String?, message: MqttMessage?) {
 
         CoroutineScope(Dispatchers.IO).launch {

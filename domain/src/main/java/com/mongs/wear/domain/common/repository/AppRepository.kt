@@ -1,6 +1,7 @@
 package com.mongs.wear.domain.common.repository
 
 import androidx.lifecycle.LiveData
+import java.time.LocalDateTime
 
 interface AppRepository {
 
@@ -8,6 +9,10 @@ interface AppRepository {
      * deviceId 조회
      */
     suspend fun getDeviceId(): String
+
+    suspend fun setBootTime(bootTime: LocalDateTime)
+
+    suspend fun getBootTime(): LocalDateTime
 
     /**
      * 배경 화면 맵 타입 코드 등록

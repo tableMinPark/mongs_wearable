@@ -1,9 +1,13 @@
 package com.mongs.wear.core.exception
 
+import com.mongs.wear.core.errors.ErrorCode
+
 open class ErrorException(
 
-    override val message: String,
+    open val code: ErrorCode,
 
-    open val result: Map<String, Any>
+    open val result: Map<String, Any>,
+
+    override val message: String = code.getMessage()
 
 ) : RuntimeException()

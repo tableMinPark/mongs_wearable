@@ -1,6 +1,5 @@
 package com.mongs.wear.data.common.resolver
 
-import android.util.Log
 import com.mongs.wear.core.enums.MatchStateCode
 import com.mongs.wear.data.activity.dto.response.CreateBattleResponseDto
 import com.mongs.wear.data.activity.dto.response.FightBattleResponseDto
@@ -13,9 +12,8 @@ import com.mongs.wear.data.manager.dto.response.MongStateObserveResponseDto
 import com.mongs.wear.data.manager.dto.response.MongStatusObserveResponseDto
 import com.mongs.wear.data.user.datastore.PlayerDataStore
 import com.mongs.wear.data.user.dto.response.PlayerObserveResponseDto
-import javax.inject.Inject
 
-class ObserveResolver @Inject constructor(
+class ObserveResolver(
     private val roomDB: RoomDB,
     private val appDataStore: AppDataStore,
     private val playerDataStore: PlayerDataStore,

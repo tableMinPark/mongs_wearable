@@ -1,8 +1,11 @@
 package com.mongs.wear.data.common.datastore
 
 import android.content.Context
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LiveData
@@ -13,6 +16,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.UUID
 import javax.inject.Inject
 
@@ -29,6 +34,10 @@ class AppDataStore @Inject constructor(
         private val BG_MAP_TYPE_CODE = stringPreferencesKey("BG_MAP_TYPE_CODE")
 
         private val NETWORK = booleanPreferencesKey("NETWORK")
+
+        private val BOOT_TIME = stringPreferencesKey("BOOT_TIME")
+
+        private val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
     }
 
     private val Context.store by preferencesDataStore(name = APP_DATA_STORE_NAME)
@@ -36,6 +45,10 @@ class AppDataStore @Inject constructor(
     init {
         CoroutineScope(Dispatchers.IO).launch {
             context.store.edit { preferences ->
+
+                if (!preferences.contains(BOOT_TIME)) {
+                    preferences[BOOT_TIME] = LocalDateTime.of(1970, 1, 1, 0, 0, 0).format(dateFormatter)
+                }
 
                 if (!preferences.contains(DEVICE_ID)) {
                     preferences[DEVICE_ID] = UUID.randomUUID().toString()
@@ -49,6 +62,19 @@ class AppDataStore @Inject constructor(
                     preferences[NETWORK] = false
                 }
             }
+        }
+    }
+
+    suspend fun setBootTime(bootTime: LocalDateTime) {
+        context.store.edit { preferences ->
+            preferences[BOOT_TIME] = bootTime.format(dateFormatter)
+        }
+    }
+    fun getUpTime(): LocalDateTime {
+        return runBlocking {
+            context.store.data.map { preferences ->
+                LocalDateTime.parse(preferences[BOOT_TIME]!!, dateFormatter)
+            }.first()
         }
     }
 

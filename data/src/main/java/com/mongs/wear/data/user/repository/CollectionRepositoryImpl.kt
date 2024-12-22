@@ -1,8 +1,8 @@
 package com.mongs.wear.data.user.repository
 
 import com.mongs.wear.data.user.api.CollectionApi
-import com.mongs.wear.data.user.exception.InvalidGetMapCollectionsException
-import com.mongs.wear.data.user.exception.InvalidGetMongCollectionsException
+import com.mongs.wear.data.user.exception.GetMapCollectionsException
+import com.mongs.wear.data.user.exception.GetMongCollectionsException
 import com.mongs.wear.domain.collection.model.CollectionModel
 import com.mongs.wear.domain.collection.repository.CollectionRepository
 import javax.inject.Inject
@@ -27,7 +27,7 @@ class CollectionRepositoryImpl @Inject constructor(
             }
         }
 
-        throw InvalidGetMapCollectionsException()
+        throw GetMapCollectionsException()
     }
 
     override suspend fun getMongCollections(): List<CollectionModel> {
@@ -46,6 +46,6 @@ class CollectionRepositoryImpl @Inject constructor(
             }
         }
 
-        throw InvalidGetMongCollectionsException()
+        throw GetMongCollectionsException()
     }
 }

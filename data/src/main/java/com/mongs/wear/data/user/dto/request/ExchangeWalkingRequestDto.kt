@@ -5,4 +5,6 @@ data class ExchangeWalkingRequestDto(
     val mongId: Long,
 
     val walkingCount: Int,
+
+    val totalWalkingCount: Int,
 )

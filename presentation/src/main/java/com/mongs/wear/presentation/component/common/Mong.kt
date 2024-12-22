@@ -12,21 +12,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.ImageDecoderDecoder
+import com.mongs.wear.core.enums.MongStatusCode
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.MongResourceCode
-import com.mongs.wear.domain.code.StateCode
 
 @Composable
 fun Mong(
     mong: MongResourceCode,
-    state: StateCode = StateCode.NORMAL,
+    state: MongStatusCode = MongStatusCode.NORMAL,
     isHappy: Boolean = false,
     isEating: Boolean = false,
     isSleeping: Boolean = false,
@@ -73,9 +71,9 @@ fun Mong(
                 modifier = Modifier.zIndex(1f)
             ) {
                 val expression = when (state) {
-                    StateCode.SICK -> R.drawable.sad
-                    StateCode.TIRED -> R.drawable.depressed
-                    StateCode.HUNGRY -> R.drawable.sulky
+                    MongStatusCode.SICK -> R.drawable.sad
+                    MongStatusCode.SOMNOLENCE -> R.drawable.depressed
+                    MongStatusCode.HUNGRY -> R.drawable.sulky
                     else -> {
                         if (isHappy) {
                             R.drawable.happy
@@ -100,10 +98,4 @@ fun Mong(
             }
         }
     }
-}
-
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND)
-@Composable
-private fun MongPreview() {
-    Mong(mong = MongResourceCode.CH201, isPng = false)
 }

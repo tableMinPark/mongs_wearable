@@ -6,9 +6,9 @@ data class LoginRequestDto(
 
     val email: String,
 
-    val name: String,
+    val socialAccountId: String,
 
-    val appCode: String,
+    val appPackageName: String,
 
     val buildVersion: String,
 )

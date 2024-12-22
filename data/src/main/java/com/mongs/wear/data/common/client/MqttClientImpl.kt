@@ -7,14 +7,18 @@ import com.mongs.wear.data.activity.dto.request.EnterBattleRequestDto
 import com.mongs.wear.data.activity.dto.request.ExitBattleRequestDto
 import com.mongs.wear.data.activity.dto.request.PickBattleRequestDto
 import com.mongs.wear.data.common.api.MqttApi
-import com.mongs.wear.data.common.exception.InvalidConnectMqttException
-import com.mongs.wear.data.common.exception.InvalidDisconnectMqttException
-import com.mongs.wear.data.common.exception.InvalidPauseMqttException
-import com.mongs.wear.data.common.exception.InvalidPubMqttException
-import com.mongs.wear.data.common.exception.InvalidResumeMqttException
-import com.mongs.wear.data.common.exception.InvalidSubMqttException
+import com.mongs.wear.data.common.exception.ConnectMqttException
+import com.mongs.wear.data.common.exception.DisconnectMqttException
+import com.mongs.wear.data.common.exception.PauseMqttException
+import com.mongs.wear.data.common.exception.PubMqttException
+import com.mongs.wear.data.common.exception.ResumeMqttException
+import com.mongs.wear.data.common.exception.SubMqttException
 import com.mongs.wear.domain.common.client.MqttClient
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import org.eclipse.paho.client.mqttv3.MqttException
 import javax.inject.Inject
 
@@ -50,6 +54,14 @@ class MqttClientImpl @Inject constructor(
         val mqttState = MqttState()
     }
 
+    override suspend fun isConnected(): Boolean {
+        return mqttApi.isConnected()
+    }
+
+    override suspend fun isConnectPending(): Boolean {
+        return mqttApi.isConnectPending();
+    }
+
     /**
      * 일괄 처리
      */
@@ -59,14 +71,13 @@ class MqttClientImpl @Inject constructor(
 
             try {
                 mqttState.broker = MqttState.MqttStateCode.CONNECT
-
                 mqttApi.connect()
 
-            } catch (e: MqttException) {
+            } catch (e: Exception) {
 
                 mqttState.broker = MqttState.MqttStateCode.DISCONNECT
 
-                throw InvalidConnectMqttException()
+                throw ConnectMqttException()
             }
         }
     }
@@ -78,18 +89,19 @@ class MqttClientImpl @Inject constructor(
             try {
                 mqttState.broker = MqttState.MqttStateCode.CONNECT
 
-                mqttApi.connect()
+                CoroutineScope(Dispatchers.IO).async {
+                    mqttApi.connect()
+                    resumeManager()
+                    resumePlayer()
+                    resumeSearchMatch()
+                    resumeBattleMatch()
+                }.await()
 
-                this.resumeManager()
-                this.resumePlayer()
-                this.resumeSearchMatch()
-                this.resumeBattleMatch()
-
-            } catch (e: MqttException) {
+            } catch (e: Exception) {
 
                 mqttState.broker = MqttState.MqttStateCode.PAUSE_DISCONNECT
 
-                throw InvalidResumeMqttException()
+                throw ResumeMqttException()
             }
         }
     }
@@ -101,18 +113,19 @@ class MqttClientImpl @Inject constructor(
             try {
                 mqttState.broker = MqttState.MqttStateCode.PAUSE_DISCONNECT
 
-                this.pauseManager()
-                this.pausePlayer()
-                this.pauseSearchMatch()
-                this.pauseBattleMatch()
+                CoroutineScope(Dispatchers.IO).async {
+                    pauseManager()
+                    pausePlayer()
+                    pauseSearchMatch()
+                    pauseBattleMatch()
+                    mqttApi.disConnect()
+                }.await()
 
-                mqttApi.disConnect()
-
-            } catch (_: MqttException) {
+            } catch (_: Exception) {
 
                 mqttState.broker = MqttState.MqttStateCode.CONNECT
 
-                throw InvalidPauseMqttException()
+                throw PauseMqttException()
             }
         }
     }
@@ -124,14 +137,16 @@ class MqttClientImpl @Inject constructor(
             try {
                 mqttState.broker = MqttState.MqttStateCode.DISCONNECT
 
-                this.disSubManager()
-                this.disSubPlayer()
-                this.disSubSearchMatch()
-                this.disSubBattleMatch()
-                mqttApi.disConnect()
+                CoroutineScope(Dispatchers.IO).async {
+                    disSubManager()
+                    disSubPlayer()
+                    disSubSearchMatch()
+                    disSubBattleMatch()
+                    mqttApi.disConnect()
+                }.await()
 
-            } catch (_: MqttException) {
-                throw InvalidDisconnectMqttException()
+            } catch (_: Exception) {
+                throw DisconnectMqttException()
             }
         }
     }
@@ -149,8 +164,8 @@ class MqttClientImpl @Inject constructor(
                 mqttApi.subscribe(mqttState.managerTopic)
                 mqttState.manager = MqttState.MqttStateCode.SUB
             }
-        } catch (_: MqttException) {
-            throw InvalidSubMqttException()
+        } catch (_: Exception) {
+            throw SubMqttException()
         }
     }
 
@@ -163,8 +178,8 @@ class MqttClientImpl @Inject constructor(
                 mqttApi.subscribe(mqttState.managerTopic)
                 mqttState.manager = MqttState.MqttStateCode.SUB
             }
-        } catch (_: MqttException) {
-            throw InvalidPauseMqttException()
+        } catch (_: Exception) {
+            throw PauseMqttException()
         }
     }
 
@@ -177,8 +192,8 @@ class MqttClientImpl @Inject constructor(
                 mqttApi.disSubscribe(mqttState.managerTopic)
                 mqttState.manager = MqttState.MqttStateCode.PAUSE
             }
-        } catch (_: MqttException) {
-            throw InvalidPauseMqttException()
+        } catch (_: Exception) {
+            throw PauseMqttException()
         }
     }
 
@@ -192,8 +207,8 @@ class MqttClientImpl @Inject constructor(
                 mqttState.managerTopic = ""
                 mqttState.manager = MqttState.MqttStateCode.DIS_SUB
             }
-        } catch (_: MqttException) {
-            throw InvalidPauseMqttException()
+        } catch (_: Exception) {
+            throw PauseMqttException()
         }
     }
 
@@ -210,8 +225,8 @@ class MqttClientImpl @Inject constructor(
                 mqttApi.subscribe(mqttState.searchMatchTopic)
                 mqttState.searchMatch = MqttState.MqttStateCode.SUB
             }
-        } catch (_: MqttException) {
-            throw InvalidSubMqttException()
+        } catch (_: Exception) {
+            throw SubMqttException()
         }
     }
 
@@ -224,8 +239,8 @@ class MqttClientImpl @Inject constructor(
                 mqttApi.subscribe(mqttState.searchMatchTopic)
                 mqttState.searchMatch = MqttState.MqttStateCode.SUB
             }
-        } catch (_: MqttException) {
-            throw InvalidPauseMqttException()
+        } catch (_: Exception) {
+            throw PauseMqttException()
         }
     }
 
@@ -238,8 +253,8 @@ class MqttClientImpl @Inject constructor(
                 mqttApi.disSubscribe(mqttState.searchMatchTopic)
                 mqttState.searchMatch = MqttState.MqttStateCode.PAUSE
             }
-        } catch (_: MqttException) {
-            throw InvalidPauseMqttException()
+        } catch (_: Exception) {
+            throw PauseMqttException()
         }
     }
 
@@ -253,8 +268,8 @@ class MqttClientImpl @Inject constructor(
                 mqttState.searchMatchTopic = ""
                 mqttState.searchMatch = MqttState.MqttStateCode.DIS_SUB
             }
-        } catch (_: MqttException) {
-            throw InvalidPauseMqttException()
+        } catch (_: Exception) {
+            throw PauseMqttException()
         }
     }
 
@@ -271,8 +286,8 @@ class MqttClientImpl @Inject constructor(
                 mqttApi.subscribe(mqttState.battleMatchTopic)
                 mqttState.battleMatch = MqttState.MqttStateCode.SUB
             }
-        } catch (_: MqttException) {
-            throw InvalidSubMqttException()
+        } catch (_: Exception) {
+            throw SubMqttException()
         }
     }
 
@@ -286,8 +301,8 @@ class MqttClientImpl @Inject constructor(
 
             mqttApi.produce(topic = topic, requestDto = EnterBattleRequestDto(playerId = playerId))
 
-        } catch (_: MqttException) {
-            throw InvalidPubMqttException()
+        } catch (_: Exception) {
+            throw PubMqttException()
         }
     }
 
@@ -301,8 +316,8 @@ class MqttClientImpl @Inject constructor(
 
             mqttApi.produce(topic = topic, requestDto = PickBattleRequestDto(playerId = playerId, targetPlayerId = targetPlayerId, pickCode = pickCode))
 
-        } catch (_: MqttException) {
-            throw InvalidPubMqttException()
+        } catch (_: Exception) {
+            throw PubMqttException()
         }
     }
 
@@ -316,8 +331,8 @@ class MqttClientImpl @Inject constructor(
 
             mqttApi.produce(topic = topic, requestDto = ExitBattleRequestDto(playerId = playerId))
 
-        } catch (_: MqttException) {
-            throw InvalidPubMqttException()
+        } catch (_: Exception) {
+            throw PubMqttException()
         }
     }
 
@@ -330,8 +345,8 @@ class MqttClientImpl @Inject constructor(
                 mqttApi.subscribe(mqttState.battleMatchTopic)
                 mqttState.battleMatch = MqttState.MqttStateCode.SUB
             }
-        } catch (_: MqttException) {
-            throw InvalidPauseMqttException()
+        } catch (_: Exception) {
+            throw PauseMqttException()
         }
     }
 
@@ -344,8 +359,8 @@ class MqttClientImpl @Inject constructor(
                 mqttApi.disSubscribe(mqttState.battleMatchTopic)
                 mqttState.battleMatch = MqttState.MqttStateCode.PAUSE
             }
-        } catch (_: MqttException) {
-            throw InvalidPauseMqttException()
+        } catch (_: Exception) {
+            throw PauseMqttException()
         }
     }
 
@@ -359,8 +374,8 @@ class MqttClientImpl @Inject constructor(
                 mqttState.battleMatchTopic = ""
                 mqttState.battleMatch = MqttState.MqttStateCode.DIS_SUB
             }
-        } catch (_: MqttException) {
-            throw InvalidPauseMqttException()
+        } catch (_: Exception) {
+            throw PauseMqttException()
         }
     }
 
@@ -377,8 +392,8 @@ class MqttClientImpl @Inject constructor(
                 mqttApi.subscribe(mqttState.playerTopic)
                 mqttState.player = MqttState.MqttStateCode.SUB
             }
-        } catch (_: MqttException) {
-            throw InvalidSubMqttException()
+        } catch (_: Exception) {
+            throw SubMqttException()
         }
     }
 
@@ -391,8 +406,8 @@ class MqttClientImpl @Inject constructor(
                 mqttApi.subscribe(mqttState.playerTopic)
                 mqttState.player = MqttState.MqttStateCode.SUB
             }
-        } catch (_: MqttException) {
-            throw InvalidPauseMqttException()
+        } catch (_: Exception) {
+            throw PauseMqttException()
         }
     }
 
@@ -405,8 +420,8 @@ class MqttClientImpl @Inject constructor(
                 mqttApi.disSubscribe(mqttState.playerTopic)
                 mqttState.player = MqttState.MqttStateCode.PAUSE
             }
-        } catch (_: MqttException) {
-            throw InvalidPauseMqttException()
+        } catch (_: Exception) {
+            throw PauseMqttException()
         }
     }
 
@@ -420,8 +435,8 @@ class MqttClientImpl @Inject constructor(
                 mqttState.playerTopic = ""
                 mqttState.player = MqttState.MqttStateCode.DIS_SUB
             }
-        } catch (_: MqttException) {
-            throw InvalidPauseMqttException()
+        } catch (_: Exception) {
+            throw PauseMqttException()
         }
     }
 }

@@ -5,11 +5,11 @@ package com.mongs.wear.core.dto.response
  */
 data class ResponseDto<T>(
 
-    val code: String,
+    val code: String?,
 
-    val message: String,
+    val message: String?,
 
-    val httpStatus: Int,
+    val httpStatus: Int?,
 
     val result: T,
 )

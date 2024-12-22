@@ -4,6 +4,10 @@ import com.mongs.wear.core.enums.MatchRoundCode
 
 interface MqttClient {
 
+    suspend fun isConnected(): Boolean
+
+    suspend fun isConnectPending(): Boolean
+
     /**
      * 구독 준비 (콜백 클래스 등록 및 MqttClient 객체 생성)
      */

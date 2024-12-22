@@ -1,10 +1,11 @@
 package com.mongs.wear.presentation.pages.main.layout
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.viewModelScope
 import com.mongs.wear.domain.common.usecase.GetBackgroundMapCodeUseCase
-import com.mongs.wear.domain.slot.exception.InvalidGetCurrentSlotException
 import com.mongs.wear.domain.slot.usecase.GetCurrentSlotUseCase
 import com.mongs.wear.domain.slot.vo.SlotVo
 import com.mongs.wear.presentation.common.BaseViewModel
@@ -48,16 +49,14 @@ class MainPagerViewModel @Inject constructor(
 
     val uiState = UiState()
 
-    class UiState : BaseUiState()
+    class UiState(
+        loadingBar: Boolean = false,
+    ) : BaseUiState() {
 
-    override fun exceptionHandler(exception: Throwable, loadingBar: Boolean, errorToast: Boolean) {
+        var loadingBar by mutableStateOf(loadingBar)
+    }
 
-        uiState.loadingBar = loadingBar
-        uiState.errorToast = errorToast
+    override fun exceptionHandler(exception: Throwable) {
 
-        when (exception) {
-
-            is InvalidGetCurrentSlotException -> {}
-        }
     }
 }

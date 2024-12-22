@@ -7,6 +7,9 @@ import com.mongs.wear.data.R
 import com.mongs.wear.data.common.consumer.MqttConsumer
 import info.mqtt.android.service.MqttAndroidClient
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import org.eclipse.paho.client.mqttv3.IMqttActionListener
@@ -21,9 +24,17 @@ class MqttApi (
     private val mqttConsumer: MqttConsumer,
     private val gson: Gson,
 ) {
+    companion object {
+        private var connectPending = false
+    }
+
+    fun isConnected(): Boolean = mqttAndroidClient.isConnected
+
+    fun isConnectPending(): Boolean = connectPending
 
     suspend fun connect() {
-        withContext(Dispatchers.IO) {
+//        withContext(Dispatchers.IO) {
+        connectPending = true
             val options = MqttConnectOptions().apply {
                 this.userName = context.getString(R.string.mqtt_username)
                 this.password = context.getString(R.string.mqtt_password).toCharArray()
@@ -31,42 +42,43 @@ class MqttApi (
             mqttAndroidClient.setCallback(mqttConsumer)
             mqttAndroidClient.connect(options).await()
             Log.i("MqttClientApi", "connect.")
-        }
+        connectPending = false
+//        }
     }
 
     suspend fun disConnect() {
-        withContext(Dispatchers.IO) {
+//        withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
                 mqttAndroidClient.disconnect().await()
                 Log.i("MqttClientApi", "disConnect.")
             }
-        }
+//        }
     }
 
     suspend fun subscribe(topic: String) {
-        withContext(Dispatchers.IO) {
+//        withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
                 mqttAndroidClient.subscribe(topic, 2).await()
                 Log.i("MqttClientApi", "[$topic] subscribe.")
             } else {
                 Log.e("MqttClientApi", "[$topic] subscribe fail.")
             }
-        }
+//        }
     }
 
     suspend fun disSubscribe(topic: String) {
-        withContext(Dispatchers.IO) {
+//        withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
                 mqttAndroidClient.unsubscribe(topic).await()
                 Log.i("MqttClientApi", "[$topic] unSubscribe.")
             } else {
                 Log.e("MqttClientApi", "[$topic] unSubscribe fail.")
             }
-        }
+//        }
     }
 
     suspend fun <T> produce(topic: String, requestDto: T) {
-        withContext(Dispatchers.IO) {
+//        withContext(Dispatchers.IO) {
             if (mqttAndroidClient.isConnected) {
 
                 val payload = gson.toJson(requestDto).toByteArray()
@@ -77,7 +89,7 @@ class MqttApi (
             } else {
                 Log.e("MqttClientApi", "[$topic] produce fail.")
             }
-        }
+//        }
     }
 
     private suspend fun IMqttToken.await() = suspendCancellableCoroutine { cont ->
@@ -87,6 +99,7 @@ class MqttApi (
             }
 
             override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+                exception?.printStackTrace()
                 cont.resumeWithException(exception ?: Exception("Unknown error"))
             }
         }

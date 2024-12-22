@@ -5,6 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import com.mongs.wear.core.errors.SlotErrorCode
+import com.mongs.wear.core.errors.UserErrorCode
+import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.player.usecase.ExchangeWalkingCountUseCase
 import com.mongs.wear.domain.player.usecase.GetWalkingCountUseCase
 import com.mongs.wear.domain.slot.usecase.GetCurrentSlotUseCase
@@ -62,15 +65,26 @@ class MainWalkingViewModel @Inject constructor(
     val uiState: UiState = UiState()
 
     class UiState (
+        loadingBar: Boolean = false,
         chargePayPointDialog: Boolean = false,
     ) : BaseUiState() {
 
+        var loadingBar by mutableStateOf(loadingBar)
         var chargePayPointDialog by mutableStateOf(chargePayPointDialog)
     }
 
-    override fun exceptionHandler(exception: Throwable, loadingBar: Boolean, errorToast: Boolean) {
+    override fun exceptionHandler(exception: Throwable) {
 
-        uiState.loadingBar = loadingBar
-        uiState.errorToast = errorToast
+        if (exception is ErrorException) {
+
+            when (exception.code) {
+
+                SlotErrorCode.SLOT_GET_CURRENT_SLOT -> {}
+
+                UserErrorCode.USER_GET_WALKING_COUNT -> {}
+
+                UserErrorCode.USER_EXCHANGE_WALKING -> {}
+            }
+        }
     }
 }

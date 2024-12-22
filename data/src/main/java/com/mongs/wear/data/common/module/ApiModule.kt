@@ -2,6 +2,7 @@ package com.mongs.wear.data.common.module
 
 import android.content.Context
 import com.google.gson.Gson
+import com.mongs.wear.core.dto.response.ResponseDto
 import com.mongs.wear.data.R
 import com.mongs.wear.data.auth.api.AuthApi
 import com.mongs.wear.data.auth.dataStore.TokenDataStore

@@ -3,7 +3,6 @@ package com.mongs.wear
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.hardware.SensorManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
@@ -38,7 +37,7 @@ class MainActivity : ComponentActivity() {
             ActivityCompat.requestPermissions(this, permissions, 100)
         }
 
-        mainActivityViewModel.init(network = this.isNetworkAvailable(this))
+        mainActivityViewModel.setNetworkAvailable(network = this.isNetworkAvailable(this))
 
         setContent {
             MongsTheme {
@@ -51,7 +50,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        mainActivityViewModel.connectSensor(sensorManager = application.getSystemService(Context.SENSOR_SERVICE) as SensorManager)
+        mainActivityViewModel.connectSensor()
         mainActivityViewModel.resumeConnectMqtt()
     }
 

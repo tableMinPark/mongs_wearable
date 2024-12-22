@@ -2,7 +2,7 @@ package com.mongs.wear.data.user.api
 
 import com.mongs.wear.core.dto.response.ResponseDto
 import com.mongs.wear.data.user.dto.request.ChargeStarPointRequestDto
-import com.mongs.wear.data.user.dto.request.ChargeWalkingRequestDto
+import com.mongs.wear.data.user.dto.request.UpdateWalkingRequestDto
 import com.mongs.wear.data.user.dto.request.ExchangeStarPointRequestDto
 import com.mongs.wear.data.user.dto.request.ExchangeWalkingRequestDto
 import com.mongs.wear.data.user.dto.response.GetPlayerResponseDto
@@ -26,9 +26,9 @@ interface PlayerApi {
     @POST("/user/player/exchange/starPoint")
     suspend fun exchangeStarPoint(@Body exchangeStarPointRequestDto: ExchangeStarPointRequestDto) : Response<ResponseDto<Void>>
 
-    @PATCH("/user/player/charge/walking")
-    suspend fun chargeWalking(@Body chargeWalkingRequestDto: ChargeWalkingRequestDto) : Response<ResponseDto<Void>>
+    @PATCH("/user/player/walking")
+    suspend fun updateWalkingCount(@Body updateWalkingRequestDto: UpdateWalkingRequestDto) : Response<ResponseDto<Void>>
 
     @POST("/user/player/exchange/walking")
-    suspend fun exchangeWalking(@Body exchangeWalkingRequestDto: ExchangeWalkingRequestDto) : Response<ResponseDto<Void>>
+    suspend fun exchangeWalkingCount(@Body exchangeWalkingRequestDto: ExchangeWalkingRequestDto) : Response<ResponseDto<Void>>
 }

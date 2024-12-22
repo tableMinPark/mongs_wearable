@@ -8,8 +8,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class PlayerDataStore @Inject constructor(
@@ -70,6 +72,14 @@ class PlayerDataStore @Inject constructor(
     suspend fun setWalkingCount(walkingCount: Int) {
         context.store.edit { preferences ->
             preferences[WALKING_COUNT] = walkingCount
+        }
+    }
+
+    suspend fun getWalkingCount(): Int {
+        return runBlocking {
+            context.store.data.map { preferences ->
+                preferences[WALKING_COUNT]!!
+            }.first()
         }
     }
 

@@ -1,11 +1,11 @@
 package com.mongs.wear.domain.auth.usecase
 
-import com.mongs.wear.core.exception.ErrorException
-import com.mongs.wear.domain.auth.enums.DomainAuthErrorCode
-import com.mongs.wear.domain.common.client.MqttClient
-import com.mongs.wear.domain.auth.exception.InvalidLoginException
-import com.mongs.wear.domain.common.repository.AppRepository
+import com.mongs.wear.domain.auth.exception.NotExistsEmailException
+import com.mongs.wear.domain.auth.exception.NotExistsGoogleAccountIdException
 import com.mongs.wear.domain.auth.repository.AuthRepository
+import com.mongs.wear.domain.common.client.MqttClient
+import com.mongs.wear.domain.common.repository.AppRepository
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(
@@ -13,22 +13,27 @@ class LoginUseCase @Inject constructor(
     private val appRepository: AppRepository,
     private val authRepository: AuthRepository,
 ) {
-    suspend operator fun invoke(email: String?, name: String?) {
 
-        if (email.isNullOrEmpty()) throw InvalidLoginException(code = DomainAuthErrorCode.DOMAIN_NOT_EXISTS_EMAIL)
+    suspend operator fun invoke(googleAccountId: String?, email: String?) {
 
-        if (name.isNullOrEmpty()) throw InvalidLoginException(code = DomainAuthErrorCode.DOMAIN_NOT_EXISTS_NAME)
+        if (email.isNullOrEmpty()) throw NotExistsEmailException()
 
-        try {
-            val deviceId = appRepository.getDeviceId()
+        if (googleAccountId.isNullOrEmpty()) throw NotExistsGoogleAccountIdException()
 
-            val accountId = authRepository.login(deviceId = deviceId, email = email, name = name)
+        val deviceId = appRepository.getDeviceId()
 
+        val accountId = authRepository.login(
+            deviceId = deviceId,
+            email = email,
+            googleAccountId = googleAccountId
+        )
+
+        while (mqttClient.isConnectPending()) delay(1000)
+
+        if (mqttClient.isConnected()) {
             mqttClient.subPlayer(accountId = accountId)
-
-        } catch (_: ErrorException) {
-
-            throw InvalidLoginException()
+        } else {
+            appRepository.setNetwork(network = false)
         }
     }
 }

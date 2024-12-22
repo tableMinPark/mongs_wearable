@@ -13,23 +13,23 @@ import com.mongs.wear.data.activity.entity.MatchRoomEntity
 interface MatchRoomDao {
 
     @Query("SELECT * FROM mongs_match_room WHERE deviceId = :deviceId")
-    suspend fun findByDeviceId(deviceId: String) : MatchRoomEntity?
+    fun findByDeviceId(deviceId: String) : MatchRoomEntity?
 
     @Query("SELECT * FROM mongs_match_room WHERE deviceId = :deviceId")
-    suspend fun findLiveByDeviceId(deviceId: String) : LiveData<MatchRoomEntity?>
+    fun findLiveByDeviceId(deviceId: String) : LiveData<MatchRoomEntity?>
 
     @Query("SELECT * FROM mongs_match_room WHERE roomId = :roomId")
-    suspend fun findByRoomId(roomId: Long) : MatchRoomEntity?
+    fun findByRoomId(roomId: Long) : MatchRoomEntity?
 
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(matchRoomEntity: MatchRoomEntity) : Long
+    fun insert(matchRoomEntity: MatchRoomEntity) : Long
 
     @Update
-    suspend fun update(matchRoomEntity: MatchRoomEntity) : Int
+    fun update(matchRoomEntity: MatchRoomEntity) : Int
 
     @Transaction
-    suspend fun save(matchRoomEntity: MatchRoomEntity) : MatchRoomEntity {
+    fun save(matchRoomEntity: MatchRoomEntity) : MatchRoomEntity {
 
         val isSuccess = this.insert(matchRoomEntity = matchRoomEntity)
 

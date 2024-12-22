@@ -1,10 +1,10 @@
 package com.mongs.wear.data.activity.exception
 
 import com.mongs.wear.core.exception.ErrorException
-import com.mongs.wear.data.auth.enums.DataActivityErrorCode
+import com.mongs.wear.core.errors.ActivityErrorCode
 import java.util.Collections
 
 class NotExistsMatchException(deviceId: String) : ErrorException(
-    message = DataActivityErrorCode.ACTIVITY_NOT_EXISTS_MATCH.getMessage(),
+    code = ActivityErrorCode.ACTIVITY_NOT_EXISTS_MATCH,
     result = Collections.singletonMap("deviceId", deviceId),
 )

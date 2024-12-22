@@ -1,6 +1,9 @@
 package com.mongs.wear.data.common.module
 
+import com.mongs.wear.data.common.datastore.AppDataStore
 import com.mongs.wear.data.common.resolver.ObserveResolver
+import com.mongs.wear.data.common.room.RoomDB
+import com.mongs.wear.data.user.datastore.PlayerDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,5 +16,13 @@ object ResolverModule {
 
     @Provides
     @Singleton
-    fun bindPlayerObserveResolver() : ObserveResolver = ObserveResolver()
+    fun bindPlayerObserveResolver(
+        roomDB: RoomDB,
+        appDataStore: AppDataStore,
+        playerDataStore: PlayerDataStore,
+    ) : ObserveResolver = ObserveResolver(
+        roomDB = roomDB,
+        appDataStore = appDataStore,
+        playerDataStore = playerDataStore,
+    )
 }

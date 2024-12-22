@@ -3,7 +3,7 @@ package com.mongs.wear.presentation.pages.main.configure
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.viewModelScope
+import com.mongs.wear.core.errors.AuthErrorCode
 import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.auth.usecase.LogoutUseCase
 import com.mongs.wear.presentation.common.BaseViewModel
@@ -17,8 +17,11 @@ class MainConfigureViewModel @Inject constructor(
     private val logoutUseCase: LogoutUseCase,
 ): BaseViewModel() {
 
+    /**
+     * 로그아웃
+     */
     fun logout() {
-        viewModelScope.launch (Dispatchers.IO) {
+        viewModelScopeWithHandler.launch (Dispatchers.IO) {
             logoutUseCase()
             uiState.navLoginView = true
         }
@@ -27,21 +30,26 @@ class MainConfigureViewModel @Inject constructor(
     val uiState: UiState = UiState()
 
     class UiState (
+        loadingBar: Boolean = false,
         navLoginView: Boolean = false,
         logoutDialog: Boolean = false,
     ) : BaseUiState() {
 
+        var loadingBar by mutableStateOf(loadingBar)
         var navLoginView by mutableStateOf(navLoginView)
         var logoutDialog by mutableStateOf(logoutDialog)
     }
 
-    override fun exceptionHandler(exception: Throwable, loadingBar: Boolean, errorToast: Boolean) {
-
-        uiState.loadingBar = loadingBar
-        uiState.errorToast = errorToast
+    override fun exceptionHandler(exception: Throwable) {
 
         if (exception is ErrorException) {
-            uiState.logoutDialog = false
+
+            when (exception.code) {
+
+                AuthErrorCode.AUTH_LOGOUT -> {
+                    uiState.logoutDialog = false
+                }
+            }
         }
     }
 }

@@ -13,29 +13,29 @@ import com.mongs.wear.data.manager.entity.MongEntity
 interface MongDao {
 
     @Query("SElECT * FROM mongs_mong WHERE mongId = :mongId")
-    suspend fun findByMongId(mongId: Long) : MongEntity?
+    fun findByMongId(mongId: Long) : MongEntity?
 
     @Query("SELECT * FROM mongs_mong WHERE isCurrent = true")
-    suspend fun findByIsCurrentTrue() : MongEntity?
+    fun findByIsCurrentTrue() : MongEntity?
 
     @Query("SELECT * FROM mongs_mong WHERE isCurrent = true")
-    suspend fun findLiveByIsCurrentTrue() : LiveData<MongEntity?>
+    fun findLiveByIsCurrentTrue() : LiveData<MongEntity?>
 
     @Query("SELECT * FROM mongs_mong WHERE isCurrent = true")
-    suspend fun findAllByIsCurrentTrue() : List<MongEntity>
+    fun findAllByIsCurrentTrue() : List<MongEntity>
 
     @Query("SELECT * FROM mongs_mong")
-    suspend fun findLiveAll() : LiveData<List<MongEntity>>
+    fun findLiveAll() : LiveData<List<MongEntity>>
 
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(mongEntity: MongEntity) : Long
+    fun insert(mongEntity: MongEntity) : Long
 
     @Update
-    suspend fun update(mongEntity: MongEntity) : Int
+    fun update(mongEntity: MongEntity) : Int
 
     @Transaction
-    suspend fun save(mongEntity: MongEntity) : MongEntity {
+    fun save(mongEntity: MongEntity) : MongEntity {
 
         val isSuccess = this.insert(mongEntity = mongEntity)
 

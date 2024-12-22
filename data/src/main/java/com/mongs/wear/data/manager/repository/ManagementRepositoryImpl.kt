@@ -4,15 +4,15 @@ import com.mongs.wear.data.common.room.RoomDB
 import com.mongs.wear.data.manager.api.ManagementApi
 import com.mongs.wear.data.manager.dto.request.CreateMongRequestDto
 import com.mongs.wear.data.manager.dto.request.FeedMongRequestDto
-import com.mongs.wear.data.manager.exception.InvalidCreateMongException
-import com.mongs.wear.data.manager.exception.InvalidDeleteMongException
-import com.mongs.wear.data.manager.exception.InvalidEvolutionMongException
-import com.mongs.wear.data.manager.exception.InvalidFeedMongException
-import com.mongs.wear.data.manager.exception.InvalidGetFeedItemsException
-import com.mongs.wear.data.manager.exception.InvalidGraduateMongException
-import com.mongs.wear.data.manager.exception.InvalidPoopCleanMongException
-import com.mongs.wear.data.manager.exception.InvalidSleepMongException
-import com.mongs.wear.data.manager.exception.InvalidStrokeMongException
+import com.mongs.wear.data.manager.exception.CreateMongException
+import com.mongs.wear.data.manager.exception.DeleteMongException
+import com.mongs.wear.data.manager.exception.EvolutionMongException
+import com.mongs.wear.data.manager.exception.FeedMongException
+import com.mongs.wear.data.manager.exception.GetFeedItemsException
+import com.mongs.wear.data.manager.exception.GraduateMongException
+import com.mongs.wear.data.manager.exception.PoopCleanMongException
+import com.mongs.wear.data.manager.exception.SleepMongException
+import com.mongs.wear.data.manager.exception.StrokeMongException
 import com.mongs.wear.domain.management.model.FeedItemModel
 import com.mongs.wear.domain.management.repository.ManagementRepository
 import kotlinx.coroutines.CoroutineScope
@@ -40,7 +40,7 @@ class ManagementRepositoryImpl @Inject constructor(
         ));
 
         if (!response.isSuccessful) {
-            throw InvalidCreateMongException(name = name, sleepStart = sleepStart, sleepEnd = sleepEnd)
+            throw CreateMongException(name = name, sleepStart = sleepStart, sleepEnd = sleepEnd)
         }
     }
 
@@ -49,7 +49,7 @@ class ManagementRepositoryImpl @Inject constructor(
         val response = managementApi.deleteMong(mongId = mongId)
 
         if (!response.isSuccessful) {
-            throw InvalidDeleteMongException(mongId = mongId)
+            throw DeleteMongException(mongId = mongId)
         }
     }
 
@@ -77,7 +77,7 @@ class ManagementRepositoryImpl @Inject constructor(
             }
         }
 
-        throw InvalidGetFeedItemsException(mongId = mongId)
+        throw GetFeedItemsException(mongId = mongId)
     }
 
     override suspend fun feedMong(mongId: Long, foodTypeCode: String) {
@@ -85,7 +85,7 @@ class ManagementRepositoryImpl @Inject constructor(
         val response = managementApi.feedMong(mongId = mongId, feedMongRequestDto = FeedMongRequestDto(foodTypeCode = foodTypeCode))
 
         if (!response.isSuccessful) {
-            throw InvalidFeedMongException(mongId = mongId, foodTypeCode = foodTypeCode)
+            throw FeedMongException(mongId = mongId, foodTypeCode = foodTypeCode)
         }
     }
 
@@ -94,7 +94,7 @@ class ManagementRepositoryImpl @Inject constructor(
         val response = managementApi.graduateMong(mongId = mongId)
 
         if (!response.isSuccessful) {
-            throw InvalidGraduateMongException(mongId = mongId)
+            throw GraduateMongException(mongId = mongId)
         }
     }
 
@@ -113,7 +113,7 @@ class ManagementRepositoryImpl @Inject constructor(
         val response = managementApi.evolutionMong(mongId = mongId)
 
         if (!response.isSuccessful) {
-            throw InvalidEvolutionMongException(mongId = mongId)
+            throw EvolutionMongException(mongId = mongId)
         }
     }
 
@@ -122,7 +122,7 @@ class ManagementRepositoryImpl @Inject constructor(
         val response = managementApi.sleepMong(mongId = mongId)
 
         if (!response.isSuccessful) {
-            throw InvalidSleepMongException(mongId = mongId)
+            throw SleepMongException(mongId = mongId)
         }
     }
 
@@ -131,7 +131,7 @@ class ManagementRepositoryImpl @Inject constructor(
         val response = managementApi.strokeMong(mongId = mongId)
 
         if (!response.isSuccessful) {
-            throw InvalidStrokeMongException(mongId = mongId)
+            throw StrokeMongException(mongId = mongId)
         }
     }
 
@@ -140,7 +140,7 @@ class ManagementRepositoryImpl @Inject constructor(
         val response = managementApi.poopCleanMong(mongId = mongId)
 
         if (!response.isSuccessful) {
-            throw InvalidPoopCleanMongException(mongId = mongId)
+            throw PoopCleanMongException(mongId = mongId)
         }
     }
 

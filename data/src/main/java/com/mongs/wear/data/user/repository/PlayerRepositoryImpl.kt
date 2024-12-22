@@ -4,15 +4,13 @@ import androidx.lifecycle.LiveData
 import com.mongs.wear.data.user.api.PlayerApi
 import com.mongs.wear.data.user.datastore.PlayerDataStore
 import com.mongs.wear.data.user.dto.request.ChargeStarPointRequestDto
-import com.mongs.wear.data.user.dto.request.ChargeWalkingRequestDto
 import com.mongs.wear.data.user.dto.request.ExchangeStarPointRequestDto
 import com.mongs.wear.data.user.dto.request.ExchangeWalkingRequestDto
-import com.mongs.wear.data.user.exception.InvalidBuySlotException
-import com.mongs.wear.data.user.exception.InvalidChargeStarPointException
-import com.mongs.wear.data.user.exception.InvalidChargeWalkingException
-import com.mongs.wear.data.user.exception.InvalidExchangeStarPointException
-import com.mongs.wear.data.user.exception.InvalidExchangeWalkingException
-import com.mongs.wear.data.user.exception.InvalidUpdatePlayerException
+import com.mongs.wear.data.user.exception.BuySlotException
+import com.mongs.wear.data.user.exception.ChargeStarPointException
+import com.mongs.wear.data.user.exception.ExchangeStarPointException
+import com.mongs.wear.data.user.exception.ExchangeWalkingException
+import com.mongs.wear.data.user.exception.UpdatePlayerException
 import com.mongs.wear.domain.player.repository.PlayerRepository
 import javax.inject.Inject
 
@@ -32,7 +30,7 @@ class PlayerRepositoryImpl @Inject constructor(
                 playerDataStore.setWalkingCount(walkingCount = body.result.walkingCount)
             }
         } else {
-            throw InvalidUpdatePlayerException()
+            throw UpdatePlayerException()
         }
     }
 
@@ -41,7 +39,7 @@ class PlayerRepositoryImpl @Inject constructor(
         val response = playerApi.buySlot()
 
         if (!response.isSuccessful) {
-            throw InvalidBuySlotException()
+            throw BuySlotException()
         }
     }
 
@@ -67,7 +65,7 @@ class PlayerRepositoryImpl @Inject constructor(
         )
 
         if (!response.isSuccessful) {
-            throw InvalidChargeStarPointException(receipt = receipt)
+            throw ChargeStarPointException(receipt = receipt)
         }
     }
 
@@ -81,34 +79,29 @@ class PlayerRepositoryImpl @Inject constructor(
         )
 
         if (!response.isSuccessful) {
-            throw InvalidExchangeStarPointException(mongId = mongId)
+            throw ExchangeStarPointException(mongId = mongId)
         }
     }
 
     override suspend fun chargeWalking(walkingCount: Int) {
 
-        val response = playerApi.chargeWalking(
-            chargeWalkingRequestDto = ChargeWalkingRequestDto(
-                walkingCount = walkingCount
-            )
-        )
-
-        if (!response.isSuccessful) {
-            throw InvalidChargeWalkingException()
-        }
+        playerDataStore.setWalkingCount(walkingCount = walkingCount)
     }
 
     override suspend fun exchangeWalking(mongId: Long, walkingCount: Int) {
 
-        val response = playerApi.exchangeWalking(
+        val totalWalkingCount = playerDataStore.getWalkingCount()
+
+        val response = playerApi.exchangeWalkingCount(
             exchangeWalkingRequestDto = ExchangeWalkingRequestDto(
                 mongId = mongId,
-                walkingCount = walkingCount
+                walkingCount = walkingCount,
+                totalWalkingCount = totalWalkingCount
             )
         )
 
         if (!response.isSuccessful) {
-            throw InvalidExchangeWalkingException()
+            throw ExchangeWalkingException()
         }
     }
 }

@@ -5,13 +5,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mongs.wear.core.errors.CommonErrorCode
+import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.common.client.MqttClient
 import com.mongs.wear.domain.common.repository.AppRepository
 import com.mongs.wear.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -25,26 +28,37 @@ class MainViewModel @Inject constructor(
     val network: LiveData<Boolean> get() = _network
     private val _network = MediatorLiveData<Boolean>()
 
-    fun init() {
+    init {
+        viewModelScopeWithHandler.launch(Dispatchers.IO) {
 
-        viewModelScope.launch(Dispatchers.Main) {
+            uiState.loadingBar = true
 
             _network.addSource(withContext(Dispatchers.IO) { appRepository.getNetworkLive() }) { _network.value = it }
 
-            withContext(Dispatchers.IO) {
-                mqttClient.connect()
-                uiState.loadingBar = false
-            }
+            mqttClient.connect()
+
+            uiState.loadingBar = false
         }
     }
 
     val uiState = UiState()
 
-    class UiState : BaseUiState()
+    class UiState(
+        loadingBar: Boolean = false,
+    ) : BaseUiState() {
 
-    override fun exceptionHandler(exception: Throwable, loadingBar: Boolean, errorToast: Boolean) {
+        var loadingBar by mutableStateOf(loadingBar)
+    }
 
-        uiState.loadingBar = loadingBar
-        uiState.errorToast = errorToast
+    override fun exceptionHandler(exception: Throwable) {
+
+        if (exception is ErrorException) {
+
+            when (exception.code) {
+                CommonErrorCode.COMMON_MQTT_CONNECT -> {
+                    viewModelScope.launch { appRepository.setNetwork(network = false) }
+                }
+            }
+        }
     }
 }

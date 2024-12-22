@@ -1,44 +1,53 @@
 package com.mongs.wear
 
-import android.hardware.Sensor
-import android.hardware.SensorManager
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.os.SystemClock
+import android.util.Log
 import com.mongs.wear.domain.common.client.MqttClient
 import com.mongs.wear.domain.common.repository.AppRepository
-import com.mongs.wear.presentation.layout.StepSensorEventListener
+import com.mongs.wear.domain.player.repository.PlayerRepository
+import com.mongs.wear.presentation.common.BaseViewModel
+import com.mongs.wear.presentation.common.StepSensorManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import java.time.LocalDateTime
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val mqttClient: MqttClient,
     private val appRepository: AppRepository,
-    private val stepSensorEventListener: StepSensorEventListener,
-) : ViewModel() {
+    private val playerRepository: PlayerRepository,
+    private val stepSensorManager: StepSensorManager,
+) : BaseViewModel() {
 
-    private lateinit var sensorManager: SensorManager
+    init {
 
-    fun init(network: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScopeWithHandler.launch {
+
+            val bootTime = LocalDateTime.now()
+                .minusSeconds(TimeUnit.MILLISECONDS.toSeconds(SystemClock.uptimeMillis()))
+
+            appRepository.setBootTime(bootTime = bootTime)
+
+            Log.d("test", bootTime.toString())
+        }
+    }
+
+    fun setNetworkAvailable(network: Boolean) {
+        viewModelScopeWithHandler.launch(Dispatchers.IO) {
             appRepository.setNetwork(network = network)
         }
     }
 
-    fun connectSensor(sensorManager: SensorManager) = CoroutineScope(Dispatchers.IO).launch {
-        this@MainActivityViewModel.sensorManager = sensorManager
-        //TYPE_STEP_DETECTOR TYPE_STEP_COUNTER TYPE_GRAVITY
-        this@MainActivityViewModel.sensorManager.registerListener(
-            this@MainActivityViewModel.stepSensorEventListener,
-            sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR), SensorManager.SENSOR_DELAY_FASTEST)
+    fun connectSensor() = CoroutineScope(Dispatchers.IO).launch {
+        stepSensorManager.listen()
     }
 
     fun disconnectSensor() = CoroutineScope(Dispatchers.IO).launch {
-        this@MainActivityViewModel.sensorManager.unregisterListener(this@MainActivityViewModel.stepSensorEventListener)
+        stepSensorManager.stop()
     }
 
     fun resumeConnectMqtt() = CoroutineScope(Dispatchers.IO).launch {
@@ -46,10 +55,12 @@ class MainActivityViewModel @Inject constructor(
     }
 
     fun pauseConnectMqtt() = CoroutineScope(Dispatchers.IO).launch {
-        runBlocking { this@MainActivityViewModel.mqttClient.pauseConnect() }
+        this@MainActivityViewModel.mqttClient.pauseConnect()
     }
 
     fun disconnectMqtt() = CoroutineScope(Dispatchers.IO).launch {
-        runBlocking { this@MainActivityViewModel.mqttClient.disconnect() }
+        this@MainActivityViewModel.mqttClient.disconnect()
     }
+
+    override fun exceptionHandler(exception: Throwable) {}
 }

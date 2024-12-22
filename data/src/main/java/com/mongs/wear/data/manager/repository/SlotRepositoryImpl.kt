@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.mongs.wear.data.common.room.RoomDB
 import com.mongs.wear.data.manager.api.ManagementApi
-import com.mongs.wear.data.manager.exception.InvalidGetMongException
+import com.mongs.wear.data.manager.exception.GetMongException
 import com.mongs.wear.domain.slot.model.SlotModel
 import com.mongs.wear.domain.slot.repository.SlotRepository
 import javax.inject.Inject
@@ -42,7 +42,7 @@ class SlotRepositoryImpl @Inject constructor(
                     )
                 }
             } else {
-                throw InvalidGetMongException(mongId = mongEntity.mongId)
+                throw GetMongException(mongId = mongEntity.mongId)
             }
         }
     }

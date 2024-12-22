@@ -1,8 +1,6 @@
 package com.mongs.wear.domain.slot.usecase
 
-import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.management.repository.ManagementRepository
-import com.mongs.wear.domain.slot.exception.InvalidPoopCleanMongException
 import javax.inject.Inject
 
 class PoopCleanMongUseCase @Inject constructor(
@@ -10,14 +8,8 @@ class PoopCleanMongUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(mongId: Long) {
 
-        try {
-            managementRepository.poopCleanMong(mongId = mongId)
+        managementRepository.poopCleanMong(mongId = mongId)
 
-            managementRepository.setIsPoopCleaning(mongId = mongId)
-
-        } catch (_: ErrorException) {
-
-            throw InvalidPoopCleanMongException()
-        }
+        managementRepository.setIsPoopCleaning(mongId = mongId)
     }
 }

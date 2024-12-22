@@ -5,16 +5,16 @@ import androidx.lifecycle.map
 import com.mongs.wear.core.enums.MatchRoundCode
 import com.mongs.wear.core.enums.MatchStateCode
 import com.mongs.wear.data.activity.api.BattleApi
-import com.mongs.wear.data.activity.exception.InvalidCreateMatchException
-import com.mongs.wear.data.activity.exception.InvalidDeleteMatchException
-import com.mongs.wear.data.activity.exception.InvalidEnterMatchException
-import com.mongs.wear.data.activity.exception.InvalidExitMatchException
-import com.mongs.wear.data.activity.exception.InvalidPickMatchException
-import com.mongs.wear.data.activity.exception.InvalidUpdateOverMatchException
+import com.mongs.wear.data.activity.exception.CreateMatchException
+import com.mongs.wear.data.activity.exception.DeleteMatchException
+import com.mongs.wear.data.activity.exception.EnterMatchException
+import com.mongs.wear.data.activity.exception.ExitMatchException
+import com.mongs.wear.data.activity.exception.PickMatchException
+import com.mongs.wear.data.activity.exception.UpdateOverMatchException
 import com.mongs.wear.data.activity.exception.NotExistsMatchException
 import com.mongs.wear.data.activity.exception.NotExistsMatchPlayerException
 import com.mongs.wear.data.common.datastore.AppDataStore
-import com.mongs.wear.data.common.exception.InvalidPubMqttException
+import com.mongs.wear.data.common.exception.PubMqttException
 import com.mongs.wear.data.common.room.RoomDB
 import com.mongs.wear.domain.common.client.MqttClient
 import com.mongs.wear.domain.battle.model.MatchModel
@@ -88,7 +88,7 @@ class BattleRepositoryImpl @Inject constructor(
         val response = battleApi.createWaitMatching(mongId = mongId)
 
         if (!response.isSuccessful) {
-            throw InvalidCreateMatchException(mongId = mongId)
+            throw CreateMatchException(mongId = mongId)
         }
     }
 
@@ -97,7 +97,7 @@ class BattleRepositoryImpl @Inject constructor(
         val response = battleApi.deleteWaitMatching(mongId = mongId)
 
         if (!response.isSuccessful) {
-            throw InvalidDeleteMatchException(mongId = mongId)
+            throw DeleteMatchException(mongId = mongId)
         }
     }
 
@@ -135,7 +135,7 @@ class BattleRepositoryImpl @Inject constructor(
             }
 
         } else {
-            throw InvalidUpdateOverMatchException(roomId = roomId)
+            throw UpdateOverMatchException(roomId = roomId)
         }
     }
 
@@ -146,9 +146,9 @@ class BattleRepositoryImpl @Inject constructor(
             try {
                 mqttClient.pubBattleMatchEnter(roomId = roomId, playerId = playerId)
 
-            } catch (e: InvalidPubMqttException) {
+            } catch (e: PubMqttException) {
 
-                throw InvalidEnterMatchException(roomId = roomId, playerId = playerId)
+                throw EnterMatchException(roomId = roomId, playerId = playerId)
             }
         }
     }
@@ -165,9 +165,9 @@ class BattleRepositoryImpl @Inject constructor(
                     pickCode = pickCode
                 )
 
-            } catch (e: InvalidPubMqttException) {
+            } catch (e: PubMqttException) {
 
-                throw InvalidPickMatchException(
+                throw PickMatchException(
                     roomId = roomId,
                     playerId = playerId,
                     pickCode = pickCode
@@ -185,9 +185,9 @@ class BattleRepositoryImpl @Inject constructor(
 
                 mqttClient.disSubBattleMatch()
 
-            } catch (e: InvalidPubMqttException) {
+            } catch (e: PubMqttException) {
 
-                throw InvalidExitMatchException(roomId = roomId, playerId = playerId)
+                throw ExitMatchException(roomId = roomId, playerId = playerId)
             }
         }
     }
