@@ -6,7 +6,7 @@ import com.mongs.wear.core.errors.UserErrorCode
 import java.util.Collections
 
 class BuySlotException(
-    code: ErrorCode = UserErrorCode.USER_BUY_SLOT
+    code: ErrorCode = UserErrorCode.DATA_USER_BUY_SLOT
 ) : ErrorException(
     code = code,
     result = Collections.emptyMap(),

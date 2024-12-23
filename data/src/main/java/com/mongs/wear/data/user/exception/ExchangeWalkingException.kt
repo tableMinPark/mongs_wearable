@@ -5,6 +5,6 @@ import com.mongs.wear.core.errors.UserErrorCode
 import java.util.Collections
 
 class ExchangeWalkingException : ErrorException(
-    code = UserErrorCode.USER_EXCHANGE_WALKING,
+    code = UserErrorCode.DATA_USER_EXCHANGE_WALKING,
     result = Collections.emptyMap(),
 )

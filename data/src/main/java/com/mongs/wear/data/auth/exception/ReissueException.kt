@@ -5,6 +5,6 @@ import com.mongs.wear.core.exception.ErrorException
 import java.util.Collections
 
 class ReissueException : ErrorException(
-    code = AuthErrorCode.AUTH_REISSUE,
+    code = AuthErrorCode.DATA_AUTH_REISSUE,
     result = Collections.emptyMap(),
 )

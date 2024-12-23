@@ -13,8 +13,6 @@ import com.mongs.wear.domain.common.repository.AppRepository
 import com.mongs.wear.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -33,7 +31,9 @@ class MainViewModel @Inject constructor(
 
             uiState.loadingBar = true
 
-            _network.addSource(withContext(Dispatchers.IO) { appRepository.getNetworkLive() }) { _network.value = it }
+            _network.addSource(withContext(Dispatchers.IO) { appRepository.getNetworkLive() }) {
+                _network.value = it
+            }
 
             mqttClient.connect()
 
@@ -43,11 +43,8 @@ class MainViewModel @Inject constructor(
 
     val uiState = UiState()
 
-    class UiState(
-        loadingBar: Boolean = false,
-    ) : BaseUiState() {
-
-        var loadingBar by mutableStateOf(loadingBar)
+    class UiState : BaseUiState() {
+        var loadingBar by mutableStateOf(false)
     }
 
     override fun exceptionHandler(exception: Throwable) {
@@ -55,8 +52,10 @@ class MainViewModel @Inject constructor(
         if (exception is ErrorException) {
 
             when (exception.code) {
-                CommonErrorCode.COMMON_MQTT_CONNECT -> {
-                    viewModelScope.launch { appRepository.setNetwork(network = false) }
+                CommonErrorCode.DATA_COMMON_MQTT_CONNECT -> {
+                    viewModelScope.launch(Dispatchers.IO) {
+                        appRepository.setNetwork(network = false)
+                    }
                 }
             }
         }

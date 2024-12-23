@@ -5,6 +5,6 @@ import com.mongs.wear.core.exception.ErrorException
 import java.util.Collections
 
 class LogoutException : ErrorException(
-    code = AuthErrorCode.AUTH_LOGOUT,
+    code = AuthErrorCode.DATA_AUTH_LOGOUT,
     result = Collections.emptyMap(),
 )

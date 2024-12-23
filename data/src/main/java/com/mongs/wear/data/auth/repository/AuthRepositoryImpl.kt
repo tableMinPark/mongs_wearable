@@ -20,6 +20,9 @@ class AuthRepositoryImpl @Inject constructor(
     private val tokenDataStore: TokenDataStore,
 ) : AuthRepository {
 
+    /**
+     * 회원가입
+     */
     override suspend fun join(email: String, name: String, googleAccountId: String) {
 
         val response = authApi.join(JoinRequestDto(email = email, name = name, socialAccountId = googleAccountId))

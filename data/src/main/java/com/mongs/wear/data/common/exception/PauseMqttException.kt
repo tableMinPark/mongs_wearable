@@ -5,6 +5,6 @@ import com.mongs.wear.core.errors.CommonErrorCode
 import java.util.Collections
 
 class PauseMqttException : ErrorException(
-    code = CommonErrorCode.COMMON_MQTT_PAUSE,
+    code = CommonErrorCode.DATA_COMMON_MQTT_PAUSE,
     result = Collections.emptyMap(),
 )

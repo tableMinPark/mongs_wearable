@@ -5,6 +5,6 @@ import com.mongs.wear.core.errors.UserErrorCode
 import java.util.Collections
 
 class CreateFeedbackException : ErrorException(
-    code = UserErrorCode.USER_CREATE_FEEDBACK,
+    code = UserErrorCode.DATA_USER_CREATE_FEEDBACK,
     result = Collections.emptyMap(),
 )

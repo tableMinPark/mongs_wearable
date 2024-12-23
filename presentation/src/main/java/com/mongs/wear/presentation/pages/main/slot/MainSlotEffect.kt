@@ -20,8 +20,8 @@ fun MainSlotEffect(
     isPageChanging: Boolean,
     evolution: (Long) -> Unit,
     graduationReady: () -> Unit,
-    uiState: UiState,
     modifier: Modifier = Modifier.zIndex(0f),
+    uiState: UiState,
 ) {
     when (slotVo.stateCode) {
         MongStateCode.NORMAL -> {

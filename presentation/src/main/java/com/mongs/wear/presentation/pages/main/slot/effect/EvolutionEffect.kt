@@ -22,8 +22,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -33,7 +31,6 @@ import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongResourceCode
 import com.mongs.wear.presentation.assets.MongsWhite
-import com.mongs.wear.presentation.component.background.MainPagerBackground
 import com.mongs.wear.presentation.component.common.Mong
 import kotlinx.coroutines.delay
 
@@ -42,6 +39,7 @@ private val imageList = listOf(
     R.drawable.create_effect_2,
     R.drawable.create_effect_3,
 )
+
 private val delayList = listOf(
     100L,
     300L,
@@ -109,34 +107,3 @@ fun EvolutionEffect(
         }
     }
 }
-
-@Preview(showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
-@Composable
-private fun EvolutionEffectPreview() {
-    Box {
-        MainPagerBackground()
-        EvolutionEffect(
-            slotVo = SlotVo(mongTypeCode = "CH102"),
-            isEvolution = false,
-            evolution = {} ,
-            runEvolution = {}
-        )
-    }
-}
-
-@Preview(showSystemUi = true, device = Devices.WEAR_OS_LARGE_ROUND)
-@Composable
-private fun LargeEvolutionEffectPreview() {
-    Box {
-        MainPagerBackground()
-        EvolutionEffect(
-            slotVo = SlotVo(mongTypeCode = "CH102"),
-            isEvolution = false,
-            evolution = {} ,
-            runEvolution = {}
-        )
-    }
-}
-
-
-

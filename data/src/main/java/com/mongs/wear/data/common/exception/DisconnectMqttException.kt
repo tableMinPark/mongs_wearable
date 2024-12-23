@@ -5,6 +5,6 @@ import com.mongs.wear.core.errors.CommonErrorCode
 import java.util.Collections
 
 class DisconnectMqttException : ErrorException(
-    code = CommonErrorCode.COMMON_MQTT_DISCONNECT,
+    code = CommonErrorCode.DATA_COMMON_MQTT_DISCONNECT,
     result = Collections.emptyMap(),
 )

@@ -46,7 +46,7 @@ class MainConfigureViewModel @Inject constructor(
 
             when (exception.code) {
 
-                AuthErrorCode.AUTH_LOGOUT -> {
+                AuthErrorCode.DATA_AUTH_LOGOUT -> {
                     uiState.logoutDialog = false
                 }
             }

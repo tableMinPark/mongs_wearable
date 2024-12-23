@@ -5,6 +5,6 @@ import com.mongs.wear.core.errors.ActivityErrorCode
 import java.util.Collections
 
 class UpdateOverMatchException(roomId: Long) : ErrorException(
-    code = ActivityErrorCode.ACTIVITY_UPDATE_OVER_MATCH,
+    code = ActivityErrorCode.DATA_ACTIVITY_UPDATE_OVER_MATCH,
     result = Collections.singletonMap("roomId", roomId),
 )

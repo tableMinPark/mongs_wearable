@@ -5,6 +5,6 @@ import com.mongs.wear.core.errors.CommonErrorCode
 import java.util.Collections
 
 class DisSubMqttException : ErrorException(
-    code = CommonErrorCode.COMMON_MQTT_DIS_SUB,
+    code = CommonErrorCode.DATA_COMMON_MQTT_DIS_SUB,
     result = Collections.emptyMap(),
 )

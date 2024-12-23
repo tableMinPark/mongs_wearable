@@ -5,6 +5,6 @@ import com.mongs.wear.core.exception.ErrorException
 import java.util.Collections
 
 class NotExistsNameException : ErrorException(
-    code = AuthErrorCode.AUTH_NOT_EXISTS_NAME,
+    code = AuthErrorCode.DOMAIN_AUTH_NOT_EXISTS_NAME,
     result = Collections.emptyMap(),
 )

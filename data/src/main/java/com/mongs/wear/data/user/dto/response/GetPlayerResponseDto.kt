@@ -7,6 +7,4 @@ data class GetPlayerResponseDto(
     val slotCount: Int,
 
     val starPoint: Int,
-
-    val walkingCount: Int,
 )

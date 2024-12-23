@@ -5,6 +5,6 @@ import com.mongs.wear.core.exception.ErrorException
 import java.util.Collections
 
 class LoginException(email: String) : ErrorException(
-    code = AuthErrorCode.AUTH_LOGIN,
+    code = AuthErrorCode.DATA_AUTH_LOGIN,
     result = Collections.singletonMap("email", email),
 )

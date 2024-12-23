@@ -5,6 +5,6 @@ import com.mongs.wear.core.errors.ManagerErrorCode
 import java.util.Collections
 
 class GetMongException(mongId: Long) : ErrorException(
-    code = ManagerErrorCode.MANAGER_GET_MONG,
+    code = ManagerErrorCode.DATA_MANAGER_GET_MONG,
     result = Collections.singletonMap("mongId", mongId)
 )

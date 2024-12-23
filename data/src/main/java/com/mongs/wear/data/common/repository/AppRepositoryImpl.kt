@@ -10,13 +10,13 @@ class AppRepositoryImpl @Inject constructor(
     private val appDataStore: AppDataStore,
 ) : AppRepository {
 
-    override suspend fun setBootTime(bootTime: LocalDateTime) {
-        appDataStore.setBootTime(bootTime = bootTime)
+    override suspend fun getDeviceId(): String = appDataStore.getDeviceId()
+
+    override suspend fun setDeviceBootedDt(deviceBootedDt: LocalDateTime) {
+        appDataStore.setDeviceBootedDt(deviceBootedDt = deviceBootedDt)
     }
 
-    override suspend fun getBootTime(): LocalDateTime = appDataStore.getUpTime()
-
-    override suspend fun getDeviceId(): String = appDataStore.getDeviceId()
+    override suspend fun getDeviceBootedDt(): LocalDateTime = appDataStore.getDeviceBootedDt()
 
     override suspend fun setBgMapTypeCode(mapTypeCode: String) {
         appDataStore.setBgMapTypeCode(mapTypeCode = mapTypeCode)

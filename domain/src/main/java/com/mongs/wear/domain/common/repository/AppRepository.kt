@@ -10,9 +10,9 @@ interface AppRepository {
      */
     suspend fun getDeviceId(): String
 
-    suspend fun setBootTime(bootTime: LocalDateTime)
+    suspend fun setDeviceBootedDt(deviceBootedDt: LocalDateTime)
 
-    suspend fun getBootTime(): LocalDateTime
+    suspend fun getDeviceBootedDt(): LocalDateTime
 
     /**
      * 배경 화면 맵 타입 코드 등록

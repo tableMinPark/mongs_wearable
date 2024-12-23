@@ -5,6 +5,6 @@ import com.mongs.wear.core.errors.UserErrorCode
 import java.util.Collections
 
 class GetMapCollectionsException : ErrorException(
-    code = UserErrorCode.USER_GET_MAP_COLLECTIONS,
+    code = UserErrorCode.DATA_USER_GET_MAP_COLLECTIONS,
     result = Collections.emptyMap(),
 )

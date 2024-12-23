@@ -5,6 +5,6 @@ import com.mongs.wear.core.errors.UserErrorCode
 import java.util.Collections
 
 class GetMongCollectionsException : ErrorException(
-    code = UserErrorCode.USER_GET_MONG_COLLECTIONS,
+    code = UserErrorCode.DATA_USER_GET_MONG_COLLECTIONS,
     result = Collections.emptyMap(),
 )

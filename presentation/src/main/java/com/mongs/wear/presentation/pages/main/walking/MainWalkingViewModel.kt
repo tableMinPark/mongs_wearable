@@ -9,7 +9,7 @@ import com.mongs.wear.core.errors.SlotErrorCode
 import com.mongs.wear.core.errors.UserErrorCode
 import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.player.usecase.ExchangeWalkingCountUseCase
-import com.mongs.wear.domain.player.usecase.GetWalkingCountUseCase
+import com.mongs.wear.domain.player.usecase.GetStepsUseCase
 import com.mongs.wear.domain.slot.usecase.GetCurrentSlotUseCase
 import com.mongs.wear.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainWalkingViewModel @Inject constructor(
     private val getCurrentSlotUseCase: GetCurrentSlotUseCase,
-    private val getWalkingCountUseCase: GetWalkingCountUseCase,
+    private val getStepsUseCase: GetStepsUseCase,
     private val exchangeWalkingCountUseCase: ExchangeWalkingCountUseCase,
 ): BaseViewModel() {
 
@@ -42,7 +42,7 @@ class MainWalkingViewModel @Inject constructor(
                 } ?: run { _payPoint.value = 0 }
             }
 
-            _walkingCount.addSource(withContext(Dispatchers.IO) { getWalkingCountUseCase() }) { walkingCount ->
+            _walkingCount.addSource(withContext(Dispatchers.IO) { getStepsUseCase() }) { walkingCount ->
                 _walkingCount.value = walkingCount
             }
 
@@ -53,8 +53,8 @@ class MainWalkingViewModel @Inject constructor(
     fun chargePayPoint(mongId: Long, walkingCount: Int) {
         viewModelScopeWithHandler.launch (Dispatchers.IO) {
 
-            uiState.chargePayPointDialog = false
             uiState.loadingBar = true
+            uiState.chargePayPointDialog = false
 
             exchangeWalkingCountUseCase(mongId = mongId, walkingCount = walkingCount)
 
@@ -64,13 +64,10 @@ class MainWalkingViewModel @Inject constructor(
 
     val uiState: UiState = UiState()
 
-    class UiState (
-        loadingBar: Boolean = false,
-        chargePayPointDialog: Boolean = false,
-    ) : BaseUiState() {
+    class UiState : BaseUiState() {
 
-        var loadingBar by mutableStateOf(loadingBar)
-        var chargePayPointDialog by mutableStateOf(chargePayPointDialog)
+        var loadingBar by mutableStateOf(false)
+        var chargePayPointDialog by mutableStateOf(false)
     }
 
     override fun exceptionHandler(exception: Throwable) {
@@ -79,11 +76,11 @@ class MainWalkingViewModel @Inject constructor(
 
             when (exception.code) {
 
-                SlotErrorCode.SLOT_GET_CURRENT_SLOT -> {}
+                SlotErrorCode.DATA_SLOT_GET_CURRENT_SLOT -> {}
 
-                UserErrorCode.USER_GET_WALKING_COUNT -> {}
+                UserErrorCode.DATA_USER_GET_WALKING_COUNT -> {}
 
-                UserErrorCode.USER_EXCHANGE_WALKING -> {}
+                UserErrorCode.DATA_USER_EXCHANGE_WALKING -> {}
             }
         }
     }

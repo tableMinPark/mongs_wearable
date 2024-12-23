@@ -5,6 +5,6 @@ import com.mongs.wear.core.exception.ErrorException
 import java.util.Collections
 
 class UpdatePlayerException : ErrorException(
-    code = UserErrorCode.USER_UPDATE_PLAYER,
+    code = UserErrorCode.DATA_USER_UPDATE_PLAYER,
     result = Collections.emptyMap(),
 )

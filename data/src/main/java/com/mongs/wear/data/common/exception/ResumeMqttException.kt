@@ -5,6 +5,6 @@ import com.mongs.wear.core.errors.CommonErrorCode
 import java.util.Collections
 
 class ResumeMqttException : ErrorException(
-    code = CommonErrorCode.COMMON_MQTT_RESUME,
+    code = CommonErrorCode.DATA_COMMON_MQTT_RESUME,
     result = Collections.emptyMap(),
 )

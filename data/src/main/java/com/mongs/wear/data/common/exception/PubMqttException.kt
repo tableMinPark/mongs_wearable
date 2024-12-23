@@ -5,6 +5,6 @@ import com.mongs.wear.core.errors.CommonErrorCode
 import java.util.Collections
 
 class PubMqttException : ErrorException(
-    code = CommonErrorCode.COMMON_MQTT_PUB,
+    code = CommonErrorCode.DATA_COMMON_MQTT_PUB,
     result = Collections.emptyMap(),
 )

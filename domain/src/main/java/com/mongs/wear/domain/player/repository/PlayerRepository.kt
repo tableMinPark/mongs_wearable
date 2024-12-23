@@ -1,6 +1,7 @@
 package com.mongs.wear.domain.player.repository
 
 import androidx.lifecycle.LiveData
+import java.time.LocalDateTime
 
 interface PlayerRepository {
 
@@ -12,15 +13,15 @@ interface PlayerRepository {
 
     suspend fun getSlotCountLive(): LiveData<Int>
 
-    suspend fun setWalkingCount(walkingCount: Int)
-
-    suspend fun getWalkingCountLive(): LiveData<Int>
-
     suspend fun chargeStarPoint(receipt: String, starPoint: Int)
 
     suspend fun exchangeStarPoint(mongId: Long, starPoint: Int)
 
-    suspend fun chargeWalking(walkingCount: Int)
+    suspend fun getStepsLive(): LiveData<Int>
 
-    suspend fun exchangeWalking(mongId: Long, walkingCount: Int)
+    suspend fun syncWalkingCount(deviceId: String, totalWalkingCount: Int, deviceBootedDt: LocalDateTime)
+
+    suspend fun resetWalkingCount(deviceId: String, deviceBootedDt: LocalDateTime)
+
+    suspend fun exchangeWalking(mongId: Long, walkingCount: Int, deviceBootedDt: LocalDateTime)
 }

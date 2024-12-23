@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -104,13 +103,15 @@ fun LoginView(
 private fun LoginContent(
     login: suspend (googleAccountId: String?, email: String?) -> Unit,
     join: suspend (googleAccountId: String?, email: String?, name: String?) -> Unit,
-    uiState: UiState,
     context: Context = LocalContext.current,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     modifier: Modifier = Modifier.zIndex(0f),
+    uiState: UiState,
 ) {
 
-    // 구글 회원 가입
+    /**
+     * 구글 회원 가입
+     */
     LaunchedEffect(uiState.needJoin) {
         if (uiState.needJoin) {
             GoogleSignIn.getLastSignedInAccount(context)?.let { account ->
@@ -119,7 +120,9 @@ private fun LoginContent(
         }
     }
 
-    // 구글 로그인 확인
+    /**
+     * 구글 로그인 확인
+     */
     LaunchedEffect(Unit) {
 
         uiState.loadingBar = true
@@ -134,7 +137,9 @@ private fun LoginContent(
         uiState.signInButton = true
     }
 
-    // 구글 로그인
+    /**
+     * 구글 로그인
+     */
     val googleLoginLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         coroutineScope.launch {
             if (result.resultCode == Activity.RESULT_OK) {

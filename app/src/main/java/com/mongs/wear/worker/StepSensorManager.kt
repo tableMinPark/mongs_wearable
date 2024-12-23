@@ -1,4 +1,4 @@
-package com.mongs.wear.presentation.common
+package com.mongs.wear.worker
 
 import android.content.Context
 import android.hardware.Sensor
@@ -30,7 +30,7 @@ class StepSensorManager @Inject constructor(
 
                     Log.i("StepSensorManager", "nowStepCount: $nowStepCount")
 
-                    playerRepository.chargeWalking(walkingCount = nowStepCount)
+//                    playerRepository.resetWalkingCount(walkingCount = nowStepCount)
 
                     // TODO: 걸음수에 대한 로직 구현 필요
 //                if (rebootFlag) {

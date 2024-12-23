@@ -1,7 +1,9 @@
 package com.mongs.wear.presentation.common
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.core.exception.ErrorException
@@ -12,18 +14,21 @@ import kotlinx.coroutines.launch
 
 abstract class BaseViewModel : ViewModel() {
 
-    private val _errorMessage = MutableLiveData("")
-    val errorMessage: MutableLiveData<String> get() = _errorMessage
+    companion object {
+        var errorToast by mutableStateOf(false)
+        var errorMessage by mutableStateOf("")
+    }
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
 
         CoroutineScope(Dispatchers.IO).launch {
 
             if (exception is ErrorException) {
-                _errorMessage.postValue(exception.message)
                 exceptionHandler(exception = exception)
-
                 Log.e("viewModelExceptionHandler", "[${exception.javaClass.simpleName}] ${exception.code} -> ${exception.message} ===> ${exception.result}")
+
+                errorMessage = exception.message
+                errorToast = true
 
             } else {
                 exceptionHandler(exception = exception)
@@ -38,5 +43,5 @@ abstract class BaseViewModel : ViewModel() {
 
     abstract fun exceptionHandler(exception: Throwable)
 
-    open class BaseUiState() {}
+    open class BaseUiState
 }

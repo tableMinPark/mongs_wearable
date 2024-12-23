@@ -5,6 +5,6 @@ import com.mongs.wear.core.errors.ActivityErrorCode
 import java.util.Collections
 
 class NotExistsMatchPlayerException() : ErrorException(
-    code = ActivityErrorCode.ACTIVITY_NOT_EXISTS_MATCH_PLAYER,
+    code = ActivityErrorCode.DATA_ACTIVITY_NOT_EXISTS_MATCH_PLAYER,
     result = Collections.emptyMap(),
 )

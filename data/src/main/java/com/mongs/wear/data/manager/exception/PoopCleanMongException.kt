@@ -5,6 +5,6 @@ import com.mongs.wear.core.errors.ManagerErrorCode
 import java.util.Collections
 
 class PoopCleanMongException(mongId: Long) : ErrorException(
-    code = ManagerErrorCode.MANAGER_POOP_CLEAN_MONG,
+    code = ManagerErrorCode.DATA_MANAGER_POOP_CLEAN_MONG,
     result = Collections.singletonMap("mongId", mongId),
 )

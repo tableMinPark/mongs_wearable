@@ -12,12 +12,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.mongs.wear.presentation.R
-import com.mongs.wear.presentation.component.background.MainPagerBackground
 
 @Composable
 fun DeadContent(
@@ -41,23 +38,5 @@ fun DeadContent(
             painter = painterResource(R.drawable.rip),
             contentDescription = null
         )
-    }
-}
-
-@Preview(showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
-@Composable
-private fun DeadPreview() {
-    Box {
-        MainPagerBackground()
-        DeadContent()
-    }
-}
-
-@Preview(showSystemUi = true, device = Devices.WEAR_OS_LARGE_ROUND)
-@Composable
-private fun DeadLargePreview() {
-    Box {
-        MainPagerBackground()
-        DeadContent()
     }
 }

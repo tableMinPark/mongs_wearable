@@ -26,7 +26,13 @@ class PlayerDataStore @Inject constructor(
 
         private val SLOT_COUNT = intPreferencesKey("SLOT_COUNT")
 
+        private val STEPS = intPreferencesKey("STEPS")
+
         private val WALKING_COUNT = intPreferencesKey("WALKING_COUNT")
+
+        private val CONSUME_WALKING_COUNT = intPreferencesKey("CONSUME_WALKING_COUNT")
+
+        private val TOTAL_WALKING_COUNT = intPreferencesKey("TOTAL_WALKING_COUNT")
     }
 
     private val Context.store by preferencesDataStore(name = MEMBER_DATA_STORE_NAME)
@@ -39,7 +45,21 @@ class PlayerDataStore @Inject constructor(
 
                 preferences[SLOT_COUNT] = 0
 
-                preferences[WALKING_COUNT] = 0
+                if (!preferences.contains(STEPS)) {
+                    preferences[STEPS] = 0
+                }
+
+                if (!preferences.contains(WALKING_COUNT)) {
+                    preferences[WALKING_COUNT] = 0
+                }
+
+                if (!preferences.contains(CONSUME_WALKING_COUNT)) {
+                    preferences[CONSUME_WALKING_COUNT] = 0
+                }
+
+                if (!preferences.contains(TOTAL_WALKING_COUNT)) {
+                    preferences[TOTAL_WALKING_COUNT] = 0
+                }
             }
         }
     }
@@ -69,24 +89,66 @@ class PlayerDataStore @Inject constructor(
         }.asLiveData()
     }
 
-    suspend fun setWalkingCount(walkingCount: Int) {
-        context.store.edit { preferences ->
-            preferences[WALKING_COUNT] = walkingCount
-        }
-    }
-
-    suspend fun getWalkingCount(): Int {
+    suspend fun getSteps(): Int {
         return runBlocking {
             context.store.data.map { preferences ->
-                preferences[WALKING_COUNT]!!
+                preferences[STEPS]!!
             }.first()
         }
     }
 
-    suspend fun getWalkingCountLive() : LiveData<Int> {
+    suspend fun getStepsLive() : LiveData<Int> {
         return context.store.data.map { preferences ->
-            preferences[WALKING_COUNT]!!
+            preferences[STEPS]!!
         }.asLiveData()
+    }
 
+    suspend fun setWalkingCount(walkingCount: Int) {
+        context.store.edit { preferences ->
+            preferences[WALKING_COUNT] = walkingCount
+
+            val totalWalkingCount = preferences[TOTAL_WALKING_COUNT]!!
+            val consumeWalkingCount = preferences[CONSUME_WALKING_COUNT]!!
+
+            preferences[STEPS] = walkingCount + (totalWalkingCount - consumeWalkingCount)
+        }
+    }
+
+    suspend fun setConsumeWalkingCount(consumeWalkingCount: Int) {
+        context.store.edit { preferences ->
+            preferences[CONSUME_WALKING_COUNT] = consumeWalkingCount
+
+            val totalWalkingCount = preferences[TOTAL_WALKING_COUNT]!!
+            val walkingCount = preferences[WALKING_COUNT]!!
+
+            preferences[STEPS] = walkingCount + (totalWalkingCount - consumeWalkingCount)
+        }
+    }
+
+    suspend fun getConsumeWalkingCount(): Int {
+        return runBlocking {
+            context.store.data.map { preferences ->
+                preferences[CONSUME_WALKING_COUNT]!!
+            }.first()
+        }
+    }
+
+    suspend fun setTotalWalkingCount(totalWalkingCount: Int) {
+        context.store.edit { preferences ->
+            preferences[TOTAL_WALKING_COUNT] = totalWalkingCount
+
+            val consumeWalkingCount = preferences[CONSUME_WALKING_COUNT]!!
+            val walkingCount = preferences[WALKING_COUNT]!!
+
+            preferences[STEPS] = walkingCount + (totalWalkingCount - consumeWalkingCount)
+        }
+    }
+
+    suspend fun getTotalWalkingCount() : Int {
+        return runBlocking {
+            context.store.data.map { preferences ->
+                preferences[TOTAL_WALKING_COUNT]!!
+            }.first()
+        }
     }
 }

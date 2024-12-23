@@ -21,7 +21,6 @@ class MainPagerViewModel @Inject constructor(
     private val getBackgroundMapCodeUseCase: GetBackgroundMapCodeUseCase,
 ): BaseViewModel() {
 
-
     private val _slotVo = MediatorLiveData<SlotVo?>(null)
     val slotVo: LiveData<SlotVo?> get() = _slotVo
 
@@ -49,14 +48,10 @@ class MainPagerViewModel @Inject constructor(
 
     val uiState = UiState()
 
-    class UiState(
-        loadingBar: Boolean = false,
-    ) : BaseUiState() {
-
-        var loadingBar by mutableStateOf(loadingBar)
+    class UiState : BaseUiState() {
+        // 로딩바
+        var loadingBar by mutableStateOf(false)
     }
 
-    override fun exceptionHandler(exception: Throwable) {
-
-    }
+    override fun exceptionHandler(exception: Throwable) {}
 }

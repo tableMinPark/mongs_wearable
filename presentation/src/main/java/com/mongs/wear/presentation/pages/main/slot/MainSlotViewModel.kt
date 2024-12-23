@@ -3,8 +3,6 @@ package com.mongs.wear.presentation.pages.main.slot
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.mongs.wear.core.errors.ManagerErrorCode
 import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.slot.usecase.EvoluteMongUseCase
@@ -58,11 +56,11 @@ class MainSlotViewModel @Inject constructor(
 
             when (exception.code) {
 
-                ManagerErrorCode.MANAGER_EVOLUTION_MONG -> {
+                ManagerErrorCode.DATA_MANAGER_EVOLUTION_MONG -> {
                     uiState.isEvolution = false
                 }
 
-                ManagerErrorCode.MANAGER_STROKE_MONG -> {}
+                ManagerErrorCode.DATA_MANAGER_STROKE_MONG -> {}
 
                 else -> {}
             }

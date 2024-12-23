@@ -17,8 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -26,7 +24,6 @@ import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
-import com.mongs.wear.presentation.component.background.MainPagerBackground
 import com.mongs.wear.presentation.component.button.BlueButton
 
 @Composable
@@ -56,8 +53,7 @@ fun EmptyContent(
                         .zIndex(1f)
                 ) {
                     Image(
-                        modifier = Modifier
-                            .size(100.dp),
+                        modifier = Modifier.size(100.dp),
                         painter = painterResource(R.drawable.egg_blind),
                         contentDescription = null
                     )
@@ -88,23 +84,5 @@ fun EmptyContent(
             Spacer(modifier = Modifier.height(30.dp))
 
         }
-    }
-}
-
-@Preview(showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
-@Composable
-private fun EmptyPreview() {
-    Box {
-        MainPagerBackground()
-        EmptyContent()
-    }
-}
-
-@Preview(showSystemUi = true, device = Devices.WEAR_OS_LARGE_ROUND)
-@Composable
-private fun EmptyLargePreview() {
-    Box {
-        MainPagerBackground()
-        EmptyContent()
     }
 }

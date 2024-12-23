@@ -35,17 +35,12 @@ class MainInteractionViewModel @Inject constructor(
 
     val uiState: UiState = UiState()
 
-    class UiState (
-        loadingBar: Boolean = false,
-        navMainSlotView: Boolean = false,
-        alertSleepingFail: Boolean = false,
-        alertPoopCleanFail: Boolean = false,
-    ) : BaseUiState() {
+    class UiState : BaseUiState() {
 
-        var loadingBar by mutableStateOf(loadingBar)
-        var navMainSlotView by mutableStateOf(navMainSlotView)
-        var alertSleepingFail by mutableStateOf(alertSleepingFail)
-        var alertPoopCleanFail by mutableStateOf(alertPoopCleanFail)
+        var loadingBar by mutableStateOf(false)
+        var navMainSlotView by mutableStateOf(false)
+        var alertSleepingFail by mutableStateOf(false)
+        var alertPoopCleanFail by mutableStateOf(false)
     }
 
     override fun exceptionHandler(exception: Throwable) {
@@ -54,11 +49,11 @@ class MainInteractionViewModel @Inject constructor(
 
             when (exception.code) {
 
-                ManagerErrorCode.MANAGER_SLEEP_MONG -> {
+                ManagerErrorCode.DATA_MANAGER_SLEEP_MONG -> {
                     uiState.alertSleepingFail = true
                 }
 
-                ManagerErrorCode.MANAGER_POOP_CLEAN_MONG -> {
+                ManagerErrorCode.DATA_MANAGER_POOP_CLEAN_MONG -> {
                     uiState.alertPoopCleanFail = true
                 }
             }

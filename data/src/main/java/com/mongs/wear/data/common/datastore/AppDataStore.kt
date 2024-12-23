@@ -1,11 +1,8 @@
 package com.mongs.wear.data.common.datastore
 
 import android.content.Context
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LiveData
@@ -31,11 +28,11 @@ class AppDataStore @Inject constructor(
 
         private val DEVICE_ID = stringPreferencesKey("DEVICE_ID")
 
+        private val DEVICE_BOOTED_DT = stringPreferencesKey("DEVICE_BOOTED_DT")
+
         private val BG_MAP_TYPE_CODE = stringPreferencesKey("BG_MAP_TYPE_CODE")
 
         private val NETWORK = booleanPreferencesKey("NETWORK")
-
-        private val BOOT_TIME = stringPreferencesKey("BOOT_TIME")
 
         private val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
     }
@@ -46,12 +43,12 @@ class AppDataStore @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             context.store.edit { preferences ->
 
-                if (!preferences.contains(BOOT_TIME)) {
-                    preferences[BOOT_TIME] = LocalDateTime.of(1970, 1, 1, 0, 0, 0).format(dateFormatter)
-                }
-
                 if (!preferences.contains(DEVICE_ID)) {
                     preferences[DEVICE_ID] = UUID.randomUUID().toString()
+                }
+
+                if (!preferences.contains(DEVICE_BOOTED_DT)) {
+                    preferences[DEVICE_BOOTED_DT] = LocalDateTime.of(1970, 1, 1, 0, 0, 0).format(dateFormatter)
                 }
 
                 if (!preferences.contains(BG_MAP_TYPE_CODE)) {
@@ -65,23 +62,23 @@ class AppDataStore @Inject constructor(
         }
     }
 
-    suspend fun setBootTime(bootTime: LocalDateTime) {
-        context.store.edit { preferences ->
-            preferences[BOOT_TIME] = bootTime.format(dateFormatter)
-        }
-    }
-    fun getUpTime(): LocalDateTime {
-        return runBlocking {
-            context.store.data.map { preferences ->
-                LocalDateTime.parse(preferences[BOOT_TIME]!!, dateFormatter)
-            }.first()
-        }
-    }
-
     fun getDeviceId() : String {
         return runBlocking {
             context.store.data.map { preferences ->
                 preferences[DEVICE_ID]!!
+            }.first()
+        }
+    }
+
+    suspend fun setDeviceBootedDt(deviceBootedDt: LocalDateTime) {
+        context.store.edit { preferences ->
+            preferences[DEVICE_BOOTED_DT] = deviceBootedDt.format(dateFormatter)
+        }
+    }
+    fun getDeviceBootedDt(): LocalDateTime {
+        return runBlocking {
+            context.store.data.map { preferences ->
+                LocalDateTime.parse(preferences[DEVICE_BOOTED_DT]!!, dateFormatter)
             }.first()
         }
     }

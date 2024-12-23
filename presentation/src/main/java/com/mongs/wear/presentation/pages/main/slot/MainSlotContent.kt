@@ -18,8 +18,8 @@ fun MainSlotContent(
     isPageChanging: Boolean,
     stroke: () -> Unit,
     navSlotPick: () -> Unit,
-    uiState: UiState,
     modifier: Modifier = Modifier.zIndex(0f),
+    uiState: UiState,
 ) {
     when (slotVo.stateCode) {
         MongStateCode.NORMAL -> {

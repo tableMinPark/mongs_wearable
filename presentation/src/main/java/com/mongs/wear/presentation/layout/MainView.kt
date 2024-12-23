@@ -16,7 +16,9 @@ package com.mongs.wear.presentation.layout
 //import com.mongs.wear.presentation.pages.slot.SlotPickView
 //import com.mongs.wear.presentation.pages.training.jumping.TrainingJumpingView
 //import com.mongs.wear.presentation.pages.training.menu.TrainingMenuView
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,6 +35,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -48,6 +51,7 @@ import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
 import com.mongs.wear.presentation.assets.NavItem
+import com.mongs.wear.presentation.common.BaseViewModel
 import com.mongs.wear.presentation.component.background.MainBackground
 import com.mongs.wear.presentation.component.background.ServerErrorBackground
 import com.mongs.wear.presentation.component.button.BlueButton
@@ -60,10 +64,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainView (
     closeApp: () -> Unit,
+    context: Context = LocalContext.current,
     mainViewModel: MainViewModel = hiltViewModel(),
 ) {
 
-    val networkFlag = mainViewModel.network.observeAsState(false)
+    val networkFlag = mainViewModel.network.observeAsState(true)
 
     if (mainViewModel.uiState.loadingBar) {
         MainBackground()
@@ -73,6 +78,22 @@ fun MainView (
         NetworkErrorContent(closeApp = closeApp, modifier = Modifier.zIndex(1f))
     } else {
         NavContent(closeApp = closeApp)
+    }
+
+    /**
+     * 예외 발생 시 에러 Toast
+     */
+    LaunchedEffect(BaseViewModel.errorToast) {
+        if (BaseViewModel.errorToast) {
+
+            BaseViewModel.errorToast = false
+
+            Toast.makeText(
+                context,
+                BaseViewModel.errorMessage,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 }
 
