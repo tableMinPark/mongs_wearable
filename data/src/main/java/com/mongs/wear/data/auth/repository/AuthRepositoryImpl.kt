@@ -21,7 +21,7 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
 
     /**
-     * 회원가입
+     * 회원 가입
      */
     override suspend fun join(email: String, name: String, googleAccountId: String) {
 
@@ -41,7 +41,18 @@ class AuthRepositoryImpl @Inject constructor(
 
         val buildVersion = context.packageManager.getPackageInfo(context.packageName, 0).versionName
 
-        val response = authApi.login(LoginRequestDto(deviceId = deviceId, email = email, socialAccountId = googleAccountId, appPackageName = appPackageName, buildVersion = buildVersion))
+        val deviceName = android.os.Build.MODEL
+
+        val response = authApi.login(
+            LoginRequestDto(
+                deviceId = deviceId,
+                email = email,
+                socialAccountId = googleAccountId,
+                appPackageName = appPackageName,
+                deviceName = deviceName,
+                buildVersion = buildVersion
+            )
+        )
 
         if (response.isSuccessful) {
             response.body()?.let { body ->
@@ -51,8 +62,9 @@ class AuthRepositoryImpl @Inject constructor(
 
                 return body.result.accountId
             }
-        } else if (response.code() == 406){
+        } else if (response.code() == 406) {
             throw NeedUpdateAppException(buildVersion = buildVersion)
+
         } else if (response.code() == 404) {
             throw NeedJoinException(email = email)
         }
@@ -61,7 +73,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     /**
-     * 로그아웃
+     * 로그 아웃
      */
     override suspend fun logout() {
 

@@ -8,6 +8,6 @@ import retrofit2.http.POST
 
 interface FeedbackApi {
 
-    @POST("/user/feedback")
+    @POST("user/feedback")
     suspend fun createFeedback(@Body createFeedbackRequestDto: CreateFeedbackRequestDto) : Response<ResponseDto<Void>>
 }

@@ -1,6 +1,7 @@
 package com.mongs.wear.data.common.datastore
 
 import android.content.Context
+import android.provider.Settings
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -44,7 +45,7 @@ class AppDataStore @Inject constructor(
             context.store.edit { preferences ->
 
                 if (!preferences.contains(DEVICE_ID)) {
-                    preferences[DEVICE_ID] = UUID.randomUUID().toString()
+                    preferences[DEVICE_ID] = ""
                 }
 
                 if (!preferences.contains(DEVICE_BOOTED_DT)) {
@@ -55,10 +56,14 @@ class AppDataStore @Inject constructor(
                     preferences[BG_MAP_TYPE_CODE] = "MP000"
                 }
 
-                if (!preferences.contains(NETWORK)) {
-                    preferences[NETWORK] = false
-                }
+                preferences[NETWORK] = true
             }
+        }
+    }
+
+    suspend fun setDeviceId(deviceId: String) {
+        context.store.edit { preferences ->
+            preferences[DEVICE_ID] = deviceId
         }
     }
 

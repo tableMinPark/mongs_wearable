@@ -1,34 +1,33 @@
 package com.mongs.wear.presentation.common
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mongs.wear.core.exception.ErrorException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel : ViewModel() {
 
     companion object {
-        var errorToast by mutableStateOf(false)
-        var errorMessage by mutableStateOf("")
+        private val _errorEvent = MutableSharedFlow<String>()
+        val errorEvent = _errorEvent.asSharedFlow()
     }
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
 
         CoroutineScope(Dispatchers.IO).launch {
 
+            exception.printStackTrace()
+
             if (exception is ErrorException) {
                 exceptionHandler(exception = exception)
                 Log.e("viewModelExceptionHandler", "[${exception.javaClass.simpleName}] ${exception.code} -> ${exception.message} ===> ${exception.result}")
-
-                errorMessage = exception.message
-                errorToast = true
+                _errorEvent.emit(exception.message)
 
             } else {
                 exceptionHandler(exception = exception)

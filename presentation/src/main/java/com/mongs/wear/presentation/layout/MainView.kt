@@ -19,6 +19,7 @@ package com.mongs.wear.presentation.layout
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,6 +33,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
@@ -63,34 +66,31 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MainView (
-    closeApp: () -> Unit,
     context: Context = LocalContext.current,
     mainViewModel: MainViewModel = hiltViewModel(),
 ) {
-
     val networkFlag = mainViewModel.network.observeAsState(true)
 
     if (mainViewModel.uiState.loadingBar) {
         MainBackground()
         MainLoadingBar()
-    } else if (!networkFlag.value) {
-        ServerErrorBackground()
-        NetworkErrorContent(closeApp = closeApp, modifier = Modifier.zIndex(1f))
     } else {
-        NavContent(closeApp = closeApp)
+        if (!networkFlag.value) {
+            ServerErrorBackground()
+            NetworkErrorContent(modifier = Modifier.zIndex(1f))
+        } else {
+            NavContent()
+        }
     }
 
     /**
      * 예외 발생 시 에러 Toast
      */
-    LaunchedEffect(BaseViewModel.errorToast) {
-        if (BaseViewModel.errorToast) {
-
-            BaseViewModel.errorToast = false
-
+    LaunchedEffect(Unit) {
+        BaseViewModel.errorEvent.collect { errorMessage ->
             Toast.makeText(
                 context,
-                BaseViewModel.errorMessage,
+                errorMessage,
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -99,7 +99,7 @@ fun MainView (
 
 @Composable
 fun NetworkErrorContent (
-    closeApp: () -> Unit,
+    context: Context = LocalContext.current,
     modifier: Modifier = Modifier.zIndex(0f)
 ) {
     Box(
@@ -132,7 +132,7 @@ fun NetworkErrorContent (
 
             BlueButton(
                 text =  "앱종료",
-                onClick = closeApp,
+                onClick = { (context as ComponentActivity).finish() },
             )
         }
     }
@@ -142,9 +142,7 @@ fun NetworkErrorContent (
  * 라우터
  */
 @Composable
-fun NavContent(
-    closeApp: () -> Unit,
-) {
+fun NavContent() {
     val coroutineScope = rememberCoroutineScope()
     val navController = rememberSwipeDismissableNavController()
     val pagerState = rememberPagerState(initialPage = 2) { 5 }
@@ -160,10 +158,7 @@ fun NavContent(
         startDestination = NavItem.Login.route
     ) {
         composable(route = NavItem.Login.route) {
-            LoginView(
-                navController = navController,
-                closeApp = closeApp,
-            )
+            LoginView(navController = navController)
         }
 
         composable(route = NavItem.MainPager.route) {

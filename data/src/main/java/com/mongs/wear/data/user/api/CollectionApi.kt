@@ -8,9 +8,9 @@ import retrofit2.http.GET
 
 interface CollectionApi {
 
-    @GET("/user/collection/map")
+    @GET("user/collection/map")
     suspend fun getCollectionMaps() : Response<ResponseDto<List<GetCollectionMapResponseDto>>>
 
-    @GET("/user/collection/mong")
+    @GET("user/collection/mong")
     suspend fun getCollectionMongs() : Response<ResponseDto<List<GetCollectionMongResponseDto>>>
 }

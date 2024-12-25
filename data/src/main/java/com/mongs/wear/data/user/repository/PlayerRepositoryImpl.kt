@@ -6,7 +6,6 @@ import com.mongs.wear.data.user.datastore.PlayerDataStore
 import com.mongs.wear.data.user.dto.request.ChargeStarPointRequestDto
 import com.mongs.wear.data.user.dto.request.ExchangeStarPointRequestDto
 import com.mongs.wear.data.user.dto.request.ExchangeWalkingCountRequestDto
-import com.mongs.wear.data.user.dto.request.ResetWalkingCountRequestDto
 import com.mongs.wear.data.user.dto.request.SyncWalkingCountRequestDto
 import com.mongs.wear.data.user.exception.BuySlotException
 import com.mongs.wear.data.user.exception.ChargeStarPointException
@@ -107,6 +106,8 @@ class PlayerRepositoryImpl @Inject constructor(
      */
     override suspend fun syncWalkingCount(deviceId: String, totalWalkingCount: Int, deviceBootedDt: LocalDateTime) {
 
+        playerDataStore.setTotalWalkingCount(totalWalkingCount = totalWalkingCount)
+
         val response = playerApi.syncWalkingCount(
             SyncWalkingCountRequestDto(
                 deviceId = deviceId,
@@ -117,30 +118,6 @@ class PlayerRepositoryImpl @Inject constructor(
 
         if (response.isSuccessful) {
             response.body()?.let { body ->
-                playerDataStore.setTotalWalkingCount(totalWalkingCount = totalWalkingCount)
-                playerDataStore.setWalkingCount(walkingCount = body.result.walkingCount)
-                playerDataStore.setConsumeWalkingCount(consumeWalkingCount = body.result.consumeWalkingCount)
-            }
-        }
-    }
-
-    /**
-     * 걸음 수 초기화 (재부팅 시)
-     */
-    override suspend fun resetWalkingCount(deviceId: String, deviceBootedDt: LocalDateTime) {
-
-        val totalWalkingCount = playerDataStore.getSteps()
-
-        val response = playerApi.resetWalkingCount(
-            ResetWalkingCountRequestDto(
-                totalWalkingCount = totalWalkingCount,
-                deviceBootedDt = deviceBootedDt,
-            )
-        )
-
-        if (response.isSuccessful) {
-            response.body()?.let { body ->
-                playerDataStore.setTotalWalkingCount(totalWalkingCount = totalWalkingCount)
                 playerDataStore.setWalkingCount(walkingCount = body.result.walkingCount)
                 playerDataStore.setConsumeWalkingCount(consumeWalkingCount = body.result.consumeWalkingCount)
             }

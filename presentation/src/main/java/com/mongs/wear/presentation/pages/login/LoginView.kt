@@ -1,11 +1,10 @@
 package com.mongs.wear.presentation.pages.login
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.view.WindowManager
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,9 +19,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -35,8 +33,6 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.wear.compose.material.Text
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
@@ -47,53 +43,58 @@ import com.mongs.wear.presentation.component.button.GoogleSignInButton
 import com.mongs.wear.presentation.component.common.LoadingBar
 import com.mongs.wear.presentation.component.common.Logo
 import com.mongs.wear.presentation.pages.login.LoginViewModel.UiState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun LoginView(
-    closeApp: () -> Unit,
     navController: NavController,
     loginViewModel: LoginViewModel = hiltViewModel(),
-    context: Context = LocalContext.current,
 ) {
 
-    DisposableEffect(Unit) {
-        val window = (context as ComponentActivity).window
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+//    DisposableEffect(Unit) {
+//        val window = (context as ComponentActivity).window
+//        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+//
+//        onDispose {
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+//        }
+//    }
 
-        onDispose {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        }
+    /**
+     * 구글 로그인 확인
+     */
+    LaunchedEffect(Unit) {
+        loginViewModel.login()
     }
+
+    /**
+     * 구글 로그인
+     */
+    val googleLoginLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult(), loginViewModel::login)
 
     Box {
         LoginBackground()
 
         if (loginViewModel.uiState.needAppUpdate) {
-
             NeedUpdateAppContent(
-                closeApp = closeApp,
                 modifier = Modifier.zIndex(1f)
             )
-
         } else {
-
             LoginContent(
-                login = loginViewModel::login,
-                join = loginViewModel::join,
                 uiState = loginViewModel.uiState,
-                modifier = Modifier.zIndex(1f)
+                modifier = Modifier.zIndex(1f),
+                loginButtonClick = { loginViewModel.loginButtonClick(googleLoginLauncher = googleLoginLauncher) },
             )
         }
     }
 
+    /**
+     * 메인 화면 이동
+     */
     LaunchedEffect(loginViewModel.uiState.navMainPagerView) {
         if (loginViewModel.uiState.navMainPagerView) {
             navController.navigate(NavItem.MainPager.route) {
                 popUpTo(navController.graph.id)
             }
-            loginViewModel.uiState.navMainPagerView = false
         }
     }
 }
@@ -101,58 +102,10 @@ fun LoginView(
 
 @Composable
 private fun LoginContent(
-    login: suspend (googleAccountId: String?, email: String?) -> Unit,
-    join: suspend (googleAccountId: String?, email: String?, name: String?) -> Unit,
-    context: Context = LocalContext.current,
-    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    loginButtonClick: () -> Unit,
     modifier: Modifier = Modifier.zIndex(0f),
     uiState: UiState,
 ) {
-
-    /**
-     * 구글 회원 가입
-     */
-    LaunchedEffect(uiState.needJoin) {
-        if (uiState.needJoin) {
-            GoogleSignIn.getLastSignedInAccount(context)?.let { account ->
-                join(account.id, account.email, account.displayName)
-            }
-        }
-    }
-
-    /**
-     * 구글 로그인 확인
-     */
-    LaunchedEffect(Unit) {
-
-        uiState.loadingBar = true
-        uiState.signInButton = false
-
-        GoogleSignIn.getLastSignedInAccount(context)?.let { account ->
-            login(account.id, account.email)
-            return@LaunchedEffect
-        }
-
-        uiState.loadingBar = false
-        uiState.signInButton = true
-    }
-
-    /**
-     * 구글 로그인
-     */
-    val googleLoginLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        coroutineScope.launch {
-            if (result.resultCode == Activity.RESULT_OK) {
-                GoogleSignIn.getSignedInAccountFromIntent(result.data).result?.let { account ->
-                    login(account.id, account.email)
-                    return@launch
-                }
-            }
-
-            uiState.loadingBar = false
-            uiState.signInButton = true
-        }
-    }
 
     Box(
         contentAlignment = Alignment.Center,
@@ -176,27 +129,7 @@ private fun LoginContent(
                 modifier = Modifier.weight(0.4f)
             ) {
                 if (uiState.signInButton) {
-                    GoogleSignInButton(
-                        onClick = {
-
-                            uiState.loadingBar = true
-                            uiState.signInButton = false
-
-                            val googleSignIn = GoogleSignIn.getLastSignedInAccount(context)
-                            val googleSignInOption = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                                .requestEmail()
-                                .requestId()
-                                .build()
-
-                            val googleSignInClient = GoogleSignIn.getClient(context, googleSignInOption)
-
-                            if (googleSignIn != null) {
-                                googleSignInClient.signOut()
-                            }
-
-                            googleLoginLauncher.launch(googleSignInClient.signInIntent)
-                        }
-                    )
+                    GoogleSignInButton(onClick = loginButtonClick)
                 }
 
                 if (uiState.loadingBar) {
@@ -211,7 +144,6 @@ private fun LoginContent(
 @SuppressLint("QueryPermissionsNeeded")
 @Composable
 private fun NeedUpdateAppContent (
-    closeApp: () -> Unit,
     context: Context = LocalContext.current,
     modifier: Modifier = Modifier.zIndex(0f)
 ) {
@@ -257,7 +189,7 @@ private fun NeedUpdateAppContent (
             } else {
                 BlueButton(
                     text =  "종료",
-                    onClick = closeApp,
+                    onClick = { (context as ComponentActivity).finish() },
                 )
             }
         }

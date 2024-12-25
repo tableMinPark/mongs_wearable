@@ -17,8 +17,6 @@ class SyncWalkingCountUseCase @Inject constructor(
 
             val deviceBootedDt = appRepository.getDeviceBootedDt()
 
-            Log.i("StepWorker", "walkingCount: $totalWalkingCount")
-
             playerRepository.syncWalkingCount(deviceId = deviceId, totalWalkingCount = totalWalkingCount, deviceBootedDt = deviceBootedDt)
 
             return true

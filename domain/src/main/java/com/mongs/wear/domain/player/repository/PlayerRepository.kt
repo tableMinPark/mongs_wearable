@@ -21,7 +21,5 @@ interface PlayerRepository {
 
     suspend fun syncWalkingCount(deviceId: String, totalWalkingCount: Int, deviceBootedDt: LocalDateTime)
 
-    suspend fun resetWalkingCount(deviceId: String, deviceBootedDt: LocalDateTime)
-
     suspend fun exchangeWalking(mongId: Long, walkingCount: Int, deviceBootedDt: LocalDateTime)
 }

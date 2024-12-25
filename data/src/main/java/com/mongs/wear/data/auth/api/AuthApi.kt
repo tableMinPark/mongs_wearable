@@ -13,15 +13,15 @@ import retrofit2.http.POST
 
 interface AuthApi {
 
-    @POST("/auth/join")
+    @POST("auth/join")
     suspend fun join(@Body joinRequestDto: JoinRequestDto) : Response<ResponseDto<Void>>
 
-    @POST("/auth/login")
+    @POST("auth/login")
     suspend fun login(@Body loginRequestDto: LoginRequestDto) : Response<ResponseDto<LoginResponseDto>>
 
-    @POST("/auth/reissue")
+    @POST("auth/reissue")
     suspend fun reissue(@Body reissueRequestDto: ReissueRequestDto) : Response<ResponseDto<ReissueResponseDto>>
 
-    @POST("/auth/logout")
+    @POST("auth/logout")
     suspend fun logout(@Body logoutRequestDto: LogoutRequestDto) : Response<ResponseDto<Void>>
 }

@@ -5,6 +5,7 @@ import java.time.LocalDateTime
 
 interface AppRepository {
 
+    suspend fun setDeviceId(deviceId: String)
     /**
      * deviceId 조회
      */

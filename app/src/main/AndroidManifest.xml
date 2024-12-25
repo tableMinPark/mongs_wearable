@@ -4,8 +4,9 @@
     package="com.mongs.wear">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 <!--    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
 <!--    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />-->
     <uses-feature android:name="android.hardware.type.watch" />
@@ -52,6 +53,16 @@
                 tools:node="remove" />
         </provider>
 
+        <service
+            android:name="com.mongs.wear.service.NotificationService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+<!--            <meta-data-->
+<!--                android:name="com.google.firebase.messaging.default_notification_icon"-->
+<!--                android:resource="@drawable/logo_not_open" />-->
+        </service>
 
     </application>
 

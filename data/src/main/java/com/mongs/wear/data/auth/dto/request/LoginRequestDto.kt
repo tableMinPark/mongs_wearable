@@ -10,5 +10,7 @@ data class LoginRequestDto(
 
     val appPackageName: String,
 
+    val deviceName: String,
+
     val buildVersion: String,
 )
