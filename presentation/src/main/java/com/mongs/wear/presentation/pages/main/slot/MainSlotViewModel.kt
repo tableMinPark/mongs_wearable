@@ -8,7 +8,7 @@ import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.slot.usecase.EvoluteMongUseCase
 import com.mongs.wear.domain.slot.usecase.GraduateCheckMongUseCase
 import com.mongs.wear.domain.slot.usecase.StrokeMongUseCase
-import com.mongs.wear.presentation.common.BaseViewModel
+import com.mongs.wear.presentation.common.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

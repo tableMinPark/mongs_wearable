@@ -15,7 +15,7 @@ android {
         minSdk 30
         targetSdk 34
         versionCode 20
-        versionName "1.2.3"
+        versionName "2.0.0"
         vectorDrawables {
             useSupportLibrary true
         }
@@ -73,6 +73,6 @@ dependencies {
 
     // fcm
 //    implementation 'com.google.firebase:firebase-messaging:24.1.0'
-    implementation 'com.google.firebase:firebase-messaging-ktx'
-    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-messaging-ktx:24.1.0'
+//    implementation 'com.google.firebase:firebase-analytics-ktx:24.2.0'
 }

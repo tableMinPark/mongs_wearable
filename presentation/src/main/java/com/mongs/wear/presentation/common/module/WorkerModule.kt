@@ -1,4 +1,4 @@
-package com.mongs.wear.module
+package com.mongs.wear.presentation.common.module
 
 import android.content.Context
 import androidx.work.WorkManager

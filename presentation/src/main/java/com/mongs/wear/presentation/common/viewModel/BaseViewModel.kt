@@ -1,4 +1,4 @@
-package com.mongs.wear.presentation.common
+package com.mongs.wear.presentation.common.viewModel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

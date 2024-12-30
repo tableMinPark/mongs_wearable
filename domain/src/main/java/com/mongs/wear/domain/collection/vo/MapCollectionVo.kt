@@ -6,5 +6,5 @@ data class MapCollectionVo(
 
     val name: String = "",
 
-    val disable: Boolean = false,
+    val isIncluded: Boolean = false,
 )

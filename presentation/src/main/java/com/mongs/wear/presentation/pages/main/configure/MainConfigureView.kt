@@ -28,7 +28,7 @@ import com.mongs.wear.presentation.assets.NavItem
 import com.mongs.wear.presentation.component.button.CircleImageButton
 import com.mongs.wear.presentation.component.button.CircleTextButton
 import com.mongs.wear.presentation.component.common.LoadingBar
-import com.mongs.wear.presentation.component.dialog.common.ConfirmDialog
+import com.mongs.wear.presentation.component.dialog.common.ConfirmAndCancelDialog
 
 @Composable
 fun MainConfigureView(
@@ -41,7 +41,7 @@ fun MainConfigureView(
         if (mainConfigureViewModel.uiState.loadingBar) {
             MainConfigureLoadingBar(modifier = Modifier.zIndex(1f))
         } else if (mainConfigureViewModel.uiState.logoutDialog) {
-            ConfirmDialog(
+            ConfirmAndCancelDialog(
                 text = "로그아웃하시겠습니까?",
                 confirm = {
                     mainConfigureViewModel.uiState.loadingBar = true
@@ -62,7 +62,7 @@ fun MainConfigureView(
         } else {
             MainConfigureContent(
                 payment = {
-                    navController.navigate(NavItem.PaymentNested.route)
+                    navController.navigate(NavItem.StoreNested.route)
                 },
                 help = {
                     navController.navigate(NavItem.HelpNested.route)

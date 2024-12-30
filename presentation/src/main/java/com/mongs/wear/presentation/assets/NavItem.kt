@@ -24,10 +24,10 @@ sealed class NavItem(val route: String) {
     object SlotPick: NavItem("SlotPick")
 
     /* Payment */
-    object PaymentNested: NavItem("PaymentNested")
-    object PaymentMenu: NavItem("PaymentMenu")
-    object PaymentChargeStarPoint: NavItem("PaymentChargeStarPoint")
-    object PaymentExchangePayPoint: NavItem("PaymentExchangePayPoint")
+    object StoreNested: NavItem("StoreNested")
+    object StoreMenu: NavItem("StoreMenu")
+    object StoreChargeStarPoint: NavItem("StoreChargeStarPoint")
+    object StoreExchangePayPoint: NavItem("StoreExchangePayPoint")
 
     /* Feedback */
     object Feedback: NavItem("Feedback")

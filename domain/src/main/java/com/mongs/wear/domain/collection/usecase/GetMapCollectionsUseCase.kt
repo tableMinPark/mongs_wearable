@@ -12,7 +12,7 @@ class GetMapCollectionsUseCase @Inject constructor(
             MapCollectionVo(
                 code = it.code,
                 name = it.name,
-                disable = it.isIncluded
+                isIncluded = it.isIncluded
             )
         }
 }

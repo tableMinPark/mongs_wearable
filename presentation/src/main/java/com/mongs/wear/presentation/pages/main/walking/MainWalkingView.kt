@@ -39,7 +39,7 @@ import com.mongs.wear.presentation.component.button.LeftButton
 import com.mongs.wear.presentation.component.button.RightButton
 import com.mongs.wear.presentation.component.common.LoadingBar
 import com.mongs.wear.presentation.component.common.PayPoint
-import com.mongs.wear.presentation.component.dialog.common.ConfirmDialog
+import com.mongs.wear.presentation.component.dialog.common.ConfirmAndCancelDialog
 import com.mongs.wear.presentation.pages.main.walking.MainWalkingViewModel.UiState
 import kotlin.math.max
 import kotlin.math.min
@@ -70,7 +70,7 @@ fun MainWalkingView(
             }
 
             if(mainWalkingViewModel.uiState.chargePayPointDialog) {
-                ConfirmDialog(
+                ConfirmAndCancelDialog(
                     text = "$${chargePayPoint.value}\n환전하시겠습니까?",
                     confirm = {
                         mainWalkingViewModel.chargePayPoint(

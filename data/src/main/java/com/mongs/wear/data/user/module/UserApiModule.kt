@@ -3,6 +3,7 @@ package com.mongs.wear.data.user.module
 import com.mongs.wear.data.user.api.CollectionApi
 import com.mongs.wear.data.user.api.FeedbackApi
 import com.mongs.wear.data.user.api.PlayerApi
+import com.mongs.wear.data.user.api.StoreApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,4 +26,8 @@ object UserApiModule {
     @Provides
     @Singleton
     fun providePlayerApi(retrofit: Retrofit): PlayerApi = retrofit.create(PlayerApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideStoreApi(retrofit: Retrofit): StoreApi = retrofit.create(StoreApi::class.java)
 }

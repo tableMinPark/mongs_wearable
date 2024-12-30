@@ -3,23 +3,19 @@ package com.mongs.wear.activity
 import android.Manifest
 import android.app.NotificationManager
 import android.content.pm.PackageManager
-import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import com.mongs.wear.R
-import com.mongs.wear.module.NotificationModule
 import com.mongs.wear.presentation.assets.MongsTheme
 import com.mongs.wear.presentation.layout.MainView
 import com.mongs.wear.viewModel.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -30,7 +26,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         /**
          * 권한 확인
@@ -54,15 +49,6 @@ class MainActivity : ComponentActivity() {
                 ActivityCompat.requestPermissions(this, permissions, 100)
             }
         }
-
-        val notificationBuilder = NotificationCompat.Builder(this, NotificationModule.CHANNEL_ID)
-            .setContentTitle("FCM Message")
-            .setContentText("FCM Body")
-            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-            .setSmallIcon(R.mipmap.ic_launcher_round)
-            .setAutoCancel(true)
-
-        notificationManager.notify(0, notificationBuilder.build())
 
         /**
          * UI 로딩

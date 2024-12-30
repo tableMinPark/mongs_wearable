@@ -102,7 +102,7 @@ class PlayerRepositoryImpl @Inject constructor(
     override suspend fun getStepsLive(): LiveData<Int> = playerDataStore.getStepsLive()
 
     /**
-     * 걸음 수 동기화
+     * 걸음 수 서버 동기화
      */
     override suspend fun syncWalkingCount(deviceId: String, totalWalkingCount: Int, deviceBootedDt: LocalDateTime) {
 
@@ -122,6 +122,13 @@ class PlayerRepositoryImpl @Inject constructor(
                 playerDataStore.setConsumeWalkingCount(consumeWalkingCount = body.result.consumeWalkingCount)
             }
         }
+    }
+
+    /**
+     * 걸음 수 로컬 동기화
+     */
+    override suspend fun setWalkingCount(totalWalkingCount: Int) {
+        playerDataStore.setTotalWalkingCount(totalWalkingCount = totalWalkingCount)
     }
 
     /**

@@ -7,7 +7,7 @@ import com.mongs.wear.core.errors.ManagerErrorCode
 import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.slot.usecase.PoopCleanMongUseCase
 import com.mongs.wear.domain.slot.usecase.SleepingMongUseCase
-import com.mongs.wear.presentation.common.BaseViewModel
+import com.mongs.wear.presentation.common.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

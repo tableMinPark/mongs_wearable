@@ -1,13 +1,12 @@
-package com.mongs.wear.worker
+package com.mongs.wear.presentation.common.manager
 
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.os.SystemClock
 import android.util.Log
-import com.mongs.wear.data.user.datastore.PlayerDataStore
+import com.mongs.wear.domain.player.usecase.SetTotalWalkingCountUseCase
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 class StepSensorManager @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val playerDataStore: PlayerDataStore,
+    private val setTotalWalkingCountUseCase: SetTotalWalkingCountUseCase
 ) {
 
     companion object {
@@ -38,7 +37,7 @@ class StepSensorManager @Inject constructor(
                     val totalWalkingCount = event.values[0].toInt()
 //                    val totalWalkingCount = SystemClock.uptimeMillis().toInt()      // TODO: 센서 값 변경
                     Log.d(TAG, "totalWalkingCount: $totalWalkingCount")
-                    playerDataStore.setTotalWalkingCount(totalWalkingCount = totalWalkingCount)
+                    setTotalWalkingCountUseCase(totalWalkingCount = totalWalkingCount)
                 }
             }
         }

@@ -10,15 +10,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DriveFileRenameOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -28,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
@@ -36,12 +32,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsLightGray
 import com.mongs.wear.presentation.component.button.BlueButton
-import com.mongs.wear.presentation.component.dialog.common.ConfirmDialog
+import com.mongs.wear.presentation.component.dialog.common.ConfirmAndCancelDialog
+import com.mongs.wear.presentation.component.dialog.common.InputBox
 import com.mongs.wear.presentation.component.dialog.common.TimePickerDialog
 
 const val SLOT_ADD_ROUND_SIZE = 10
@@ -224,7 +220,7 @@ fun SlotAddDialog(
     }
 
     if (addDialog.value) {
-        ConfirmDialog(
+        ConfirmAndCancelDialog(
             text = "새로운 몽을\n생성하시겠습니까?\n(시간은 수정불가)",
             confirm = {
                 if (name.value.length <= 6) {
@@ -261,52 +257,11 @@ private fun InputNameTab(
                 .width(SLOT_ADD_TAB_WIDTH.dp)
                 .weight(0.2f),
         ) {
-            BasicTextField(
-                value = name,
-                onValueChange = { inputName ->
-                    changeInput(inputName)
-                },
-                textStyle = TextStyle(
-                    textAlign = TextAlign.Center,
-                    fontFamily = DAL_MU_RI,
-                    fontWeight = FontWeight.Light,
-                    fontSize = 12.sp,
-                    color = Color.Black,
-                ),
-
+            InputBox(
+                text = name,
+                changeInput = { inputName -> changeInput(inputName) },
                 maxLines = 1,
-                decorationBox = { innerTextField ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                color = Color.LightGray,
-                                shape = RoundedCornerShape(size = 10.dp)
-                            )
-                            .padding(all = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.DriveFileRenameOutline,
-                            contentDescription = "",
-                            tint = Color.DarkGray,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(width = 8.dp))
-                        if (name.isBlank()) {
-                            Text(
-                                text = "최대 6자 입력",
-                                textAlign = TextAlign.Center,
-                                fontFamily = DAL_MU_RI,
-                                fontWeight = FontWeight.Light,
-                                fontSize = 12.sp,
-                                color = Color.Gray,
-                            )
-                        } else {
-                            innerTextField()
-                        }
-                    }
-                }
+                placeholder = "최대 6자 입력"
             )
         }
     }

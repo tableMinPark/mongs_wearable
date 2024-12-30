@@ -13,8 +13,6 @@ import javax.inject.Inject
 @HiltAndroidApp
 class MainApplication : Application(), Configuration.Provider {
 
-//    @Inject lateinit var workerFactory: HiltWorkerFactory
-
     @EntryPoint
     @InstallIn(SingletonComponent::class)
     interface HiltWorkerFactoryEntryPoint {
@@ -22,7 +20,6 @@ class MainApplication : Application(), Configuration.Provider {
     }
 
     override val workManagerConfiguration: Configuration = Configuration.Builder()
-//            .setWorkerFactory(workerFactory)
             .setWorkerFactory(EntryPoints.get(this, HiltWorkerFactoryEntryPoint::class.java).workerFactory())
             .build()
 }

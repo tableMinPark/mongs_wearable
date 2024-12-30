@@ -11,7 +11,7 @@ import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.player.usecase.ExchangeWalkingCountUseCase
 import com.mongs.wear.domain.player.usecase.GetStepsUseCase
 import com.mongs.wear.domain.slot.usecase.GetCurrentSlotUseCase
-import com.mongs.wear.presentation.common.BaseViewModel
+import com.mongs.wear.presentation.common.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

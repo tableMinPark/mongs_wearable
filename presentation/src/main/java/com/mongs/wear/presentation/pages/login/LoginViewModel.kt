@@ -15,7 +15,7 @@ import com.mongs.wear.core.errors.CommonErrorCode
 import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.auth.usecase.JoinUseCase
 import com.mongs.wear.domain.auth.usecase.LoginUseCase
-import com.mongs.wear.presentation.common.BaseViewModel
+import com.mongs.wear.presentation.common.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers

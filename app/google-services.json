@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "47490513860",
     "project_id": "mongs-ccc23",
-    "storage_bucket": "mongs-ccc23.appspot.com"
+    "storage_bucket": "mongs-ccc23.firebasestorage.app"
   },
   "client": [
     {
@@ -13,6 +13,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "47490513860-ev2epqk8q2p657oesk0ocaamh3mpb2p1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mongs.wear",
+            "certificate_hash": "2692235d6fe046aa71c5b38d5a73829db95a9b70"
+          }
+        },
+        {
+          "client_id": "47490513860-j4dlnik30cemvpaosibvm3l8ob61casu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mongs.wear",
+            "certificate_hash": "64b38a710c122cf648ae3e3dd8a9d3113bd56083"
+          }
+        },
         {
           "client_id": "47490513860-lmo501flnou72fc7q5kq0ajfii6dpieb.apps.googleusercontent.com",
           "client_type": 3

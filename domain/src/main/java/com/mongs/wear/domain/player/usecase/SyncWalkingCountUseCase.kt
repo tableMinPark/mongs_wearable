@@ -1,6 +1,5 @@
 package com.mongs.wear.domain.player.usecase
 
-import android.util.Log
 import com.mongs.wear.domain.common.repository.AppRepository
 import com.mongs.wear.domain.player.repository.PlayerRepository
 import javax.inject.Inject

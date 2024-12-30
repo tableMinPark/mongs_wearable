@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -37,6 +38,7 @@ import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsLightGray
 import com.mongs.wear.presentation.component.button.BlueButton
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -48,13 +50,6 @@ fun TimePickerDialog(
     val listState = rememberScalingLazyListState(initialCenterItemIndex = 0)
 
     val isScrollInProgress = remember { derivedStateOf { listState.isScrollInProgress } }
-    val coroutineScope = rememberCoroutineScope()
-
-    if (!isScrollInProgress.value) {
-        coroutineScope.launch {
-            listState.animateScrollToItem(index = listState.centerItemIndex)
-        }
-    }
 
     Box(
         contentAlignment = Alignment.Center,
@@ -86,8 +81,8 @@ fun TimePickerDialog(
                             .zIndex(0f)
                             .size(width = 100.dp, height = 40.dp)
                             .background(
-                                color = Color.LightGray.copy(alpha = 0.8f),
-                                shape = RoundedCornerShape(size = 5.dp)
+                                color = Color.DarkGray.copy(alpha = 0.8f),
+                                shape = RoundedCornerShape(size = 20.dp)
                             )
                     )
 
@@ -133,6 +128,12 @@ fun TimePickerDialog(
                     },
                 )
             }
+        }
+    }
+
+    LaunchedEffect(isScrollInProgress.value) {
+        if (!isScrollInProgress.value) {
+            listState.animateScrollToItem(index = listState.centerItemIndex)
         }
     }
 }

@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.mongs.wear.presentation.assets.MapResourceCode
 import com.mongs.wear.presentation.component.button.BlueButton
-import com.mongs.wear.presentation.component.dialog.common.ConfirmDialog
+import com.mongs.wear.presentation.component.dialog.common.ConfirmAndCancelDialog
 
 
 @Composable
@@ -68,7 +68,7 @@ fun MapCollectionDetailDialog(
         }
 
         if (setBackgroundDialog.value) {
-            ConfirmDialog(
+            ConfirmAndCancelDialog(
                 text = "배경화면으로\n설정하시겠습니까?",
                 confirm = { setBackground(mapCode) },
                 cancel = { setBackgroundDialog.value = false },

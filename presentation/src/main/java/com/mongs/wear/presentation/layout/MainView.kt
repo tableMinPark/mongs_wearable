@@ -1,23 +1,6 @@
 package com.mongs.wear.presentation.layout
 
-//import com.mongs.wear.presentation.pages.battle.match.BattleMatchView
-//import com.mongs.wear.presentation.pages.battle.menu.BattleMenuView
-//import com.mongs.wear.presentation.pages.collection.map.CollectionMapPickView
-//import com.mongs.wear.presentation.pages.collection.menu.CollectionMenuView
-//import com.mongs.wear.presentation.pages.collection.mong.CollectionMongPickView
-//import com.mongs.wear.presentation.pages.feed.food.FeedFoodPickView
-//import com.mongs.wear.presentation.pages.feed.menu.FeedMenuView
-//import com.mongs.wear.presentation.pages.feed.snack.FeedSnackPickView
-//import com.mongs.wear.presentation.pages.feedback.FeedbackView
-//import com.mongs.wear.presentation.pages.help.menu.HelpMenuView
-//import com.mongs.wear.presentation.pages.payment.chargeStartPoint.PaymentChargeStarPointView
-//import com.mongs.wear.presentation.pages.payment.exchangePayPoint.PaymentExchangePayPointView
-//import com.mongs.wear.presentation.pages.payment.menu.PaymentMenuView
-//import com.mongs.wear.presentation.pages.slot.SlotPickView
-//import com.mongs.wear.presentation.pages.training.jumping.TrainingJumpingView
-//import com.mongs.wear.presentation.pages.training.menu.TrainingMenuView
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
@@ -33,7 +16,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.wear.compose.material.Scaffold
+import androidx.navigation.navigation
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
@@ -54,15 +36,22 @@ import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
 import com.mongs.wear.presentation.assets.NavItem
-import com.mongs.wear.presentation.common.BaseViewModel
+import com.mongs.wear.presentation.common.viewModel.BaseViewModel
 import com.mongs.wear.presentation.component.background.MainBackground
 import com.mongs.wear.presentation.component.background.ServerErrorBackground
 import com.mongs.wear.presentation.component.button.BlueButton
 import com.mongs.wear.presentation.component.common.LoadingBar
+import com.mongs.wear.presentation.pages.collection.map.CollectionMapPickView
+import com.mongs.wear.presentation.pages.collection.menu.CollectionMenuView
+import com.mongs.wear.presentation.pages.collection.mong.CollectionMongPickView
+import com.mongs.wear.presentation.pages.feedback.FeedbackView
+import com.mongs.wear.presentation.pages.help.menu.HelpMenuView
 import com.mongs.wear.presentation.pages.login.LoginView
 import com.mongs.wear.presentation.pages.main.layout.MainPagerView
+import com.mongs.wear.presentation.pages.store.chargeStartPoint.StoreChargeStarPointView
+import com.mongs.wear.presentation.pages.store.exchangePayPoint.PaymentExchangePayPointView
+import com.mongs.wear.presentation.pages.store.menu.StoreMenuView
 import kotlinx.coroutines.launch
-
 
 @Composable
 fun MainView (
@@ -169,6 +158,21 @@ fun NavContent() {
             )
         }
 
+        navigation(
+            startDestination = NavItem.CollectionMenu.route,
+            route = NavItem.CollectionNested.route
+        ) {
+            composable(route = NavItem.CollectionMenu.route) {
+                CollectionMenuView(navController = navController)
+            }
+            composable(route = NavItem.CollectionMapPick.route) {
+                CollectionMapPickView(navController = navController)
+            }
+            composable(route = NavItem.CollectionMongPick.route) {
+                CollectionMongPickView(navController = navController)
+            }
+        }
+
 //        navigation(
 //            startDestination = NavItem.FeedMenu.route,
 //            route = NavItem.FeedNested.route
@@ -184,43 +188,28 @@ fun NavContent() {
 //            }
 //        }
 //
-//        navigation(
-//            startDestination = NavItem.CollectionMenu.route,
-//            route = NavItem.CollectionNested.route
-//        ) {
-//            composable(route = NavItem.CollectionMenu.route) {
-//                CollectionMenuView(navController = navController)
-//            }
-//            composable(route = NavItem.CollectionMapPick.route) {
-//                CollectionMapPickView(navController = navController)
-//            }
-//            composable(route = NavItem.CollectionMongPick.route) {
-//                CollectionMongPickView(navController = navController)
-//            }
-//        }
-//
 //        composable(route = NavItem.SlotPick.route) {
 //            SlotPickView(navController = navController, scrollPage = pagerScroll)
 //        }
 //
-//        navigation(
-//            startDestination = NavItem.PaymentMenu.route,
-//            route = NavItem.PaymentNested.route
-//        ) {
-//            composable(route = NavItem.PaymentMenu.route) {
-//                PaymentMenuView(navController = navController)
-//            }
-//            composable(route = NavItem.PaymentChargeStarPoint.route) {
-//                PaymentChargeStarPointView(navController = navController)
-//            }
-//            composable(route = NavItem.PaymentExchangePayPoint.route) {
-//                PaymentExchangePayPointView(navController = navController)
-//            }
-//        }
-//
-//        composable(route = NavItem.Feedback.route) {
-//            FeedbackView()
-//        }
+        navigation(
+            startDestination = NavItem.StoreMenu.route,
+            route = NavItem.StoreNested.route
+        ) {
+            composable(route = NavItem.StoreMenu.route) {
+                StoreMenuView(navController = navController)
+            }
+            composable(route = NavItem.StoreChargeStarPoint.route) {
+                StoreChargeStarPointView(navController = navController)
+            }
+            composable(route = NavItem.StoreExchangePayPoint.route) {
+                PaymentExchangePayPointView(navController = navController)
+            }
+        }
+
+        composable(route = NavItem.Feedback.route) {
+            FeedbackView()
+        }
 //
 //        navigation(
 //            startDestination = NavItem.TrainingMenu.route,
@@ -245,15 +234,15 @@ fun NavContent() {
 //                BattleMatchView(navController = navController)
 //            }
 //        }
-//
-//        navigation(
-//            startDestination = NavItem.HelpMenu.route,
-//            route = NavItem.HelpNested.route
-//        ) {
-//            composable(route = NavItem.HelpMenu.route) {
-//                HelpMenuView()
-//            }
-//        }
+
+        navigation(
+            startDestination = NavItem.HelpMenu.route,
+            route = NavItem.HelpNested.route
+        ) {
+            composable(route = NavItem.HelpMenu.route) {
+                HelpMenuView()
+            }
+        }
     }
 }
 

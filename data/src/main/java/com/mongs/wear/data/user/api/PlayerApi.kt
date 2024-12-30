@@ -16,7 +16,7 @@ import retrofit2.http.POST
 
 interface PlayerApi {
 
-    @GET("user/player/")
+    @GET("user/player")
     suspend fun getPlayer() : Response<ResponseDto<GetPlayerResponseDto>>
 
     @PATCH("user/player/slot")

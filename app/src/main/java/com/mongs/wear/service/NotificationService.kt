@@ -88,4 +88,20 @@ class NotificationService
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
     }
+
+
+    /*
+
+
+
+        val notificationBuilder = NotificationCompat.Builder(this, NotificationModule.CHANNEL_ID)
+            .setContentTitle("FCM Message")
+            .setContentText("FCM Body")
+            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+            .setSmallIcon(R.mipmap.ic_launcher_round)
+            .setAutoCancel(true)
+
+        notificationManager.notify(0, notificationBuilder.build())
+
+     */
 }
