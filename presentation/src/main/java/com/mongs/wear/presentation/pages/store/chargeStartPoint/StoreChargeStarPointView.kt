@@ -1,6 +1,8 @@
 package com.mongs.wear.presentation.pages.store.chargeStartPoint
 
 import android.app.Activity
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,30 +17,42 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mongs.wear.presentation.common.manager.BillingManager
+import com.mongs.wear.presentation.common.viewModel.BaseViewModel
 import com.mongs.wear.presentation.component.background.PaymentNestedBackground
 import com.mongs.wear.presentation.component.button.BlueButton
+import com.mongs.wear.presentation.component.common.LoadingBar
 
 @Composable
 fun StoreChargeStarPointView(
     navController: NavController,
     storeChargeStarPointViewModel: StoreChargeStarPointViewModel = hiltViewModel(),
-    activity: Activity = LocalContext.current as Activity
+    context: Context = LocalContext.current
 ) {
 
     val productVoList = storeChargeStarPointViewModel.productVoList.observeAsState(ArrayList())
 
     Box {
         PaymentNestedBackground()
-        PaymentChargeStarPointContent(
-            productVoList = productVoList.value,
-            productOrder = { productId ->
-                storeChargeStarPointViewModel.productOrder(
-                    activity = activity,
-                    productId = productId
-                )
-            },
-            modifier = Modifier.zIndex(1f)
-        )
+
+        if (storeChargeStarPointViewModel.uiState.loadingBar) {
+            StoreChargeStarPointLoadingBar()
+        } else {
+            PaymentChargeStarPointContent(
+                productVoList = productVoList.value,
+                consumeOrder = { productId ->
+                    storeChargeStarPointViewModel.consumeOrder(
+                        productId = productId
+                    )
+                },
+                productOrder = { productId ->
+                    storeChargeStarPointViewModel.productOrder(
+                        activity = context as Activity,
+                        productId = productId
+                    )
+                },
+                modifier = Modifier.zIndex(1f)
+            )
+        }
     }
 
     LaunchedEffect(storeChargeStarPointViewModel.uiState.navStoreMenu) {
@@ -52,6 +66,7 @@ fun StoreChargeStarPointView(
 private fun PaymentChargeStarPointContent(
     productVoList: List<BillingManager.ProductVo>,
     productOrder: (String) -> Unit,
+    consumeOrder: (String) -> Unit,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
     Box(
@@ -61,13 +76,33 @@ private fun PaymentChargeStarPointContent(
         Column {
             for (productVo in productVoList) {
                 Row {
-                    BlueButton(
-                        text = productVo.productId,
-                        onClick = { productOrder(productVo.productId) },
-                        width = 120
-                    )
+                    if (productVo.hasNotConsumed) {
+                        BlueButton(
+                            text = "* ${productVo.productId}",
+                            onClick = { consumeOrder(productVo.productId) },
+                            width = 120
+                        )
+                    } else {
+                        BlueButton(
+                            text = productVo.productId,
+                            onClick = { productOrder(productVo.productId) },
+                            width = 120
+                        )
+                    }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun StoreChargeStarPointLoadingBar(
+    modifier: Modifier = Modifier.zIndex(0f),
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier.fillMaxSize(),
+    ) {
+        LoadingBar()
     }
 }

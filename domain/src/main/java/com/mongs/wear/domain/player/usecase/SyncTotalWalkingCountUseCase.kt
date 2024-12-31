@@ -4,7 +4,7 @@ import com.mongs.wear.domain.common.repository.AppRepository
 import com.mongs.wear.domain.player.repository.PlayerRepository
 import javax.inject.Inject
 
-class SyncWalkingCountUseCase @Inject constructor(
+class SyncTotalWalkingCountUseCase @Inject constructor(
     private val appRepository: AppRepository,
     private val playerRepository: PlayerRepository,
 ) {

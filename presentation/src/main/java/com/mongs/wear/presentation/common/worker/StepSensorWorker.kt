@@ -9,12 +9,9 @@ import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.mongs.wear.domain.player.usecase.SyncWalkingCountUseCase
+import com.mongs.wear.domain.player.usecase.SyncTotalWalkingCountUseCase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
@@ -22,7 +19,7 @@ import kotlin.coroutines.resume
 class StepSensorWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
-    private val syncWalkingCountUseCase: SyncWalkingCountUseCase,
+    private val syncTotalWalkingCountUseCase: SyncTotalWalkingCountUseCase,
 ) : CoroutineWorker(context, workerParams) {
 
     companion object {
@@ -39,7 +36,7 @@ class StepSensorWorker @AssistedInject constructor(
 
         Log.i(TAG, "totalWalkingCount: $totalWalkingCount")
 
-        syncWalkingCountUseCase(totalWalkingCount = totalWalkingCount)
+        syncTotalWalkingCountUseCase(totalWalkingCount = totalWalkingCount)
 
         Result.success()
     } catch (e: Exception) {

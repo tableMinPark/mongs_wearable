@@ -4,7 +4,7 @@ data class ConsumeProductOrderRequestDto(
 
     val productId: String,
 
-    val price: Int,
+    val orderId: String,
 
     val purchaseToken: String,
 )

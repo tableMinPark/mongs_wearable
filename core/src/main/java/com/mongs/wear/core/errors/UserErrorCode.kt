@@ -19,6 +19,7 @@ enum class UserErrorCode(
     DATA_USER_GET_WALKING_COUNT("걸음 수 조회에 실패했습니다."),
 
     DATA_USER_GET_PRODUCT_IDS("상품 목록 조회에 실패했습니다."),
+    DATA_USER_CONSUME_PRODUCT_ORDER("상품 소비에 실패했습니다."),
 
     PRESENTATION_USER_BILLING_CONNECT("인앱 결제 시스템 연결에 실패했습니다."),
     PRESENTATION_USER_BILLING_NOT_SUPPORT("결제를 지원하지 않는 기기입니다."),

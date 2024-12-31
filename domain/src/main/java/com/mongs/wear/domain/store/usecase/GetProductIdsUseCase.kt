@@ -1,6 +1,6 @@
-package com.mongs.wear.domain.player.usecase
+package com.mongs.wear.domain.store.usecase
 
-import com.mongs.wear.domain.player.repository.StoreRepository
+import com.mongs.wear.domain.store.repository.StoreRepository
 import javax.inject.Inject
 
 class GetProductIdsUseCase @Inject constructor(

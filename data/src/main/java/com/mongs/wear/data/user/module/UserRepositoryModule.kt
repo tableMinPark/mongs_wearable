@@ -7,7 +7,7 @@ import com.mongs.wear.data.user.repository.StoreRepositoryImpl
 import com.mongs.wear.domain.collection.repository.CollectionRepository
 import com.mongs.wear.domain.feedback.repository.FeedbackRepository
 import com.mongs.wear.domain.player.repository.PlayerRepository
-import com.mongs.wear.domain.player.repository.StoreRepository
+import com.mongs.wear.domain.store.repository.StoreRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
