@@ -13,11 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.mongs.wear.domain.slot.vo.SlotVo
+import com.mongs.wear.domain.management.vo.MongVo
 import com.mongs.wear.presentation.assets.MapResourceCode
-import com.mongs.wear.presentation.component.background.MainPagerBackground
-import com.mongs.wear.presentation.component.common.LoadingBar
-import com.mongs.wear.presentation.component.common.PageIndicator
+import com.mongs.wear.presentation.component.common.background.MainPagerBackground
+import com.mongs.wear.presentation.component.common.bar.LoadingBar
+import com.mongs.wear.presentation.component.common.pagenation.PageIndicator
 import com.mongs.wear.presentation.pages.main.condition.MainConditionView
 import com.mongs.wear.presentation.pages.main.configure.MainConfigureView
 import com.mongs.wear.presentation.pages.main.interaction.MainInteractionView
@@ -31,7 +31,7 @@ fun MainPagerView(
     pagerScroll: (Int) -> Unit,
     mainPagerViewModel: MainPagerViewModel = hiltViewModel()
 ) {
-    val slotVoState = mainPagerViewModel.slotVo.observeAsState()
+    val mongVo = mainPagerViewModel.mongVo.observeAsState()
     val backgroundMapCodeState = mainPagerViewModel.backgroundMapCode.observeAsState(MapResourceCode.MP000.name)
 
     Box {
@@ -49,7 +49,7 @@ fun MainPagerView(
             )
             NormalMainPagerContent(
                 navController = navController,
-                slotVo = slotVoState.value ?: SlotVo(),
+                mongVo = mongVo.value ?: MongVo(),
                 pagerState = pagerState,
                 scrollPage = pagerScroll,
                 modifier = Modifier.zIndex(2f),
@@ -61,7 +61,7 @@ fun MainPagerView(
 @Composable
 private fun NormalMainPagerContent(
     navController: NavController,
-    slotVo: SlotVo,
+    mongVo: MongVo,
     pagerState: PagerState,
     scrollPage: (Int) -> Unit,
     modifier: Modifier = Modifier.zIndex(0f),
@@ -87,23 +87,23 @@ private fun NormalMainPagerContent(
 
             when (page) {
                 0 -> MainWalkingView(
-                    slotVo = slotVo,
+                    mongVo = mongVo,
                 )
 
                 1 -> MainConditionView(
-                    slotVo = slotVo,
+                    mongVo = mongVo,
                     isPageChanging = isPageChanging,
                 )
 
                 2 -> MainSlotView(
                     navController = navController,
-                    slotVo = slotVo,
+                    mongVo = mongVo,
                     isPageChanging = isPageChanging,
                 )
 
                 3 -> MainInteractionView(
                     navController = navController,
-                    slotVo = slotVo,
+                    mongVo = mongVo,
                     scrollPage = scrollPage,
                 )
 

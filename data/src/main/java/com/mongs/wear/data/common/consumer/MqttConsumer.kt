@@ -32,25 +32,23 @@ class MqttConsumer (
         private const val ACTIVITY_BATTLE_ENTER_ALL_BATTLE_PLAYER = "ACTIVITY-BATTLE-003"
         private const val ACTIVITY_BATTLE_OVER_BATTLE = "ACTIVITY-BATTLE-004"
         private const val ACTIVITY_BATTLE_FIGHT_BATTLE = "ACTIVITY-BATTLE-005"
-        private const val MANAGER_MANAGEMENT_OBSERVE_MONG = "MANAGER-MANAGEMENT-010"
-        private const val MANAGER_MANAGEMENT_OBSERVE_MONG_STATE = "MANAGER-MANAGEMENT-011"
-        private const val MANAGER_MANAGEMENT_OBSERVE_MONG_STATUS = "MANAGER-MANAGEMENT-012"
+        private const val MANAGER_MANAGEMENT_OBSERVE_MONG = "MANAGER-MANAGEMENT-011"
+        private const val MANAGER_MANAGEMENT_OBSERVE_MONG_STATE = "MANAGER-MANAGEMENT-012"
+        private const val MANAGER_MANAGEMENT_OBSERVE_MONG_STATUS = "MANAGER-MANAGEMENT-013"
         private const val USER_PLAYER_OBSERVE_MEMBER = "USER-PLAYER-000"
     }
-
-
 
     override fun messageArrived(topic: String?, message: MqttMessage?) {
 
         CoroutineScope(Dispatchers.IO).launch {
             message?.let {
                 topic?.let {
-
                     try {
-
                         val responseDto = gson.fromJson(message.toString(), ResponseDto::class.java)
 
                         val resultJson = gson.toJson(responseDto.result)
+
+                        Log.i("MqttConsumer", "$responseDto")
 
                         when (responseDto.code) {
 
@@ -70,7 +68,7 @@ class MqttConsumer (
                                 observeResolver.updateMong(mongObserveResponseDto = gson.fromJson(resultJson, MongObserveResponseDto::class.java))
 
                             MANAGER_MANAGEMENT_OBSERVE_MONG_STATE ->
-                                observeResolver.updateMOngState(mongStateObserveResponseDto = gson.fromJson(resultJson, MongStateObserveResponseDto::class.java))
+                                observeResolver.updateMongState(mongStateObserveResponseDto = gson.fromJson(resultJson, MongStateObserveResponseDto::class.java))
 
                             MANAGER_MANAGEMENT_OBSERVE_MONG_STATUS ->
                                 observeResolver.updateMongStatus(mongStatusObserveResponseDto = gson.fromJson(resultJson, MongStatusObserveResponseDto::class.java))

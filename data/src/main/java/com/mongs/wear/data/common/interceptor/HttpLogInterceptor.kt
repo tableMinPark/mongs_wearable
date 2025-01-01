@@ -1,14 +1,21 @@
 package com.mongs.wear.data.common.interceptor
 
 import android.util.Log
+import com.google.gson.Gson
+import com.mongs.wear.core.dto.response.ResponseDto
 import okhttp3.Interceptor
 import okhttp3.MediaType
 import okhttp3.Protocol
 import okhttp3.Response
 import okhttp3.ResponseBody
+import okio.BufferedSource
+import okio.buffer
+import okio.source
 import java.net.ConnectException
 
-class HttpLogInterceptor : Interceptor {
+class HttpLogInterceptor(
+    private val gson: Gson
+) : Interceptor {
 
     companion object {
         private const val CONNECTION_RESPONSE_CODE = 500
@@ -31,8 +38,27 @@ class HttpLogInterceptor : Interceptor {
                 .build()
         }
 
-        Log.i("HttpLogInterceptor", "[${response.code()}] ${request.method()} ${request.url()}")
+        response.body()?.let { body ->
 
-        return response
+            val bodyJson = body.string()
+
+            val responseDto = gson.fromJson(bodyJson, ResponseDto::class.java)
+
+            Log.i("HttpLogInterceptor", "${request.method()} ${request.url()} ==> [${response.code()}] $responseDto")
+
+            return response.newBuilder().body(CustomResponseBody(body = bodyJson, originalBody = body)).build()
+
+        } ?: run {
+            return response
+        }
+    }
+
+    class CustomResponseBody(
+        private val body: String,
+        private val originalBody: ResponseBody,
+    ) : ResponseBody() {
+        override fun contentType(): MediaType? = originalBody.contentType()
+        override fun contentLength(): Long = originalBody.contentLength()
+        override fun source(): BufferedSource = body.byteInputStream().source().buffer()
     }
 }

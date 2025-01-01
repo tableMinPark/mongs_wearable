@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.mongs.wear.domain.common.usecase.GetBackgroundMapCodeUseCase
-import com.mongs.wear.domain.slot.usecase.GetCurrentSlotUseCase
-import com.mongs.wear.domain.slot.vo.SlotVo
+import com.mongs.wear.domain.management.usecase.GetCurrentSlotUseCase
+import com.mongs.wear.domain.management.vo.MongVo
 import com.mongs.wear.presentation.common.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -21,8 +21,8 @@ class MainPagerViewModel @Inject constructor(
     private val getBackgroundMapCodeUseCase: GetBackgroundMapCodeUseCase,
 ): BaseViewModel() {
 
-    private val _slotVo = MediatorLiveData<SlotVo?>(null)
-    val slotVo: LiveData<SlotVo?> get() = _slotVo
+    private val _mongVo = MediatorLiveData<MongVo?>(null)
+    val mongVo: LiveData<MongVo?> get() = _mongVo
 
     private val _backgroundMapCode = MediatorLiveData<String>()
     val backgroundMapCode: LiveData<String> get() = _backgroundMapCode
@@ -32,9 +32,9 @@ class MainPagerViewModel @Inject constructor(
 
             uiState.loadingBar = true
 
-            _slotVo.addSource(withContext(Dispatchers.IO) { getCurrentSlotUseCase() }) {
-                it?.let { slotVo ->
-                    _slotVo.value = slotVo
+            _mongVo.addSource(withContext(Dispatchers.IO) { getCurrentSlotUseCase() }) { mongModel ->
+                mongModel?.let { mongVo ->
+                    _mongVo.value = mongVo
                 }
             }
 

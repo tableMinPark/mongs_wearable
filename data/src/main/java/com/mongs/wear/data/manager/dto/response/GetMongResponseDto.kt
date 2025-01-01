@@ -2,6 +2,7 @@ package com.mongs.wear.data.manager.dto.response
 
 import com.mongs.wear.core.enums.MongStateCode
 import com.mongs.wear.core.enums.MongStatusCode
+import java.time.LocalDateTime
 
 data class GetMongResponseDto(
 
@@ -32,4 +33,6 @@ data class GetMongResponseDto(
     val statusCode: MongStatusCode,
 
     val isSleep: Boolean,
+
+    val createdAt: LocalDateTime,
 )

@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.mongs.wear.core.errors.ManagerErrorCode
 import com.mongs.wear.core.exception.ErrorException
-import com.mongs.wear.domain.slot.usecase.EvoluteMongUseCase
-import com.mongs.wear.domain.slot.usecase.GraduateCheckMongUseCase
-import com.mongs.wear.domain.slot.usecase.StrokeMongUseCase
+import com.mongs.wear.domain.management.usecase.EvoluteMongUseCase
+import com.mongs.wear.domain.management.usecase.GraduateCheckMongUseCase
+import com.mongs.wear.domain.management.usecase.StrokeMongUseCase
 import com.mongs.wear.presentation.common.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

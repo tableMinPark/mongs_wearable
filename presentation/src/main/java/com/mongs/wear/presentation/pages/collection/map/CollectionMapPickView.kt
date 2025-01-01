@@ -26,11 +26,11 @@ import androidx.wear.compose.material.PositionIndicator
 import com.mongs.wear.domain.collection.vo.MapCollectionVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.MapResourceCode
-import com.mongs.wear.presentation.component.background.CollectionNestedBackground
-import com.mongs.wear.presentation.component.button.CircleImageButton
-import com.mongs.wear.presentation.component.button.CircleTextButton
-import com.mongs.wear.presentation.component.common.LoadingBar
-import com.mongs.wear.presentation.component.dialog.collection.MapCollectionDetailDialog
+import com.mongs.wear.presentation.component.common.background.CollectionNestedBackground
+import com.mongs.wear.presentation.component.common.bar.LoadingBar
+import com.mongs.wear.presentation.component.common.button.CircleImageButton
+import com.mongs.wear.presentation.component.common.button.CircleTextButton
+import com.mongs.wear.presentation.dialog.collection.MapCollectionDetailDialog
 import kotlin.math.min
 
 @Composable

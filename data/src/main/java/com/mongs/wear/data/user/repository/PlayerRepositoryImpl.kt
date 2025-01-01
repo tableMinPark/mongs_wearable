@@ -11,7 +11,7 @@ import com.mongs.wear.data.user.exception.BuySlotException
 import com.mongs.wear.data.user.exception.ChargeStarPointException
 import com.mongs.wear.data.user.exception.ExchangeStarPointException
 import com.mongs.wear.data.user.exception.ExchangeWalkingException
-import com.mongs.wear.data.user.exception.UpdatePlayerException
+import com.mongs.wear.data.user.exception.GetPlayerException
 import com.mongs.wear.domain.player.repository.PlayerRepository
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -20,23 +20,6 @@ class PlayerRepositoryImpl @Inject constructor(
     private val playerApi: PlayerApi,
     private val playerDataStore: PlayerDataStore,
 ): PlayerRepository {
-
-    /**
-     * 플레이어 정보 업데이트
-     */
-    override suspend fun updatePlayer() {
-
-        val response = playerApi.getPlayer()
-
-        if (response.isSuccessful) {
-            response.body()?.let { body ->
-                playerDataStore.setStarPoint(starPoint = body.result.starPoint)
-                playerDataStore.setSlotCount(slotCount = body.result.slotCount)
-            }
-        } else {
-            throw UpdatePlayerException()
-        }
-    }
 
     /**
      * 슬롯 구매
@@ -53,19 +36,45 @@ class PlayerRepositoryImpl @Inject constructor(
     /**
      * 스타 포인트 조회
      */
-    override suspend fun getStarPointLive(): LiveData<Int> = playerDataStore.getStarPointLive()
+    override suspend fun getStarPointLive(): LiveData<Int> {
+
+        val response = playerApi.getPlayer()
+
+        if (response.isSuccessful) {
+            response.body()?.let { body ->
+                playerDataStore.setStarPoint(starPoint = body.result.starPoint)
+            }
+
+            return playerDataStore.getStarPointLive()
+
+        } else {
+            throw GetPlayerException()
+        }
+    }
 
     /**
      * 슬롯 카운트 조회
      */
-    override suspend fun getSlotCountLive(): LiveData<Int> = playerDataStore.getSlotCountLive()
+    override suspend fun getSlotCount(): Int {
+
+        val response = playerApi.getPlayer()
+
+        if (response.isSuccessful) {
+            response.body()?.let { body ->
+                return body.result.slotCount
+            } ?: run {
+                return 1
+            }
+
+        } else {
+            throw GetPlayerException()
+        }
+    }
 
     /**
      * 스타 포인트 충전
      */
     override suspend fun chargeStarPoint(receipt: String, starPoint: Int) {
-
-        // TODO: 구글 영수증 검증 로직 필요
 
         val response = playerApi.chargeStarPoint(
             chargeStarPointRequestDto = ChargeStarPointRequestDto(
@@ -148,7 +157,6 @@ class PlayerRepositoryImpl @Inject constructor(
         )
 
         if (response.isSuccessful) {
-
             response.body()?.let { body ->
                 playerDataStore.setWalkingCount(walkingCount = body.result.walkingCount)
                 playerDataStore.setConsumeWalkingCount(consumeWalkingCount = body.result.consumeWalkingCount)

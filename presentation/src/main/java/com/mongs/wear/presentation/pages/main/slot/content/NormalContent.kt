@@ -8,13 +8,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.mongs.wear.domain.slot.vo.SlotVo
+import com.mongs.wear.domain.management.vo.MongVo
 import com.mongs.wear.presentation.assets.MongResourceCode
-import com.mongs.wear.presentation.component.common.Mong
+import com.mongs.wear.presentation.component.common.charactor.Mong
 
 @Composable
 fun NormalContent(
-    slotVo: SlotVo,
+    mongVo: MongVo,
     stroke: () -> Unit,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
@@ -23,11 +23,11 @@ fun NormalContent(
         modifier = modifier.fillMaxSize(),
     ) {
         Mong(
-            state = slotVo.statusCode,
-            isHappy = slotVo.isHappy,
-            isEating = slotVo.isEating,
-            isSleeping = slotVo.isSleeping,
-            mong = MongResourceCode.valueOf(slotVo.mongTypeCode),
+            state = mongVo.statusCode,
+            isHappy = mongVo.isHappy,
+            isEating = mongVo.isEating,
+            isSleeping = mongVo.isSleeping,
+            mong = MongResourceCode.valueOf(mongVo.mongTypeCode),
             onClick = stroke,
             modifier = Modifier
                 .padding(bottom = 20.dp)

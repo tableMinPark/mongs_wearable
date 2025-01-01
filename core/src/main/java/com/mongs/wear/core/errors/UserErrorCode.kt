@@ -7,7 +7,7 @@ enum class UserErrorCode(
     DATA_USER_GET_MAP_COLLECTIONS("컬렉션 맵 조회 실패했습니다."),
     DATA_USER_GET_MONG_COLLECTIONS("컬렉션 맵 조회 실패했습니다."),
     DATA_USER_CREATE_FEEDBACK("오류 신고 실패했습니다."),
-    DATA_USER_UPDATE_PLAYER("플레이어 업데이트 실패했습니다."),
+    DATA_USER_GET_PLAYER("플레이어 정보 조회 실패했습니다."),
 
     DATA_USER_BUY_SLOT("슬롯 구매 실패했습니다."),
     DATA_USER_EXCHANGE_WALKING("걸음 수 환전 실패했습니다."),
@@ -20,6 +20,7 @@ enum class UserErrorCode(
 
     DATA_USER_GET_PRODUCT_IDS("상품 목록 조회에 실패했습니다."),
     DATA_USER_CONSUME_PRODUCT_ORDER("상품 소비에 실패했습니다."),
+    DATA_USER_CONSUMED_ORDER_IDS("상품 소비 ID 목록 조회에 실패했습니다."),
 
     PRESENTATION_USER_BILLING_CONNECT("인앱 결제 시스템 연결에 실패했습니다."),
     PRESENTATION_USER_BILLING_NOT_SUPPORT("결제를 지원하지 않는 기기입니다."),

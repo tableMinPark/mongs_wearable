@@ -19,29 +19,29 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.CircularProgressIndicator
-import com.mongs.wear.domain.slot.vo.SlotVo
+import com.mongs.wear.domain.management.vo.MongVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.MongsBlue
 import com.mongs.wear.presentation.assets.MongsGreen
 import com.mongs.wear.presentation.assets.MongsPink
 import com.mongs.wear.presentation.assets.MongsYellow
-import com.mongs.wear.presentation.component.common.ProgressIndicator
+import com.mongs.wear.presentation.component.common.bar.ProgressIndicator
 
 @Composable
 fun MainConditionView(
-    slotVo: SlotVo,
+    mongVo: MongVo,
     isPageChanging: State<Boolean>,
 ) {
     Box {
         if (!isPageChanging.value) {
             ProgressIndicator(
-                progress = slotVo.exp.toFloat(),
+                progress = mongVo.exp.toFloat(),
                 modifier = Modifier.zIndex(1f)
             )
         }
 
         MainConditionContent(
-            slotVo = slotVo,
+            mongVo = mongVo,
             modifier = Modifier.zIndex(1f)
         )
     }
@@ -49,7 +49,7 @@ fun MainConditionView(
 
 @Composable
 private fun MainConditionContent(
-    slotVo: SlotVo,
+    mongVo: MongVo,
     modifier: Modifier = Modifier.zIndex(0f),
 ) {
     Box(
@@ -66,12 +66,12 @@ private fun MainConditionContent(
             ) {
                 MainConditionCondition(
                     icon = R.drawable.health,
-                    progress = slotVo.healthy.toFloat(),
+                    progress = mongVo.healthy.toFloat(),
                     indicatorColor = MongsPink
                 )
                 MainConditionCondition(
                     icon = R.drawable.satiety,
-                    progress = slotVo.satiety.toFloat(),
+                    progress = mongVo.satiety.toFloat(),
                     indicatorColor = MongsYellow
                 )
             }
@@ -81,12 +81,12 @@ private fun MainConditionContent(
             ) {
                 MainConditionCondition(
                     icon = R.drawable.strength,
-                    progress = slotVo.strength.toFloat(),
+                    progress = mongVo.strength.toFloat(),
                     indicatorColor = MongsGreen
                 )
                 MainConditionCondition(
                     icon = R.drawable.sleep,
-                    progress = slotVo.sleep.toFloat(),
+                    progress = mongVo.sleep.toFloat(),
                     indicatorColor = MongsBlue
                 )
             }

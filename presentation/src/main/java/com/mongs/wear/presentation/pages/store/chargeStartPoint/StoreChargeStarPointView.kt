@@ -2,7 +2,6 @@ package com.mongs.wear.presentation.pages.store.chargeStartPoint
 
 import android.app.Activity
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,10 +16,9 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mongs.wear.presentation.common.manager.BillingManager
-import com.mongs.wear.presentation.common.viewModel.BaseViewModel
-import com.mongs.wear.presentation.component.background.PaymentNestedBackground
-import com.mongs.wear.presentation.component.button.BlueButton
-import com.mongs.wear.presentation.component.common.LoadingBar
+import com.mongs.wear.presentation.component.common.background.StoreNestedBackground
+import com.mongs.wear.presentation.component.common.button.BlueButton
+import com.mongs.wear.presentation.component.common.bar.LoadingBar
 
 @Composable
 fun StoreChargeStarPointView(
@@ -32,7 +30,7 @@ fun StoreChargeStarPointView(
     val productVoList = storeChargeStarPointViewModel.productVoList.observeAsState(ArrayList())
 
     Box {
-        PaymentNestedBackground()
+        StoreNestedBackground()
 
         if (storeChargeStarPointViewModel.uiState.loadingBar) {
             StoreChargeStarPointLoadingBar()
@@ -78,13 +76,13 @@ private fun PaymentChargeStarPointContent(
                 Row {
                     if (productVo.hasNotConsumed) {
                         BlueButton(
-                            text = "* ${productVo.productId}",
+                            text = "소비",
                             onClick = { consumeOrder(productVo.productId) },
                             width = 120
                         )
                     } else {
                         BlueButton(
-                            text = productVo.productId,
+                            text = "구매",
                             onClick = { productOrder(productVo.productId) },
                             width = 120
                         )

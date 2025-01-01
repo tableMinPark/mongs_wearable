@@ -1,24 +1,88 @@
 package com.mongs.wear.presentation.pages.store.exchangePayPoint
 
-import android.content.Context
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import com.mongs.wear.core.errors.SlotErrorCode
+import com.mongs.wear.core.errors.UserErrorCode
+import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.domain.player.usecase.ExchangeWalkingCountUseCase
+import com.mongs.wear.domain.player.usecase.GetStepsUseCase
+import com.mongs.wear.domain.management.usecase.GetCurrentSlotUseCase
+import com.mongs.wear.domain.management.vo.MongVo
+import com.mongs.wear.presentation.common.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class StoreExchangePayPointViewModel @Inject constructor(
-): ViewModel() {
-    val uiState: UiState = UiState()
+    private val getCurrentSlotUseCase: GetCurrentSlotUseCase,
+    private val getStepsUseCase: GetStepsUseCase,
+    private val exchangeWalkingCountUseCase: ExchangeWalkingCountUseCase,
+): BaseViewModel() {
 
-    fun loadData(context: Context) {
-        viewModelScope.launch (Dispatchers.IO) {
+    private val _mongVo = MediatorLiveData<MongVo?>(null)
+    val mongVo: LiveData<MongVo?> get() = _mongVo
+
+    private val _walkingCount = MediatorLiveData<Int>()
+    val walkingCount: LiveData<Int> get() = _walkingCount
+
+    init {
+        viewModelScopeWithHandler.launch (Dispatchers.IO) {
+
+            uiState.loadingBar = true
+
+            _mongVo.addSource(withContext(Dispatchers.IO) { getCurrentSlotUseCase() }) {
+                it?.let { mongVo ->
+                    _mongVo.value = mongVo
+                }
+            }
+
+            _walkingCount.addSource(withContext(Dispatchers.IO) { getStepsUseCase() }) { walkingCount ->
+                _walkingCount.value = walkingCount
+            }
+
+            uiState.loadingBar = false
         }
     }
 
-    class UiState (
-    ) {
+    fun chargePayPoint(mongId: Long, walkingCount: Int) {
+        viewModelScopeWithHandler.launch (Dispatchers.IO) {
+
+            uiState.loadingBar = true
+            uiState.chargePayPointDialog = false
+
+            exchangeWalkingCountUseCase(mongId = mongId, walkingCount = walkingCount)
+
+            uiState.loadingBar = false
+        }
+    }
+
+    val uiState: UiState = UiState()
+
+    class UiState : BaseUiState() {
+
+        var loadingBar by mutableStateOf(false)
+        var chargePayPointDialog by mutableStateOf(false)
+    }
+
+    override fun exceptionHandler(exception: Throwable) {
+
+        if (exception is ErrorException) {
+
+            when (exception.code) {
+
+                SlotErrorCode.DATA_SLOT_GET_CURRENT_SLOT -> {}
+
+                UserErrorCode.DATA_USER_GET_WALKING_COUNT -> {}
+
+                UserErrorCode.DATA_USER_EXCHANGE_WALKING -> {}
+            }
+        }
     }
 }

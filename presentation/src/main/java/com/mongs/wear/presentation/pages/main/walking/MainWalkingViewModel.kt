@@ -10,7 +10,7 @@ import com.mongs.wear.core.errors.UserErrorCode
 import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.player.usecase.ExchangeWalkingCountUseCase
 import com.mongs.wear.domain.player.usecase.GetStepsUseCase
-import com.mongs.wear.domain.slot.usecase.GetCurrentSlotUseCase
+import com.mongs.wear.domain.management.usecase.GetCurrentSlotUseCase
 import com.mongs.wear.presentation.common.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -37,8 +37,8 @@ class MainWalkingViewModel @Inject constructor(
             uiState.loadingBar = true
 
             _payPoint.addSource(withContext(Dispatchers.IO) { getCurrentSlotUseCase() }) {
-                it?.let { slotVo ->
-                    _payPoint.value = slotVo.payPoint
+                it?.let { mongVo ->
+                    _payPoint.value = mongVo.payPoint
                 } ?: run { _payPoint.value = 0 }
             }
 

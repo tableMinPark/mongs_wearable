@@ -24,8 +24,6 @@ class PlayerDataStore @Inject constructor(
 
         private val STAR_POINT = intPreferencesKey("STAR_POINT")
 
-        private val SLOT_COUNT = intPreferencesKey("SLOT_COUNT")
-
         private val STEPS = intPreferencesKey("STEPS")
 
         private val WALKING_COUNT = intPreferencesKey("WALKING_COUNT")
@@ -42,8 +40,6 @@ class PlayerDataStore @Inject constructor(
             context.store.edit { preferences ->
 
                 preferences[STAR_POINT] = 0
-
-                preferences[SLOT_COUNT] = 0
 
                 if (!preferences.contains(STEPS)) {
                     preferences[STEPS] = 0
@@ -73,19 +69,6 @@ class PlayerDataStore @Inject constructor(
     suspend fun getStarPointLive(): LiveData<Int> {
         return context.store.data.map { preferences ->
             preferences[STAR_POINT]!!
-        }.asLiveData()
-    }
-
-
-    suspend fun setSlotCount(slotCount: Int) {
-        context.store.edit { preferences ->
-            preferences[SLOT_COUNT] = slotCount
-        }
-    }
-
-    suspend fun getSlotCountLive() : LiveData<Int> {
-        return context.store.data.map { preferences ->
-            preferences[SLOT_COUNT]!!
         }.asLiveData()
     }
 

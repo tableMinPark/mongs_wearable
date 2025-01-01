@@ -2,7 +2,7 @@ package com.mongs.wear.domain.battle.usecase
 
 import com.mongs.wear.domain.common.client.MqttClient
 import com.mongs.wear.domain.battle.repository.BattleRepository
-import com.mongs.wear.domain.slot.repository.SlotRepository
+import com.mongs.wear.domain.management.repository.SlotRepository
 import javax.inject.Inject
 
 class MatchWaitCancelUseCase @Inject constructor(

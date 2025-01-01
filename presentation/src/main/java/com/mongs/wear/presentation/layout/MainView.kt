@@ -37,10 +37,10 @@ import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
 import com.mongs.wear.presentation.assets.NavItem
 import com.mongs.wear.presentation.common.viewModel.BaseViewModel
-import com.mongs.wear.presentation.component.background.MainBackground
-import com.mongs.wear.presentation.component.background.ServerErrorBackground
-import com.mongs.wear.presentation.component.button.BlueButton
-import com.mongs.wear.presentation.component.common.LoadingBar
+import com.mongs.wear.presentation.component.common.background.MainBackground
+import com.mongs.wear.presentation.component.common.background.ServerErrorBackground
+import com.mongs.wear.presentation.component.common.button.BlueButton
+import com.mongs.wear.presentation.component.common.bar.LoadingBar
 import com.mongs.wear.presentation.pages.collection.map.CollectionMapPickView
 import com.mongs.wear.presentation.pages.collection.menu.CollectionMenuView
 import com.mongs.wear.presentation.pages.collection.mong.CollectionMongPickView
@@ -48,8 +48,9 @@ import com.mongs.wear.presentation.pages.feedback.FeedbackView
 import com.mongs.wear.presentation.pages.help.menu.HelpMenuView
 import com.mongs.wear.presentation.pages.login.LoginView
 import com.mongs.wear.presentation.pages.main.layout.MainPagerView
+import com.mongs.wear.presentation.pages.slot.SlotPickView
 import com.mongs.wear.presentation.pages.store.chargeStartPoint.StoreChargeStarPointView
-import com.mongs.wear.presentation.pages.store.exchangePayPoint.PaymentExchangePayPointView
+import com.mongs.wear.presentation.pages.store.exchangePayPoint.StoreExchangePayPointView
 import com.mongs.wear.presentation.pages.store.menu.StoreMenuView
 import kotlinx.coroutines.launch
 
@@ -188,10 +189,10 @@ fun NavContent() {
 //            }
 //        }
 //
-//        composable(route = NavItem.SlotPick.route) {
-//            SlotPickView(navController = navController, scrollPage = pagerScroll)
-//        }
-//
+        composable(route = NavItem.SlotPick.route) {
+            SlotPickView(navController = navController, scrollPage = pagerScroll)
+        }
+
         navigation(
             startDestination = NavItem.StoreMenu.route,
             route = NavItem.StoreNested.route
@@ -203,7 +204,7 @@ fun NavContent() {
                 StoreChargeStarPointView(navController = navController)
             }
             composable(route = NavItem.StoreExchangePayPoint.route) {
-                PaymentExchangePayPointView(navController = navController)
+                StoreExchangePayPointView(navController = navController)
             }
         }
 

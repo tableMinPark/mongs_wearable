@@ -1,6 +1,7 @@
 package com.mongs.wear.presentation.pages.store.menu
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,32 +31,48 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
 import com.mongs.wear.presentation.assets.NavItem
-import com.mongs.wear.presentation.component.background.PaymentNestedBackground
+import com.mongs.wear.presentation.component.common.background.StoreNestedBackground
+import com.mongs.wear.presentation.component.common.bar.LoadingBar
 
 @Composable
 fun StoreMenuView(
     navController: NavController,
-    context: Context = LocalContext.current
+    storeMenuViewModel: StoreMenuViewModel = hiltViewModel(),
+    context: Context = LocalContext.current,
 ) {
     Box {
-        PaymentNestedBackground()
-        StoreMenuContent(
-            exchange = {
-//                Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()
-                navController.navigate(NavItem.StoreExchangePayPoint.route)
-            },
-            charge = {
-//                Toast.makeText(context, "업데이트 예정", Toast.LENGTH_SHORT).show()
-                navController.navigate(NavItem.StoreChargeStarPoint.route)
-            },
-            modifier = Modifier.zIndex(1f)
-        )
+        StoreNestedBackground()
+
+        if (storeMenuViewModel.uiState.loadingBar) {
+            StoreMenuLoadingBar()
+        } else {
+            val mongVo = storeMenuViewModel.mongVo.observeAsState()
+
+            StoreMenuContent(
+                exchange = {
+                    mongVo.value?.let {
+                        navController.navigate(NavItem.StoreExchangePayPoint.route)
+                    } ?: run {
+                        Toast.makeText(
+                            context,
+                            "선택된 슬롯이 없습니다.",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    }
+                },
+                charge = {
+                    navController.navigate(NavItem.StoreChargeStarPoint.route)
+                },
+                modifier = Modifier.zIndex(1f)
+            )
+        }
     }
 }
 
@@ -141,5 +159,18 @@ private fun StoreMenuContent(
                 )
             }
         }
+    }
+}
+
+
+@Composable
+private fun StoreMenuLoadingBar(
+    modifier: Modifier = Modifier.zIndex(0f),
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier.fillMaxSize(),
+    ) {
+        LoadingBar()
     }
 }

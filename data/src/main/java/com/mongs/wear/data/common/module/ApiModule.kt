@@ -55,7 +55,7 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideHttpLogInterceptor() : HttpLogInterceptor = HttpLogInterceptor()
+    fun provideHttpLogInterceptor(gson: Gson) : HttpLogInterceptor = HttpLogInterceptor(gson = gson)
 
     @Provides
     @Singleton

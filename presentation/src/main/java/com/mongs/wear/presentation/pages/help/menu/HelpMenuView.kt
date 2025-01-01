@@ -21,13 +21,13 @@ import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
-import com.mongs.wear.presentation.component.background.HelpNestedBackground
-import com.mongs.wear.presentation.component.common.Chip
-import com.mongs.wear.presentation.component.dialog.help.HelpBattleDialog
-import com.mongs.wear.presentation.component.dialog.help.HelpInfoDialog
-import com.mongs.wear.presentation.component.dialog.help.HelpMongDialog
-import com.mongs.wear.presentation.component.dialog.help.HelpPointDialog
-import com.mongs.wear.presentation.component.dialog.help.HelpSlotDialog
+import com.mongs.wear.presentation.component.common.background.HelpNestedBackground
+import com.mongs.wear.presentation.component.common.chip.Chip
+import com.mongs.wear.presentation.dialog.help.HelpBattleDialog
+import com.mongs.wear.presentation.dialog.help.HelpInfoDialog
+import com.mongs.wear.presentation.dialog.help.HelpMongDialog
+import com.mongs.wear.presentation.dialog.help.HelpPointDialog
+import com.mongs.wear.presentation.dialog.help.HelpSlotDialog
 
 @Composable
 fun HelpMenuView(

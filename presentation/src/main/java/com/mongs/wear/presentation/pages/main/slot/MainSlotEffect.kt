@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
 import com.mongs.wear.core.enums.MongStateCode
-import com.mongs.wear.domain.slot.vo.SlotVo
+import com.mongs.wear.domain.management.vo.MongVo
 import com.mongs.wear.presentation.pages.main.slot.MainSlotViewModel.UiState
 import com.mongs.wear.presentation.pages.main.slot.effect.EvolutionEffect
 import com.mongs.wear.presentation.pages.main.slot.effect.GraduatedEffect
@@ -16,31 +16,31 @@ import com.mongs.wear.presentation.pages.main.slot.effect.SleepEffect
 
 @Composable
 fun MainSlotEffect(
-    slotVo: SlotVo,
+    mongVo: MongVo,
     isPageChanging: Boolean,
     evolution: (Long) -> Unit,
     graduationReady: () -> Unit,
     modifier: Modifier = Modifier.zIndex(0f),
     uiState: UiState,
 ) {
-    when (slotVo.stateCode) {
+    when (mongVo.stateCode) {
         MongStateCode.NORMAL -> {
-            if (slotVo.isHappy) {
+            if (mongVo.isHappy) {
                 HeartEffect(modifier = modifier)
-            } else if (slotVo.isSleeping) {
+            } else if (mongVo.isSleeping) {
                 SleepEffect(modifier = modifier)
-            } else if (slotVo.isPoopCleaning) {
+            } else if (mongVo.isPoopCleaning) {
                 PoopCleanEffect(modifier = modifier)
             }
 
             PoopEffect(
-                poopCount = slotVo.poopCount,
+                poopCount = mongVo.poopCount,
                 modifier = modifier,
             )
         }
         MongStateCode.DEAD -> {}
         MongStateCode.GRADUATE_READY -> {
-            if (!isPageChanging && !slotVo.graduateCheck) {
+            if (!isPageChanging && !mongVo.graduateCheck) {
                 GraduationEffect(
                     graduationReady = graduationReady,
                     modifier = modifier,
@@ -54,7 +54,7 @@ fun MainSlotEffect(
         MongStateCode.EVOLUTION_READY -> {
             if (!isPageChanging) {
                 EvolutionEffect(
-                    slotVo = slotVo,
+                    mongVo = mongVo,
                     isEvolution = uiState.isEvolution,
                     runEvolution = { uiState.isEvolution = true },
                     evolution = { mongId -> evolution(mongId) },

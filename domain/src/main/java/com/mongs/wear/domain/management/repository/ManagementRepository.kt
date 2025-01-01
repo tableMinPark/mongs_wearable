@@ -1,8 +1,11 @@
 package com.mongs.wear.domain.management.repository
 
 import com.mongs.wear.domain.management.model.FeedItemModel
+import com.mongs.wear.domain.management.model.MongModel
 
 interface ManagementRepository {
+
+    suspend fun getMongs(): List<MongModel>
 
     suspend fun createMong(name: String, sleepStart: String, sleepEnd: String)
 

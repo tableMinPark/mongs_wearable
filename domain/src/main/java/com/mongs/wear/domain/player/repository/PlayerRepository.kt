@@ -5,13 +5,11 @@ import java.time.LocalDateTime
 
 interface PlayerRepository {
 
-    suspend fun updatePlayer()
-
     suspend fun buySlot()
 
     suspend fun getStarPointLive(): LiveData<Int>
 
-    suspend fun getSlotCountLive(): LiveData<Int>
+    suspend fun getSlotCount(): Int
 
     suspend fun chargeStarPoint(receipt: String, starPoint: Int)
 

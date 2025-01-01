@@ -1,6 +1,5 @@
 package com.mongs.wear.presentation.common.exception
 
-import com.mongs.wear.core.errors.AuthErrorCode
 import com.mongs.wear.core.errors.UserErrorCode
 import com.mongs.wear.core.exception.ErrorException
 import java.util.Collections

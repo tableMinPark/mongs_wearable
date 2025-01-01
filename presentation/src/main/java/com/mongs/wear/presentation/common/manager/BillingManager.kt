@@ -3,7 +3,6 @@ package com.mongs.wear.presentation.common.manager
 import android.app.Activity
 import android.content.Context
 import android.os.Build
-import android.os.SystemClock
 import android.util.Log
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClient.BillingResponseCode
@@ -12,18 +11,13 @@ import com.android.billingclient.api.BillingClient.ProductType
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
-import com.android.billingclient.api.ConsumeParams
-import com.android.billingclient.api.ConsumeResult
 import com.android.billingclient.api.PendingPurchasesParams
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryProductDetailsParams.Product
-import com.android.billingclient.api.QueryPurchaseHistoryParams
 import com.android.billingclient.api.QueryPurchasesParams
-import com.android.billingclient.api.consumePurchase
 import com.android.billingclient.api.queryProductDetails
-import com.android.billingclient.api.queryPurchaseHistory
 import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.store.usecase.ConsumeProductOrderUseCase
 import com.mongs.wear.presentation.common.exception.BillingConnectException
@@ -38,8 +32,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
-import java.time.LocalDateTime
-import java.util.Collections
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.resume
@@ -89,16 +81,20 @@ class BillingManager @Inject constructor(
 
                         _errorEvent.emit(exception)
                     }
-//
 //                    val consumeResult = this@BillingManager.consumeProduct(purchase)
-//                    Log.d("TEST", "consume: ${consumeResult.purchaseToken}")
                 }
             }
-        } else if (billingResult.responseCode == BillingResponseCode.USER_CANCELED) {
+        } else if (billingResult.responseCode in listOf(
+                BillingResponseCode.USER_CANCELED,
+                BillingResponseCode.ERROR,
+                BillingResponseCode.ITEM_ALREADY_OWNED)
+            ) {
+
             CoroutineScope(Dispatchers.IO).launch {
                 _successEvent.emit(Unit)
             }
         }
+        Log.d("TEST", "${billingResult}")
     }
 
     /**
@@ -188,12 +184,7 @@ class BillingManager @Inject constructor(
 
                 val productDetailsParamsList = listOf(
                     BillingFlowParams.ProductDetailsParams.newBuilder()
-                        // retrieve a value for "productDetails" by calling queryProductDetailsAsync()
                         .setProductDetails(productDetailsList.get(0))
-                        // For One-time products, "setOfferToken" method shouldn't be called.
-                        // For subscriptions, to get an offer token, call ProductDetails.subscriptionOfferDetails()
-                        // for a list of offers that are available to the user
-                        //                        .setOfferToken(selectedOfferToken)
                         .build()
                 )
 
@@ -216,7 +207,6 @@ class BillingManager @Inject constructor(
 
         billingClient.queryPurchasesAsync(purchasesParams, { billingResult, purchases ->
             if (billingResult.responseCode == BillingResponseCode.OK) {
-
                 cont.resume(purchases.map { purchase ->
                     OrderVo(
                         productId = purchase.products.get(0),
@@ -230,21 +220,21 @@ class BillingManager @Inject constructor(
         })
     }
 
-    /**
-     * 상품 소비 처리
-     * Backend 에서 처리하도록 변경
-     */
-    private suspend fun consumeProduct(purchase : Purchase): ConsumeResult {
-
-        val consumeParams =
-            ConsumeParams.newBuilder()
-                .setPurchaseToken(purchase.purchaseToken)
-                .build()
-
-        return withContext(Dispatchers.IO) {
-            billingClient.consumePurchase(consumeParams)
-        }
-    }
+//    /**
+//     * 상품 소비 처리
+//     * Backend 에서 처리하도록 변경
+//     */
+//    private suspend fun consumeProduct(purchase : Purchase): ConsumeResult {
+//
+//        val consumeParams =
+//            ConsumeParams.newBuilder()
+//                .setPurchaseToken(purchase.purchaseToken)
+//                .build()
+//
+//        return withContext(Dispatchers.IO) {
+//            billingClient.consumePurchase(consumeParams)
+//        }
+//    }
 
     data class ProductVo(
 

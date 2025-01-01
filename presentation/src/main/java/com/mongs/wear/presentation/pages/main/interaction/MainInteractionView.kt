@@ -22,31 +22,31 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mongs.wear.core.enums.MongStateCode
-import com.mongs.wear.domain.slot.vo.SlotVo
+import com.mongs.wear.domain.management.vo.MongVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.MongResourceCode
 import com.mongs.wear.presentation.assets.NavItem
-import com.mongs.wear.presentation.component.button.CircleImageButton
+import com.mongs.wear.presentation.component.common.button.CircleImageButton
 
 @Composable
 fun MainInteractionView(
     navController: NavController,
-    slotVo: SlotVo,
+    mongVo: MongVo,
     scrollPage: (Int) -> Unit,
     mainInteractionViewModel: MainInteractionViewModel = hiltViewModel(),
     context: Context = LocalContext.current,
 ) {
-    val isEgg = remember { derivedStateOf { MongResourceCode.valueOf(slotVo.mongTypeCode).isEgg } }
-    val isMongEmpty =  remember { derivedStateOf { slotVo.stateCode == MongStateCode.EMPTY || slotVo.stateCode == MongStateCode.DELETE || slotVo.stateCode == MongStateCode.DEAD } }
-    val isGraduateReady = remember { derivedStateOf {  slotVo.stateCode == MongStateCode.GRADUATE_READY } }
+    val isEgg = remember { derivedStateOf { MongResourceCode.valueOf(mongVo.mongTypeCode).isEgg } }
+    val isMongEmpty =  remember { derivedStateOf { mongVo.stateCode == MongStateCode.EMPTY || mongVo.stateCode == MongStateCode.DELETE || mongVo.stateCode == MongStateCode.DEAD } }
+    val isGraduateReady = remember { derivedStateOf {  mongVo.stateCode == MongStateCode.GRADUATE_READY } }
 
     Box {
         MainInteractionContent(
             feed = {
-                slotVo?.let {
+                mongVo?.let {
 
                 }
-                if (isMongEmpty.value || isEgg.value || slotVo.isSleeping) {
+                if (isMongEmpty.value || isEgg.value || mongVo.isSleeping) {
                     Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
                 } else {
                     navController.navigate(NavItem.FeedNested.route)
@@ -59,28 +59,28 @@ fun MainInteractionView(
                 if (isMongEmpty.value || isGraduateReady.value || isEgg.value) {
                     Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
                 } else {
-                    mainInteractionViewModel.sleeping(mongId = slotVo.mongId)
+                    mainInteractionViewModel.sleeping(mongId = mongVo.mongId)
                 }
             },
             slotPick = {
                 navController.navigate(NavItem.SlotPick.route)
             },
             poopClean = {
-                if (isMongEmpty.value || isGraduateReady.value || isEgg.value ||  slotVo.isSleeping) {
+                if (isMongEmpty.value || isGraduateReady.value || isEgg.value ||  mongVo.isSleeping) {
                     Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
                 } else {
-                    mainInteractionViewModel.poopClean(mongId = slotVo.mongId)
+                    mainInteractionViewModel.poopClean(mongId = mongVo.mongId)
                 }
             },
             training = {
-                if (isMongEmpty.value || isEgg.value ||  slotVo.isSleeping) {
+                if (isMongEmpty.value || isEgg.value ||  mongVo.isSleeping) {
                     Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
                 } else {
                     navController.navigate(NavItem.TrainingNested.route)
                 }
             },
             battle = {
-                if (isMongEmpty.value || isEgg.value || slotVo.isSleeping) {
+                if (isMongEmpty.value || isEgg.value || mongVo.isSleeping) {
                     Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
                 } else {
                     navController.navigate(NavItem.BattleNested.route)

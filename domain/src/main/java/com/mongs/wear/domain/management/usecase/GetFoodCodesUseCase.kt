@@ -2,7 +2,7 @@ package com.mongs.wear.domain.management.usecase
 
 import com.mongs.wear.domain.management.repository.ManagementRepository
 import com.mongs.wear.domain.management.vo.FeedItemVo
-import com.mongs.wear.domain.slot.repository.SlotRepository
+import com.mongs.wear.domain.management.repository.SlotRepository
 import javax.inject.Inject
 
 class GetFoodCodesUseCase @Inject constructor(
@@ -17,7 +17,6 @@ class GetFoodCodesUseCase @Inject constructor(
     suspend operator fun invoke(): List<FeedItemVo> = slotRepository.getCurrentSlot()?.let { slotModel ->
 
         managementRepository.getFeedItems(mongId = slotModel.mongId, foodTypeGroupCode = FOOD_TYPE_GROUP_CODE).map { //.associateBy { it.foodTypeCode }
-
             FeedItemVo(
                 foodTypeCode = it.foodTypeCode,
                 foodTypeName = it.foodTypeName,

@@ -25,7 +25,7 @@ interface ManagementApi {
     @GET("manager/management/feed/{mongId}")
     suspend fun getFeedItems(@Path("mongId") mongId: Long, @Query("foodTypeGroupCode") foodTypeGroupCode: String) : Response<ResponseDto<GetFeedItemResponseDto>>
 
-    @POST("manager/management/{mongId}")
+    @POST("manager/management")
     suspend fun createMong(@Body createMongRequestDto: CreateMongRequestDto) : Response<ResponseDto<Void>>
 
     @DELETE("manager/management/{mongId}")

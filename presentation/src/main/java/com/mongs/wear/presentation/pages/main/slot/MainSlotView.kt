@@ -7,26 +7,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.mongs.wear.domain.slot.vo.SlotVo
+import com.mongs.wear.domain.management.vo.MongVo
 import com.mongs.wear.presentation.assets.MongResourceCode
 import com.mongs.wear.presentation.assets.NavItem
 
 @Composable
 fun MainSlotView(
     navController: NavController,
-    slotVo: SlotVo,
+    mongVo: MongVo,
     isPageChanging: State<Boolean>,
     mainSlotViewModel: MainSlotViewModel = hiltViewModel(),
 ) {
     Box {
-        val isEgg = MongResourceCode.valueOf(slotVo.mongTypeCode).isEgg
+        val isEgg = MongResourceCode.valueOf(mongVo.mongTypeCode).isEgg
 
         MainSlotContent(
-            slotVo = slotVo,
+            mongVo = mongVo,
             isPageChanging = isPageChanging.value,
             stroke = {
-                if (!isEgg && !slotVo.isSleeping) {
-                    mainSlotViewModel.stroke(mongId = slotVo.mongId)
+                if (!isEgg && !mongVo.isSleeping) {
+                    mainSlotViewModel.stroke(mongId = mongVo.mongId)
                 }
             },
             navSlotPick = {
@@ -36,13 +36,13 @@ fun MainSlotView(
             modifier = Modifier.zIndex(1f)
         )
         MainSlotEffect(
-            slotVo = slotVo,
+            mongVo = mongVo,
             isPageChanging = isPageChanging.value,
             evolution = { mongId ->
                 mainSlotViewModel.evolution(mongId)
             },
             graduationReady = {
-                mainSlotViewModel.graduationReady(mongId = slotVo.mongId)
+                mainSlotViewModel.graduationReady(mongId = mongVo.mongId)
             },
             uiState = mainSlotViewModel.uiState,
             modifier = Modifier.zIndex(2f),

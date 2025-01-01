@@ -24,7 +24,7 @@ import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
-import com.mongs.wear.presentation.component.button.BlueButton
+import com.mongs.wear.presentation.component.common.button.BlueButton
 
 @Composable
 fun EmptyContent(

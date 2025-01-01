@@ -1,6 +1,7 @@
 package com.mongs.wear.data.common.resolver
 
 import com.mongs.wear.core.enums.MatchStateCode
+import com.mongs.wear.core.enums.MongStateCode
 import com.mongs.wear.data.activity.dto.response.CreateBattleResponseDto
 import com.mongs.wear.data.activity.dto.response.FightBattleResponseDto
 import com.mongs.wear.data.activity.dto.response.OverBattleResponseDto
@@ -171,16 +172,22 @@ class ObserveResolver(
         }
     }
 
-    suspend fun updateMOngState(mongStateObserveResponseDto: MongStateObserveResponseDto) {
+    suspend fun updateMongState(mongStateObserveResponseDto: MongStateObserveResponseDto) {
 
-        roomDB.mongDao().findByMongId(mongId = mongStateObserveResponseDto.mongId)?.let { mongEntity ->
+        roomDB.mongDao().let { dao ->
+            if (mongStateObserveResponseDto.stateCode == MongStateCode.DEAD) {
+                dao.deleteByMongId(mongStateObserveResponseDto.mongId)
+            } else {
+                dao.findByMongId(mongId = mongStateObserveResponseDto.mongId)?.let { mongEntity ->
 
-            roomDB.mongDao().save(
-                mongEntity.update(
-                    stateCode = mongStateObserveResponseDto.stateCode,
-                    isSleeping = mongStateObserveResponseDto.isSleep,
-                )
-            )
+                    roomDB.mongDao().save(
+                        mongEntity.update(
+                            stateCode = mongStateObserveResponseDto.stateCode,
+                            isSleeping = mongStateObserveResponseDto.isSleep,
+                        )
+                    )
+                }
+            }
         }
     }
 
@@ -204,8 +211,6 @@ class ObserveResolver(
     }
 
     suspend fun updatePlayer(playerObserveResponseDto: PlayerObserveResponseDto) {
-
-        playerDataStore.setSlotCount(slotCount = playerObserveResponseDto.slotCount)
 
         playerDataStore.setStarPoint(starPoint = playerObserveResponseDto.starPoint)
 

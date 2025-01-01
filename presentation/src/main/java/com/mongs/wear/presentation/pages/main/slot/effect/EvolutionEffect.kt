@@ -26,12 +26,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.Text
-import com.mongs.wear.domain.slot.vo.SlotVo
+import com.mongs.wear.domain.management.vo.MongVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongResourceCode
 import com.mongs.wear.presentation.assets.MongsWhite
-import com.mongs.wear.presentation.component.common.Mong
+import com.mongs.wear.presentation.component.common.charactor.Mong
 import kotlinx.coroutines.delay
 
 private val imageList = listOf(
@@ -49,7 +49,7 @@ private val delayList = listOf(
 
 @Composable
 fun EvolutionEffect(
-    slotVo: SlotVo,
+    mongVo: MongVo,
     isEvolution: Boolean,
     runEvolution: () -> Unit,
     evolution: (Long) -> Unit,
@@ -63,7 +63,7 @@ fun EvolutionEffect(
                 nowStep = step
                 delay(delayList[step])
             }
-            evolution(slotVo.mongId)
+            evolution(mongVo.mongId)
         }
 
         Box(
@@ -71,7 +71,7 @@ fun EvolutionEffect(
             modifier = modifier.fillMaxSize(),
         ) {
             Mong(
-                mong = MongResourceCode.valueOf(slotVo.mongTypeCode),
+                mong = MongResourceCode.valueOf(mongVo.mongTypeCode),
                 modifier = Modifier.padding(bottom = 25.dp),
                 isPng = true,
             )

@@ -30,23 +30,23 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.wear.compose.material.Text
 import com.mongs.wear.core.enums.MongStateCode
-import com.mongs.wear.domain.slot.vo.SlotVo
+import com.mongs.wear.domain.management.vo.MongVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
-import com.mongs.wear.presentation.component.button.BlueButton
-import com.mongs.wear.presentation.component.button.LeftButton
-import com.mongs.wear.presentation.component.button.RightButton
-import com.mongs.wear.presentation.component.common.LoadingBar
-import com.mongs.wear.presentation.component.common.PayPoint
-import com.mongs.wear.presentation.component.dialog.common.ConfirmAndCancelDialog
+import com.mongs.wear.presentation.component.common.bar.LoadingBar
+import com.mongs.wear.presentation.component.common.button.BlueButton
+import com.mongs.wear.presentation.component.common.button.LeftButton
+import com.mongs.wear.presentation.component.common.button.RightButton
+import com.mongs.wear.presentation.component.common.textbox.PayPoint
+import com.mongs.wear.presentation.dialog.common.ConfirmAndCancelDialog
 import com.mongs.wear.presentation.pages.main.walking.MainWalkingViewModel.UiState
 import kotlin.math.max
 import kotlin.math.min
 
 @Composable
 fun MainWalkingView(
-    slotVo: SlotVo,
+    mongVo: MongVo,
     mainWalkingViewModel: MainWalkingViewModel = hiltViewModel(),
 ) {
     Box {
@@ -74,7 +74,7 @@ fun MainWalkingView(
                     text = "$${chargePayPoint.value}\n환전하시겠습니까?",
                     confirm = {
                         mainWalkingViewModel.chargePayPoint(
-                            mongId = slotVo.mongId,
+                            mongId = mongVo.mongId,
                             walkingCount = 100 * ratio.intValue,
                         )
                     },
@@ -82,7 +82,7 @@ fun MainWalkingView(
                 )
             } else {
                 MainWalkingContent(
-                    slotVo = slotVo,
+                    mongVo = mongVo,
                     chargePayPoint = chargePayPoint.value,
                     payPoint = payPoint.value,
                     walkingCount = walkingCount.value,
@@ -97,20 +97,8 @@ fun MainWalkingView(
 }
 
 @Composable
-private fun MainWalkingLoadingBar(
-    modifier: Modifier = Modifier.zIndex(0f),
-) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier.fillMaxSize(),
-    ) {
-        LoadingBar()
-    }
-}
-
-@Composable
 private fun MainWalkingContent(
-    slotVo: SlotVo,
+    mongVo: MongVo,
     chargePayPoint: Int,
     payPoint: Int,
     walkingCount: Int,
@@ -225,12 +213,24 @@ private fun MainWalkingContent(
                 BlueButton(
                     text = "환전",
                     width = 70,
-                    disable = chargePayPoint == 0 || slotVo.stateCode == MongStateCode.EMPTY,
+                    disable = chargePayPoint == 0 || mongVo.stateCode == MongStateCode.EMPTY,
                     onClick = { uiState.chargePayPointDialog = true },
                 )
             }
 
             Spacer(modifier = Modifier.height(15.dp))
         }
+    }
+}
+
+@Composable
+private fun MainWalkingLoadingBar(
+    modifier: Modifier = Modifier.zIndex(0f),
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier.fillMaxSize(),
+    ) {
+        LoadingBar()
     }
 }

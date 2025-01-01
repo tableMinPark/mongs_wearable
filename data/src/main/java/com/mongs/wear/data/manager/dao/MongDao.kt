@@ -25,8 +25,16 @@ interface MongDao {
     fun findAllByIsCurrentTrue() : List<MongEntity>
 
     @Query("SELECT * FROM mongs_mong")
+    fun findAll() : List<MongEntity>
+
+    @Query("SELECT * FROM mongs_mong")
     fun findLiveAll() : LiveData<List<MongEntity>>
 
+    @Query("DELETE FROM mongs_mong WHERE mongId = :mongId")
+    fun deleteByMongId(mongId: Long)
+
+    @Query("DELETE FROM mongs_mong WHERE mongId NOT IN (:mongIds)")
+    fun deleteByMongIdNotIn(mongIds: List<Long>)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(mongEntity: MongEntity) : Long

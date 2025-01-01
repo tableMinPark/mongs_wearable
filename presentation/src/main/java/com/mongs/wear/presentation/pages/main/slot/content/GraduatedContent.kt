@@ -17,15 +17,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.wear.compose.material.Text
-import com.mongs.wear.domain.slot.vo.SlotVo
+import com.mongs.wear.domain.management.vo.MongVo
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongResourceCode
 import com.mongs.wear.presentation.assets.MongsWhite
-import com.mongs.wear.presentation.component.common.Mong
+import com.mongs.wear.presentation.component.common.charactor.Mong
 
 @Composable
 fun GraduatedContent(
-    slotVo: SlotVo,
+    mongVo: MongVo,
     isPageChanging: Boolean,
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier.zIndex(0f),
@@ -48,7 +48,7 @@ fun GraduatedContent(
                 .fillMaxSize()
         ) {
             Mong(
-                mong = MongResourceCode.valueOf(slotVo.mongTypeCode),
+                mong = MongResourceCode.valueOf(mongVo.mongTypeCode),
                 modifier = Modifier.padding(bottom = 25.dp)
             )
         }

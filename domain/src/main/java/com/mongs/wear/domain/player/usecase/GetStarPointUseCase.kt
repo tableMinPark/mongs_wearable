@@ -7,6 +7,5 @@ import javax.inject.Inject
 class GetStarPointUseCase @Inject constructor(
     private val playerRepository: PlayerRepository,
 ) {
-
     suspend operator fun invoke(): LiveData<Int> = playerRepository.getStarPointLive()
 }

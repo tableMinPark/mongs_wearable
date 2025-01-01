@@ -4,13 +4,14 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.mongs.wear.core.enums.MongStateCode
 import com.mongs.wear.core.enums.MongStatusCode
+import com.mongs.wear.domain.management.model.MongModel
 import java.time.LocalDateTime
 
 @Entity(tableName = "mongs_mong")
 data class MongEntity(
 
     @PrimaryKey
-    val mongId: Long,
+    val mongId: Long = 0L,
 
     val mongName: String,
 
@@ -41,15 +42,15 @@ data class MongEntity(
     var isSleeping: Boolean,
 
     /* 로컬 필드 */
-    var isCurrent: Boolean,
+    var isCurrent: Boolean = false,
 
-    var graduateCheck: Boolean,
+    var graduateCheck: Boolean = false,
 
-    var isHappy: Boolean,
+    var isHappy: Boolean = false,
 
-    var isEating: Boolean,
+    var isEating: Boolean = false,
 
-    var isPoopCleaning: Boolean,
+    var isPoopCleaning: Boolean = false,
 
 ) {
 
@@ -81,10 +82,10 @@ data class MongEntity(
         this.stateCode = stateCode
         this.statusCode = statusCode
         this.isSleeping = isSleeping
+        this.isCurrent = isCurrent
 
         return this
     }
-
 
     fun graduateCheck() {
         this.graduateCheck = true
@@ -107,4 +108,27 @@ data class MongEntity(
         this.isEating = false
         this.isPoopCleaning = false
     }
+
+    fun toMongModel() = MongModel(
+        mongId = this.mongId,
+        mongName = this.mongName,
+        payPoint = this.payPoint,
+        mongTypeCode = this.mongTypeCode,
+        createdAt = this.createdAt,
+        weight = this.weight,
+        expRatio = this.expRatio,
+        healthyRatio = this.healthyRatio,
+        satietyRatio = this.satietyRatio,
+        strengthRatio = this.strengthRatio,
+        fatigueRatio = this.fatigueRatio,
+        poopCount = this.poopCount,
+        stateCode = this.stateCode,
+        statusCode = this.statusCode,
+        isSleeping = this.isSleeping,
+        isCurrent = this.isCurrent,
+        graduateCheck = this.graduateCheck,
+        isHappy = this.isHappy,
+        isEating = this.isEating,
+        isPoopCleaning = this.isPoopCleaning,
+    )
 }

@@ -25,10 +25,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.NavItem
-import com.mongs.wear.presentation.component.button.CircleImageButton
-import com.mongs.wear.presentation.component.button.CircleTextButton
-import com.mongs.wear.presentation.component.common.LoadingBar
-import com.mongs.wear.presentation.component.dialog.common.ConfirmAndCancelDialog
+import com.mongs.wear.presentation.component.common.bar.LoadingBar
+import com.mongs.wear.presentation.component.common.button.CircleImageButton
+import com.mongs.wear.presentation.component.common.button.CircleTextButton
+import com.mongs.wear.presentation.dialog.common.ConfirmAndCancelDialog
 
 @Composable
 fun MainConfigureView(
@@ -90,18 +90,6 @@ fun MainConfigureView(
 }
 
 @Composable
-private fun MainConfigureLoadingBar(
-    modifier: Modifier = Modifier.zIndex(0f),
-) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier.fillMaxSize(),
-    ) {
-        LoadingBar()
-    }
-}
-
-@Composable
 private fun MainConfigureContent(
     payment: () -> Unit,
     help: () -> Unit,
@@ -157,5 +145,18 @@ private fun MainConfigureContent(
                 )
             }
         }
+    }
+}
+
+
+@Composable
+private fun MainConfigureLoadingBar(
+    modifier: Modifier = Modifier.zIndex(0f),
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier.fillMaxSize(),
+    ) {
+        LoadingBar()
     }
 }

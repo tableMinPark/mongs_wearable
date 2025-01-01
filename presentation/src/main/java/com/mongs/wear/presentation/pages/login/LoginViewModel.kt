@@ -160,6 +160,11 @@ class LoginViewModel @Inject constructor(
                     uiState.loadingBar = false
                     uiState.signInButton = true
                 }
+
+                else -> {
+                    uiState.loadingBar = false
+                    uiState.signInButton = true
+                }
             }
         }
     }
