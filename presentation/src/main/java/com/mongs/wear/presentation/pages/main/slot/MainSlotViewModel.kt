@@ -3,12 +3,13 @@ package com.mongs.wear.presentation.pages.main.slot
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.mongs.wear.core.errors.ManagerErrorCode
-import com.mongs.wear.core.exception.ErrorException
-import com.mongs.wear.domain.management.usecase.EvoluteMongUseCase
+import com.mongs.wear.domain.management.exception.EvolutionMongException
+import com.mongs.wear.domain.management.exception.GraduateCheckException
+import com.mongs.wear.domain.management.exception.StrokeMongException
+import com.mongs.wear.domain.management.usecase.EvolutionMongUseCase
 import com.mongs.wear.domain.management.usecase.GraduateCheckMongUseCase
 import com.mongs.wear.domain.management.usecase.StrokeMongUseCase
-import com.mongs.wear.presentation.common.viewModel.BaseViewModel
+import com.mongs.wear.presentation.global.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,52 +18,74 @@ import javax.inject.Inject
 @HiltViewModel
 class MainSlotViewModel @Inject constructor(
     private val strokeMongUseCase: StrokeMongUseCase,
-    private val evoluteMongUseCase: EvoluteMongUseCase,
+    private val evolutionMongUseCase: EvolutionMongUseCase,
     private val graduateCheckMongUseCase: GraduateCheckMongUseCase,
 ): BaseViewModel() {
 
+    init {
+        viewModelScopeWithHandler.launch(Dispatchers.Main) {
+            uiState.loadingBar = false
+        }
+    }
+
     fun stroke(mongId: Long) {
         viewModelScopeWithHandler.launch (Dispatchers.IO) {
-            strokeMongUseCase(mongId = mongId)
+            strokeMongUseCase(
+                StrokeMongUseCase.Param(
+                    mongId = mongId
+                )
+            )
+
+            effectState.happyEffect()
         }
     }
 
     fun evolution(mongId: Long) {
         viewModelScopeWithHandler.launch (Dispatchers.IO) {
-            evoluteMongUseCase(mongId = mongId)
+
+            evolutionMongUseCase(
+                EvolutionMongUseCase.Param(
+                    mongId = mongId
+                )
+            )
         }
     }
 
     fun graduationReady(mongId: Long) {
         viewModelScopeWithHandler.launch (Dispatchers.IO) {
-            graduateCheckMongUseCase(mongId = mongId)
+            graduateCheckMongUseCase(
+                GraduateCheckMongUseCase.Param(
+                    mongId = mongId
+                )
+            )
         }
     }
 
     val uiState: UiState = UiState()
 
-    class UiState (
-        loadingBar: Boolean = false,
-        isEvolution: Boolean = false,
-    ) : BaseUiState() {
-
-        var loadingBar by mutableStateOf(loadingBar)
-        var isEvolution by mutableStateOf(isEvolution)
+    class UiState : BaseUiState() {
+        var isEvolution by mutableStateOf(false)
     }
 
     override fun exceptionHandler(exception: Throwable) {
 
-        if (exception is ErrorException) {
+        when(exception) {
+            is StrokeMongException -> {
+                uiState.loadingBar = false
+            }
 
-            when (exception.code) {
+            is EvolutionMongException -> {
+                uiState.loadingBar = false
+                uiState.isEvolution = false
+            }
 
-                ManagerErrorCode.DATA_MANAGER_EVOLUTION_MONG -> {
-                    uiState.isEvolution = false
-                }
+            is GraduateCheckException -> {
 
-                ManagerErrorCode.DATA_MANAGER_STROKE_MONG -> {}
+            }
 
-                else -> {}
+            else -> {
+                uiState.loadingBar = false
+                uiState.isEvolution = false
             }
         }
     }

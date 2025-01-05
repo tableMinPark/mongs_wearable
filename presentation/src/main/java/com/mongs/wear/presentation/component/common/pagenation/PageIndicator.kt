@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,21 +20,18 @@ import androidx.wear.compose.material.PageIndicatorState
 import com.mongs.wear.presentation.assets.MongsNavy
 import com.mongs.wear.presentation.assets.MongsWhite
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PageIndicator(
     pagerState: PagerState,
     modifier: Modifier = Modifier.zIndex(0f)
 ) {
-    val pageIndicatorState: PageIndicatorState = remember {
-        object : PageIndicatorState {
-            override val pageOffset: Float
-                get() = pagerState.currentPageOffsetFraction
-            override val selectedPage: Int
-                get() = pagerState.currentPage
-            override val pageCount: Int
-                get() = pagerState.pageCount
-        }
+    val pageIndicatorState: PageIndicatorState = object : PageIndicatorState {
+        override val pageOffset: Float
+            get() = pagerState.currentPageOffsetFraction
+        override val selectedPage: Int
+            get() = pagerState.currentPage
+        override val pageCount: Int
+            get() = pagerState.pageCount
     }
 
     Box(
@@ -69,7 +67,6 @@ fun PageIndicator(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Preview(showSystemUi = true, device = Devices.WEAR_OS_SMALL_ROUND)
 @Composable
 private fun PageIndicatorPreview() {

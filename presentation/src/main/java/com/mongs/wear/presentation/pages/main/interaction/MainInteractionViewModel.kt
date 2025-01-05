@@ -1,13 +1,10 @@
 package com.mongs.wear.presentation.pages.main.interaction
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import com.mongs.wear.core.errors.ManagerErrorCode
-import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.domain.management.exception.PoopCleanMongException
+import com.mongs.wear.domain.management.exception.SleepingMongException
 import com.mongs.wear.domain.management.usecase.PoopCleanMongUseCase
 import com.mongs.wear.domain.management.usecase.SleepingMongUseCase
-import com.mongs.wear.presentation.common.viewModel.BaseViewModel
+import com.mongs.wear.presentation.global.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,41 +18,48 @@ class MainInteractionViewModel @Inject constructor(
 
     fun sleeping(mongId: Long) {
         viewModelScopeWithHandler.launch (Dispatchers.IO) {
-            sleepingMongUseCase(mongId = mongId)
-            uiState.navMainSlotView = true
+            sleepingMongUseCase(
+                SleepingMongUseCase.Param(
+                    mongId = mongId
+                )
+            )
+
+            scrollPageMainPagerView()
         }
     }
 
     fun poopClean(mongId: Long) {
         viewModelScopeWithHandler.launch(Dispatchers.IO) {
-            poopCleanMongUseCase(mongId = mongId)
-            uiState.navMainSlotView = true
+
+            poopCleanMongUseCase(
+                PoopCleanMongUseCase.Param(
+                    mongId = mongId
+                )
+            )
+
+            scrollPageMainPagerView()
+
+            effectState.poopCleaningEffect()
         }
     }
 
     val uiState: UiState = UiState()
 
-    class UiState : BaseUiState() {
-
-        var loadingBar by mutableStateOf(false)
-        var navMainSlotView by mutableStateOf(false)
-        var alertSleepingFail by mutableStateOf(false)
-        var alertPoopCleanFail by mutableStateOf(false)
-    }
+    class UiState : BaseUiState() {}
 
     override fun exceptionHandler(exception: Throwable) {
 
-        if (exception is ErrorException) {
+        when(exception) {
+            is SleepingMongException -> {
+                uiState.loadingBar = false
+            }
 
-            when (exception.code) {
+            is PoopCleanMongException -> {
+                uiState.loadingBar = false
+            }
 
-                ManagerErrorCode.DATA_MANAGER_SLEEP_MONG -> {
-                    uiState.alertSleepingFail = true
-                }
-
-                ManagerErrorCode.DATA_MANAGER_POOP_CLEAN_MONG -> {
-                    uiState.alertPoopCleanFail = true
-                }
+            else -> {
+                uiState.loadingBar = false
             }
         }
     }

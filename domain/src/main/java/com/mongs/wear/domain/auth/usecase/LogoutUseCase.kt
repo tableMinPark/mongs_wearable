@@ -1,23 +1,41 @@
 package com.mongs.wear.domain.auth.usecase
 
+import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.domain.auth.exception.JoinException
+import com.mongs.wear.domain.auth.exception.LogoutException
 import com.mongs.wear.domain.auth.repository.AuthRepository
-import com.mongs.wear.domain.common.client.MqttClient
+import com.mongs.wear.domain.global.client.MqttClient
+import com.mongs.wear.domain.global.usecase.BaseNoParamUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class LogoutUseCase @Inject constructor(
     private val mqttClient: MqttClient,
     private val authRepository: AuthRepository,
-) {
-    suspend operator fun invoke() {
+) : BaseNoParamUseCase<Unit>() {
 
-        authRepository.logout()
+    override suspend fun execute() {
 
-        mqttClient.disSubManager()
+        withContext(Dispatchers.IO) {
 
-        mqttClient.disSubPlayer()
+            authRepository.logout()
 
-        mqttClient.disSubBattleMatch()
+            mqttClient.disSubManager()
 
-        mqttClient.disSubSearchMatch()
+            mqttClient.disSubPlayer()
+
+            mqttClient.disSubBattleMatch()
+
+            mqttClient.disSubSearchMatch()
+        }
+    }
+
+    override fun handleException(exception: ErrorException) {
+        super.handleException(exception)
+
+        when(exception.code) {
+            else -> throw LogoutException()
+        }
     }
 }

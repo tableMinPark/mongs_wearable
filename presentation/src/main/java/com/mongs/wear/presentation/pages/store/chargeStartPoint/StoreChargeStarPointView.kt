@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.mongs.wear.presentation.common.manager.BillingManager
+import com.mongs.wear.presentation.global.manager.BillingManager
 import com.mongs.wear.presentation.component.common.background.StoreNestedBackground
 import com.mongs.wear.presentation.component.common.button.BlueButton
 import com.mongs.wear.presentation.component.common.bar.LoadingBar

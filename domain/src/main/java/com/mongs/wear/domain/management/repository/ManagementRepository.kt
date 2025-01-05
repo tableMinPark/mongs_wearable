@@ -28,10 +28,4 @@ interface ManagementRepository {
 //    suspend fun trainingMong(mongId: Long, trainingCode: String, score: Int)
 
     suspend fun poopCleanMong(mongId: Long)
-
-    suspend fun setIsHappy(mongId: Long)
-
-    suspend fun setIsEating(mongId: Long)
-
-    suspend fun setIsPoopCleaning(mongId: Long)
 }

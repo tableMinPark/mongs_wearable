@@ -1,14 +1,13 @@
 package com.mongs.wear.presentation.pages.main.layout
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.mongs.wear.domain.common.usecase.GetBackgroundMapCodeUseCase
+import com.mongs.wear.domain.device.exception.GetBackgroundMapCodeException
+import com.mongs.wear.domain.device.usecase.GetBackgroundMapCodeUseCase
+import com.mongs.wear.domain.management.exception.GetCurrentSlotException
 import com.mongs.wear.domain.management.usecase.GetCurrentSlotUseCase
 import com.mongs.wear.domain.management.vo.MongVo
-import com.mongs.wear.presentation.common.viewModel.BaseViewModel
+import com.mongs.wear.presentation.global.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,10 +31,8 @@ class MainPagerViewModel @Inject constructor(
 
             uiState.loadingBar = true
 
-            _mongVo.addSource(withContext(Dispatchers.IO) { getCurrentSlotUseCase() }) { mongModel ->
-                mongModel?.let { mongVo ->
-                    _mongVo.value = mongVo
-                }
+            _mongVo.addSource(withContext(Dispatchers.IO) { getCurrentSlotUseCase() }) { mongVo ->
+                _mongVo.value = mongVo
             }
 
             _backgroundMapCode.addSource(withContext(Dispatchers.IO) { getBackgroundMapCodeUseCase() }) { backgroundMapCode ->
@@ -49,9 +46,25 @@ class MainPagerViewModel @Inject constructor(
     val uiState = UiState()
 
     class UiState : BaseUiState() {
-        // 로딩바
-        var loadingBar by mutableStateOf(false)
     }
 
-    override fun exceptionHandler(exception: Throwable) {}
+    override fun exceptionHandler(exception: Throwable) {
+
+        when(exception) {
+            is GetCurrentSlotException -> {
+                uiState.loadingBar = false
+            }
+
+            is GetBackgroundMapCodeException -> {
+                uiState.loadingBar = false
+            }
+
+            else -> {
+                uiState.loadingBar = false
+            }
+        }
+    }
 }
+
+// 285510201
+// 285810197

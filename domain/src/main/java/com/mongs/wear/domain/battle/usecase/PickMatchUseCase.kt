@@ -1,26 +1,50 @@
 package com.mongs.wear.domain.battle.usecase
 
 import com.mongs.wear.core.enums.MatchRoundCode
+import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.domain.battle.exception.PickMatchException
 import com.mongs.wear.domain.battle.repository.BattleRepository
+import com.mongs.wear.domain.global.usecase.BaseParamUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class PickMatchUseCase @Inject constructor(
     private val battleRepository: BattleRepository,
-) {
-    suspend operator fun invoke(roomId: Long, playerId: String, targetPlayerId: String, pickCode: MatchRoundCode) {
+) : BaseParamUseCase<PickMatchUseCase.Param, Unit>() {
 
-        when (pickCode) {
+    override suspend fun execute(param: Param) {
 
-            MatchRoundCode.MATCH_PICK_ATTACK ->
-                battleRepository.pickMatch(roomId = roomId, targetPlayerId = targetPlayerId, pickCode = pickCode)
+        withContext(Dispatchers.IO) {
+            when (param.pickCode) {
 
-            MatchRoundCode.MATCH_PICK_DEFENCE ->
-                battleRepository.pickMatch(roomId = roomId, targetPlayerId = playerId, pickCode = pickCode)
+                MatchRoundCode.MATCH_PICK_ATTACK ->
+                    battleRepository.pickMatch(roomId = param.roomId, targetPlayerId = param.targetPlayerId, pickCode = param.pickCode)
 
-            MatchRoundCode.MATCH_PICK_HEAL ->
-                battleRepository.pickMatch(roomId = roomId, targetPlayerId = playerId, pickCode = pickCode)
+                MatchRoundCode.MATCH_PICK_DEFENCE ->
+                    battleRepository.pickMatch(roomId = param.roomId, targetPlayerId = param.targetPlayerId, pickCode = param.pickCode)
 
-            else -> {}
+                MatchRoundCode.MATCH_PICK_HEAL ->
+                    battleRepository.pickMatch(roomId = param.roomId, targetPlayerId = param.targetPlayerId, pickCode = param.pickCode)
+
+                else -> {}
+            }
         }
+    }
+
+    data class Param(
+
+        val roomId: Long,
+
+        val playerId: String,
+
+        val targetPlayerId: String,
+
+        val pickCode: MatchRoundCode,
+    )
+
+    override fun handleException(exception: ErrorException) {
+        super.handleException(exception)
+        throw PickMatchException()
     }
 }

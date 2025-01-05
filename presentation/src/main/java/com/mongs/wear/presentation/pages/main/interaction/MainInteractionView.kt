@@ -11,9 +11,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,34 +28,20 @@ import com.mongs.wear.presentation.component.common.button.CircleImageButton
 @Composable
 fun MainInteractionView(
     navController: NavController,
-    mongVo: MongVo,
-    scrollPage: (Int) -> Unit,
+    mongVo: MongVo?,
     mainInteractionViewModel: MainInteractionViewModel = hiltViewModel(),
-    context: Context = LocalContext.current,
 ) {
-    val isEgg = remember { derivedStateOf { MongResourceCode.valueOf(mongVo.mongTypeCode).isEgg } }
-    val isMongEmpty =  remember { derivedStateOf { mongVo.stateCode == MongStateCode.EMPTY || mongVo.stateCode == MongStateCode.DELETE || mongVo.stateCode == MongStateCode.DEAD } }
-    val isGraduateReady = remember { derivedStateOf {  mongVo.stateCode == MongStateCode.GRADUATE_READY } }
-
     Box {
         MainInteractionContent(
+            mongVo = mongVo,
             feed = {
-                mongVo?.let {
-
-                }
-                if (isMongEmpty.value || isEgg.value || mongVo.isSleeping) {
-                    Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
-                } else {
-                    navController.navigate(NavItem.FeedNested.route)
-                }
+                navController.navigate(NavItem.FeedNested.route)
             },
             collection = {
                 navController.navigate(NavItem.CollectionNested.route)
             },
             sleeping = {
-                if (isMongEmpty.value || isGraduateReady.value || isEgg.value) {
-                    Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
-                } else {
+                mongVo?.let {
                     mainInteractionViewModel.sleeping(mongId = mongVo.mongId)
                 }
             },
@@ -66,53 +49,24 @@ fun MainInteractionView(
                 navController.navigate(NavItem.SlotPick.route)
             },
             poopClean = {
-                if (isMongEmpty.value || isGraduateReady.value || isEgg.value ||  mongVo.isSleeping) {
-                    Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
-                } else {
+                mongVo?.let {
                     mainInteractionViewModel.poopClean(mongId = mongVo.mongId)
                 }
             },
             training = {
-                if (isMongEmpty.value || isEgg.value ||  mongVo.isSleeping) {
-                    Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
-                } else {
-                    navController.navigate(NavItem.TrainingNested.route)
-                }
+                navController.navigate(NavItem.TrainingNested.route)
             },
             battle = {
-                if (isMongEmpty.value || isEgg.value || mongVo.isSleeping) {
-                    Toast.makeText(context, "불가능한 상태", Toast.LENGTH_SHORT).show()
-                } else {
-                    navController.navigate(NavItem.BattleNested.route)
-                }
+                navController.navigate(NavItem.BattleNested.route)
             },
             modifier = Modifier.zIndex(1f)
         )
-    }
-
-    LaunchedEffect(mainInteractionViewModel.uiState.navMainSlotView) {
-        if (mainInteractionViewModel.uiState.navMainSlotView) {
-            scrollPage(2)
-            mainInteractionViewModel.uiState.navMainSlotView = false
-        }
-    }
-    LaunchedEffect(mainInteractionViewModel.uiState.alertSleepingFail) {
-        if (mainInteractionViewModel.uiState.alertSleepingFail) {
-            Toast.makeText(context, "잠시후 다시 시도", Toast.LENGTH_SHORT).show()
-            mainInteractionViewModel.uiState.alertSleepingFail = false
-        }
-    }
-
-    LaunchedEffect(mainInteractionViewModel.uiState.alertPoopCleanFail) {
-        if (mainInteractionViewModel.uiState.alertPoopCleanFail) {
-            Toast.makeText(context, "잠시후 다시 시도", Toast.LENGTH_SHORT).show()
-            mainInteractionViewModel.uiState.alertPoopCleanFail = false
-        }
     }
 }
 
 @Composable
 private fun MainInteractionContent(
+    mongVo: MongVo?,
     feed: () -> Unit,
     collection: () -> Unit,
     sleeping: () -> Unit,
@@ -121,6 +75,7 @@ private fun MainInteractionContent(
     training: () -> Unit,
     battle: () -> Unit,
     modifier: Modifier = Modifier.zIndex(0f),
+    context: Context = LocalContext.current
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -137,7 +92,21 @@ private fun MainInteractionContent(
                 CircleImageButton(
                     icon = R.drawable.feed,
                     border = R.drawable.interaction_bnt_yellow,
-                    onClick = feed,
+                    onClick = {
+                        mongVo?.let {
+                            if (MongResourceCode.valueOf(mongVo.mongTypeCode).isEgg) {
+                                Toast.makeText(context, "알 상태에서는 불가능", Toast.LENGTH_SHORT).show()
+                            } else if (mongVo.isSleeping) {
+                                Toast.makeText(context, "수면 상태에서는 불가능", Toast.LENGTH_SHORT).show()
+                            } else if (mongVo.stateCode == MongStateCode.DEAD) {
+                                Toast.makeText(context, "죽음 상태에서는 불가능", Toast.LENGTH_SHORT).show()
+                            } else {
+                                feed()
+                            }
+                        } ?: run {
+                            Toast.makeText(context, "선택 된 몽이 없음", Toast.LENGTH_SHORT).show()
+                        }
+                    },
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -156,7 +125,19 @@ private fun MainInteractionContent(
                 CircleImageButton(
                     icon = R.drawable.sleep,
                     border = R.drawable.interaction_bnt_blue,
-                    onClick = sleeping,
+                    onClick = {
+                        mongVo?.let {
+                            if (MongResourceCode.valueOf(mongVo.mongTypeCode).isEgg) {
+                                Toast.makeText(context, "알 상태에서는 불가능", Toast.LENGTH_SHORT).show()
+                            } else if (mongVo.stateCode == MongStateCode.DEAD) {
+                                Toast.makeText(context, "죽음 상태에서는 불가능", Toast.LENGTH_SHORT).show()
+                            } else {
+                                sleeping()
+                            }
+                        } ?: run {
+                            Toast.makeText(context, "선택 된 몽이 없음", Toast.LENGTH_SHORT).show()
+                        }
+                    },
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -172,7 +153,21 @@ private fun MainInteractionContent(
                 CircleImageButton(
                     icon = R.drawable.poop,
                     border = R.drawable.interaction_bnt_purple,
-                    onClick = poopClean,
+                    onClick = {
+                        mongVo?.let {
+                            if (MongResourceCode.valueOf(mongVo.mongTypeCode).isEgg) {
+                                Toast.makeText(context, "알 상태에서는 불가능", Toast.LENGTH_SHORT).show()
+                            } else if (mongVo.stateCode == MongStateCode.DEAD) {
+                                Toast.makeText(context, "죽음 상태에서는 불가능", Toast.LENGTH_SHORT).show()
+                            } else if (mongVo.isSleeping) {
+                                Toast.makeText(context, "수면 상태에서는 불가능", Toast.LENGTH_SHORT).show()
+                            } else {
+                                poopClean()
+                            }
+                        } ?: run {
+                            Toast.makeText(context, "선택 된 몽이 없음", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 )
             }
 
@@ -183,7 +178,21 @@ private fun MainInteractionContent(
                 CircleImageButton(
                     icon = R.drawable.activity,
                     border = R.drawable.interaction_bnt_green,
-                    onClick = training,
+                    onClick = {
+                        mongVo?.let {
+                            if (MongResourceCode.valueOf(mongVo.mongTypeCode).isEgg) {
+                                Toast.makeText(context, "알 상태에서는 불가능", Toast.LENGTH_SHORT).show()
+                            } else if (mongVo.isSleeping) {
+                                Toast.makeText(context, "수면 상태에서는 불가능", Toast.LENGTH_SHORT).show()
+                            } else if (mongVo.stateCode == MongStateCode.DEAD) {
+                                Toast.makeText(context, "죽음 상태에서는 불가능", Toast.LENGTH_SHORT).show()
+                            } else {
+                                training()
+                            }
+                        } ?: run {
+                            Toast.makeText(context, "선택 된 몽이 없음", Toast.LENGTH_SHORT).show()
+                        }
+                    },
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -191,7 +200,21 @@ private fun MainInteractionContent(
                 CircleImageButton(
                     icon = R.drawable.battle,
                     border = R.drawable.interaction_bnt_pink,
-                    onClick = battle,
+                    onClick = {
+                        mongVo?.let {
+                            if (MongResourceCode.valueOf(mongVo.mongTypeCode).isEgg) {
+                                Toast.makeText(context, "알 상태에서는 불가능", Toast.LENGTH_SHORT).show()
+                            } else if (mongVo.isSleeping) {
+                                Toast.makeText(context, "수면 상태에서는 불가능", Toast.LENGTH_SHORT).show()
+                            } else if (mongVo.stateCode == MongStateCode.DEAD) {
+                                Toast.makeText(context, "죽음 상태에서는 불가능", Toast.LENGTH_SHORT).show()
+                            } else {
+                                battle()
+                            }
+                        } ?: run {
+                            Toast.makeText(context, "선택 된 몽이 없음", Toast.LENGTH_SHORT).show()
+                        }
+                    },
                 )
             }
         }

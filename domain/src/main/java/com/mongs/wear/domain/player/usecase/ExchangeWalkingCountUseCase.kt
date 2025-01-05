@@ -1,18 +1,45 @@
 package com.mongs.wear.domain.player.usecase
 
-import com.mongs.wear.domain.common.repository.AppRepository
+import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.domain.device.repository.DeviceRepository
+import com.mongs.wear.domain.global.usecase.BaseParamUseCase
+import com.mongs.wear.domain.player.exception.ExchangeWalkingCountException
 import com.mongs.wear.domain.player.repository.PlayerRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ExchangeWalkingCountUseCase @Inject constructor(
-    private val appRepository: AppRepository,
+    private val deviceRepository: DeviceRepository,
     private val playerRepository: PlayerRepository,
-) {
+) : BaseParamUseCase<ExchangeWalkingCountUseCase.Param, Unit>() {
 
-    suspend operator fun invoke(mongId: Long, walkingCount: Int) {
+    override suspend fun execute(param: Param) {
 
-        val deviceBootedDt = appRepository.getDeviceBootedDt()
+        withContext(Dispatchers.IO) {
 
-        playerRepository.exchangeWalking(mongId = mongId, walkingCount = walkingCount, deviceBootedDt = deviceBootedDt)
+            val deviceBootedDt = deviceRepository.getDeviceBootedDt()
+
+            playerRepository.exchangeWalkingCount(
+                mongId = param.mongId,
+                walkingCount = param.walkingCount,
+                deviceBootedDt = deviceBootedDt
+            )
+        }
+    }
+
+    data class Param(
+
+        val mongId: Long,
+
+        val walkingCount: Int,
+    )
+
+    override fun handleException(exception: ErrorException) {
+        super.handleException(exception)
+
+        when(exception.code) {
+            else -> throw ExchangeWalkingCountException()
+        }
     }
 }

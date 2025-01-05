@@ -11,4 +11,4 @@ open class ErrorException(
 
     override val message: String = code.getMessage()
 
-) : RuntimeException()
+) : RuntimeException(message)

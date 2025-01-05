@@ -40,12 +40,6 @@ data class MongModel(
     val isCurrent: Boolean,
 
     val graduateCheck: Boolean,
-
-    val isHappy: Boolean,
-
-    val isEating: Boolean,
-
-    val isPoopCleaning: Boolean,
 ) {
 
     fun toMongVo() = MongVo(
@@ -64,9 +58,6 @@ data class MongModel(
         stateCode = this.stateCode,
         payPoint = this.payPoint,
         born = this.createdAt,
-        isHappy = this.isHappy,
-        isEating = this.isEating,
-        isPoopCleaning = this.isPoopCleaning,
         graduateCheck = this.graduateCheck,
         isCurrent = this.isCurrent,
     )

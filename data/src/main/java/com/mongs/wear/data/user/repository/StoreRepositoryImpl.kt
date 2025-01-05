@@ -8,7 +8,9 @@ import com.mongs.wear.data.user.exception.GetConsumedOrderIdsException
 import com.mongs.wear.data.user.exception.GetProductIdsException
 import com.mongs.wear.domain.store.repository.StoreRepository
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class StoreRepositoryImpl @Inject constructor(
     private val storeApi: StoreApi,
 ) : StoreRepository {

@@ -1,13 +1,11 @@
 package com.mongs.wear.presentation.pages.store.menu
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import com.mongs.wear.domain.management.exception.GetCurrentSlotException
 import com.mongs.wear.domain.management.usecase.GetCurrentSlotUseCase
 import com.mongs.wear.domain.management.vo.MongVo
-import com.mongs.wear.presentation.common.viewModel.BaseViewModel
+import com.mongs.wear.presentation.global.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,9 +38,18 @@ class StoreMenuViewModel @Inject constructor(
     val uiState = UiState()
 
     class UiState : BaseUiState() {
-
-        var loadingBar by mutableStateOf(false)
     }
 
-    override fun exceptionHandler(exception: Throwable) {}
+    override fun exceptionHandler(exception: Throwable) {
+
+        when(exception) {
+            is GetCurrentSlotException -> {
+                uiState.loadingBar = false
+            }
+
+            else -> {
+                uiState.loadingBar = false
+            }
+        }
+    }
 }

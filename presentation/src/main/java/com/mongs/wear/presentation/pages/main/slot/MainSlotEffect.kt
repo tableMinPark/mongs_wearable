@@ -6,13 +6,14 @@ import androidx.compose.ui.zIndex
 import com.mongs.wear.core.enums.MongStateCode
 import com.mongs.wear.domain.management.vo.MongVo
 import com.mongs.wear.presentation.pages.main.slot.MainSlotViewModel.UiState
-import com.mongs.wear.presentation.pages.main.slot.effect.EvolutionEffect
-import com.mongs.wear.presentation.pages.main.slot.effect.GraduatedEffect
-import com.mongs.wear.presentation.pages.main.slot.effect.GraduationEffect
-import com.mongs.wear.presentation.pages.main.slot.effect.HeartEffect
-import com.mongs.wear.presentation.pages.main.slot.effect.PoopCleanEffect
-import com.mongs.wear.presentation.pages.main.slot.effect.PoopEffect
-import com.mongs.wear.presentation.pages.main.slot.effect.SleepEffect
+import com.mongs.wear.presentation.component.main.slot.effect.EvolutionEffect
+import com.mongs.wear.presentation.component.main.slot.effect.GraduatedEffect
+import com.mongs.wear.presentation.component.main.slot.effect.GraduationEffect
+import com.mongs.wear.presentation.component.main.slot.effect.HeartEffect
+import com.mongs.wear.presentation.component.main.slot.effect.PoopCleanEffect
+import com.mongs.wear.presentation.component.main.slot.effect.PoopEffect
+import com.mongs.wear.presentation.component.main.slot.effect.SleepEffect
+import com.mongs.wear.presentation.global.viewModel.BaseViewModel
 
 @Composable
 fun MainSlotEffect(
@@ -24,13 +25,14 @@ fun MainSlotEffect(
     uiState: UiState,
 ) {
     when (mongVo.stateCode) {
+
         MongStateCode.NORMAL -> {
-            if (mongVo.isHappy) {
+            if (BaseViewModel.effectState.isHappy) {
                 HeartEffect(modifier = modifier)
+            } else if (BaseViewModel.effectState.isPoopCleaning) {
+                PoopCleanEffect(modifier = modifier)
             } else if (mongVo.isSleeping) {
                 SleepEffect(modifier = modifier)
-            } else if (mongVo.isPoopCleaning) {
-                PoopCleanEffect(modifier = modifier)
             }
 
             PoopEffect(
@@ -38,7 +40,9 @@ fun MainSlotEffect(
                 modifier = modifier,
             )
         }
+
         MongStateCode.DEAD -> {}
+
         MongStateCode.GRADUATE_READY -> {
             if (!isPageChanging && !mongVo.graduateCheck) {
                 GraduationEffect(
@@ -51,6 +55,7 @@ fun MainSlotEffect(
                 )
             }
         }
+
         MongStateCode.EVOLUTION_READY -> {
             if (!isPageChanging) {
                 EvolutionEffect(
@@ -62,9 +67,11 @@ fun MainSlotEffect(
                 )
             }
         }
+
         MongStateCode.GRADUATE -> {}
-        MongStateCode.EMPTY -> {}
+
         MongStateCode.DELETE -> {}
+
         else -> {}
     }
 }

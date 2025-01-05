@@ -6,11 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.core.errors.UserErrorCode
-import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.domain.collection.exception.GetMongCollectionException
 import com.mongs.wear.domain.collection.usecase.GetMongCollectionsUseCase
 import com.mongs.wear.domain.collection.vo.MongCollectionVo
-import com.mongs.wear.presentation.common.viewModel.BaseViewModel
+import com.mongs.wear.presentation.global.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,19 +41,20 @@ class CollectionMongPickViewModel @Inject constructor(
 
     class UiState : BaseUiState() {
         var navCollectionMenu by mutableStateOf(false)
-        var loadingBar by mutableStateOf(false)
         var detailDialog by mutableStateOf(false)
     }
 
     override fun exceptionHandler(exception: Throwable) {
 
-        if (exception is ErrorException) {
+        when(exception) {
+            is GetMongCollectionException -> {
+                uiState.loadingBar = false
+                uiState.navCollectionMenu = true
+            }
 
-            when (exception.code) {
-                UserErrorCode.DATA_USER_GET_MONG_COLLECTIONS -> {
-                    uiState.loadingBar = false
-                    uiState.navCollectionMenu = true
-                }
+            else -> {
+                uiState.loadingBar = false
+                uiState.detailDialog = false
             }
         }
     }

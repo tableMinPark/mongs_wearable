@@ -28,13 +28,13 @@ import com.mongs.wear.presentation.component.slot.Slot
 import com.mongs.wear.presentation.dialog.common.ConfirmAndCancelDialog
 import com.mongs.wear.presentation.dialog.slotPick.SlotAddDialog
 import com.mongs.wear.presentation.dialog.slotPick.SlotDetailDialog
+import com.mongs.wear.presentation.global.viewModel.BaseViewModel
 import kotlin.math.max
 import kotlin.math.min
 
 @Composable
 fun SlotPickView(
     navController: NavController,
-    scrollPage: (Int) -> Unit,
     slotPickViewModel: SlotPickViewModel = hiltViewModel(),
 ) {
     Box {
@@ -164,7 +164,7 @@ fun SlotPickView(
 
     LaunchedEffect(slotPickViewModel.uiState.navMainPager) {
         if (slotPickViewModel.uiState.navMainPager) {
-            scrollPage(2)
+            BaseViewModel.scrollPageMainPagerView()
             navController.navigate(NavItem.MainPager.route) { popUpTo(navController.graph.id) }
         }
     }

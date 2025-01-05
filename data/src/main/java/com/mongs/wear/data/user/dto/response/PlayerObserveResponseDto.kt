@@ -4,7 +4,7 @@ data class PlayerObserveResponseDto(
 
     val accountId: Long,
 
-    val starPoint: Int,
+    val slotCount: Int,
 
-    val walkingCount: Int,
+    val starPoint: Int,
 )

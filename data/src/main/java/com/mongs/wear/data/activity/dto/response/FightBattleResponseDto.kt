@@ -1,6 +1,6 @@
 package com.mongs.wear.data.activity.dto.response
 
-import com.mongs.wear.data.activity.vo.MatchPlayerVo
+import com.mongs.wear.data.activity.dto.etc.MatchPlayerDto
 
 data class FightBattleResponseDto(
 
@@ -10,5 +10,5 @@ data class FightBattleResponseDto(
 
     val isLastRound: Boolean,
 
-    val battlePlayers: Set<MatchPlayerVo>,
+    val battlePlayers: Set<MatchPlayerDto>,
 )

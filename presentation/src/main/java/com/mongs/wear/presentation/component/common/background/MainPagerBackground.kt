@@ -32,7 +32,7 @@ fun MainPagerBackground(
 ) {
     val backgroundAlpha = remember {
         derivedStateOf {
-            val currentPage = pagerState.currentPage
+            val currentPage = if (pagerState.pageCount == 5) pagerState.currentPage else pagerState.currentPage + 2
             val ratio = pagerState.currentPageOffsetFraction.coerceIn(-1f, 1f)
             val nextPage = if (ratio < 0) {
                 currentPage - 1

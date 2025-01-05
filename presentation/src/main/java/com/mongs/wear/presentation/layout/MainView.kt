@@ -12,11 +12,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -36,11 +34,11 @@ import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
 import com.mongs.wear.presentation.assets.NavItem
-import com.mongs.wear.presentation.common.viewModel.BaseViewModel
 import com.mongs.wear.presentation.component.common.background.MainBackground
 import com.mongs.wear.presentation.component.common.background.ServerErrorBackground
-import com.mongs.wear.presentation.component.common.button.BlueButton
 import com.mongs.wear.presentation.component.common.bar.LoadingBar
+import com.mongs.wear.presentation.component.common.button.BlueButton
+import com.mongs.wear.presentation.global.viewModel.BaseViewModel
 import com.mongs.wear.presentation.pages.collection.map.CollectionMapPickView
 import com.mongs.wear.presentation.pages.collection.menu.CollectionMenuView
 import com.mongs.wear.presentation.pages.collection.mong.CollectionMongPickView
@@ -52,7 +50,6 @@ import com.mongs.wear.presentation.pages.slot.SlotPickView
 import com.mongs.wear.presentation.pages.store.chargeStartPoint.StoreChargeStarPointView
 import com.mongs.wear.presentation.pages.store.exchangePayPoint.StoreExchangePayPointView
 import com.mongs.wear.presentation.pages.store.menu.StoreMenuView
-import kotlinx.coroutines.launch
 
 @Composable
 fun MainView (
@@ -133,15 +130,7 @@ fun NetworkErrorContent (
  */
 @Composable
 fun NavContent() {
-    val coroutineScope = rememberCoroutineScope()
     val navController = rememberSwipeDismissableNavController()
-    val pagerState = rememberPagerState(initialPage = 2) { 5 }
-
-    val pagerScroll = fun (page: Int) {
-        coroutineScope.launch {
-            pagerState.scrollToPage(page)
-        }
-    }
 
     SwipeDismissableNavHost(
         navController = navController,
@@ -154,8 +143,7 @@ fun NavContent() {
         composable(route = NavItem.MainPager.route) {
             MainPagerView(
                 navController = navController,
-                pagerState = pagerState,
-                pagerScroll = pagerScroll,
+//                pagerState = pagerState,
             )
         }
 
@@ -190,7 +178,7 @@ fun NavContent() {
 //        }
 //
         composable(route = NavItem.SlotPick.route) {
-            SlotPickView(navController = navController, scrollPage = pagerScroll)
+            SlotPickView(navController = navController)
         }
 
         navigation(

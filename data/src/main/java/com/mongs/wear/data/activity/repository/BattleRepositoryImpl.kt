@@ -13,25 +13,27 @@ import com.mongs.wear.data.activity.exception.PickMatchException
 import com.mongs.wear.data.activity.exception.UpdateOverMatchException
 import com.mongs.wear.data.activity.exception.NotExistsMatchException
 import com.mongs.wear.data.activity.exception.NotExistsMatchPlayerException
-import com.mongs.wear.data.common.datastore.AppDataStore
-import com.mongs.wear.data.common.exception.PubMqttException
-import com.mongs.wear.data.common.room.RoomDB
-import com.mongs.wear.domain.common.client.MqttClient
+import com.mongs.wear.data.device.datastore.DeviceDataStore
+import com.mongs.wear.data.global.exception.PubMqttException
+import com.mongs.wear.data.global.room.RoomDB
+import com.mongs.wear.domain.global.client.MqttClient
 import com.mongs.wear.domain.battle.model.MatchModel
 import com.mongs.wear.domain.battle.model.MatchPlayerModel
 import com.mongs.wear.domain.battle.repository.BattleRepository
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class BattleRepositoryImpl @Inject constructor(
     private val roomDB: RoomDB,
     private val battleApi: BattleApi,
     private val mqttClient: MqttClient,
-    private val appDataStore: AppDataStore,
+    private val deviceDataStore: DeviceDataStore,
 ): BattleRepository {
 
     override suspend fun getMatchLive(): LiveData<MatchModel> {
 
-        val deviceId = appDataStore.getDeviceId()
+        val deviceId = deviceDataStore.getDeviceId()
 
         return roomDB.matchRoomDao().findLiveByDeviceId(deviceId = deviceId).map { matchRoomEntity ->
             matchRoomEntity?.let {

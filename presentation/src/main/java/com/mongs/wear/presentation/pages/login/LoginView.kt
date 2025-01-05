@@ -35,11 +35,11 @@ import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
 import com.mongs.wear.presentation.assets.NavItem
+import com.mongs.wear.presentation.component.common.Logo
 import com.mongs.wear.presentation.component.common.background.LoginBackground
+import com.mongs.wear.presentation.component.common.bar.LoadingBar
 import com.mongs.wear.presentation.component.common.button.BlueButton
 import com.mongs.wear.presentation.component.common.button.GoogleSignInButton
-import com.mongs.wear.presentation.component.common.bar.LoadingBar
-import com.mongs.wear.presentation.component.common.Logo
 import com.mongs.wear.presentation.pages.login.LoginViewModel.UiState
 
 @Composable
@@ -56,13 +56,6 @@ fun LoginView(
 //            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 //        }
 //    }
-
-    /**
-     * 구글 로그인 확인
-     */
-    LaunchedEffect(Unit) {
-        loginViewModel.login()
-    }
 
     /**
      * 구글 로그인

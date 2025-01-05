@@ -4,7 +4,7 @@ import android.content.Context
 import com.google.gson.Gson
 import com.mongs.wear.data.R
 import com.mongs.wear.data.auth.api.AuthApi
-import com.mongs.wear.data.common.interceptor.HttpLogInterceptor
+import com.mongs.wear.data.global.interceptor.HttpLogInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

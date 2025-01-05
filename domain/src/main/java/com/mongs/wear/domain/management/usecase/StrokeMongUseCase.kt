@@ -1,15 +1,28 @@
 package com.mongs.wear.domain.management.usecase
 
+import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.domain.global.usecase.BaseParamUseCase
+import com.mongs.wear.domain.management.exception.StrokeMongException
 import com.mongs.wear.domain.management.repository.ManagementRepository
 import javax.inject.Inject
 
 class StrokeMongUseCase @Inject constructor(
     private val managementRepository: ManagementRepository,
-) {
-    suspend operator fun invoke(mongId: Long) {
+) : BaseParamUseCase<StrokeMongUseCase.Param, Unit>() {
 
-        managementRepository.strokeMong(mongId = mongId)
+    override suspend fun execute(param: Param) {
+        managementRepository.strokeMong(mongId = param.mongId)
+    }
 
-        managementRepository.setIsHappy(mongId = mongId)
+    data class Param(
+        val mongId: Long,
+    )
+
+    override fun handleException(exception: ErrorException) {
+        super.handleException(exception)
+
+        when(exception.code) {
+            else -> throw StrokeMongException()
+        }
     }
 }

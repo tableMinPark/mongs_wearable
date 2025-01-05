@@ -4,10 +4,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.mongs.wear.core.enums.FeedbackCode
-import com.mongs.wear.core.errors.UserErrorCode
-import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.domain.feedback.exception.CreateFeedbackException
 import com.mongs.wear.domain.feedback.usecase.CreateFeedbackUseCase
-import com.mongs.wear.presentation.common.viewModel.BaseViewModel
+import com.mongs.wear.presentation.global.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,13 +17,23 @@ class FeedbackViewModel @Inject constructor(
     private val createFeedbackUseCase: CreateFeedbackUseCase
 ) : BaseViewModel() {
 
+    init {
+        viewModelScopeWithHandler.launch(Dispatchers.Main) {
+            uiState.loadingBar = false
+        }
+    }
+
     fun createFeedback(feedbackCode: FeedbackCode, content: String) {
         viewModelScopeWithHandler.launch(Dispatchers.IO) {
 
             uiState.loadingBar = true
             uiState.inputDialog = false
 
-            createFeedbackUseCase(title = feedbackCode.message, content = content)
+            createFeedbackUseCase(
+                CreateFeedbackUseCase.Param(
+                    title = feedbackCode.message, content = content
+                )
+            )
 
             uiState.loadingBar = false
             uiState.confirmDialog = true
@@ -35,7 +44,6 @@ class FeedbackViewModel @Inject constructor(
     val uiState = UiState()
 
     class UiState : BaseUiState() {
-        var loadingBar by mutableStateOf(false)
         var inputDialog by mutableStateOf(false)
         var addDialog by mutableStateOf(false)
         var confirmDialog by mutableStateOf(false)
@@ -43,12 +51,13 @@ class FeedbackViewModel @Inject constructor(
 
     override fun exceptionHandler(exception: Throwable) {
 
-        if (exception is ErrorException) {
+        when(exception) {
+            is CreateFeedbackException -> {
+                uiState.loadingBar = false
+            }
 
-            when (exception.code) {
-                UserErrorCode.DATA_USER_CREATE_FEEDBACK -> {
-                    uiState.loadingBar = false
-                }
+            else -> {
+                uiState.loadingBar = false
             }
         }
     }

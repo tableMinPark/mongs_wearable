@@ -5,14 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.mongs.wear.core.errors.SlotErrorCode
-import com.mongs.wear.core.errors.UserErrorCode
-import com.mongs.wear.core.exception.ErrorException
-import com.mongs.wear.domain.player.usecase.ExchangeWalkingCountUseCase
-import com.mongs.wear.domain.player.usecase.GetStepsUseCase
+import com.mongs.wear.domain.management.exception.GetCurrentSlotException
 import com.mongs.wear.domain.management.usecase.GetCurrentSlotUseCase
 import com.mongs.wear.domain.management.vo.MongVo
-import com.mongs.wear.presentation.common.viewModel.BaseViewModel
+import com.mongs.wear.domain.player.exception.ExchangeWalkingCountException
+import com.mongs.wear.domain.player.exception.GetStepsException
+import com.mongs.wear.domain.player.usecase.ExchangeWalkingCountUseCase
+import com.mongs.wear.domain.player.usecase.GetStepsUseCase
+import com.mongs.wear.presentation.global.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,7 +33,7 @@ class StoreExchangePayPointViewModel @Inject constructor(
     val walkingCount: LiveData<Int> get() = _walkingCount
 
     init {
-        viewModelScopeWithHandler.launch (Dispatchers.IO) {
+        viewModelScopeWithHandler.launch (Dispatchers.Main) {
 
             uiState.loadingBar = true
 
@@ -57,7 +57,11 @@ class StoreExchangePayPointViewModel @Inject constructor(
             uiState.loadingBar = true
             uiState.chargePayPointDialog = false
 
-            exchangeWalkingCountUseCase(mongId = mongId, walkingCount = walkingCount)
+            exchangeWalkingCountUseCase(
+                ExchangeWalkingCountUseCase.Param(
+                    mongId = mongId, walkingCount = walkingCount
+                )
+            )
 
             uiState.loadingBar = false
         }
@@ -66,22 +70,27 @@ class StoreExchangePayPointViewModel @Inject constructor(
     val uiState: UiState = UiState()
 
     class UiState : BaseUiState() {
-
-        var loadingBar by mutableStateOf(false)
         var chargePayPointDialog by mutableStateOf(false)
     }
 
     override fun exceptionHandler(exception: Throwable) {
 
-        if (exception is ErrorException) {
+        when(exception) {
+            is GetStepsException -> {
+                uiState.loadingBar = false
+            }
 
-            when (exception.code) {
+            is GetCurrentSlotException -> {
+                uiState.loadingBar = false
+            }
 
-                SlotErrorCode.DATA_SLOT_GET_CURRENT_SLOT -> {}
+            is ExchangeWalkingCountException -> {
+                uiState.loadingBar = false
+                uiState.chargePayPointDialog = false
+            }
 
-                UserErrorCode.DATA_USER_GET_WALKING_COUNT -> {}
-
-                UserErrorCode.DATA_USER_EXCHANGE_WALKING -> {}
+            else -> {
+                uiState.loadingBar = false
             }
         }
     }

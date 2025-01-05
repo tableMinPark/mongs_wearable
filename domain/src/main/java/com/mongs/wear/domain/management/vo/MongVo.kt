@@ -28,21 +28,15 @@ data class MongVo(
 
     val isSleeping: Boolean = false,
 
-    val stateCode: MongStateCode = MongStateCode.EMPTY,
+    val stateCode: MongStateCode = MongStateCode.NORMAL,
 
-    val statusCode: MongStatusCode = MongStatusCode.EMPTY,
+    val statusCode: MongStatusCode = MongStatusCode.NORMAL,
 
     val payPoint: Int = 0,
 
     val born: LocalDateTime = LocalDateTime.now(),
 
     val graduateCheck: Boolean = false,
-
-    val isHappy: Boolean = false,
-
-    val isEating: Boolean = false,
-
-    val isPoopCleaning: Boolean = false,
 
     val isCurrent: Boolean = false,
 )

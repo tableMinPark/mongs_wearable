@@ -14,38 +14,33 @@ import com.mongs.wear.presentation.assets.NavItem
 @Composable
 fun MainSlotView(
     navController: NavController,
-    mongVo: MongVo,
+    mongVo: MongVo?,
     isPageChanging: State<Boolean>,
     mainSlotViewModel: MainSlotViewModel = hiltViewModel(),
 ) {
     Box {
-        val isEgg = MongResourceCode.valueOf(mongVo.mongTypeCode).isEgg
-
         MainSlotContent(
             mongVo = mongVo,
             isPageChanging = isPageChanging.value,
-            stroke = {
-                if (!isEgg && !mongVo.isSleeping) {
-                    mainSlotViewModel.stroke(mongId = mongVo.mongId)
-                }
-            },
-            navSlotPick = {
-                navController.navigate(NavItem.SlotPick.route)
-            },
+            stroke = { mongId -> mainSlotViewModel.stroke(mongId = mongId) },
+            navSlotPick = { navController.navigate(NavItem.SlotPick.route) },
             uiState = mainSlotViewModel.uiState,
             modifier = Modifier.zIndex(1f)
         )
-        MainSlotEffect(
-            mongVo = mongVo,
-            isPageChanging = isPageChanging.value,
-            evolution = { mongId ->
-                mainSlotViewModel.evolution(mongId)
-            },
-            graduationReady = {
-                mainSlotViewModel.graduationReady(mongId = mongVo.mongId)
-            },
-            uiState = mainSlotViewModel.uiState,
-            modifier = Modifier.zIndex(2f),
-        )
+
+        mongVo?.let {
+            MainSlotEffect(
+                mongVo = mongVo,
+                isPageChanging = isPageChanging.value,
+                evolution = { mongId ->
+                    mainSlotViewModel.evolution(mongId)
+                },
+                graduationReady = {
+                    mainSlotViewModel.graduationReady(mongId = mongVo.mongId)
+                },
+                uiState = mainSlotViewModel.uiState,
+                modifier = Modifier.zIndex(2f),
+            )
+        }
     }
 }

@@ -15,11 +15,11 @@ interface MongDao {
     @Query("SElECT * FROM mongs_mong WHERE mongId = :mongId")
     fun findByMongId(mongId: Long) : MongEntity?
 
-    @Query("SELECT * FROM mongs_mong WHERE isCurrent = true")
-    fun findByIsCurrentTrue() : MongEntity?
+    @Query("SElECT * FROM mongs_mong WHERE mongId = :mongId")
+    fun findLiveByMongId(mongId: Long) : LiveData<MongEntity?>
 
     @Query("SELECT * FROM mongs_mong WHERE isCurrent = true")
-    fun findLiveByIsCurrentTrue() : LiveData<MongEntity?>
+    fun findByIsCurrentTrue() : MongEntity?
 
     @Query("SELECT * FROM mongs_mong WHERE isCurrent = true")
     fun findAllByIsCurrentTrue() : List<MongEntity>

@@ -25,7 +25,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.NavItem
-import com.mongs.wear.presentation.component.common.bar.LoadingBar
 import com.mongs.wear.presentation.component.common.button.CircleImageButton
 import com.mongs.wear.presentation.component.common.button.CircleTextButton
 import com.mongs.wear.presentation.dialog.common.ConfirmAndCancelDialog
@@ -33,14 +32,11 @@ import com.mongs.wear.presentation.dialog.common.ConfirmAndCancelDialog
 @Composable
 fun MainConfigureView(
     navController: NavController,
-    scrollPage: (Int) -> Unit,
     mainConfigureViewModel: MainConfigureViewModel = hiltViewModel(),
     context: Context = LocalContext.current,
 ) {
     Box {
-        if (mainConfigureViewModel.uiState.loadingBar) {
-            MainConfigureLoadingBar(modifier = Modifier.zIndex(1f))
-        } else if (mainConfigureViewModel.uiState.logoutDialog) {
+        if (mainConfigureViewModel.uiState.logoutDialog) {
             ConfirmAndCancelDialog(
                 text = "로그아웃하시겠습니까?",
                 confirm = {
@@ -80,11 +76,9 @@ fun MainConfigureView(
 
     LaunchedEffect(mainConfigureViewModel.uiState.navLoginView) {
         if (mainConfigureViewModel.uiState.navLoginView) {
-            scrollPage(2)
             navController.navigate(NavItem.Login.route) {
                 popUpTo(navController.graph.id)
             }
-            mainConfigureViewModel.uiState.navLoginView = false
         }
     }
 }
@@ -145,18 +139,5 @@ private fun MainConfigureContent(
                 )
             }
         }
-    }
-}
-
-
-@Composable
-private fun MainConfigureLoadingBar(
-    modifier: Modifier = Modifier.zIndex(0f),
-) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier.fillMaxSize(),
-    ) {
-        LoadingBar()
     }
 }

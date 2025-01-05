@@ -1,10 +1,8 @@
 package com.mongs.wear.domain.auth.exception
 
-import com.mongs.wear.core.errors.AuthErrorCode
-import com.mongs.wear.core.exception.ErrorException
-import java.util.Collections
+import com.mongs.wear.core.exception.UseCaseException
+import com.mongs.wear.core.errors.DomainErrorCode
 
-class NotExistsGoogleAccountIdException : ErrorException(
-    code = AuthErrorCode.DOMAIN_AUTH_NOT_EXISTS_EMAIL,
-    result = Collections.emptyMap(),
+class NotExistsGoogleAccountIdException : UseCaseException(
+    code = DomainErrorCode.DOMAIN_AUTH_NOT_EXISTS_GOOGLE_ACCOUNT_ID,
 )

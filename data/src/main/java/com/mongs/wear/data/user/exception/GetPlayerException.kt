@@ -1,10 +1,10 @@
 package com.mongs.wear.data.user.exception
 
-import com.mongs.wear.core.errors.UserErrorCode
 import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.core.errors.DataErrorCode
 import java.util.Collections
 
 class GetPlayerException : ErrorException(
-    code = UserErrorCode.DATA_USER_GET_PLAYER,
+    code = DataErrorCode.DATA_USER_PLAYER_GET_PLAYER,
     result = Collections.emptyMap(),
 )

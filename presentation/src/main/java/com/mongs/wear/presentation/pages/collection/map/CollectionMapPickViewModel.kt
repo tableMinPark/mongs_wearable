@@ -6,12 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.mongs.wear.core.errors.UserErrorCode
-import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.domain.collection.exception.GetMapCollectionsException
 import com.mongs.wear.domain.collection.usecase.GetMapCollectionsUseCase
 import com.mongs.wear.domain.collection.vo.MapCollectionVo
-import com.mongs.wear.domain.common.usecase.SetBackgroundMapCodeUseCase
-import com.mongs.wear.presentation.common.viewModel.BaseViewModel
+import com.mongs.wear.domain.device.exception.SetBackgroundMapCodeException
+import com.mongs.wear.domain.device.usecase.SetBackgroundMapCodeUseCase
+import com.mongs.wear.presentation.global.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,7 +45,11 @@ class CollectionMapPickViewModel @Inject constructor(
 
             uiState.loadingBar = true
 
-            setBackgroundMapCodeUseCase(code = mapCode)
+            setBackgroundMapCodeUseCase(
+                SetBackgroundMapCodeUseCase.Param(
+                    mapTypeCode = mapCode
+                )
+            )
 
             uiState.detailDialog = false
             uiState.loadingBar = false
@@ -56,19 +60,25 @@ class CollectionMapPickViewModel @Inject constructor(
 
     class UiState : BaseUiState() {
         var navCollectionMenu by mutableStateOf(false)
-        var loadingBar by mutableStateOf(false)
         var detailDialog by mutableStateOf(false)
     }
 
     override fun exceptionHandler(exception: Throwable) {
 
-        if (exception is ErrorException) {
+        when(exception) {
+            is GetMapCollectionsException -> {
+                uiState.loadingBar = false
+                uiState.navCollectionMenu = true
+            }
 
-            when (exception.code) {
-                UserErrorCode.DATA_USER_GET_MAP_COLLECTIONS -> {
-                    uiState.loadingBar = false
-                    uiState.navCollectionMenu = true
-                }
+            is SetBackgroundMapCodeException -> {
+                uiState.loadingBar = false
+                uiState.detailDialog = false
+            }
+
+            else -> {
+                uiState.loadingBar = false
+                uiState.detailDialog = false
             }
         }
     }

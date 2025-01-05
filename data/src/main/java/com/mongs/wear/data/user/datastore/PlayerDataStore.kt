@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -13,9 +14,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class PlayerDataStore @Inject constructor(
-    private val context: Context
+    @ApplicationContext private val context: Context
 ) {
 
     companion object {
@@ -66,13 +69,13 @@ class PlayerDataStore @Inject constructor(
         }
     }
 
-    suspend fun getStarPointLive(): LiveData<Int> {
+    fun getStarPointLive(): LiveData<Int> {
         return context.store.data.map { preferences ->
             preferences[STAR_POINT]!!
         }.asLiveData()
     }
 
-    suspend fun getSteps(): Int {
+    fun getSteps(): Int {
         return runBlocking {
             context.store.data.map { preferences ->
                 preferences[STEPS]!!
@@ -80,7 +83,7 @@ class PlayerDataStore @Inject constructor(
         }
     }
 
-    suspend fun getStepsLive() : LiveData<Int> {
+    fun getStepsLive() : LiveData<Int> {
         return context.store.data.map { preferences ->
             preferences[STEPS]!!
         }.asLiveData()
@@ -108,7 +111,7 @@ class PlayerDataStore @Inject constructor(
         }
     }
 
-    suspend fun getConsumeWalkingCount(): Int {
+    fun getConsumeWalkingCount(): Int {
         return runBlocking {
             context.store.data.map { preferences ->
                 preferences[CONSUME_WALKING_COUNT]!!

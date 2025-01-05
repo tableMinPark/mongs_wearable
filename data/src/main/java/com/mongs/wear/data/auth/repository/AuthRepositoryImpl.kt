@@ -12,10 +12,13 @@ import com.mongs.wear.data.auth.exception.LogoutException
 import com.mongs.wear.data.auth.exception.NeedJoinException
 import com.mongs.wear.data.auth.exception.NeedUpdateAppException
 import com.mongs.wear.domain.auth.repository.AuthRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class AuthRepositoryImpl @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val authApi: AuthApi,
     private val tokenDataStore: TokenDataStore,
 ) : AuthRepository {

@@ -10,4 +10,6 @@ interface SlotRepository {
     suspend fun getCurrentSlot(): MongModel?
 
     suspend fun getCurrentSlotLive(): LiveData<MongModel?>
+
+    suspend fun updateCurrentSlot()
 }

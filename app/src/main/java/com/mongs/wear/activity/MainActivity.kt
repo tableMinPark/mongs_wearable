@@ -63,17 +63,17 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         mainActivityViewModel.connectSensor()
-        mainActivityViewModel.resumeConnectMqtt()
+//        mainActivityViewModel.resumeConnectMqtt()
     }
 
     override fun onPause() {
-        super.onPause()
         mainActivityViewModel.disconnectSensor()
-        mainActivityViewModel.pauseConnectMqtt()
+//        mainActivityViewModel.pauseConnectMqtt()
+        super.onPause()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         mainActivityViewModel.disconnectMqtt()
+        super.onDestroy()
     }
 }

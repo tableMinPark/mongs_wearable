@@ -1,17 +1,14 @@
 package com.mongs.wear.presentation.layout
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.viewModelScope
-import com.mongs.wear.core.errors.CommonErrorCode
-import com.mongs.wear.core.exception.ErrorException
-import com.mongs.wear.domain.common.client.MqttClient
-import com.mongs.wear.domain.common.repository.AppRepository
-import com.mongs.wear.presentation.common.viewModel.BaseViewModel
+import com.mongs.wear.domain.device.exception.ConnectMqttException
+import com.mongs.wear.domain.device.usecase.ConnectMqttUseCase
+import com.mongs.wear.domain.device.usecase.GetNetworkUseCase
+import com.mongs.wear.domain.device.usecase.SetNetworkUseCase
+import com.mongs.wear.presentation.global.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,23 +16,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val mqttClient: MqttClient,
-    private val appRepository: AppRepository,
+    private val setNetworkUseCase: SetNetworkUseCase,
+    private val getNetworkUseCase: GetNetworkUseCase,
+    private val connectMqttUseCase: ConnectMqttUseCase,
 ) : BaseViewModel() {
 
     val network: LiveData<Boolean> get() = _network
-    private val _network = MediatorLiveData<Boolean>()
+    private val _network = MediatorLiveData(true)
 
     init {
-        viewModelScopeWithHandler.launch(Dispatchers.IO) {
+        viewModelScopeWithHandler.launch(Dispatchers.Main) {
 
             uiState.loadingBar = true
 
-            _network.addSource(withContext(Dispatchers.IO) { appRepository.getNetworkLive() }) {
+            _network.addSource(withContext(Dispatchers.IO) { getNetworkUseCase() }) {
                 _network.value = it
             }
 
-            mqttClient.connect()
+            connectMqttUseCase()
 
             uiState.loadingBar = false
         }
@@ -43,20 +41,19 @@ class MainViewModel @Inject constructor(
 
     val uiState = UiState()
 
-    class UiState : BaseUiState() {
-        var loadingBar by mutableStateOf(false)
-    }
+    class UiState : BaseUiState() {}
 
     override fun exceptionHandler(exception: Throwable) {
 
-        if (exception is ErrorException) {
-
-            when (exception.code) {
-                CommonErrorCode.DATA_COMMON_MQTT_CONNECT -> {
-                    viewModelScope.launch(Dispatchers.IO) {
-                        appRepository.setNetwork(network = false)
-                    }
+        when (exception) {
+            is ConnectMqttException -> {
+                CoroutineScope(Dispatchers.IO).launch {
+                    setNetworkUseCase(false)
                 }
+            }
+
+            else -> {
+                uiState.loadingBar = false
             }
         }
     }

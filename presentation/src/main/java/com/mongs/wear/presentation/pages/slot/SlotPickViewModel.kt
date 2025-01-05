@@ -6,18 +6,24 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import com.mongs.wear.core.errors.UserErrorCode
-import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.domain.management.exception.CreateMongException
+import com.mongs.wear.domain.management.exception.DeleteMongException
+import com.mongs.wear.domain.management.exception.GetSlotsException
+import com.mongs.wear.domain.management.exception.GraduateMongException
+import com.mongs.wear.domain.management.exception.SetCurrentSlotException
 import com.mongs.wear.domain.management.usecase.CreateMongUseCase
 import com.mongs.wear.domain.management.usecase.DeleteMongUseCase
 import com.mongs.wear.domain.management.usecase.GetSlotsUseCase
 import com.mongs.wear.domain.management.usecase.GraduateMongUseCase
 import com.mongs.wear.domain.management.usecase.SetCurrentSlotUseCase
 import com.mongs.wear.domain.management.vo.SlotVo
+import com.mongs.wear.domain.player.exception.BuySlotException
+import com.mongs.wear.domain.player.exception.GetSlotCountException
+import com.mongs.wear.domain.player.exception.GetStarPointException
 import com.mongs.wear.domain.player.usecase.BuySlotUseCase
 import com.mongs.wear.domain.player.usecase.GetSlotCountUseCase
 import com.mongs.wear.domain.player.usecase.GetStarPointUseCase
-import com.mongs.wear.presentation.common.viewModel.BaseViewModel
+import com.mongs.wear.presentation.global.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -93,7 +99,11 @@ class SlotPickViewModel @Inject constructor(
             uiState.loadingBar = true
             uiState.mongCreateDialog = false
 
-            createMongUseCase(name = name, sleepStart = sleepStart, sleepEnd = sleepEnd)
+            createMongUseCase(
+                CreateMongUseCase.Param(
+                    name = name, sleepStart = sleepStart, sleepEnd = sleepEnd
+                )
+            )
 
             getSlots()
 
@@ -107,7 +117,11 @@ class SlotPickViewModel @Inject constructor(
             uiState.loadingBar = true
             uiState.mongDeleteDialog = false
 
-            deleteMongUseCase(mongId = mongId)
+            deleteMongUseCase(
+                DeleteMongUseCase.Param(
+                    mongId = mongId
+                )
+            )
 
             getSlots()
 
@@ -121,7 +135,11 @@ class SlotPickViewModel @Inject constructor(
             uiState.loadingBar = true
             uiState.pickDialog = false
 
-            setCurrentSlotUseCase(mongId = mongId)
+            setCurrentSlotUseCase(
+                SetCurrentSlotUseCase.Param(
+                    mongId = mongId
+                )
+            )
 
             uiState.navMainPager = true
         }
@@ -133,7 +151,11 @@ class SlotPickViewModel @Inject constructor(
             uiState.loadingBar = true
             uiState.mongGraduateDialog = false
 
-            graduateMongUseCase(mongId = mongId)
+            graduateMongUseCase(
+                GraduateMongUseCase.Param(
+                    mongId = mongId
+                )
+            )
 
             getSlots()
 
@@ -158,7 +180,6 @@ class SlotPickViewModel @Inject constructor(
     val uiState: UiState = UiState()
 
     class UiState : BaseUiState() {
-        var loadingBar by mutableStateOf(false)
         var navMainPager by mutableStateOf(false)
         var mongDetailDialog by mutableStateOf(false)
         var mongCreateDialog by mutableStateOf(false)
@@ -170,20 +191,49 @@ class SlotPickViewModel @Inject constructor(
 
     override fun exceptionHandler(exception: Throwable) {
 
-        if (exception is ErrorException) {
+        when(exception) {
+            is GetSlotsException -> {
+                uiState.loadingBar = false
+                uiState.navMainPager = true
+            }
 
-            when (exception.code) {
+            is CreateMongException -> {
+                uiState.loadingBar = false
+                uiState.mongCreateDialog = false
+            }
 
-                UserErrorCode.DATA_USER_GET_PLAYER,
-                UserErrorCode.DATA_USER_GET_STAR_POINT,
-                UserErrorCode.DATA_USER_GET_SLOT_COUNT -> {
-                    uiState.loadingBar = false
-                    uiState.navMainPager = true
-                }
+            is DeleteMongException -> {
+                uiState.loadingBar = false
+                uiState.mongDeleteDialog = false
+            }
 
-                else -> {
-                    uiState.loadingBar = false
-                }
+            is GraduateMongException -> {
+                uiState.loadingBar = false
+                uiState.mongGraduateDialog = false
+            }
+
+            is GetStarPointException -> {
+                uiState.loadingBar = false
+                uiState.navMainPager = true
+            }
+
+            is GetSlotCountException -> {
+                uiState.loadingBar = false
+                uiState.navMainPager = true
+            }
+
+            is SetCurrentSlotException -> {
+                uiState.loadingBar = false
+                uiState.pickDialog = false
+            }
+
+            is BuySlotException -> {
+                uiState.loadingBar = false
+                uiState.buySlotDialog = false
+            }
+
+            else -> {
+                uiState.loadingBar = false
             }
         }
     }

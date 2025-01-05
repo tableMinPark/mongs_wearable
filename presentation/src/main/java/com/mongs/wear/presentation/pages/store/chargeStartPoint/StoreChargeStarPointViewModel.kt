@@ -6,13 +6,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.mongs.wear.core.errors.UserErrorCode
 import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.domain.store.exception.ConsumeProductOrderException
+import com.mongs.wear.domain.store.exception.GetConsumedOrderIdsException
+import com.mongs.wear.domain.store.exception.GetProductIdsException
 import com.mongs.wear.domain.store.usecase.ConsumeProductOrderUseCase
 import com.mongs.wear.domain.store.usecase.GetConsumedOrderIdsUseCase
 import com.mongs.wear.domain.store.usecase.GetProductIdsUseCase
-import com.mongs.wear.presentation.common.manager.BillingManager
-import com.mongs.wear.presentation.common.viewModel.BaseViewModel
+import com.mongs.wear.presentation.global.exception.BillingConnectException
+import com.mongs.wear.presentation.global.exception.BillingNotSupportException
+import com.mongs.wear.presentation.global.exception.GetProductException
+import com.mongs.wear.presentation.global.manager.BillingManager
+import com.mongs.wear.presentation.global.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -53,7 +58,11 @@ class StoreChargeStarPointViewModel @Inject constructor(
             val productVoList = billingManager.getProductList(productIds)
             val orderVoList = billingManager.getOrder()
 
-            val consumedOrderIds = getConsumedOrderIdsUseCase(orderVoList.map { it.orderId })
+            val consumedOrderIds = getConsumedOrderIdsUseCase(
+                GetConsumedOrderIdsUseCase.Param(
+                    orderIds = orderVoList.map { it.orderId }
+                )
+            )
             val orderedProductIdList = orderVoList
                 .filter { it.orderId !in consumedOrderIds }
                 .map { it.productId }
@@ -109,9 +118,11 @@ class StoreChargeStarPointViewModel @Inject constructor(
                 if (orderVo.productId == productId) {
 
                     consumeProductOrderUseCase(
-                        productId = orderVo.productId,
-                        orderId = orderVo.orderId,
-                        purchaseToken = orderVo.purchaseToken
+                        ConsumeProductOrderUseCase.Param(
+                            productId = orderVo.productId,
+                            orderId = orderVo.orderId,
+                            purchaseToken = orderVo.purchaseToken
+                        )
                     )
                     // 소비 성공
                     getProducts()
@@ -126,36 +137,47 @@ class StoreChargeStarPointViewModel @Inject constructor(
     val uiState: UiState = UiState()
 
     class UiState : BaseUiState() {
-
-        var loadingBar by mutableStateOf(false)
-
         var navStoreMenu by mutableStateOf(false)
     }
 
     override fun exceptionHandler(exception: Throwable) {
 
-        if (exception is ErrorException) {
+        when(exception) {
+            is BillingConnectException -> {
+                uiState.loadingBar = false
+                uiState.navStoreMenu = true
+            }
 
-            when (exception.code) {
+            is BillingNotSupportException -> {
+                uiState.loadingBar = false
+                uiState.navStoreMenu = true
+            }
 
-                UserErrorCode.DATA_USER_GET_PRODUCT_IDS -> {
-                    uiState.loadingBar = false
-                    uiState.navStoreMenu = true
+            is GetProductException -> {
+                uiState.loadingBar = false
+                uiState.navStoreMenu = true
+            }
+
+            is GetProductIdsException -> {
+                uiState.loadingBar = false
+                uiState.navStoreMenu = true
+            }
+
+            is GetConsumedOrderIdsException -> {
+                uiState.loadingBar = false
+                uiState.navStoreMenu = true
+            }
+
+            is ConsumeProductOrderException -> {
+                uiState.loadingBar = false
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    getProducts()
                 }
+            }
 
-                UserErrorCode.PRESENTATION_USER_BILLING_CONNECT,
-                UserErrorCode.PRESENTATION_USER_BILLING_NOT_SUPPORT -> {
-                    uiState.loadingBar = false
-                    uiState.navStoreMenu = true
-                }
-
-                UserErrorCode.DATA_USER_CONSUME_PRODUCT_ORDER -> {
-                    uiState.loadingBar = false
-
-                    CoroutineScope(Dispatchers.IO).launch {
-                        getProducts()
-                    }
-                }
+            else -> {
+                uiState.loadingBar = false
             }
         }
     }
