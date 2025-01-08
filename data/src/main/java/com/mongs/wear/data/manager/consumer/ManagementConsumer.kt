@@ -2,9 +2,6 @@ package com.mongs.wear.data.manager.consumer
 
 import com.google.gson.Gson
 import com.mongs.wear.data.manager.dto.response.GetMongResponseDto
-import com.mongs.wear.data.manager.dto.response.MongResponseDto
-import com.mongs.wear.data.manager.dto.response.MongStateResponseDto
-import com.mongs.wear.data.manager.dto.response.MongStatusResponseDto
 import com.mongs.wear.data.manager.resolver.ManagementObserveResolver
 import javax.inject.Inject
 import javax.inject.Singleton

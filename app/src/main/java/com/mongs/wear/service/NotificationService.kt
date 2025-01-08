@@ -16,11 +16,12 @@ import com.mongs.wear.activity.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class NotificationService
-//@Inject constructor(
-//    private val appRepository: AppRepository,
-//)
+@Singleton
+class NotificationService @Inject constructor(
+)
 : FirebaseMessagingService() {
 
     private val TAG = "NotificationService"

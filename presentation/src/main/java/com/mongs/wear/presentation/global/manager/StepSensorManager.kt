@@ -38,7 +38,7 @@ class StepSensorManager @Inject constructor(
 //                    val totalWalkingCount = event.values[0].toInt()
                     val totalWalkingCount = SystemClock.uptimeMillis().toInt()      // TODO: 센서 값 변경
 
-                    Log.d(TAG, "[sync device] totalWalkingCount: $totalWalkingCount")
+                    Log.i(TAG, "[sync device] totalWalkingCount: $totalWalkingCount")
 
                     setTotalWalkingCountUseCase(
                         SetTotalWalkingCountUseCase.Param(

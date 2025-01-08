@@ -70,23 +70,21 @@ data class MongEntity(
 
     ) : MongEntity {
 
-        if (updatedAt.isAfter(this.updatedAt)) {
-            this.mongName = mongName
-            this.mongTypeCode = mongTypeCode
-            this.payPoint = payPoint
-            this.stateCode = stateCode
-            this.isSleeping = isSleeping
-            this.statusCode = statusCode
-            this.weight = weight
-            this.expRatio = expRatio
-            this.healthyRatio = healthyRatio
-            this.satietyRatio = satietyRatio
-            this.strengthRatio = strengthRatio
-            this.fatigueRatio = fatigueRatio
-            this.poopCount = poopCount
-        }
-
+        this.mongName = mongName
+        this.mongTypeCode = mongTypeCode
+        this.payPoint = payPoint
+        this.stateCode = stateCode
+        this.isSleeping = isSleeping
+        this.statusCode = statusCode
+        this.weight = weight
+        this.expRatio = expRatio
+        this.healthyRatio = healthyRatio
+        this.satietyRatio = satietyRatio
+        this.strengthRatio = strengthRatio
+        this.fatigueRatio = fatigueRatio
+        this.poopCount = poopCount
         this.isCurrent = isCurrent
+        this.updatedAt = updatedAt
 
         return this
     }

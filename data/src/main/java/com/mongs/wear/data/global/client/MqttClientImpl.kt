@@ -173,49 +173,41 @@ class MqttClientImpl @Inject constructor(
                     dao.findByMongId(mongId = mongId)?.let { mongEntity ->
                         dao.save(
                             mongEntity.update(
-//                                    mongId = body.result.mong.mongId,
-                                mongName = body.result.mong.mongName,
-                                mongTypeCode = body.result.mong.mongTypeCode,
-                                payPoint = body.result.mong.payPoint,
-//                                    createdAt = body.result.mong.createdAt,
-
-                                stateCode = body.result.mongState.stateCode,
-                                isSleeping = body.result.mongState.isSleep,
-
-                                statusCode = body.result.mongStatus.statusCode,
-                                weight = body.result.mongStatus.weight,
-                                expRatio = body.result.mongStatus.expRatio,
-                                healthyRatio = body.result.mongStatus.healthyRatio,
-                                satietyRatio = body.result.mongStatus.satietyRatio,
-                                strengthRatio = body.result.mongStatus.strengthRatio,
-                                fatigueRatio = body.result.mongStatus.fatigueRatio,
-                                poopCount = body.result.mongStatus.poopCount,
-
-                                updatedAt = body.result.mong.updatedAt,
+                                mongName = body.result.mongName,
+                                mongTypeCode = body.result.mongTypeCode,
+                                payPoint = body.result.payPoint,
+                                stateCode = body.result.stateCode,
+                                isSleeping = body.result.isSleep,
+                                statusCode = body.result.statusCode,
+                                expRatio = body.result.expRatio,
+                                weight = body.result.weight,
+                                healthyRatio = body.result.healthyRatio,
+                                satietyRatio = body.result.satietyRatio,
+                                strengthRatio = body.result.strengthRatio,
+                                fatigueRatio = body.result.fatigueRatio,
+                                poopCount = body.result.poopCount,
+                                updatedAt = body.result.updatedAt,
                             )
                         ).toMongModel()
                     } ?: run {
                         dao.save(
                             MongEntity(
-                                mongId = body.result.mong.mongId,
-                                mongName = body.result.mong.mongName,
-                                mongTypeCode = body.result.mong.mongTypeCode,
-                                payPoint = body.result.mong.payPoint,
-                                createdAt = body.result.mong.createdAt,
-
-                                stateCode = body.result.mongState.stateCode,
-                                isSleeping = body.result.mongState.isSleep,
-
-                                statusCode = body.result.mongStatus.statusCode,
-                                weight = body.result.mongStatus.weight,
-                                expRatio = body.result.mongStatus.expRatio,
-                                healthyRatio = body.result.mongStatus.healthyRatio,
-                                satietyRatio = body.result.mongStatus.satietyRatio,
-                                strengthRatio = body.result.mongStatus.strengthRatio,
-                                fatigueRatio = body.result.mongStatus.fatigueRatio,
-                                poopCount = body.result.mongStatus.poopCount,
-
-                                updatedAt = body.result.mong.updatedAt,
+                                mongId = body.result.mongId,
+                                mongName = body.result.mongName,
+                                mongTypeCode = body.result.mongTypeCode,
+                                payPoint = body.result.payPoint,
+                                stateCode = body.result.stateCode,
+                                isSleeping = body.result.isSleep,
+                                statusCode = body.result.statusCode,
+                                expRatio = body.result.expRatio,
+                                weight = body.result.weight,
+                                healthyRatio = body.result.healthyRatio,
+                                satietyRatio = body.result.satietyRatio,
+                                strengthRatio = body.result.strengthRatio,
+                                fatigueRatio = body.result.fatigueRatio,
+                                poopCount = body.result.poopCount,
+                                createdAt = body.result.createdAt,
+                                updatedAt = body.result.updatedAt,
                             )
                         ).toMongModel()
                     }

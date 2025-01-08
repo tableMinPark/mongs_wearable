@@ -82,6 +82,19 @@ fun MainView (
             ).show()
         }
     }
+
+    /**
+     * 성공 Toast
+     */
+    LaunchedEffect(Unit) {
+        BaseViewModel.successEvent.collect { successMessage ->
+            Toast.makeText(
+                context,
+                successMessage,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
 }
 
 @Composable

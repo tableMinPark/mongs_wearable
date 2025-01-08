@@ -56,9 +56,9 @@ class MainActivityViewModel @Inject constructor(
                 StepSensorWorker.WORKER_NAME,
                 ExistingPeriodicWorkPolicy.KEEP,
                 PeriodicWorkRequestBuilder<StepSensorWorker>(15, TimeUnit.MINUTES)
-                .setConstraints(Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build())
+//                .setConstraints(Constraints.Builder()
+//                    .setRequiredNetworkType(NetworkType.CONNECTED)
+//                    .build())
                 .build()
             )
         }

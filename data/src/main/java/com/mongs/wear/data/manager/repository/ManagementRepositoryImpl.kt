@@ -39,57 +39,51 @@ class ManagementRepositoryImpl @Inject constructor(
                 roomDB.mongDao().let { dao ->
                     // 없는 Mong 삭제
                     body.result.let { getMongResponseDtos ->
-                        dao.deleteByMongIdNotIn(getMongResponseDtos.map { getMongResponseDto -> getMongResponseDto.mong.mongId })
+                        dao.deleteByMongIdNotIn(getMongResponseDtos.map { getMongResponseDto -> getMongResponseDto.mongId })
                     }
 
                     // 현재 몽 목록 동기화
                     body.result.forEach({ getMongResponseDto ->
                         // 수정
-                        dao.findByMongId(getMongResponseDto.mong.mongId)?.let { mongEntity ->
+                        dao.findByMongId(getMongResponseDto.mongId)?.let { mongEntity ->
                             dao.save(
                                 mongEntity.update(
-                                    mongName = getMongResponseDto.mong.mongName,
-                                    mongTypeCode = getMongResponseDto.mong.mongTypeCode,
-                                    payPoint = getMongResponseDto.mong.payPoint,
-
-                                    stateCode = getMongResponseDto.mongState.stateCode,
-                                    isSleeping = getMongResponseDto.mongState.isSleep,
-
-                                    statusCode = getMongResponseDto.mongStatus.statusCode,
-                                    weight = getMongResponseDto.mongStatus.weight,
-                                    expRatio = getMongResponseDto.mongStatus.expRatio,
-                                    healthyRatio = getMongResponseDto.mongStatus.healthyRatio,
-                                    satietyRatio = getMongResponseDto.mongStatus.satietyRatio,
-                                    strengthRatio = getMongResponseDto.mongStatus.strengthRatio,
-                                    fatigueRatio = getMongResponseDto.mongStatus.fatigueRatio,
-                                    poopCount = getMongResponseDto.mongStatus.poopCount,
-
-                                    updatedAt = getMongResponseDto.mong.updatedAt,
+                                    mongName = getMongResponseDto.mongName,
+                                    mongTypeCode = getMongResponseDto.mongTypeCode,
+                                    payPoint = getMongResponseDto.payPoint,
+                                    stateCode = getMongResponseDto.stateCode,
+                                    isSleeping = getMongResponseDto.isSleep,
+                                    statusCode = getMongResponseDto.statusCode,
+                                    expRatio = getMongResponseDto.expRatio,
+                                    weight = getMongResponseDto.weight,
+                                    healthyRatio = getMongResponseDto.healthyRatio,
+                                    satietyRatio = getMongResponseDto.satietyRatio,
+                                    strengthRatio = getMongResponseDto.strengthRatio,
+                                    fatigueRatio = getMongResponseDto.fatigueRatio,
+                                    poopCount = getMongResponseDto.poopCount,
+                                    updatedAt = getMongResponseDto.updatedAt,
                                 )
                             )
                         } ?: run {
                             // 등록
                             dao.save(
                                 MongEntity(
-                                    mongId = getMongResponseDto.mong.mongId,
-                                    mongName = getMongResponseDto.mong.mongName,
-                                    mongTypeCode = getMongResponseDto.mong.mongTypeCode,
-                                    payPoint = getMongResponseDto.mong.payPoint,
-                                    createdAt = getMongResponseDto.mong.createdAt,
-
-                                    stateCode = getMongResponseDto.mongState.stateCode,
-                                    isSleeping = getMongResponseDto.mongState.isSleep,
-
-                                    statusCode = getMongResponseDto.mongStatus.statusCode,
-                                    weight = getMongResponseDto.mongStatus.weight,
-                                    expRatio = getMongResponseDto.mongStatus.expRatio,
-                                    healthyRatio = getMongResponseDto.mongStatus.healthyRatio,
-                                    satietyRatio = getMongResponseDto.mongStatus.satietyRatio,
-                                    strengthRatio = getMongResponseDto.mongStatus.strengthRatio,
-                                    fatigueRatio = getMongResponseDto.mongStatus.fatigueRatio,
-                                    poopCount = getMongResponseDto.mongStatus.poopCount,
-
-                                    updatedAt = getMongResponseDto.mong.updatedAt,
+                                    mongId = getMongResponseDto.mongId,
+                                    mongName = getMongResponseDto.mongName,
+                                    mongTypeCode = getMongResponseDto.mongTypeCode,
+                                    payPoint = getMongResponseDto.payPoint,
+                                    stateCode = getMongResponseDto.stateCode,
+                                    isSleeping = getMongResponseDto.isSleep,
+                                    statusCode = getMongResponseDto.statusCode,
+                                    expRatio = getMongResponseDto.expRatio,
+                                    weight = getMongResponseDto.weight,
+                                    healthyRatio = getMongResponseDto.healthyRatio,
+                                    satietyRatio = getMongResponseDto.satietyRatio,
+                                    strengthRatio = getMongResponseDto.strengthRatio,
+                                    fatigueRatio = getMongResponseDto.fatigueRatio,
+                                    poopCount = getMongResponseDto.poopCount,
+                                    createdAt = getMongResponseDto.createdAt,
+                                    updatedAt = getMongResponseDto.updatedAt,
                                 )
                             )
                         }

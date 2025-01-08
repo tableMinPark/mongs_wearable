@@ -3,9 +3,6 @@ package com.mongs.wear.data.manager.resolver
 import androidx.room.Transaction
 import com.mongs.wear.data.global.room.RoomDB
 import com.mongs.wear.data.manager.dto.response.GetMongResponseDto
-import com.mongs.wear.data.manager.dto.response.MongResponseDto
-import com.mongs.wear.data.manager.dto.response.MongStateResponseDto
-import com.mongs.wear.data.manager.dto.response.MongStatusResponseDto
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,29 +14,24 @@ class ManagementObserveResolver @Inject constructor(
     @Transaction
     fun updateMong(getMongResponseDto: GetMongResponseDto) {
 
-        roomDB.mongDao().findByMongId(mongId = getMongResponseDto.mong.mongId)?.let { mongEntity ->
+        roomDB.mongDao().findByMongId(mongId = getMongResponseDto.mongId)?.let { mongEntity ->
 
             roomDB.mongDao().save(
                 mongEntity.update(
-//                                    mongId = body.result.mong.mongId,
-                    mongName = getMongResponseDto.mong.mongName,
-                    mongTypeCode = getMongResponseDto.mong.mongTypeCode,
-                    payPoint = getMongResponseDto.mong.payPoint,
-//                                    createdAt = body.result.mong.createdAt,
-
-                    stateCode = getMongResponseDto.mongState.stateCode,
-                    isSleeping = getMongResponseDto.mongState.isSleep,
-
-                    statusCode = getMongResponseDto.mongStatus.statusCode,
-                    weight = getMongResponseDto.mongStatus.weight,
-                    expRatio = getMongResponseDto.mongStatus.expRatio,
-                    healthyRatio = getMongResponseDto.mongStatus.healthyRatio,
-                    satietyRatio = getMongResponseDto.mongStatus.satietyRatio,
-                    strengthRatio = getMongResponseDto.mongStatus.strengthRatio,
-                    fatigueRatio = getMongResponseDto.mongStatus.fatigueRatio,
-                    poopCount = getMongResponseDto.mongStatus.poopCount,
-
-                    updatedAt = getMongResponseDto.mong.updatedAt,
+                    mongName = getMongResponseDto.mongName,
+                    mongTypeCode = getMongResponseDto.mongTypeCode,
+                    payPoint = getMongResponseDto.payPoint,
+                    stateCode = getMongResponseDto.stateCode,
+                    isSleeping = getMongResponseDto.isSleep,
+                    statusCode = getMongResponseDto.statusCode,
+                    expRatio = getMongResponseDto.expRatio,
+                    weight = getMongResponseDto.weight,
+                    healthyRatio = getMongResponseDto.healthyRatio,
+                    satietyRatio = getMongResponseDto.satietyRatio,
+                    strengthRatio = getMongResponseDto.strengthRatio,
+                    fatigueRatio = getMongResponseDto.fatigueRatio,
+                    poopCount = getMongResponseDto.poopCount,
+                    updatedAt = getMongResponseDto.updatedAt,
                 )
             )
         }

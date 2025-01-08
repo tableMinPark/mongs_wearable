@@ -47,7 +47,17 @@ interface MongDao {
 
         val isSuccess = this.insert(mongEntity = mongEntity)
 
-        if (isSuccess == -1L) this.update(mongEntity = mongEntity)
+        if (isSuccess == -1L) {
+            this.findByMongId(mongId = mongEntity.mongId)?.let { nowMongEntity ->
+                if (mongEntity.updatedAt.isAfter(nowMongEntity.updatedAt)) {
+                    this.update(mongEntity = mongEntity)
+                } else {
+                    nowMongEntity.graduateCheck = mongEntity.graduateCheck
+                    nowMongEntity.isCurrent = mongEntity.isCurrent
+                    this.update(mongEntity = nowMongEntity)
+                }
+            }
+        }
 
         return mongEntity
     }

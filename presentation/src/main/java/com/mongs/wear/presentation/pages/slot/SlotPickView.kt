@@ -56,6 +56,7 @@ fun SlotPickView(
                         get() = slotVoList.value.size
                 }
             }
+
             val nowSlotVo = remember {
                 derivedStateOf {
                     if (slotVoList.value.isNotEmpty()) {
@@ -150,7 +151,7 @@ fun SlotPickView(
                     starPoint = starPoint.value,
                     buySlotPrice = buySlotPrice.value,
                     uiState = slotPickViewModel.uiState,
-                    modifier = Modifier.zIndex(1f)
+                    modifier = Modifier.zIndex(2f)
                 )
 
                 SelectButton(

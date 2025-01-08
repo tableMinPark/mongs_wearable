@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.domain.player.usecase.GetStarPointUseCase
 import com.mongs.wear.domain.store.exception.ConsumeProductOrderException
 import com.mongs.wear.domain.store.exception.GetConsumedOrderIdsException
 import com.mongs.wear.domain.store.exception.GetProductIdsException
@@ -29,10 +30,14 @@ import javax.inject.Inject
 @HiltViewModel
 class StoreChargeStarPointViewModel @Inject constructor(
     private val billingManager: BillingManager,
+    private val getStarPointUseCase: GetStarPointUseCase,
     private val getProductIdsUseCase: GetProductIdsUseCase,
     private val getConsumedOrderIdsUseCase: GetConsumedOrderIdsUseCase,
     private val consumeProductOrderUseCase: ConsumeProductOrderUseCase,
 ): BaseViewModel() {
+
+    val starPoint: LiveData<Int> get() = _starPoint
+    private val _starPoint = MediatorLiveData<Int>()
 
     private val _productVoList = MediatorLiveData<List<BillingManager.ProductVo>>(ArrayList())
     val productVoList: LiveData<List<BillingManager.ProductVo>> get() = _productVoList
@@ -40,11 +45,19 @@ class StoreChargeStarPointViewModel @Inject constructor(
     // 결제 실패 오류 메시지
     private val billingErrorEvent: SharedFlow<ErrorException> = billingManager.errorEvent
 
+    // 결제 중단 플래그
+    private val billingAbortEvent: SharedFlow<Unit> = billingManager.abortEvent
+
     // 결제 성공 플래그
     private val billingSuccessEvent: SharedFlow<Unit> = billingManager.successEvent
 
     init {
         viewModelScopeWithHandler.launch(Dispatchers.Main) {
+
+            _starPoint.addSource(withContext(Dispatchers.IO) { getStarPointUseCase() }) { starPoint ->
+                _starPoint.value = starPoint
+            }
+
             getProducts()
         }
     }
@@ -71,6 +84,7 @@ class StoreChargeStarPointViewModel @Inject constructor(
                 if (orderedProductIdList.contains(productVo.productId)) {
                     BillingManager.ProductVo(
                         productId = productVo.productId,
+                        point = productVo.point,
                         productName = productVo.productName,
                         price = productVo.price,
                         hasNotConsumed = true
@@ -98,11 +112,20 @@ class StoreChargeStarPointViewModel @Inject constructor(
             }
         }
 
+        // 소비 중단 이벤트
+        viewModelScopeWithHandler.launch(Dispatchers.IO) {
+            billingAbortEvent.collect {
+                getProducts()
+                uiState.loadingBar = false
+            }
+        }
+
         // 소비 성공 이벤트
         viewModelScopeWithHandler.launch(Dispatchers.IO) {
             billingSuccessEvent.collect {
                 getProducts()
                 uiState.loadingBar = false
+                toastEvent("충전 완료")
             }
         }
     }

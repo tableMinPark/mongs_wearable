@@ -84,7 +84,9 @@ fun BuySlot(
                         contentDescription = null,
                         modifier = Modifier.size(26.dp)
                     )
+
                     Spacer(modifier = Modifier.width(6.dp))
+
                     Text(
                         text = "-",
                         textAlign = TextAlign.Center,
@@ -94,7 +96,9 @@ fun BuySlot(
                         color = MongsWhite,
                         maxLines = 1,
                     )
+
                     Spacer(modifier = Modifier.width(6.dp))
+
                     Text(
                         text = "$buySlotPrice",
                         textAlign = TextAlign.Left,

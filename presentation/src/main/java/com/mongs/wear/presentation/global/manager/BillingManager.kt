@@ -46,6 +46,9 @@ class BillingManager @Inject constructor(
     private val _errorEvent = MutableSharedFlow<ErrorException>()
     val errorEvent = _errorEvent.asSharedFlow()
 
+    private val _abortEvent = MutableSharedFlow<Unit>()
+    val abortEvent = _abortEvent.asSharedFlow()
+
     private val _successEvent = MutableSharedFlow<Unit>()
     val successEvent = _successEvent.asSharedFlow()
 
@@ -93,10 +96,9 @@ class BillingManager @Inject constructor(
             ) {
 
             CoroutineScope(Dispatchers.IO).launch {
-                _successEvent.emit(Unit)
+                _abortEvent.emit(Unit)
             }
         }
-        Log.d("TEST", "${billingResult}")
     }
 
     /**
@@ -150,6 +152,7 @@ class BillingManager @Inject constructor(
                         ProductVo(
                             productId = productDetail.productId,
                             productName = productDetail.name,
+                            point = productDetail.description.toInt() ?: 0,
                             price = productDetail.oneTimePurchaseOfferDetails?.formattedPrice ?: "",
                             hasNotConsumed = false
                         )
@@ -243,6 +246,8 @@ class BillingManager @Inject constructor(
         val productId: String,
 
         val productName: String,
+
+        val point: Int,
 
         val price: String,
 
