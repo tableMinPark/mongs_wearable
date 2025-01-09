@@ -28,6 +28,9 @@ class GetMapCollectionsUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw GetMapCollectionsException()
+
+        when(exception.code) {
+            else -> throw GetMapCollectionsException()
+        }
     }
 }

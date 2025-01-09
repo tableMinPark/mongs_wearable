@@ -25,17 +25,12 @@ class DeviceDataStore @Inject constructor(
 ) {
 
     companion object {
-
         private const val DEVICE_DATA_STORE_NAME = "DEVICE"
 
         private val DEVICE_ID = stringPreferencesKey("DEVICE_ID")
-
         private val DEVICE_BOOTED_DT = stringPreferencesKey("DEVICE_BOOTED_DT")
-
         private val BG_MAP_TYPE_CODE = stringPreferencesKey("BG_MAP_TYPE_CODE")
-
         private val NETWORK = booleanPreferencesKey("NETWORK")
-
         private val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
     }
 

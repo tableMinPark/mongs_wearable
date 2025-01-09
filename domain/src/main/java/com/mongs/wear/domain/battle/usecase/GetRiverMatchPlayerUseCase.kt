@@ -34,6 +34,9 @@ class GetRiverMatchPlayerUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw GetRiverMatchPlayerException()
+
+        when(exception.code) {
+            else -> throw GetRiverMatchPlayerException()
+        }
     }
 }

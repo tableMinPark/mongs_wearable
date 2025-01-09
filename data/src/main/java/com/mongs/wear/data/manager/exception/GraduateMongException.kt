@@ -4,7 +4,7 @@ import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.core.errors.DataErrorCode
 import java.util.Collections
 
-class GraduateMongException(mongId: Long) : ErrorException(
+class GraduateMongException(result: Map<String, Any>) : ErrorException(
     code = DataErrorCode.DATA_MANAGER_MANAGEMENT_GRADUATE_MONG,
-    result = Collections.singletonMap("mongId", mongId),
+    result = result,
 )

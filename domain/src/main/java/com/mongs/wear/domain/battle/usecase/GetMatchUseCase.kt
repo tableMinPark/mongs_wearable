@@ -31,6 +31,9 @@ class GetMatchUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw GetMatchException()
+
+        when(exception.code) {
+            else -> throw GetMatchException()
+        }
     }
 }

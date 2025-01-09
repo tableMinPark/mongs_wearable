@@ -11,4 +11,4 @@ open class UseCaseException(
 
     override val message: String = code.getMessage(),
 
-    ) : RuntimeException(message)
+) : RuntimeException(message)

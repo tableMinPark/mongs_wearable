@@ -2,7 +2,9 @@ package com.mongs.wear.domain.player.exception
 
 import com.mongs.wear.core.exception.UseCaseException
 import com.mongs.wear.core.errors.DomainErrorCode
+import com.mongs.wear.core.errors.ErrorCode
 
-class GetStepsException : UseCaseException(
-    code = DomainErrorCode.DOMAIN_GET_STEPS_FAILED,
-)
+class GetStepsException(
+    override val code: ErrorCode = DomainErrorCode.DOMAIN_GET_STEPS_FAILED,
+    override val message: String = code.getMessage()
+) : UseCaseException(code = code, message = message)

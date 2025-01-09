@@ -22,17 +22,12 @@ class PlayerDataStore @Inject constructor(
 ) {
 
     companion object {
-
         private const val MEMBER_DATA_STORE_NAME = "MEMBER"
 
         private val STAR_POINT = intPreferencesKey("STAR_POINT")
-
         private val STEPS = intPreferencesKey("STEPS")
-
         private val WALKING_COUNT = intPreferencesKey("WALKING_COUNT")
-
         private val CONSUME_WALKING_COUNT = intPreferencesKey("CONSUME_WALKING_COUNT")
-
         private val TOTAL_WALKING_COUNT = intPreferencesKey("TOTAL_WALKING_COUNT")
     }
 

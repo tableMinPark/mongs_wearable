@@ -42,6 +42,9 @@ class GetFoodCodesUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw GetFoodCodesException()
+
+        when(exception.code) {
+            else -> throw GetFoodCodesException()
+        }
     }
 }

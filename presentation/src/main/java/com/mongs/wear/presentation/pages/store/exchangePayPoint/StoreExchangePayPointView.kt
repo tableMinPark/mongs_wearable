@@ -207,7 +207,7 @@ private fun StoreExchangePayPointContent(
                 BlueButton(
                     text = "환전",
                     width = 70,
-                    disable = chargePayPoint == 0 || mongVo.stateCode == MongStateCode.EMPTY,
+                    disable = chargePayPoint == 0,
                     onClick = { uiState.chargePayPointDialog = true },
                 )
             }

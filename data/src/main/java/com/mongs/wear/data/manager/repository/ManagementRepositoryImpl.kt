@@ -1,6 +1,7 @@
 package com.mongs.wear.data.manager.repository
 
 import com.mongs.wear.data.global.room.RoomDB
+import com.mongs.wear.data.global.utils.HttpUtil
 import com.mongs.wear.data.manager.api.ManagementApi
 import com.mongs.wear.data.manager.dto.request.CreateMongRequestDto
 import com.mongs.wear.data.manager.dto.request.FeedMongRequestDto
@@ -23,6 +24,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ManagementRepositoryImpl @Inject constructor(
+    private val httpUtil: HttpUtil,
     private val roomDB: RoomDB,
     private val managementApi: ManagementApi,
 ): ManagementRepository {
@@ -107,7 +109,7 @@ class ManagementRepositoryImpl @Inject constructor(
         ));
 
         if (!response.isSuccessful) {
-            throw CreateMongException(name = name, sleepStart = sleepStart, sleepEnd = sleepEnd)
+            throw CreateMongException(result = httpUtil.getErrorResult(errorBody = response.errorBody()))
         }
     }
 
@@ -119,7 +121,7 @@ class ManagementRepositoryImpl @Inject constructor(
         val response = managementApi.deleteMong(mongId = mongId)
 
         if (!response.isSuccessful) {
-            throw DeleteMongException(mongId = mongId)
+            throw DeleteMongException(result = httpUtil.getErrorResult(errorBody = response.errorBody()))
         } else {
             roomDB.mongDao().deleteByMongId(mongId = mongId)
         }
@@ -152,7 +154,7 @@ class ManagementRepositoryImpl @Inject constructor(
             }
         }
 
-        throw GetFeedItemsException(mongId = mongId)
+        throw GetFeedItemsException(result = httpUtil.getErrorResult(errorBody = response.errorBody()))
     }
 
     /**
@@ -163,7 +165,7 @@ class ManagementRepositoryImpl @Inject constructor(
         val response = managementApi.feedMong(mongId = mongId, feedMongRequestDto = FeedMongRequestDto(foodTypeCode = foodTypeCode))
 
         if (!response.isSuccessful) {
-            throw FeedMongException(mongId = mongId, foodTypeCode = foodTypeCode)
+            throw FeedMongException(result = httpUtil.getErrorResult(errorBody = response.errorBody()))
         }
     }
 
@@ -175,7 +177,7 @@ class ManagementRepositoryImpl @Inject constructor(
         val response = managementApi.graduateMong(mongId = mongId)
 
         if (!response.isSuccessful) {
-            throw GraduateMongException(mongId = mongId)
+            throw GraduateMongException(result = httpUtil.getErrorResult(errorBody = response.errorBody()))
         }
     }
 
@@ -200,7 +202,7 @@ class ManagementRepositoryImpl @Inject constructor(
         val response = managementApi.evolutionMong(mongId = mongId)
 
         if (!response.isSuccessful) {
-            throw EvolutionMongException(mongId = mongId)
+            throw EvolutionMongException(result = httpUtil.getErrorResult(errorBody = response.errorBody()))
         }
     }
 
@@ -212,7 +214,7 @@ class ManagementRepositoryImpl @Inject constructor(
         val response = managementApi.sleepMong(mongId = mongId)
 
         if (!response.isSuccessful) {
-            throw SleepMongException(mongId = mongId)
+            throw SleepMongException(result = httpUtil.getErrorResult(errorBody = response.errorBody()))
         }
     }
 
@@ -224,7 +226,7 @@ class ManagementRepositoryImpl @Inject constructor(
         val response = managementApi.strokeMong(mongId = mongId)
 
         if (!response.isSuccessful) {
-            throw StrokeMongException(mongId = mongId)
+            throw StrokeMongException(result = httpUtil.getErrorResult(errorBody = response.errorBody()))
         }
     }
 
@@ -236,7 +238,7 @@ class ManagementRepositoryImpl @Inject constructor(
         val response = managementApi.poopCleanMong(mongId = mongId)
 
         if (!response.isSuccessful) {
-            throw PoopCleanMongException(mongId = mongId)
+            throw PoopCleanMongException(result = httpUtil.getErrorResult(errorBody = response.errorBody()))
         }
     }
 }

@@ -13,7 +13,6 @@ class PlayerConsumer @Inject constructor(
 ) {
 
     companion object {
-        private const val TAG = "PlayerConsumer"
         private const val USER_PLAYER_OBSERVE_MEMBER = "USER-PLAYER-000"
     }
 

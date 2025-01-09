@@ -3,7 +3,6 @@ package com.mongs.wear.data.manager.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
-import androidx.room.Transaction
 import com.mongs.wear.data.global.room.RoomDB
 import com.mongs.wear.data.manager.api.ManagementApi
 import com.mongs.wear.data.manager.entity.MongEntity
@@ -66,7 +65,6 @@ class SlotRepositoryImpl @Inject constructor(
     /**
      * 현재 선택된 몽 정보 동기화
      */
-    @Transaction
     override suspend fun updateCurrentSlot() {
         roomDB.mongDao().findByIsCurrentTrue()?.let { mongEntity ->
 
@@ -93,7 +91,7 @@ class SlotRepositoryImpl @Inject constructor(
                                     poopCount = body.result.poopCount,
                                     updatedAt = body.result.updatedAt,
                                 )
-                            ).toMongModel()
+                            )
                         } ?: run {
                             dao.save(
                                 MongEntity(
@@ -114,7 +112,7 @@ class SlotRepositoryImpl @Inject constructor(
                                     createdAt = body.result.createdAt,
                                     updatedAt = body.result.updatedAt,
                                 )
-                            ).toMongModel()
+                            )
                         }
                     }
                 }

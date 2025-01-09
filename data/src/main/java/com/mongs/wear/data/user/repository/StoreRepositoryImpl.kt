@@ -1,5 +1,6 @@
 package com.mongs.wear.data.user.repository
 
+import com.mongs.wear.data.global.utils.HttpUtil
 import com.mongs.wear.data.user.api.StoreApi
 import com.mongs.wear.data.user.dto.request.ConsumeProductOrderRequestDto
 import com.mongs.wear.data.user.dto.request.GetConsumedOrderIdsRequestDto
@@ -12,6 +13,7 @@ import javax.inject.Singleton
 
 @Singleton
 class StoreRepositoryImpl @Inject constructor(
+    private val httpUtil: HttpUtil,
     private val storeApi: StoreApi,
 ) : StoreRepository {
 
@@ -27,7 +29,7 @@ class StoreRepositoryImpl @Inject constructor(
             }
         }
 
-        throw GetProductIdsException()
+        throw GetProductIdsException(result = httpUtil.getErrorResult(response.errorBody()))
     }
 
     override suspend fun getConsumedOrderIds(orderIds: List<String>): List<String> {
@@ -42,7 +44,7 @@ class StoreRepositoryImpl @Inject constructor(
             }
         }
 
-        throw GetConsumedOrderIdsException()
+        throw GetConsumedOrderIdsException(result = httpUtil.getErrorResult(response.errorBody()))
     }
 
     override suspend fun consumeProductOrder(productId: String, orderId: String, purchaseToken: String) {
@@ -56,11 +58,7 @@ class StoreRepositoryImpl @Inject constructor(
         )
 
         if (!response.isSuccessful) {
-            throw ConsumeProductOrderException(
-                productId = productId,
-                orderId = orderId,
-                purchaseToken = purchaseToken
-            )
+            throw ConsumeProductOrderException(result = httpUtil.getErrorResult(response.errorBody()))
         }
     }
 }

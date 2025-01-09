@@ -45,6 +45,9 @@ class PickMatchUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw PickMatchException()
+
+        when(exception.code) {
+            else -> throw PickMatchException()
+        }
     }
 }

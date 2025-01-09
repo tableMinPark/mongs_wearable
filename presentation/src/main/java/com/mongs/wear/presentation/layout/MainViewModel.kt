@@ -48,7 +48,11 @@ class MainViewModel @Inject constructor(
         when (exception) {
             is ConnectMqttException -> {
                 CoroutineScope(Dispatchers.IO).launch {
-                    setNetworkUseCase(false)
+                    setNetworkUseCase(param =
+                        SetNetworkUseCase.Param(
+                            network = false
+                        )
+                    )
                 }
             }
 

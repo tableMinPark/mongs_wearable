@@ -4,7 +4,7 @@ import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.core.errors.DataErrorCode
 import java.util.Collections
 
-class NeedJoinException(email: String) : ErrorException(
+class NeedJoinException(result: Map<String, Any>) : ErrorException(
     code = DataErrorCode.DATA_AUTH_NEED_JOIN,
-    result = Collections.singletonMap("email", email),
+    result = result,
 )

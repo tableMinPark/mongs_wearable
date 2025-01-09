@@ -1,10 +1,9 @@
 package com.mongs.wear.data.activity.exception
 
-import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.core.errors.DataErrorCode
-import java.util.Collections
+import com.mongs.wear.core.exception.ErrorException
 
-class DeleteMatchException(mongId: Long) : ErrorException(
+class DeleteMatchException(result: Map<String, Any>) : ErrorException(
     code = DataErrorCode.DATA_ACTIVITY_BATTLE_DELETE_MATCH,
-    result = Collections.singletonMap("mongId", mongId),
+    result = result,
 )

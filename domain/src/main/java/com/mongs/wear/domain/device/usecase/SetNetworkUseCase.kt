@@ -10,17 +10,24 @@ import javax.inject.Inject
 
 class SetNetworkUseCase @Inject constructor(
     private val deviceRepository: DeviceRepository,
-) : BaseParamUseCase<Boolean, Unit>() {
+) : BaseParamUseCase<SetNetworkUseCase.Param, Unit>() {
 
-    override suspend fun execute(network: Boolean) {
+    override suspend fun execute(param: Param) {
 
         return withContext(Dispatchers.IO) {
-            deviceRepository.setNetwork(network = network)
+            deviceRepository.setNetwork(network = param.network)
         }
     }
 
+    data class Param(
+        val network: Boolean
+    )
+
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw SetNetworkException()
+
+        when(exception.code) {
+            else -> throw SetNetworkException()
+        }
     }
 }

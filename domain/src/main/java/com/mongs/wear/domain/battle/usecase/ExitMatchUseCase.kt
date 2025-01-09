@@ -25,6 +25,9 @@ class ExitMatchUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw ExitMatchException()
+
+        when(exception.code) {
+            else -> throw ExitMatchException()
+        }
     }
 }

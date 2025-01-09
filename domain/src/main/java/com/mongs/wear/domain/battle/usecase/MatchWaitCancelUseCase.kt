@@ -29,6 +29,9 @@ class MatchWaitCancelUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw MatchWaitCancelException()
+
+        when(exception.code) {
+            else -> throw MatchWaitCancelException()
+        }
     }
 }

@@ -15,7 +15,6 @@ class ManagementObserveResolver @Inject constructor(
     fun updateMong(getMongResponseDto: GetMongResponseDto) {
 
         roomDB.mongDao().findByMongId(mongId = getMongResponseDto.mongId)?.let { mongEntity ->
-
             roomDB.mongDao().save(
                 mongEntity.update(
                     mongName = getMongResponseDto.mongName,

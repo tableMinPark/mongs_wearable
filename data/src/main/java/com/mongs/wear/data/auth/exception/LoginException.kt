@@ -4,7 +4,7 @@ import com.mongs.wear.core.errors.DataErrorCode
 import com.mongs.wear.core.exception.ErrorException
 import java.util.Collections
 
-class LoginException(email: String) : ErrorException(
+class LoginException(result: Map<String, Any>) : ErrorException(
     code = DataErrorCode.DATA_AUTH_LOGIN,
-    result = Collections.singletonMap("email", email),
+    result = result,
 )

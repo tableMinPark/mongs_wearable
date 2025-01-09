@@ -28,6 +28,9 @@ class GetMongCollectionsUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw GetMongCollectionException()
+
+        when(exception.code) {
+            else -> throw GetMongCollectionException()
+        }
     }
 }

@@ -4,7 +4,7 @@ import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.core.errors.DataErrorCode
 import java.util.Collections
 
-class GetPlayerException : ErrorException(
+class GetPlayerException(result: Map<String, Any>) : ErrorException(
     code = DataErrorCode.DATA_USER_PLAYER_GET_PLAYER,
-    result = Collections.emptyMap(),
+    result = result,
 )

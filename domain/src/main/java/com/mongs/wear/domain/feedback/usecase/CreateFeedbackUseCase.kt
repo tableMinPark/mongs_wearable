@@ -31,6 +31,9 @@ class CreateFeedbackUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw CreateFeedbackException()
+
+        when(exception.code) {
+            else -> throw CreateFeedbackException()
+        }
     }
 }

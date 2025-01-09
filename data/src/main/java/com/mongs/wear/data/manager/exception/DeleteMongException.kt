@@ -4,7 +4,7 @@ import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.core.errors.DataErrorCode
 import java.util.Collections
 
-class DeleteMongException(mongId: Long) : ErrorException(
+class DeleteMongException(result: Map<String, Any>) : ErrorException(
     code = DataErrorCode.DATA_MANAGER_MANAGEMENT_DELETE_MONG,
-    result = Collections.singletonMap("mongId", mongId),
+    result = result,
 )

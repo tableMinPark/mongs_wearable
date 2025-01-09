@@ -20,6 +20,9 @@ class ConnectMqttUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw ConnectMqttException()
+
+        when(exception.code) {
+            else -> throw ConnectMqttException()
+        }
     }
 }

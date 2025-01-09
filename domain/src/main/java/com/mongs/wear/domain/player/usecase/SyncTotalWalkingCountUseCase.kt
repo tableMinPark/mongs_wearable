@@ -36,6 +36,9 @@ class SyncTotalWalkingCountUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw SyncTotalWalkingCountException()
+
+        when(exception.code) {
+            else -> throw SyncTotalWalkingCountException()
+        }
     }
 }

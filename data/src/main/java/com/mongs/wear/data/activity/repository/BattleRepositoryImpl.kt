@@ -16,6 +16,7 @@ import com.mongs.wear.data.activity.exception.NotExistsMatchPlayerException
 import com.mongs.wear.data.device.datastore.DeviceDataStore
 import com.mongs.wear.data.global.exception.PubMqttException
 import com.mongs.wear.data.global.room.RoomDB
+import com.mongs.wear.data.global.utils.HttpUtil
 import com.mongs.wear.domain.global.client.MqttClient
 import com.mongs.wear.domain.battle.model.MatchModel
 import com.mongs.wear.domain.battle.model.MatchPlayerModel
@@ -25,6 +26,7 @@ import javax.inject.Singleton
 
 @Singleton
 class BattleRepositoryImpl @Inject constructor(
+    private val httpUtil: HttpUtil,
     private val roomDB: RoomDB,
     private val battleApi: BattleApi,
     private val mqttClient: MqttClient,
@@ -44,7 +46,7 @@ class BattleRepositoryImpl @Inject constructor(
                     stateCode = matchRoomEntity.stateCode,
                 )
             } ?: run {
-                throw NotExistsMatchException(deviceId = deviceId)
+                throw NotExistsMatchException(result = emptyMap())
             }
         }
     }
@@ -62,7 +64,7 @@ class BattleRepositoryImpl @Inject constructor(
                     isWin = matchPlayerEntity.isWin,
                 )
             } ?: run {
-                throw NotExistsMatchPlayerException()
+                throw NotExistsMatchPlayerException(result = emptyMap())
             }
         }
     }
@@ -80,7 +82,7 @@ class BattleRepositoryImpl @Inject constructor(
                     isWin = matchPlayerEntity.isWin,
                 )
             } ?: run {
-                throw NotExistsMatchPlayerException()
+                throw NotExistsMatchPlayerException(result = emptyMap())
             }
         }
     }
@@ -90,7 +92,7 @@ class BattleRepositoryImpl @Inject constructor(
         val response = battleApi.createWaitMatching(mongId = mongId)
 
         if (!response.isSuccessful) {
-            throw CreateMatchException(mongId = mongId)
+            throw CreateMatchException(result = httpUtil.getErrorResult(response.errorBody()))
         }
     }
 
@@ -99,7 +101,7 @@ class BattleRepositoryImpl @Inject constructor(
         val response = battleApi.deleteWaitMatching(mongId = mongId)
 
         if (!response.isSuccessful) {
-            throw DeleteMatchException(mongId = mongId)
+            throw DeleteMatchException(result = httpUtil.getErrorResult(response.errorBody()))
         }
     }
 
@@ -137,7 +139,7 @@ class BattleRepositoryImpl @Inject constructor(
             }
 
         } else {
-            throw UpdateOverMatchException(roomId = roomId)
+            throw UpdateOverMatchException(result = httpUtil.getErrorResult(response.errorBody()))
         }
     }
 
@@ -150,7 +152,7 @@ class BattleRepositoryImpl @Inject constructor(
 
             } catch (e: PubMqttException) {
 
-                throw EnterMatchException(roomId = roomId, playerId = playerId)
+                throw EnterMatchException(result = emptyMap())
             }
         }
     }
@@ -169,11 +171,7 @@ class BattleRepositoryImpl @Inject constructor(
 
             } catch (e: PubMqttException) {
 
-                throw PickMatchException(
-                    roomId = roomId,
-                    playerId = playerId,
-                    pickCode = pickCode
-                )
+                throw PickMatchException(result = emptyMap())
             }
         }
     }
@@ -189,7 +187,7 @@ class BattleRepositoryImpl @Inject constructor(
 
             } catch (e: PubMqttException) {
 
-                throw ExitMatchException(roomId = roomId, playerId = playerId)
+                throw ExitMatchException(result = emptyMap())
             }
         }
     }

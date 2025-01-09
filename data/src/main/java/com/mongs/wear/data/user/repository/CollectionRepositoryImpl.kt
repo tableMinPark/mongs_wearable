@@ -1,5 +1,6 @@
 package com.mongs.wear.data.user.repository
 
+import com.mongs.wear.data.global.utils.HttpUtil
 import com.mongs.wear.data.user.api.CollectionApi
 import com.mongs.wear.data.user.exception.GetMapCollectionsException
 import com.mongs.wear.data.user.exception.GetMongCollectionsException
@@ -10,6 +11,7 @@ import javax.inject.Singleton
 
 @Singleton
 class CollectionRepositoryImpl @Inject constructor(
+    private val httpUtil: HttpUtil,
     private val collectionApi: CollectionApi,
 ): CollectionRepository {
 
@@ -32,7 +34,7 @@ class CollectionRepositoryImpl @Inject constructor(
             }
         }
 
-        throw GetMapCollectionsException()
+        throw GetMapCollectionsException(result = httpUtil.getErrorResult(response.errorBody()))
     }
 
     /**
@@ -54,6 +56,6 @@ class CollectionRepositoryImpl @Inject constructor(
             }
         }
 
-        throw GetMongCollectionsException()
+        throw GetMongCollectionsException(result = httpUtil.getErrorResult(response.errorBody()))
     }
 }

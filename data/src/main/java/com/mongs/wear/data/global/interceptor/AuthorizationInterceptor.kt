@@ -21,13 +21,13 @@ class AuthorizationInterceptor (
 
     override fun intercept(chain: Chain): Response {
 
-        val accessToken = runBlocking { return@runBlocking tokenDataStore.getAccessToken() }
+        val accessToken = runBlocking { tokenDataStore.getAccessToken() }
 
         val response = chain.proceed(this.generateRequest(chain, accessToken))
 
         if (response.code() == 401) {
 
-            val newAccessToken = runBlocking { return@runBlocking this@AuthorizationInterceptor.reissue() }
+            val newAccessToken = runBlocking { reissue() }
 
             return chain.proceed(this.generateRequest(chain, newAccessToken))
 

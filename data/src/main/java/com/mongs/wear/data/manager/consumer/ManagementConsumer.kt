@@ -13,7 +13,6 @@ class ManagementConsumer  @Inject constructor(
 ) {
 
     companion object {
-        private const val TAG = "ManagerConsumer"
         private const val MANAGER_MANAGEMENT_OBSERVE_MONG = "MANAGER-MANAGEMENT-200"
     }
 

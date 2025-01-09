@@ -58,7 +58,7 @@ enum class DomainErrorCode(
     DOMAIN_MANAGEMENT_POOP_CLEAN_MONG_FAILED("몽 배변 처리에 실패하였습니다.", false),
     DOMAIN_MANAGEMENT_SET_CURRENT_SLOT_FAILED("현재 슬롯을 설정하는데 실패하였습니다.", false),
     DOMAIN_MANAGEMENT_SLEEP_MONG_FAILED("몽을 재우는데 실패하였습니다.", false),
-    DOMAIN_MANAGEMENT_STROKE_MONG_FAILED("몽을 쓰다듬는데 실패하였습니다.", false),
+    DOMAIN_MANAGEMENT_STROKE_MONG_FAILED("%d초 뒤 가능합니다.", true),
     DOMAIN_MANAGEMENT_TRAINING_MONG_FAILED("몽을 훈련시키는데 실패하였습니다.", false),
 
     // Player

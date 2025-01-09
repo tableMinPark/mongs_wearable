@@ -11,6 +11,7 @@ import com.mongs.wear.data.auth.exception.LoginException
 import com.mongs.wear.data.auth.exception.LogoutException
 import com.mongs.wear.data.auth.exception.NeedJoinException
 import com.mongs.wear.data.auth.exception.NeedUpdateAppException
+import com.mongs.wear.data.global.utils.HttpUtil
 import com.mongs.wear.domain.auth.repository.AuthRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -19,6 +20,7 @@ import javax.inject.Singleton
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val httpUtil: HttpUtil,
     private val authApi: AuthApi,
     private val tokenDataStore: TokenDataStore,
 ) : AuthRepository {
@@ -31,7 +33,7 @@ class AuthRepositoryImpl @Inject constructor(
         val response = authApi.join(JoinRequestDto(email = email, name = name, socialAccountId = googleAccountId))
 
         if (!response.isSuccessful) {
-            throw JoinException(email = email)
+            throw JoinException(result = httpUtil.getErrorResult(response.errorBody()))
         }
     }
 
@@ -65,14 +67,18 @@ class AuthRepositoryImpl @Inject constructor(
 
                 return body.result.accountId
             }
-        } else if (response.code() == 406) {
-            throw NeedUpdateAppException(buildVersion = buildVersion)
-
-        } else if (response.code() == 404) {
-            throw NeedJoinException(email = email)
         }
 
-        throw LoginException(email = email)
+        val result = httpUtil.getErrorResult(response.errorBody())
+
+        if (response.code() == 406) {
+            throw NeedUpdateAppException(result = result)
+
+        } else if (response.code() == 404) {
+            throw NeedJoinException(result = result)
+        }
+
+        throw LoginException(result = result)
     }
 
     /**
@@ -86,12 +92,11 @@ class AuthRepositoryImpl @Inject constructor(
 
         if (response.isSuccessful) {
             response.body()?.let {
-
                 tokenDataStore.setAccessToken(accessToken = "")
                 tokenDataStore.setRefreshToken(refreshToken = "")
             }
         } else {
-            throw LogoutException()
+            throw LogoutException(result = httpUtil.getErrorResult(response.errorBody()))
         }
     }
 }

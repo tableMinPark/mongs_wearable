@@ -25,6 +25,9 @@ class OverMatchUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw OverMatchException()
+
+        when(exception.code) {
+            else -> throw OverMatchException()
+        }
     }
 }

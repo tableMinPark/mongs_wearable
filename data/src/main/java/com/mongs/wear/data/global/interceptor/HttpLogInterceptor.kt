@@ -41,15 +41,21 @@ class HttpLogInterceptor(
                 .build()
         }
 
-        response.body()?.let { body ->
+        response.body()?.let { responseBody ->
 
-            val bodyJson = body.string()
+            val bodyJson = responseBody.string()
 
             val responseDto = gson.fromJson(bodyJson, ResponseDto::class.java)
 
             Log.i(TAG, "${request.method()} ${request.url()} ==> [${response.code()}] $responseDto")
 
-            return response.newBuilder().body(CustomResponseBody(body = bodyJson, originalBody = body)).build()
+            return response.newBuilder()
+                .body(
+                    CustomResponseBody(
+                        body = bodyJson,
+                        originalBody = responseBody
+                    )
+                ).build()
 
         } ?: run {
             return response

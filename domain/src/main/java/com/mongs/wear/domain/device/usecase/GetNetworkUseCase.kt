@@ -2,6 +2,7 @@ package com.mongs.wear.domain.device.usecase
 
 import androidx.lifecycle.LiveData
 import com.mongs.wear.core.exception.ErrorException
+import com.mongs.wear.domain.device.exception.ConnectMqttException
 import com.mongs.wear.domain.device.exception.GetNetworkException
 import com.mongs.wear.domain.device.repository.DeviceRepository
 import com.mongs.wear.domain.global.usecase.BaseNoParamUseCase
@@ -22,6 +23,9 @@ class GetNetworkUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw GetNetworkException()
+
+        when(exception.code) {
+            else -> throw GetNetworkException()
+        }
     }
 }

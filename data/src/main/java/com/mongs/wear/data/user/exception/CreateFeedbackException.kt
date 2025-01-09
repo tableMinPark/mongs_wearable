@@ -4,7 +4,7 @@ import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.core.errors.DataErrorCode
 import java.util.Collections
 
-class CreateFeedbackException : ErrorException(
+class CreateFeedbackException(result: Map<String, Any>) : ErrorException(
     code = DataErrorCode.DATA_USER_FEEDBACK_CREATE_FEEDBACK,
-    result = Collections.emptyMap(),
+    result = result,
 )

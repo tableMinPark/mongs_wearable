@@ -40,6 +40,9 @@ class MatchWaitUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw MatchWaitException()
+
+        when(exception.code) {
+            else -> throw MatchWaitException()
+        }
     }
 }

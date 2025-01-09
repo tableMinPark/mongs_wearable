@@ -20,11 +20,9 @@ class TokenDataStore @Inject constructor(
 ) {
 
     companion object {
-
         private const val TOKEN_DATA_STORE_NAME = "TOKEN"
 
         private val ACCESS_TOKEN = stringPreferencesKey("ACCESS_TOKEN")
-
         private val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
     }
 

@@ -31,6 +31,7 @@ class MqttApi @Inject constructor(
 
     companion object {
         private const val TAG = "MqttClientApi"
+
         private var connectPending = false
     }
 

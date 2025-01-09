@@ -1,6 +1,7 @@
 package com.mongs.wear.data.user.repository
 
 import androidx.lifecycle.LiveData
+import com.mongs.wear.data.global.utils.HttpUtil
 import com.mongs.wear.data.user.api.PlayerApi
 import com.mongs.wear.data.user.datastore.PlayerDataStore
 import com.mongs.wear.data.user.dto.request.ExchangeStarPointRequestDto
@@ -17,6 +18,7 @@ import javax.inject.Singleton
 
 @Singleton
 class PlayerRepositoryImpl @Inject constructor(
+    private val httpUtil: HttpUtil,
     private val playerApi: PlayerApi,
     private val playerDataStore: PlayerDataStore,
 ): PlayerRepository {
@@ -30,7 +32,7 @@ class PlayerRepositoryImpl @Inject constructor(
                 playerDataStore.setStarPoint(starPoint = body.result.starPoint)
             }
         } else {
-            throw GetPlayerException()
+            throw GetPlayerException(result = httpUtil.getErrorResult(response.errorBody()))
         }
     }
 
@@ -56,7 +58,7 @@ class PlayerRepositoryImpl @Inject constructor(
             }
 
         } else {
-            throw GetPlayerException()
+            throw GetPlayerException(result = httpUtil.getErrorResult(response.errorBody()))
         }
     }
 
@@ -68,7 +70,7 @@ class PlayerRepositoryImpl @Inject constructor(
         val response = playerApi.buySlot()
 
         if (!response.isSuccessful) {
-            throw BuySlotException()
+            throw BuySlotException(result = httpUtil.getErrorResult(response.errorBody()))
         }
     }
 
@@ -85,7 +87,7 @@ class PlayerRepositoryImpl @Inject constructor(
         )
 
         if (!response.isSuccessful) {
-            throw ExchangeStarPointException(mongId = mongId)
+            throw ExchangeStarPointException(result = httpUtil.getErrorResult(response.errorBody()))
         }
     }
 
@@ -111,7 +113,7 @@ class PlayerRepositoryImpl @Inject constructor(
                 playerDataStore.setConsumeWalkingCount(consumeWalkingCount = body.result.consumeWalkingCount)
             }
         } else {
-            throw ExchangeWalkingException()
+            throw ExchangeWalkingException(result = httpUtil.getErrorResult(response.errorBody()))
         }
     }
 

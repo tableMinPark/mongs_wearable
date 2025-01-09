@@ -31,6 +31,9 @@ class TrainingMongUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw TrainingMongException()
+
+        when(exception.code) {
+            else -> throw TrainingMongException()
+        }
     }
 }

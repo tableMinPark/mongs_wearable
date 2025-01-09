@@ -4,7 +4,7 @@ import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.core.errors.DataErrorCode
 import java.util.Collections
 
-class CreateMatchException(mongId: Long) : ErrorException(
+class CreateMatchException(result: Map<String, Any>) : ErrorException(
     code = DataErrorCode.DATA_ACTIVITY_BATTLE_CREATE_MATCH,
-    result = Collections.singletonMap("mongId", mongId),
+    result = result,
 )

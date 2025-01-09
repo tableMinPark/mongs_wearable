@@ -4,7 +4,7 @@ import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.core.errors.DataErrorCode
 import java.util.Collections
 
-class SleepMongException(mongId: Long) : ErrorException(
+class SleepMongException(result: Map<String, Any>) : ErrorException(
     code = DataErrorCode.DATA_MANAGER_MANAGEMENT_SLEEP_MONG,
-    result = Collections.singletonMap("mongId", mongId),
+    result = result,
 )

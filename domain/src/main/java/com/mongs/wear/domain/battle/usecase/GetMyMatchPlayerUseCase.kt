@@ -33,6 +33,9 @@ class GetMyMatchPlayerUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw GetMyMatchException()
+
+        when(exception.code) {
+            else -> throw GetMyMatchException()
+        }
     }
 }

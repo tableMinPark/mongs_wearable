@@ -25,6 +25,9 @@ class SetTotalWalkingCountUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw SetTotalWalkingCountException()
+
+        when(exception.code) {
+            else -> throw SetTotalWalkingCountException()
+        }
     }
 }

@@ -4,7 +4,7 @@ import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.core.errors.DataErrorCode
 import java.util.Collections
 
-class ExchangeWalkingException : ErrorException(
+class ExchangeWalkingException(result: Map<String, Any>) : ErrorException(
     code = DataErrorCode.DATA_USER_PLAYER_EXCHANGE_WALKING,
-    result = Collections.emptyMap(),
+    result = result,
 )

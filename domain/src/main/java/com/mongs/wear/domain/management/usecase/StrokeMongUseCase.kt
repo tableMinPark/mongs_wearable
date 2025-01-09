@@ -1,5 +1,6 @@
 package com.mongs.wear.domain.management.usecase
 
+import com.mongs.wear.core.errors.DataErrorCode
 import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.global.usecase.BaseParamUseCase
 import com.mongs.wear.domain.management.exception.StrokeMongException
@@ -22,6 +23,16 @@ class StrokeMongUseCase @Inject constructor(
         super.handleException(exception)
 
         when(exception.code) {
+
+            DataErrorCode.DATA_MANAGER_MANAGEMENT_STROKE_MONG -> {
+
+                val expirationSeconds = exception.result["expirationSeconds"]?.toString()
+                    ?.toDouble()?.toLong()
+                    ?: 0
+
+                throw StrokeMongException(expirationSeconds = expirationSeconds)
+            }
+
             else -> throw StrokeMongException()
         }
     }
