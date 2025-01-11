@@ -80,7 +80,6 @@ class MainSlotViewModel @Inject constructor(
             }
 
             is GraduateCheckException -> {
-
             }
 
             else -> {

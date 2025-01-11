@@ -1,5 +1,6 @@
 package com.mongs.wear.domain.management.usecase
 
+import com.mongs.wear.core.errors.DataErrorCode
 import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.global.usecase.BaseParamUseCase
 import com.mongs.wear.domain.management.exception.FeedMongException
@@ -20,14 +21,6 @@ class FeedMongUseCase @Inject constructor(
             slotRepository.getCurrentSlot()?.let { slotModel ->
                 managementRepository.feedMong(mongId = slotModel.mongId, foodTypeCode = param.foodTypeCode)
             } ?: run {  }
-
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val slotModel = slotRepository.getNowSlot()
-//            managementRepository.setIsEating(mongId = slotModel.mongId, isEating = true)
-//            managementRepository.feedMong(mongId = slotModel.mongId, foodTypeCode = foodTypeCode)
-//            delay(2000)
-//            managementRepository.setIsEating(mongId = slotModel.mongId, isEating = false)
-//        }
         }
     }
 
@@ -37,6 +30,19 @@ class FeedMongUseCase @Inject constructor(
 
     override fun handleException(exception: ErrorException) {
         super.handleException(exception)
-        throw FeedMongException()
+
+        throw when (exception.code) {
+
+            DataErrorCode.DATA_MANAGER_MANAGEMENT_FEED_MONG -> {
+
+                val expirationSeconds = exception.result["expirationSeconds"]?.toString()
+                    ?.toDouble()?.toLong()
+                    ?: 0
+
+                throw FeedMongException(expirationSeconds = expirationSeconds)
+            }
+
+            else -> FeedMongException()
+        }
     }
 }

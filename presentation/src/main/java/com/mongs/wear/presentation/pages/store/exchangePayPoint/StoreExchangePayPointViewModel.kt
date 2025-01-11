@@ -10,8 +10,8 @@ import com.mongs.wear.domain.management.usecase.GetCurrentSlotUseCase
 import com.mongs.wear.domain.management.vo.MongVo
 import com.mongs.wear.domain.player.exception.ExchangeWalkingCountException
 import com.mongs.wear.domain.player.exception.GetStepsException
-import com.mongs.wear.domain.player.usecase.ExchangeWalkingCountUseCase
-import com.mongs.wear.domain.player.usecase.GetStepsUseCase
+import com.mongs.wear.domain.player.usecase.ExchangeStarPointUseCase
+import com.mongs.wear.domain.player.usecase.GetStarPointUseCase
 import com.mongs.wear.presentation.global.viewModel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -22,15 +22,15 @@ import javax.inject.Inject
 @HiltViewModel
 class StoreExchangePayPointViewModel @Inject constructor(
     private val getCurrentSlotUseCase: GetCurrentSlotUseCase,
-    private val getStepsUseCase: GetStepsUseCase,
-    private val exchangeWalkingCountUseCase: ExchangeWalkingCountUseCase,
+    private val getStarPointUseCase: GetStarPointUseCase,
+    private val exchangeStarPointUseCase: ExchangeStarPointUseCase,
 ): BaseViewModel() {
 
     private val _mongVo = MediatorLiveData<MongVo?>(null)
     val mongVo: LiveData<MongVo?> get() = _mongVo
 
-    private val _walkingCount = MediatorLiveData<Int>()
-    val walkingCount: LiveData<Int> get() = _walkingCount
+    val starPoint: LiveData<Int> get() = _starPoint
+    private val _starPoint = MediatorLiveData<Int>()
 
     init {
         viewModelScopeWithHandler.launch (Dispatchers.Main) {
@@ -43,25 +43,28 @@ class StoreExchangePayPointViewModel @Inject constructor(
                 }
             }
 
-            _walkingCount.addSource(withContext(Dispatchers.IO) { getStepsUseCase() }) { walkingCount ->
-                _walkingCount.value = walkingCount
+            _starPoint.addSource(withContext(Dispatchers.IO) { getStarPointUseCase() }) { starPoint ->
+                _starPoint.value = starPoint
             }
 
             uiState.loadingBar = false
         }
     }
 
-    fun chargePayPoint(mongId: Long, walkingCount: Int) {
+    fun exchangeStarPoint(mongId: Long, starPoint: Int) {
         viewModelScopeWithHandler.launch (Dispatchers.IO) {
 
             uiState.loadingBar = true
-            uiState.chargePayPointDialog = false
+            uiState.exchangeStarPointDialog = false
 
-            exchangeWalkingCountUseCase(
-                ExchangeWalkingCountUseCase.Param(
-                    mongId = mongId, walkingCount = walkingCount
+            exchangeStarPointUseCase(
+                ExchangeStarPointUseCase.Param(
+                    mongId = mongId,
+                    starPoint = starPoint,
                 )
             )
+
+            toastEvent("환전 성공")
 
             uiState.loadingBar = false
         }
@@ -70,7 +73,7 @@ class StoreExchangePayPointViewModel @Inject constructor(
     val uiState: UiState = UiState()
 
     class UiState : BaseUiState() {
-        var chargePayPointDialog by mutableStateOf(false)
+        var exchangeStarPointDialog by mutableStateOf(false)
     }
 
     override fun exceptionHandler(exception: Throwable) {
@@ -86,7 +89,7 @@ class StoreExchangePayPointViewModel @Inject constructor(
 
             is ExchangeWalkingCountException -> {
                 uiState.loadingBar = false
-                uiState.chargePayPointDialog = false
+                uiState.exchangeStarPointDialog = false
             }
 
             else -> {

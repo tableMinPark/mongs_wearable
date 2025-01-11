@@ -46,7 +46,7 @@ class BattleRepositoryImpl @Inject constructor(
                     stateCode = matchRoomEntity.stateCode,
                 )
             } ?: run {
-                throw NotExistsMatchException(result = emptyMap())
+                throw NotExistsMatchException()
             }
         }
     }
@@ -64,7 +64,7 @@ class BattleRepositoryImpl @Inject constructor(
                     isWin = matchPlayerEntity.isWin,
                 )
             } ?: run {
-                throw NotExistsMatchPlayerException(result = emptyMap())
+                throw NotExistsMatchPlayerException()
             }
         }
     }
@@ -82,7 +82,7 @@ class BattleRepositoryImpl @Inject constructor(
                     isWin = matchPlayerEntity.isWin,
                 )
             } ?: run {
-                throw NotExistsMatchPlayerException(result = emptyMap())
+                throw NotExistsMatchPlayerException()
             }
         }
     }
@@ -152,7 +152,7 @@ class BattleRepositoryImpl @Inject constructor(
 
             } catch (e: PubMqttException) {
 
-                throw EnterMatchException(result = emptyMap())
+                throw EnterMatchException()
             }
         }
     }
@@ -171,7 +171,7 @@ class BattleRepositoryImpl @Inject constructor(
 
             } catch (e: PubMqttException) {
 
-                throw PickMatchException(result = emptyMap())
+                throw PickMatchException()
             }
         }
     }
@@ -187,7 +187,7 @@ class BattleRepositoryImpl @Inject constructor(
 
             } catch (e: PubMqttException) {
 
-                throw ExitMatchException(result = emptyMap())
+                throw ExitMatchException()
             }
         }
     }

@@ -23,6 +23,7 @@ enum class DataErrorCode(
     DATA_ACTIVITY_BATTLE_NOT_EXISTS_MATCH_PLAYER("배틀 플레이어가 존재하지 않음", false),
     DATA_ACTIVITY_BATTLE_PICK_MATCH("배틀 매치 선택 실패", false),
     DATA_ACTIVITY_BATTLE_UPDATE_OVER_MATCH("배틀 매치 결과 조회 실패", false),
+    DATA_ACTIVITY_TRAINING_RUNNER("훈련 러너 실패", false),
 
     // Auth
     DATA_AUTH_JOIN("회원가입에 실패했습니다.", false),

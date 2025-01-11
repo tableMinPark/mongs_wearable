@@ -65,6 +65,3 @@ class MainPagerViewModel @Inject constructor(
         }
     }
 }
-
-// 285510201
-// 285810197

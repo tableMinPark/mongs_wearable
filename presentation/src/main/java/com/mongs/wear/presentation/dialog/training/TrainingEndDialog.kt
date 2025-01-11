@@ -53,19 +53,20 @@ fun TrainingEndDialog(
             modifier = Modifier.fillMaxHeight()
         ) {
             Spacer(modifier = Modifier.height(15.dp))
+
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.Bottom,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.4f)
+                    .weight(0.35f)
             ) {
                 Text(
                     text = "Game Over",
                     textAlign = TextAlign.Center,
                     fontFamily = DAL_MU_RI,
                     fontWeight = FontWeight.Light,
-                    fontSize = 30.sp,
+                    fontSize = 28.sp,
                     color = MongsWhite,
                     maxLines = 1,
                 )
@@ -94,7 +95,7 @@ fun TrainingEndDialog(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.2f)
+                    .weight(0.25f)
             ) {
                 Image(
                     painter = painterResource(R.drawable.pointlogo),
@@ -104,7 +105,9 @@ fun TrainingEndDialog(
                         .width(20.dp),
                     contentScale = ContentScale.FillBounds,
                 )
+
                 Spacer(modifier = Modifier.width(7.dp))
+
                 Text(
                     text = "+",
                     textAlign = TextAlign.Center,
@@ -114,7 +117,9 @@ fun TrainingEndDialog(
                     color = MongsWhite,
                     maxLines = 1,
                 )
+
                 Spacer(modifier = Modifier.width(7.dp))
+
                 Text(
                     text = "$rewardPayPoint",
                     textAlign = TextAlign.Center,
@@ -138,6 +143,7 @@ fun TrainingEndDialog(
                     onClick = trainingEnd,
                 )
             }
+
             Spacer(modifier = Modifier.height(25.dp))
         }
     }

@@ -50,19 +50,15 @@ class HttpLogInterceptor(
             Log.i(TAG, "${request.method()} ${request.url()} ==> [${response.code()}] $responseDto")
 
             return response.newBuilder()
-                .body(
-                    CustomResponseBody(
-                        body = bodyJson,
-                        originalBody = responseBody
-                    )
-                ).build()
+                .body(RealResponseBody(body = bodyJson, originalBody = responseBody))
+                .build()
 
         } ?: run {
             return response
         }
     }
 
-    class CustomResponseBody(
+    class RealResponseBody(
         private val body: String,
         private val originalBody: ResponseBody,
     ) : ResponseBody() {

@@ -5,8 +5,8 @@ import com.mongs.wear.core.errors.DomainErrorCode
 import com.mongs.wear.core.errors.ErrorCode
 
 class ConsumeProductOrderException(
-    override val code: ErrorCode = DomainErrorCode.DOMAIN_CONSUME_PRODUCT_ORDER_FAILED,
+    override val code: ErrorCode = DomainErrorCode.DOMAIN_STORE_CONSUME_PRODUCT_ORDER_FAILED,
     override val message: String = code.getMessage()
 ) : UseCaseException(
-    code = DomainErrorCode.DOMAIN_CONSUME_PRODUCT_ORDER_FAILED,
+    code = DomainErrorCode.DOMAIN_STORE_CONSUME_PRODUCT_ORDER_FAILED,
 )

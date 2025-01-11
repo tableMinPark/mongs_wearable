@@ -2,6 +2,7 @@ package com.mongs.wear.domain.management.usecase
 
 import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.global.usecase.BaseNoParamUseCase
+import com.mongs.wear.domain.management.exception.FoodCodesEmptyException
 import com.mongs.wear.domain.management.exception.GetFoodCodesException
 import com.mongs.wear.domain.management.repository.ManagementRepository
 import com.mongs.wear.domain.management.repository.SlotRepository
@@ -22,7 +23,7 @@ class GetFoodCodesUseCase @Inject constructor(
     override suspend fun execute(): List<FeedItemVo> {
 
         return withContext(Dispatchers.IO) {
-            slotRepository.getCurrentSlot()?.let { slotModel ->
+            val feedItemVoList = slotRepository.getCurrentSlot()?.let { slotModel ->
                 managementRepository.getFeedItems(mongId = slotModel.mongId, foodTypeGroupCode = FOOD_TYPE_GROUP_CODE).map { //.associateBy { it.foodTypeCode }
                     FeedItemVo(
                         foodTypeCode = it.foodTypeCode,
@@ -37,6 +38,10 @@ class GetFoodCodesUseCase @Inject constructor(
                     )
                 }
             } ?: run { ArrayList() }
+
+            if (feedItemVoList.isEmpty()) throw FoodCodesEmptyException()
+
+            feedItemVoList
         }
     }
 

@@ -125,7 +125,8 @@ class StoreChargeStarPointViewModel @Inject constructor(
             billingSuccessEvent.collect {
                 getProducts()
                 uiState.loadingBar = false
-                toastEvent("충전 완료")
+
+                toastEvent("충전 성공")
             }
         }
     }

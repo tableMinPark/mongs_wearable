@@ -11,7 +11,6 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.google.firebase.messaging.FirebaseMessaging
 import com.mongs.wear.domain.device.repository.DeviceRepository
 import com.mongs.wear.domain.global.client.MqttClient
 import com.mongs.wear.presentation.global.manager.StepSensorManager
@@ -34,7 +33,7 @@ class MainActivityViewModel @Inject constructor(
     private val stepSensorManager: StepSensorManager,
     private val deviceRepository: DeviceRepository,
     private val mqttClient: MqttClient,
-    private val firebaseMessaging: FirebaseMessaging,
+//    private val firebaseMessaging: FirebaseMessaging,
 ) : BaseViewModel() {
 
     init {
@@ -51,10 +50,13 @@ class MainActivityViewModel @Inject constructor(
 
             deviceRepository.setDeviceId(deviceId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID))
 
+            // 워커 삭제
+//            workerManager.cancelUniqueWork(StepSensorWorker.WORKER_NAME)
+
             // 15분 간격 걸음 수 서버 동기화 워커 실행
             workerManager.enqueueUniquePeriodicWork(
                 StepSensorWorker.WORKER_NAME,
-                ExistingPeriodicWorkPolicy.KEEP,
+                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
                 PeriodicWorkRequestBuilder<StepSensorWorker>(15, TimeUnit.MINUTES)
 //                .setConstraints(Constraints.Builder()
 //                    .setRequiredNetworkType(NetworkType.CONNECTED)

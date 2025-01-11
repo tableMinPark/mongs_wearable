@@ -28,7 +28,7 @@ class CollectionMapPickViewModel @Inject constructor(
     private val _mapCollectionVoList = MutableLiveData<List<MapCollectionVo>>()
 
     init {
-        viewModelScope.launch (Dispatchers.Main) {
+        viewModelScopeWithHandler.launch (Dispatchers.Main) {
 
             uiState.loadingBar = true
 
@@ -41,7 +41,7 @@ class CollectionMapPickViewModel @Inject constructor(
     }
 
     fun setBackground(mapCode: String) {
-        viewModelScope.launch (Dispatchers.IO) {
+        viewModelScopeWithHandler.launch (Dispatchers.IO) {
 
             uiState.loadingBar = true
 

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
@@ -42,6 +43,9 @@ import com.mongs.wear.presentation.global.viewModel.BaseViewModel
 import com.mongs.wear.presentation.pages.collection.map.CollectionMapPickView
 import com.mongs.wear.presentation.pages.collection.menu.CollectionMenuView
 import com.mongs.wear.presentation.pages.collection.mong.CollectionMongPickView
+import com.mongs.wear.presentation.pages.feed.food.FeedFoodPickView
+import com.mongs.wear.presentation.pages.feed.menu.FeedMenuView
+import com.mongs.wear.presentation.pages.feed.snack.FeedSnackPickView
 import com.mongs.wear.presentation.pages.feedback.FeedbackView
 import com.mongs.wear.presentation.pages.help.menu.HelpMenuView
 import com.mongs.wear.presentation.pages.login.LoginView
@@ -50,6 +54,8 @@ import com.mongs.wear.presentation.pages.slot.SlotPickView
 import com.mongs.wear.presentation.pages.store.chargeStartPoint.StoreChargeStarPointView
 import com.mongs.wear.presentation.pages.store.exchangePayPoint.StoreExchangePayPointView
 import com.mongs.wear.presentation.pages.store.menu.StoreMenuView
+import com.mongs.wear.presentation.pages.training.runner.TrainingRunnerView
+import com.mongs.wear.presentation.pages.training.menu.TrainingMenuView
 
 @Composable
 fun MainView (
@@ -145,6 +151,19 @@ fun NetworkErrorContent (
 fun NavContent() {
     val navController = rememberSwipeDismissableNavController()
 
+    val emptyPagerState = rememberPagerState(0, 0f) { 3 }
+    val pagerState = rememberPagerState(2, 0f) { 5 }
+
+    /**
+     * 메인 페이지 스크롤 이벤트
+     */
+    LaunchedEffect(Unit) {
+        BaseViewModel.pageScrollMainPagerViewEvent.collect {
+            emptyPagerState.animateScrollToPage(0)
+            pagerState.animateScrollToPage(2)
+        }
+    }
+
     SwipeDismissableNavHost(
         navController = navController,
         startDestination = NavItem.Login.route
@@ -156,7 +175,8 @@ fun NavContent() {
         composable(route = NavItem.MainPager.route) {
             MainPagerView(
                 navController = navController,
-//                pagerState = pagerState,
+                emptyPagerState = emptyPagerState,
+                pagerState = pagerState,
             )
         }
 
@@ -175,21 +195,21 @@ fun NavContent() {
             }
         }
 
-//        navigation(
-//            startDestination = NavItem.FeedMenu.route,
-//            route = NavItem.FeedNested.route
-//        ) {
-//            composable(route = NavItem.FeedMenu.route) {
-//                FeedMenuView(navController = navController)
-//            }
-//            composable(route = NavItem.FeedFoodPick.route) {
-//                FeedFoodPickView(navController = navController, scrollPage = pagerScroll)
-//            }
-//            composable(route = NavItem.FeedSnackPick.route) {
-//                FeedSnackPickView(navController = navController, scrollPage = pagerScroll)
-//            }
-//        }
-//
+        navigation(
+            startDestination = NavItem.FeedMenu.route,
+            route = NavItem.FeedNested.route
+        ) {
+            composable(route = NavItem.FeedMenu.route) {
+                FeedMenuView(navController = navController)
+            }
+            composable(route = NavItem.FeedFoodPick.route) {
+                FeedFoodPickView(navController = navController)
+            }
+            composable(route = NavItem.FeedSnackPick.route) {
+                FeedSnackPickView(navController = navController)
+            }
+        }
+
         composable(route = NavItem.SlotPick.route) {
             SlotPickView(navController = navController)
         }
@@ -212,18 +232,18 @@ fun NavContent() {
         composable(route = NavItem.Feedback.route) {
             FeedbackView()
         }
-//
-//        navigation(
-//            startDestination = NavItem.TrainingMenu.route,
-//            route = NavItem.TrainingNested.route
-//        ) {
-//            composable(route = NavItem.TrainingMenu.route) {
-//                TrainingMenuView(navController = navController)
-//            }
-//            composable(route = NavItem.TrainingJumping.route) {
-//                TrainingJumpingView(navController = navController)
-//            }
-//        }
+
+        navigation(
+            startDestination = NavItem.TrainingMenu.route,
+            route = NavItem.TrainingNested.route
+        ) {
+            composable(route = NavItem.TrainingMenu.route) {
+                TrainingMenuView(navController = navController)
+            }
+            composable(route = NavItem.TrainingJumping.route) {
+                TrainingRunnerView(navController = navController)
+            }
+        }
 //
 //        navigation(
 //            startDestination = NavItem.BattleMenu.route,

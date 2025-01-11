@@ -1,6 +1,7 @@
 package com.mongs.wear.data.activity.module
 
 import com.mongs.wear.data.activity.api.BattleApi
+import com.mongs.wear.data.activity.api.TrainingApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,4 +16,8 @@ object ActivityApiModule {
     @Provides
     @Singleton
     fun provideBattleApi(retrofit: Retrofit): BattleApi = retrofit.create(BattleApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideTrainingApi(retrofit: Retrofit): TrainingApi = retrofit.create(TrainingApi::class.java)
 }

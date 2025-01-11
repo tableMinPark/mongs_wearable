@@ -33,11 +33,11 @@ import com.mongs.wear.presentation.assets.MongsWhite
 @Composable
 fun FeedItemDetailDialog(
     onClick: () -> Unit = {},
-    addWeight: Double = 0.0,
-    addStrength: Double = 0.0,
-    addSatiety: Double = 0.0,
-    addHealthy: Double = 0.0,
-    addSleep: Double = 0.0,
+    addWeightValue: Double = 0.0,
+    addStrengthValue: Double = 0.0,
+    addSatietyValue: Double = 0.0,
+    addHealthyValue: Double = 0.0,
+    addFatigueValue: Double = 0.0,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -56,36 +56,36 @@ fun FeedItemDetailDialog(
             verticalArrangement = Arrangement.Center,
         ) {
             Spacer(modifier = Modifier.height(35.dp))
-            if (addHealthy > 0) {
+            if (addHealthyValue > 0) {
                 ImageDetail(
                     image = R.drawable.health,
-                    value = addHealthy,
+                    value = addHealthyValue,
                     modifier = Modifier.weight(0.2f)
                 )
             }
-            if (addSatiety > 0) {
+            if (addSatietyValue > 0) {
                 ImageDetail(
                     image = R.drawable.satiety,
-                    value = addSatiety,
+                    value = addSatietyValue,
                     modifier = Modifier.weight(0.2f)
                 )
             }
-            if (addStrength > 0) {
+            if (addStrengthValue > 0) {
                 ImageDetail(
                     image = R.drawable.strength,
-                    value = addStrength,
+                    value = addStrengthValue,
                     modifier = Modifier.weight(0.2f)
                 )
             }
-            if (addSleep > 0) {
+            if (addFatigueValue > 0) {
                 ImageDetail(
                     image = R.drawable.sleep,
-                    value = addSleep,
+                    value = addFatigueValue,
                     modifier = Modifier.weight(0.2f)
                 )
             }
-            if (addWeight > 0) {
-                TextDetail(text = "Kg", value = addWeight, modifier = Modifier.weight(0.2f))
+            if (addWeightValue > 0) {
+                TextDetail(text = "Kg", value = addWeightValue, modifier = Modifier.weight(0.2f))
             }
             Spacer(modifier = Modifier.height(35.dp))
         }
@@ -177,11 +177,11 @@ private fun TextDetail(
 @Composable
 private fun SmallFeedItemDetailPreview() {
     FeedItemDetailDialog(
-        addHealthy = 10.0,
-        addSatiety = 10.0,
-        addStrength = 10.0,
-        addSleep = 10.0,
-        addWeight = 10.0
+        addHealthyValue = 10.0,
+        addSatietyValue = 10.0,
+        addStrengthValue = 10.0,
+        addFatigueValue = 10.0,
+        addWeightValue = 10.0
     )
 }
 
@@ -189,10 +189,10 @@ private fun SmallFeedItemDetailPreview() {
 @Composable
 private fun LargeFeedItemDetailPreview() {
     FeedItemDetailDialog(
-        addHealthy = 10.0,
-        addSatiety = 10.0,
-        addStrength = 10.0,
-        addSleep = 10.0,
-        addWeight = 10.0
+        addHealthyValue = 10.0,
+        addSatietyValue = 10.0,
+        addStrengthValue = 10.0,
+        addFatigueValue = 10.0,
+        addWeightValue = 10.0
     )
 }

@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -36,14 +35,14 @@ import androidx.wear.compose.material.Text
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.DAL_MU_RI
 import com.mongs.wear.presentation.assets.MongsWhite
-import com.mongs.wear.presentation.global.manager.BillingManager
 import com.mongs.wear.presentation.component.common.background.StoreNestedBackground
-import com.mongs.wear.presentation.component.common.button.BlueButton
 import com.mongs.wear.presentation.component.common.bar.LoadingBar
+import com.mongs.wear.presentation.component.common.button.BlueButton
 import com.mongs.wear.presentation.component.common.button.SelectButton
 import com.mongs.wear.presentation.component.common.button.YellowButton
 import com.mongs.wear.presentation.component.common.pagenation.PageIndicator
 import com.mongs.wear.presentation.component.common.textbox.StarPoint
+import com.mongs.wear.presentation.global.manager.BillingManager
 import kotlin.math.max
 import kotlin.math.min
 

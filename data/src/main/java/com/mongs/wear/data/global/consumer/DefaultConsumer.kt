@@ -63,7 +63,6 @@ class DefaultConsumer @Inject constructor(
                         }
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace()
                     Log.e(TAG, "mqtt message parsing fail.")
                 }
             }

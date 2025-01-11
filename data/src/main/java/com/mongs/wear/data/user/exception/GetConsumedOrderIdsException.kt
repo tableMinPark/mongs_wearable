@@ -4,7 +4,7 @@ import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.core.errors.DataErrorCode
 import java.util.Collections
 
-class GetConsumedOrderIdsException(result: Map<String, Any>) : ErrorException(
+class GetConsumedOrderIdsException(result: Map<String, Any> = emptyMap()) : ErrorException(
     code = DataErrorCode.DATA_USER_STORE_CONSUMED_ORDER_IDS,
     result = result,
 )

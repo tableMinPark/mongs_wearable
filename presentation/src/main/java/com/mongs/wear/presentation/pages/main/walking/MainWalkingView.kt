@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.wear.compose.material.Text
-import com.mongs.wear.core.enums.MongStateCode
 import com.mongs.wear.domain.management.vo.MongVo
 import com.mongs.wear.presentation.R
 import com.mongs.wear.presentation.assets.DAL_MU_RI
@@ -49,49 +48,39 @@ fun MainWalkingView(
     mongVo: MongVo,
     mainWalkingViewModel: MainWalkingViewModel = hiltViewModel(),
 ) {
+
+    val payPoint = mainWalkingViewModel.payPoint.observeAsState(0)
+    val ratio = remember { mutableIntStateOf(0) }
+    val totalWalkingCount = mainWalkingViewModel.walkingCount.observeAsState(0)
+    val walkingCount = remember { derivedStateOf { totalWalkingCount.value - 1000 * ratio.intValue }}
+    val chargePayPoint = remember { derivedStateOf { 100 * ratio.intValue }}
+
     Box {
         if (mainWalkingViewModel.uiState.loadingBar) {
             MainWalkingLoadingBar()
+        } else if(mainWalkingViewModel.uiState.chargePayPointDialog) {
+            ConfirmAndCancelDialog(
+                text = "$${chargePayPoint.value}\n환전하시겠습니까?",
+                confirm = {
+                    mainWalkingViewModel.chargePayPoint(
+                        mongId = mongVo.mongId,
+                        walkingCount = 1000 * ratio.intValue,
+                    )
+                    ratio.intValue = 0
+                },
+                cancel = { mainWalkingViewModel.uiState.chargePayPointDialog = false }
+            )
         } else {
-            val payPoint = mainWalkingViewModel.payPoint.observeAsState(0)
-            val walkingCountAll = mainWalkingViewModel.walkingCount.observeAsState(0)
-            val ratio = remember {
-                mutableIntStateOf(0)
-            }
-            val walkingCount = remember {
-                derivedStateOf {
-                    walkingCountAll.value - 100 * ratio.intValue
-                }
-            }
-            val chargePayPoint = remember {
-                derivedStateOf {
-                    10 * ratio.intValue
-                }
-            }
-
-            if(mainWalkingViewModel.uiState.chargePayPointDialog) {
-                ConfirmAndCancelDialog(
-                    text = "$${chargePayPoint.value}\n환전하시겠습니까?",
-                    confirm = {
-                        mainWalkingViewModel.chargePayPoint(
-                            mongId = mongVo.mongId,
-                            walkingCount = 100 * ratio.intValue,
-                        )
-                    },
-                    cancel = { mainWalkingViewModel.uiState.chargePayPointDialog = false }
-                )
-            } else {
-                MainWalkingContent(
-                    mongVo = mongVo,
-                    chargePayPoint = chargePayPoint.value,
-                    payPoint = payPoint.value,
-                    walkingCount = walkingCount.value,
-                    uiState = mainWalkingViewModel.uiState,
-                    increaseRatio = { ratio.intValue = min(ratio.intValue + 1, walkingCountAll.value / 100) },
-                    decreaseRatio = { ratio.intValue = max(ratio.intValue - 1, 0) },
-                    modifier = Modifier.zIndex(1f)
-                )
-            }
+            MainWalkingContent(
+                mongVo = mongVo,
+                chargePayPoint = chargePayPoint.value,
+                payPoint = payPoint.value,
+                walkingCount = walkingCount.value,
+                uiState = mainWalkingViewModel.uiState,
+                increaseRatio = { ratio.intValue = min(ratio.intValue + 1, totalWalkingCount.value / 100) },
+                decreaseRatio = { ratio.intValue = max(ratio.intValue - 1, 0) },
+                modifier = Modifier.zIndex(1f)
+            )
         }
     }
 }

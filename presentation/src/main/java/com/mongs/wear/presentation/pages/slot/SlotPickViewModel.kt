@@ -141,6 +141,7 @@ class SlotPickViewModel @Inject constructor(
                 )
             )
 
+            scrollPageMainPagerView()
             uiState.navMainPager = true
         }
     }

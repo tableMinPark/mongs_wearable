@@ -9,6 +9,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,63 +34,77 @@ fun TrainingNestedBackground(
     modifier: Modifier = Modifier.zIndex(0f)
 ) {
     if (!isMoving) {
-        val mapResourceCode = R.drawable.training_bg
+        val background = R.drawable.training_bg
 
         Box(
             contentAlignment = Alignment.Center,
             modifier = modifier.fillMaxSize(),
         ) {
             Image(
-                painter = painterResource(mapResourceCode),
+                painter = painterResource(background),
                 contentDescription = "TrainingNestedBackground",
                 contentScale = ContentScale.Crop
             )
         }
     } else {
-        val infiniteTransition = rememberInfiniteTransition(label = "TrainingNestedBackgroundTransition")
-        val offsetX by infiniteTransition.animateFloat(
-            initialValue = 0f,
-            targetValue = 1f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(3000, easing = LinearEasing),
-                repeatMode = RepeatMode.Restart
-            ), label = "TrainingNestedBackgroundOffset"
+
+        val backgrounds = arrayOf(
+            ImageBitmap.imageResource(R.drawable.training_bg),
+            ImageBitmap.imageResource(R.drawable.training_bg_mirror),
+            ImageBitmap.imageResource(R.drawable.training_bg),
         )
 
-        val background1 = ImageBitmap.imageResource(R.drawable.training_bg)
-        val background2 = ImageBitmap.imageResource(R.drawable.training_bg)
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
 
-        Box(modifier = Modifier.fillMaxSize()) {
+            val infiniteTransition = rememberInfiniteTransition(label = "TrainingNestedBackgroundTransition")
+            val offsetX by infiniteTransition.animateFloat(
+                initialValue = 0f,
+                targetValue = constraints.maxWidth.toFloat() * -(backgrounds.size - 1),       // 배경 수 - 1 = 2
+                animationSpec = infiniteRepeatable(
+                    animation = tween(
+                        durationMillis = constraints.maxWidth * backgrounds.size * 2,           // 배경 속도 보정
+                        easing = LinearEasing,
+                    ),
+                    repeatMode = RepeatMode.Restart
+                ), label = "TrainingNestedBackgroundOffset"
+            )
+
             Canvas(modifier = Modifier.fillMaxSize()) {
+
                 val canvasWidth = size.width
                 val canvasHeight = size.height
-                val imageWidth = background1.width.toFloat()
-                val imageHeight = background1.height.toFloat()
-                val scaleFactor = canvasHeight / imageHeight
-                val scaledWidth = imageWidth * scaleFactor
-                val xOffset = -scaledWidth * offsetX
 
-                fun DrawScope.drawBackground(image: ImageBitmap, xOffset: Float) {
-                    drawIntoCanvas { canvas ->
-                        val paint = android.graphics.Paint()
-                        val rect = android.graphics.RectF(xOffset, 0f, xOffset + scaledWidth, canvasHeight)
-                        canvas.nativeCanvas.drawBitmap(
-                            image.asAndroidBitmap(),
-                            null,
-                            rect,
-                            paint
-                        )
-                    }
-                }
-
-                drawBackground(background1, xOffset)
-                drawBackground(background2, xOffset + scaledWidth)
-
-                if (xOffset + scaledWidth < canvasWidth) {
-                    drawBackground(background1, xOffset + 2 * scaledWidth)
+                backgrounds.forEachIndexed { index, background ->
+                    drawBackground(
+                        background,
+                        offsetX + canvasWidth * index,
+                        background.width.toFloat(),
+                        background.height.toFloat(),
+                        canvasWidth,
+                        canvasHeight,
+                    )
                 }
             }
         }
+    }
+}
+
+private fun DrawScope.drawBackground(image: ImageBitmap, offsetX: Float, imageWidth: Float, imageHeight: Float, canvasWidth: Float, canvasHeight: Float) {
+
+    val painter =  android.graphics.Paint()
+
+    drawIntoCanvas { canvas ->
+        canvas.nativeCanvas.drawBitmap(
+            image.asAndroidBitmap(),
+            null,
+            android.graphics.RectF(
+                offsetX,
+                0f,
+                (canvasWidth / imageWidth * imageWidth) + offsetX + 0.8f,
+                (canvasHeight / imageHeight * imageHeight),
+            ),
+            painter,
+        )
     }
 }
 

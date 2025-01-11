@@ -165,7 +165,6 @@ fun SlotPickView(
 
     LaunchedEffect(slotPickViewModel.uiState.navMainPager) {
         if (slotPickViewModel.uiState.navMainPager) {
-            BaseViewModel.scrollPageMainPagerView()
             navController.navigate(NavItem.MainPager.route) { popUpTo(navController.graph.id) }
         }
     }

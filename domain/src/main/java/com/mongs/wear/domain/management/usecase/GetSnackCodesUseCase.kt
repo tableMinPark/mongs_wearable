@@ -3,6 +3,7 @@ package com.mongs.wear.domain.management.usecase
 import com.mongs.wear.core.exception.ErrorException
 import com.mongs.wear.domain.global.usecase.BaseNoParamUseCase
 import com.mongs.wear.domain.management.exception.GetSnackCodesException
+import com.mongs.wear.domain.management.exception.SnackCodesEmptyException
 import com.mongs.wear.domain.management.repository.ManagementRepository
 import com.mongs.wear.domain.management.repository.SlotRepository
 import com.mongs.wear.domain.management.vo.FeedItemVo
@@ -22,7 +23,7 @@ class GetSnackCodesUseCase @Inject constructor(
     override suspend fun execute(): List<FeedItemVo> {
 
         return withContext(Dispatchers.IO) {
-            slotRepository.getCurrentSlot()?.let { slotModel ->
+            val feedItemVoList = slotRepository.getCurrentSlot()?.let { slotModel ->
                 managementRepository.getFeedItems(mongId = slotModel.mongId, foodTypeGroupCode = SNACK_TYPE_GROUP_CODE).map { //.associateBy { it.foodTypeCode }
                     FeedItemVo(
                         foodTypeCode = it.foodTypeCode,
@@ -37,6 +38,10 @@ class GetSnackCodesUseCase @Inject constructor(
                     )
                 }
             } ?: run { ArrayList() }
+
+            if (feedItemVoList.isEmpty()) throw SnackCodesEmptyException()
+
+            feedItemVoList
         }
     }
 

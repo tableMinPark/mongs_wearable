@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.mongs.wear.presentation.assets.MongsTheme
+import com.mongs.wear.presentation.component.common.background.TrainingNestedBackground
 import com.mongs.wear.presentation.layout.MainView
 import com.mongs.wear.viewModel.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
 
     private val mainActivityViewModel: MainActivityViewModel by viewModels()
 
-    @Inject lateinit var notificationManager: NotificationManager
+//    @Inject lateinit var notificationManager: NotificationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

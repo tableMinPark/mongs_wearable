@@ -25,7 +25,7 @@ class CollectionMongPickViewModel @Inject constructor(
     private val _mongCollectionVoList = MutableLiveData<List<MongCollectionVo>>()
 
     init {
-        viewModelScope.launch (Dispatchers.Main) {
+        viewModelScopeWithHandler.launch (Dispatchers.Main) {
 
             uiState.loadingBar = true
 

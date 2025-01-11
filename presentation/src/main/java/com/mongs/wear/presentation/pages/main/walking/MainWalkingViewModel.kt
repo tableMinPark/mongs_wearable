@@ -62,6 +62,8 @@ class MainWalkingViewModel @Inject constructor(
                 )
             )
 
+            toastEvent("환전 성공")
+
             uiState.loadingBar = false
         }
     }
